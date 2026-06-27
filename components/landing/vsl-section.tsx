@@ -30,12 +30,12 @@ export function VslSection() {
             01 / Video sales letter
           </span>
           <h2 className="font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
-            Watch the agent-site
+            See the appraisal
             <br />
-            <span className="text-muted-foreground">breakdown first.</span>
+            <span className="text-muted-foreground">growth system.</span>
           </h2>
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            See how the page positions an agent, proves local authority, and moves a seller toward a booked conversation.
+            Watch how a personal agent site can package your proof, answer seller doubt, and give people a clear reason to book with you.
           </p>
         </div>
 

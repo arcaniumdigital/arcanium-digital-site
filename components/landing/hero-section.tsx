@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
-const words = ["calls", "listings", "appraisals", "trust"];
-const proofPoints = ["60-minute appraisal growth call", "No existing website needed", "Built to book seller conversations"];
+const words = ["appraisals", "listings", "trust", "seller calls"];
+const proofPoints = ["60-minute appraisal growth call", "No existing website needed", "Built to turn proof into enquiries"];
 
 function BlurWord({ word }: { word: string }) {
   return (
@@ -106,7 +106,7 @@ export function HeroSection() {
           >
             <span className="inline-flex items-center gap-3 font-mono text-sm text-white/65">
               <span className="h-px w-8 bg-white/30" />
-              Personalised websites for real estate agents
+              Personal websites for agents who want sellers to choose them first
             </span>
           </div>
 
@@ -129,7 +129,7 @@ export function HeroSection() {
               isVisible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
             }`}
           >
-            If you want more appraisal opportunities, we will show you how a personal agent site can turn your social clicks, referrals, recent sales, and local search traffic into booked seller conversations.
+            Your social posts, referrals, reviews, and recent sales already create attention. We build the site that turns that attention into trust, appraisal intent, and booked seller conversations.
           </p>
 
           <div

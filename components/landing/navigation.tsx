@@ -5,10 +5,9 @@ import { useState, useEffect } from "react";
 const navLinks = [
   { name: "VSL",           href: "#vsl"           },
   { name: "Showcase",      href: "#showcase"      },
+  { name: "Reviews",       href: "#testimonials"  },
   { name: "Analytics",     href: "#analytics"     },
   { name: "Connect",       href: "#connect"       },
-  { name: "Testimonials",  href: "#testimonials"  },
-  { name: "FAQ",           href: "#faq"           },
 ];
 
 export function Navigation() {
@@ -63,7 +62,7 @@ export function Navigation() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="#video-testimonial" className={`transition-all duration-500 ${isScrolled ? "text-xs text-foreground/70 hover:text-foreground" : "text-sm text-white/70 hover:text-white"}`}>
+            <a href="#vsl" className={`transition-all duration-500 ${isScrolled ? "text-xs text-foreground/70 hover:text-foreground" : "text-sm text-white/70 hover:text-white"}`}>
               Watch proof
             </a>
             <a

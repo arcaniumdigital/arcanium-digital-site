@@ -55,9 +55,9 @@ export function ConnectEverythingSection() {
             isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          Connect
+          Keep the
           <br />
-          <span className="text-muted-foreground">everything.</span>
+          <span className="text-muted-foreground">momentum.</span>
         </h2>
 
         <p
@@ -65,7 +65,7 @@ export function ConnectEverythingSection() {
             isVisible ? "opacity-100" : "opacity-0"
           }`}
         >
-          Your agent site should connect the proof sellers check before they call: listings, reviews, bookings, CRM routing, analytics, and your local Google presence.
+          After a seller books, the site can keep the important pieces connected: listings, reviews, calendar, CRM, analytics, and local search visibility.
         </p>
       </div>
 

@@ -4,7 +4,7 @@ const testimonials = [
   {
     avatar: "https://randomuser.me/api/portraits/women/68.jpg",
     quote:
-      "The new site makes me look like the local specialist I already was. Sellers can see my recent results, reviews, and appraisal offer without hunting through three different platforms.",
+      "The site finally puts my sales proof, reviews, process, and appraisal offer in one place. It makes the first conversation feel warmer before I even pick up the phone.",
     name: "Amelia Hart",
     role: "Lead agent",
     market: "Bayside Melbourne",
@@ -12,7 +12,7 @@ const testimonials = [
   {
     avatar: "https://randomuser.me/api/portraits/men/46.jpg",
     quote:
-      "It turned my social traffic into something useful. Instead of sending people to a generic profile, I now have a page that explains my process and captures appraisal enquiries properly.",
+      "I was already getting profile views and referral traffic. The difference is now there is a clear path from curiosity to an actual appraisal enquiry.",
     name: "Daniel Cross",
     role: "Principal agent",
     market: "Gold Coast",
@@ -20,7 +20,7 @@ const testimonials = [
   {
     avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     quote:
-      "The suburb pages are the part I like most. They let me speak directly to sellers in the areas I want more listings from, with proof that feels specific to them.",
+      "The local proof matters. Sellers can quickly see where I work, what I have sold, and why I am the right person to call about their home.",
     name: "Mia Tan",
     role: "Sales consultant",
     market: "Brisbane West",
@@ -35,16 +35,16 @@ export function AuthoritySection() {
           <div className="lg:col-span-7">
             <span className="mb-6 inline-flex items-center gap-3 font-mono text-sm text-muted-foreground">
               <span className="h-px w-10 bg-foreground/30" />
-              Authority and trust
+              Reviews and trust
             </span>
             <h2 className="font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
-              Sample client proof
+              Make sellers feel
               <br />
-              <span className="text-muted-foreground">for the trust section.</span>
+              <span className="text-muted-foreground">safe to enquire.</span>
             </h2>
           </div>
           <p className="text-lg leading-relaxed text-muted-foreground lg:col-span-5">
-            Replace these samples with real agent wins as soon as they are ready, so the page can prove the outcome before asking for the call.
+            Your reviews should not sit buried on a portal. They should remove doubt, prove you are easy to work with, and make booking an appraisal feel like the obvious next step.
           </p>
         </div>
 

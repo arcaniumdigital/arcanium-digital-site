@@ -8,21 +8,21 @@ const steps = [
     title: "Position",
     subtitle: "your market",
     description:
-      "Clarify your local seller audience, core suburbs, personal brand, recent sales proof, and the enquiry you want the site to generate.",
+      "Clarify the sellers you want, the suburbs you want to own, and the proof that makes you the safer choice.",
   },
   {
     number: "02",
     title: "Build",
     subtitle: "the site",
     description:
-      "Create the page structure, copy, testimonials, sales proof, suburb content, and seller tools that make you look like the obvious local choice.",
+      "Turn your reviews, sales, story, process, and appraisal offer into a page sellers can trust before they ever speak to you.",
   },
   {
     number: "03",
     title: "Convert",
     subtitle: "& improve",
     description:
-      "Launch with clear appraisal paths, analytics, SEO foundations, and follow-up prompts so every seller visit has a next step.",
+      "Launch with a clean booking path, source tracking, and the data needed to see which proof is creating real seller intent.",
   },
 ];
 

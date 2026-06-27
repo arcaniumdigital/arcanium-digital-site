@@ -7,7 +7,7 @@ const panels = [
     metric: "38 leads",
     icon: BarChart3,
     kind: "bars",
-    caption: "See whether enquiries came from Google, Instagram, referrals, or campaign links.",
+    caption: "See which traffic sources are turning attention into real enquiry intent.",
   },
   {
     title: "Suburb intent map",
@@ -15,7 +15,7 @@ const panels = [
     metric: "12 suburbs",
     icon: PieChart,
     kind: "heatmap",
-    caption: "Identify which local pages are creating the most seller interest.",
+    caption: "See which suburbs and pages are attracting the strongest seller interest.",
   },
   {
     title: "CTA performance",
@@ -23,7 +23,7 @@ const panels = [
     metric: "14.8%",
     icon: MousePointerClick,
     kind: "steps",
-    caption: "Track which prompts move visitors toward a booked appraisal growth call or appraisal enquiry.",
+    caption: "Track which prompts move visitors from browsing into booking or appraisal action.",
   },
   {
     title: "Booked-call trend",
@@ -31,7 +31,7 @@ const panels = [
     metric: "+31%",
     icon: LineChart,
     kind: "line",
-    caption: "Measure how the site turns proof, traffic, and seller tools into booked conversations.",
+    caption: "Measure whether the site is creating more conversations over time.",
   },
 ];
 
@@ -141,13 +141,13 @@ export function AnalyticsSection() {
               Data and analytics
             </span>
             <h2 className="font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
-              Four views of
+              Know what is
               <br />
-              <span className="text-muted-foreground">seller intent.</span>
+              <span className="text-muted-foreground">creating intent.</span>
             </h2>
           </div>
           <p className="text-lg leading-relaxed text-muted-foreground lg:col-span-5">
-            See which channels, suburbs, and calls-to-action are creating real seller intent, then improve the site around what gets booked.
+            Once the site is live, you should know which proof, suburbs, sources, and calls-to-action are helping sellers move closer to an appraisal.
           </p>
         </div>
 

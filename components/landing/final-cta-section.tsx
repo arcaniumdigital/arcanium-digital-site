@@ -10,7 +10,7 @@ export function FinalCtaSection() {
             Final step
           </span>
           <h2 className="max-w-4xl font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
-            Want more appraisals from the people already checking you out?
+            Stop sending warm seller attention to a dead end.
           </h2>
         </div>
         <a

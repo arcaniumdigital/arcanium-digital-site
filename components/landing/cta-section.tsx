@@ -51,14 +51,14 @@ export function CtaSection() {
           <div className="mb-7 text-center">
             <span className="mb-4 inline-flex items-center gap-3 font-mono text-sm text-muted-foreground">
               <span className="h-px w-10 bg-foreground/30" />
-              Appraisal growth plan
+              Book the appraisal growth call
               <span className="h-px w-10 bg-foreground/30" />
             </span>
             <h2 className="mx-auto max-w-3xl font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
-              See what your agent site could look like.
+              See how your site could win more seller conversations.
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Pick a time and we will map the site that can turn your proof into more appraisal opportunities and booked seller conversations.
+              Pick a time and we will map the fastest path from your existing proof to a site sellers can trust, remember, and book through.
             </p>
           </div>
 
@@ -66,9 +66,9 @@ export function CtaSection() {
             <div className="flex items-center justify-between gap-4 border-b border-white/10 bg-white/[0.03] px-5 py-3 lg:px-6">
               <div>
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/45">
-                  Appraisal growth / Arcanium Digital
+                  Arcanium Digital / appraisal growth
                 </span>
-                <h3 className="font-display text-2xl text-white">Book your appraisal growth call</h3>
+                <h3 className="font-display text-2xl text-white">Choose a time to map your appraisal funnel</h3>
               </div>
               <CalendarDays className="hidden size-6 text-[#f68dff] sm:block" />
             </div>

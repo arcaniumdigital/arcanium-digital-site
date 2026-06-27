@@ -3,34 +3,32 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, MapPin } from "lucide-react";
 
-const clientSites = [
+const showcaseImages = [
   {
-    agent: "Mary-Ann McLoughlin",
-    market: "Sunshine Coast",
-    focus: "Coastal seller authority",
-    headline: "Premium local positioning with a clear appraisal path.",
-    notes: ["Listings journey", "Seller journey", "Appraisal CTA"],
+    label: "Hero",
     image: "/images/showcase/mary-ann.png",
   },
   {
-    agent: "Michael Bacon",
-    market: "Kangaroo Point",
-    focus: "Sales proof and media authority",
-    headline: "A personal brand site built around trust, scale, and proof.",
-    notes: ["$429M+ sales proof", "Media hub", "Reviews path"],
-    image: "/images/showcase/michael-bacon.png",
+    label: "Positioning",
+    image: "/images/showcase/mary-ann-strategy.png",
   },
   {
-    agent: "Wendy Russell",
-    market: "Brisbane",
-    focus: "Private buyer advocacy",
-    headline: "A premium advisory site with strong positioning from the first fold.",
-    notes: ["Buyer advocacy", "Expertise pages", "Media proof"],
-    image: "/images/showcase/wendy-russell.png",
+    label: "Proof",
+    image: "/images/showcase/mary-ann-results.png",
   },
 ];
 
-function SiteMockup({ site }: { site: (typeof clientSites)[number] }) {
+const showcaseDetails = {
+  agent: "Mary-Ann McLoughlin",
+  market: "Sunshine Coast",
+  focus: "Premium seller positioning",
+  headline:
+    "A live example of how one agent's market, story, proof, and appraisal call-to-action can feel premium without making the path complicated.",
+  notes: ["Seller journey", "Appraisal CTA", "Local proof", "Live example"],
+  liveUrl: "https://maryannmcloughlin.com",
+};
+
+function SiteMockup({ image }: { image: (typeof showcaseImages)[number] }) {
   return (
     <div className="relative overflow-hidden border border-white/15 bg-black text-white shadow-2xl shadow-black/30">
       <div className="flex h-10 items-center justify-between border-b border-white/10 px-4">
@@ -46,8 +44,8 @@ function SiteMockup({ site }: { site: (typeof clientSites)[number] }) {
 
       <div className="relative overflow-hidden bg-white">
         <img
-          src={site.image}
-          alt={`${site.agent} example website screenshot`}
+          src={image.image}
+          alt={`Mary-Ann McLoughlin example website ${image.label.toLowerCase()} screenshot`}
           className="aspect-[16/9] w-full object-cover object-top"
         />
       </div>
@@ -74,12 +72,12 @@ export function AutonomousSection() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveSite((prev) => (prev + 1) % clientSites.length);
+      setActiveSite((prev) => (prev + 1) % showcaseImages.length);
     }, 4200);
     return () => clearInterval(interval);
   }, []);
 
-  const active = clientSites[activeSite];
+  const active = showcaseImages[activeSite];
 
   return (
     <section id="showcase" ref={sectionRef} className="relative overflow-hidden py-24 lg:py-32">
@@ -99,9 +97,9 @@ export function AutonomousSection() {
                 isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
               }`}
             >
-              Sites sellers can
+              A site sellers can
               <br />
-              <span className="text-muted-foreground">trust quickly.</span>
+              <span className="text-muted-foreground">understand fast.</span>
             </h2>
           </div>
           <p
@@ -109,7 +107,7 @@ export function AutonomousSection() {
               isVisible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
             }`}
           >
-            Each concept is built around a specific market, clear proof, and one obvious next step: book the right seller conversation.
+            The goal is not a prettier brochure. It is one focused place where sellers can understand the agent, see the proof, and take the next step.
           </p>
         </div>
 
@@ -118,7 +116,7 @@ export function AutonomousSection() {
             isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          <SiteMockup site={active} />
+          <SiteMockup image={active} />
 
           <div
             className="border-x border-b border-foreground/10 bg-background p-6 transition-all duration-500 lg:p-8"
@@ -127,38 +125,47 @@ export function AutonomousSection() {
               <div>
                 <span className="flex items-center gap-2 text-sm text-muted-foreground">
                   <MapPin className="size-3.5" />
-                  {active.market}
+                  {showcaseDetails.market}
                 </span>
                 <div className="mt-3 flex flex-wrap items-center gap-3">
-                  <h3 className="font-display text-4xl leading-none md:text-5xl">{active.agent}</h3>
+                  <h3 className="font-display text-4xl leading-none md:text-5xl">{showcaseDetails.agent}</h3>
                   <span className="border border-foreground/10 px-3 py-1 text-xs text-muted-foreground">
-                    {active.focus}
+                    {showcaseDetails.focus}
                   </span>
                 </div>
                 <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-                  {active.headline}
+                  {showcaseDetails.headline}
                 </p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {active.notes.map((note) => (
+                <div className="mt-5 flex flex-wrap items-center gap-2">
+                  {showcaseDetails.notes.map((note) => (
                     <span key={note} className="border border-foreground/10 px-2.5 py-1 text-xs text-muted-foreground">
                       {note}
                     </span>
                   ))}
+                  <a
+                    href={showcaseDetails.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-foreground transition-opacity hover:opacity-70"
+                  >
+                    View the live Mary-Ann site
+                    <ArrowUpRight className="size-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </a>
                 </div>
               </div>
             </div>
 
             <div className="mt-6 flex items-center justify-between border-t border-foreground/10 pt-5">
               <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                {String(activeSite + 1).padStart(2, "0")} / {String(clientSites.length).padStart(2, "0")}
+                {String(activeSite + 1).padStart(2, "0")} / {String(showcaseImages.length).padStart(2, "0")}
               </span>
               <div className="flex gap-2">
-                {clientSites.map((_, index) => (
+                {showcaseImages.map((image, index) => (
                   <button
-                    key={index}
+                    key={image.label}
                     type="button"
                     onClick={() => setActiveSite(index)}
-                    aria-label={`Show example ${index + 1}`}
+                    aria-label={`Show ${image.label.toLowerCase()} example`}
                     className={`h-2 rounded-full transition-all ${
                       activeSite === index ? "w-8 bg-foreground" : "w-2 bg-foreground/20 hover:bg-foreground/40"
                     }`}

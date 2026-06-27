@@ -2,9 +2,9 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 const footerLinks = [
   { name: "Video breakdown", href: "#vsl" },
-  { name: "Client showcase", href: "#showcase" },
+  { name: "Example site", href: "#showcase" },
+  { name: "Reviews", href: "#testimonials" },
   { name: "Analytics", href: "#analytics" },
-  { name: "FAQ", href: "#faq" },
 ];
 
 const socialLinks = [
@@ -35,7 +35,7 @@ export function FooterSection() {
                 Arcanium Digital
               </a>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-white/45">
-                Personalised agent sites built to turn local proof into booked seller conversations.
+                Personalised agent sites built to make local proof easier to trust, click, and act on.
               </p>
             </div>
 
