@@ -10,12 +10,12 @@ const testimonials = [
     market: "Sunshine Coast",
   },
   {
-    avatar: "https://randomuser.me/api/portraits/men/46.jpg",
+    avatar: "/images/testimonials/shana.jpg",
     quote:
-      "I was already getting social clicks and referral traffic. The difference is now there is a clear path from curiosity to an actual appraisal enquiry.",
-    name: "Daniel Cross",
-    role: "Principal agent",
-    market: "Gold Coast",
+      "Jordan mapped out a clear path for me to step up from $1M properties into the $2M bracket by sharpening my positioning and tightening the follow-up gaps that were costing deals.",
+    name: "Shana",
+    role: "Real estate agent",
+    market: "Premium property",
   },
   {
     avatar: "https://randomuser.me/api/portraits/women/44.jpg",
