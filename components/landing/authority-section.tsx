@@ -2,17 +2,17 @@ import { Quote, Star } from "lucide-react";
 
 const testimonials = [
   {
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
+    avatar: "/images/testimonials/mary-ann-mcloughlin.jpg",
     quote:
-      "The site finally puts my sales proof, reviews, process, and appraisal offer in one place. It makes the first conversation feel warmer before I even pick up the phone.",
-    name: "Amelia Hart",
-    role: "Lead agent",
-    market: "Bayside Melbourne",
+      "The site feels premium without feeling complicated. Sellers can quickly understand who I help, what I have sold, and how to start the right conversation with me.",
+    name: "Mary-Ann McLoughlin",
+    role: "Real estate agent",
+    market: "Sunshine Coast",
   },
   {
     avatar: "https://randomuser.me/api/portraits/men/46.jpg",
     quote:
-      "I was already getting profile views and referral traffic. The difference is now there is a clear path from curiosity to an actual appraisal enquiry.",
+      "I was already getting social clicks and referral traffic. The difference is now there is a clear path from curiosity to an actual appraisal enquiry.",
     name: "Daniel Cross",
     role: "Principal agent",
     market: "Gold Coast",
@@ -20,7 +20,7 @@ const testimonials = [
   {
     avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     quote:
-      "The local proof matters. Sellers can quickly see where I work, what I have sold, and why I am the right person to call about their home.",
+      "It gives warm sellers one focused place to see my reviews, recent results, and local knowledge before they decide who to invite in.",
     name: "Mia Tan",
     role: "Sales consultant",
     market: "Brisbane West",
@@ -44,7 +44,7 @@ export function AuthoritySection() {
             </h2>
           </div>
           <p className="text-lg leading-relaxed text-muted-foreground lg:col-span-5">
-            Your reviews should not sit buried on a portal. They should remove doubt, prove you are easy to work with, and make booking an appraisal feel like the obvious next step.
+            The right proof lowers the risk of reaching out. Put reviews, recent results, and local confidence where sellers can see them before they book.
           </p>
         </div>
 

@@ -1,129 +1,49 @@
-import { BarChart3, LineChart, MousePointerClick, PieChart } from "lucide-react";
-
 const panels = [
   {
-    title: "Lead source report",
-    eyebrow: "Source tracking",
-    metric: "38 leads",
-    icon: BarChart3,
-    kind: "bars",
-    caption: "See which traffic sources are turning attention into real enquiry intent.",
+    title: "Traffic growth snapshot",
+    eyebrow: "Last 30 days",
+    image: "/images/analytics/traffic-overview.jpg",
+    alt: "Analytics dashboard showing visitors, pageviews, bounce rate, session duration, sources, and top pages",
+    caption: "Show agents where attention is coming from, which pages sellers read, and whether the site is creating more appraisal intent.",
   },
   {
-    title: "Suburb intent map",
-    eyebrow: "Local demand",
-    metric: "12 suburbs",
-    icon: PieChart,
-    kind: "heatmap",
-    caption: "See which suburbs and pages are attracting the strongest seller interest.",
+    title: "Monthly performance trend",
+    eyebrow: "Momentum",
+    image: "/images/analytics/traffic-trend.jpg",
+    alt: "Analytics dashboard showing a monthly visitor and pageview trend",
+    caption: "Track whether the site is gaining traction month to month, not just looking good on launch day.",
   },
   {
-    title: "CTA performance",
-    eyebrow: "Conversion clicks",
-    metric: "14.8%",
-    icon: MousePointerClick,
-    kind: "steps",
-    caption: "Track which prompts move visitors from browsing into booking or appraisal action.",
+    title: "Audience and action report",
+    eyebrow: "Seller behaviour",
+    image: "/images/analytics/audience-tracking.jpg",
+    alt: "Analytics dashboard showing geography, devices, and tracked seller actions",
+    caption: "See which devices, locations, and calls-to-action are turning quiet visitors into measurable seller actions.",
   },
   {
-    title: "Booked-call trend",
-    eyebrow: "Calendar growth",
-    metric: "+31%",
-    icon: LineChart,
-    kind: "line",
-    caption: "Measure whether the site is creating more conversations over time.",
+    title: "Conversion event detail",
+    eyebrow: "Action tracking",
+    image: "/images/analytics/audience-growth.jpg",
+    alt: "Analytics dashboard showing geography, devices, and tracked conversion events",
+    caption: "Break down phone taps, forms, appraisal requests, listing enquiries, and other actions that show seller intent.",
   },
 ];
 
 function AnalyticsImage({ panel }: { panel: (typeof panels)[number] }) {
   return (
     <article className="group overflow-hidden border border-foreground/10 bg-foreground/[0.02]">
-      <div className="relative aspect-[4/3] overflow-hidden bg-black p-5 text-white">
-        <div className="absolute inset-0 opacity-25">
-          <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:34px_34px]" />
-        </div>
-        <div className="relative z-10 flex h-full flex-col">
-          <div className="mb-5 flex items-start justify-between gap-4">
-            <div>
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">
-                {panel.eyebrow}
-              </span>
-              <h3 className="mt-2 font-display text-2xl">{panel.title}</h3>
-            </div>
-            <panel.icon className="size-5 text-[#eca8d6]" />
-          </div>
-
-          <strong className="font-display text-5xl font-normal">{panel.metric}</strong>
-
-          <div className="mt-auto">
-            {panel.kind === "bars" && (
-              <div className="grid h-32 grid-cols-5 items-end gap-2">
-                {[44, 72, 58, 90, 64].map((height, barIndex) => (
-                  <span
-                    key={height}
-                    className="bg-[#eca8d6]"
-                    style={{ height: `${height}%`, opacity: 0.38 + barIndex * 0.1 }}
-                  />
-                ))}
-              </div>
-            )}
-
-            {panel.kind === "heatmap" && (
-              <div className="grid grid-cols-4 gap-2">
-                {[35, 60, 95, 45, 70, 40, 82, 55, 48, 88, 63, 30].map((alpha) => (
-                  <span
-                    key={alpha}
-                    className="aspect-square bg-[#eca8d6]"
-                    style={{ opacity: alpha / 100 }}
-                  />
-                ))}
-              </div>
-            )}
-
-            {panel.kind === "steps" && (
-              <div className="space-y-3">
-                {["Hero CTA", "Site showcase", "Calendar booking"].map((label, stepIndex) => (
-                  <div key={label}>
-                    <div className="mb-1 flex justify-between text-xs text-white/45">
-                      <span>{label}</span>
-                      <span>{[18, 24, 31][stepIndex]}%</span>
-                    </div>
-                    <div className="h-2 bg-white/10">
-                      <div
-                        className="h-full bg-[#eca8d6]"
-                        style={{ width: `${[52, 68, 86][stepIndex]}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {panel.kind === "line" && (
-              <div className="relative h-32">
-                <svg viewBox="0 0 300 130" className="h-full w-full overflow-visible">
-                  <path
-                    d="M5 104 C45 90, 62 98, 92 74 S145 58, 178 44 S235 42, 295 16"
-                    fill="none"
-                    stroke="#eca8d6"
-                    strokeWidth="4"
-                  />
-                  {[5, 92, 178, 295].map((cx, dotIndex) => (
-                    <circle
-                      key={cx}
-                      cx={cx}
-                      cy={[104, 74, 44, 16][dotIndex]}
-                      r="5"
-                      fill="#eca8d6"
-                    />
-                  ))}
-                </svg>
-              </div>
-            )}
-          </div>
-        </div>
+      <div className="relative aspect-[4/3] overflow-hidden bg-black">
+        <img
+          src={panel.image}
+          alt={panel.alt}
+          className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.015]"
+        />
       </div>
       <div className="p-5">
+        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+          {panel.eyebrow}
+        </span>
+        <h3 className="mt-2 font-display text-2xl">{panel.title}</h3>
         <p className="text-sm leading-relaxed text-muted-foreground">{panel.caption}</p>
       </div>
     </article>
@@ -147,7 +67,7 @@ export function AnalyticsSection() {
             </h2>
           </div>
           <p className="text-lg leading-relaxed text-muted-foreground lg:col-span-5">
-            Once the site is live, you should know which proof, suburbs, sources, and calls-to-action are helping sellers move closer to an appraisal.
+            Once the site is live, you should know where sellers came from, what they looked at, and which actions are moving them closer to an appraisal conversation.
           </p>
         </div>
 
