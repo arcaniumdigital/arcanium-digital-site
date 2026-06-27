@@ -72,7 +72,7 @@ export function HeroSection() {
           loop
           playsInline
           aria-hidden="true"
-          className="h-full w-full translate-x-[24%] -translate-y-[8%] scale-[1.7] object-contain object-center opacity-70 md:translate-x-0 md:translate-y-0 md:scale-100 md:object-cover md:object-center"
+          className="h-full w-full translate-x-[18%] -translate-y-[12%] scale-[1.7] object-contain object-center opacity-70 md:translate-x-0 md:translate-y-0 md:scale-100 md:object-cover md:object-center"
         >
           <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bg-hero-0BnFGdr81Ifnj3WbBZoNt1KE4D5DMT.mp4" type="video/mp4" />
         </video>
