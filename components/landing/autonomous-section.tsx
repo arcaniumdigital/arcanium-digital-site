@@ -24,7 +24,7 @@ const showcaseDetails = {
   focus: "Premium seller positioning",
   headline:
     "A live example of how one agent's market, story, proof, and appraisal call-to-action can feel premium without making the path complicated.",
-  notes: ["Seller journey", "Appraisal CTA", "Local proof", "Live example"],
+  notes: ["Seller journey", "Appraisal CTA", "Local proof"],
   liveUrl: "https://maryannmcloughlin.com",
 };
 

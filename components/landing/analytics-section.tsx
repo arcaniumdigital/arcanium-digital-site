@@ -4,28 +4,24 @@ const panels = [
     eyebrow: "Last 30 days",
     image: "/images/analytics/traffic-overview.jpg",
     alt: "Analytics dashboard showing visitors, pageviews, bounce rate, session duration, sources, and top pages",
-    caption: "Show agents where attention is coming from, which pages sellers read, and whether the site is creating more appraisal intent.",
   },
   {
     title: "Monthly performance trend",
     eyebrow: "Momentum",
     image: "/images/analytics/traffic-trend.jpg",
     alt: "Analytics dashboard showing a monthly visitor and pageview trend",
-    caption: "Track whether the site is gaining traction month to month, not just looking good on launch day.",
   },
   {
     title: "Audience and action report",
     eyebrow: "Seller behaviour",
     image: "/images/analytics/audience-tracking.jpg",
     alt: "Analytics dashboard showing geography, devices, and tracked seller actions",
-    caption: "See which devices, locations, and calls-to-action are turning quiet visitors into measurable seller actions.",
   },
   {
     title: "Conversion event detail",
     eyebrow: "Action tracking",
     image: "/images/analytics/audience-growth.jpg",
     alt: "Analytics dashboard showing geography, devices, and tracked conversion events",
-    caption: "Break down phone taps, forms, appraisal requests, listing enquiries, and other actions that show seller intent.",
   },
 ];
 
@@ -44,7 +40,6 @@ function AnalyticsImage({ panel }: { panel: (typeof panels)[number] }) {
           {panel.eyebrow}
         </span>
         <h3 className="mt-2 font-display text-2xl">{panel.title}</h3>
-        <p className="text-sm leading-relaxed text-muted-foreground">{panel.caption}</p>
       </div>
     </article>
   );

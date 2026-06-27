@@ -72,7 +72,7 @@ export function HeroSection() {
           loop
           playsInline
           aria-hidden="true"
-          className="h-full w-full object-cover object-center opacity-70"
+          className="h-full w-full object-cover object-[60%_center] opacity-70 md:object-center"
         >
           <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bg-hero-0BnFGdr81Ifnj3WbBZoNt1KE4D5DMT.mp4" type="video/mp4" />
         </video>
@@ -139,7 +139,7 @@ export function HeroSection() {
           >
             <a
               href="#cta"
-              className="group inline-flex h-14 items-center justify-center rounded-full bg-white px-7 text-sm font-semibold text-black transition-colors hover:bg-white/90"
+              className="group inline-flex h-14 items-center justify-center rounded-full bg-[#eca8d6] px-7 text-sm font-semibold text-black transition-colors hover:bg-[#f1b7e0]"
             >
               I want more appraisals
               <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />

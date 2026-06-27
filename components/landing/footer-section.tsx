@@ -8,9 +8,8 @@ const footerLinks = [
 ];
 
 const socialLinks = [
-  { name: "Instagram", href: "#" },
-  { name: "YouTube", href: "#" },
-  { name: "LinkedIn", href: "#" },
+  { name: "Instagram", href: "https://www.instagram.com/arcaniumdigital/" },
+  { name: "Facebook", href: "https://www.facebook.com/arcaniumdigital/" },
 ];
 
 export function FooterSection() {
@@ -59,6 +58,8 @@ export function FooterSection() {
                   <li key={link.name}>
                     <a
                       href={link.href}
+                      target="_blank"
+                      rel="noreferrer"
                       className="group inline-flex items-center gap-1 text-sm text-white/45 transition-colors hover:text-white"
                     >
                       {link.name}
