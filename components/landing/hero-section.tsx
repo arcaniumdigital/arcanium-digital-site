@@ -72,7 +72,7 @@ export function HeroSection() {
           loop
           playsInline
           aria-hidden="true"
-          className="h-full w-full object-cover object-[60%_center] opacity-70 md:object-center"
+          className="h-full w-full scale-[0.72] object-contain object-center opacity-70 md:scale-100 md:object-cover md:object-center"
         >
           <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bg-hero-0BnFGdr81Ifnj3WbBZoNt1KE4D5DMT.mp4" type="video/mp4" />
         </video>
@@ -100,7 +100,7 @@ export function HeroSection() {
       <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 py-32 lg:px-12 lg:py-40">
         <div className="max-w-4xl">
           <div
-            className={`mb-8 transition-all duration-700 ${
+            className={`mb-8 hidden transition-all duration-700 md:block ${
               isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
             }`}
           >
