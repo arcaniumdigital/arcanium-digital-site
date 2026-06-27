@@ -1,25 +1,21 @@
 const panels = [
   {
-    title: "Traffic growth snapshot",
-    eyebrow: "Last 30 days",
+    title: "May Growth Analytics",
     image: "/images/analytics/traffic-overview.jpg",
     alt: "Analytics dashboard showing visitors, pageviews, bounce rate, session duration, sources, and top pages",
   },
   {
-    title: "Monthly performance trend",
-    eyebrow: "Momentum",
+    title: "June Growth Analytics",
     image: "/images/analytics/traffic-trend.jpg",
     alt: "Analytics dashboard showing a monthly visitor and pageview trend",
   },
   {
-    title: "Audience and action report",
-    eyebrow: "Seller behaviour",
+    title: "May Audience Report",
     image: "/images/analytics/audience-tracking.jpg",
     alt: "Analytics dashboard showing geography, devices, and tracked seller actions",
   },
   {
-    title: "Conversion event detail",
-    eyebrow: "Action tracking",
+    title: "June Audience Report",
     image: "/images/analytics/audience-growth.jpg",
     alt: "Analytics dashboard showing geography, devices, and tracked conversion events",
   },
@@ -36,10 +32,7 @@ function AnalyticsImage({ panel }: { panel: (typeof panels)[number] }) {
         />
       </div>
       <div className="p-5">
-        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-          {panel.eyebrow}
-        </span>
-        <h3 className="mt-2 font-display text-2xl">{panel.title}</h3>
+        <h3 className="font-display text-2xl">{panel.title}</h3>
       </div>
     </article>
   );

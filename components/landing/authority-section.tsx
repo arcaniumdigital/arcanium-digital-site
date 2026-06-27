@@ -20,7 +20,7 @@ const testimonials = [
   {
     avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     quote:
-      "It gives warm sellers one focused place to see my reviews, recent results, and local knowledge before they decide who to invite in.",
+      "Jordan helped me see exactly where my positioning, follow-up, and appraisal conversations were leaking opportunity. The plan was practical, direct, and easy to act on that week.",
     name: "Mia Tan",
     role: "Sales consultant",
     market: "Brisbane West",
