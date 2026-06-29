@@ -12,18 +12,18 @@ const testimonials = [
   {
     avatar: "/images/testimonials/shana.jpg",
     quote:
-      "Jordan mapped out a clear path for me to step up from $1M properties into the $2M bracket by sharpening my positioning and tightening the follow-up gaps that were costing deals.",
+      "I was hesitant at first because I was not ready for more social exposure. Once I decided to move forward, the process felt considered, professional, and I have not regretted it.",
     name: "Shana",
     role: "Real estate agent",
     market: "Premium property",
   },
   {
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     quote:
-      "Jordan helped me see exactly where my positioning, follow-up, and appraisal conversations were leaking opportunity. The plan was practical, direct, and easy to act on that week.",
-    name: "Mia Tan",
-    role: "Sales consultant",
-    market: "Brisbane West",
+      "Jordan is a driven young professional who genuinely looks for ways to create value. He listens carefully, brings practical ideas, and is focused on outcomes rather than just selling a service.",
+    name: "Mark Clayton",
+    role: "Business owner",
+    market: "Property services",
   },
 ];
 

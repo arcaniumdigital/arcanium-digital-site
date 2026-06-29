@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Navigation } from "@/components/landing/navigation";
 import { HeroSection } from "@/components/landing/hero-section";
 import { VslSection } from "@/components/landing/vsl-section";
+import { QuickCallSection } from "@/components/landing/quick-call-section";
 import { MechanismSection } from "@/components/landing/mechanism-section";
 import { AutonomousSection } from "@/components/landing/autonomous-section";
 import { ConnectEverythingSection } from "@/components/landing/connect-everything-section";
@@ -73,6 +74,7 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       <VslSection />
+      <QuickCallSection />
       <div className="hidden" aria-hidden="true">
         <MechanismSection />
       </div>
