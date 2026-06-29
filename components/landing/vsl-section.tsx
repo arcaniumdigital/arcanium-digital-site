@@ -5,18 +5,18 @@ export function VslSection() {
     <section id="vsl" className="relative overflow-hidden bg-background py-20 lg:py-28">
       <Script src="https://fast.wistia.com/player.js" strategy="afterInteractive" />
       <Script
-        src="https://fast.wistia.com/embed/e6p2cj6s1v.js"
+        src="https://fast.wistia.com/embed/43wdr7dw38.js"
         strategy="afterInteractive"
         type="module"
       />
       <style>{`
-        wistia-player[media-id='e6p2cj6s1v'] {
+        wistia-player[media-id='43wdr7dw38'] {
           display: block;
           width: 100%;
         }
 
-        wistia-player[media-id='e6p2cj6s1v']:not(:defined) {
-          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/e6p2cj6s1v/swatch');
+        wistia-player[media-id='43wdr7dw38']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/43wdr7dw38/swatch');
           display: block;
           filter: blur(5px);
           padding-top: 75%;
@@ -44,7 +44,7 @@ export function VslSection() {
             <div
               dangerouslySetInnerHTML={{
                 __html:
-                  '<wistia-player media-id="e6p2cj6s1v" wistia-popover="true" aspect="1.3333333333333333"></wistia-player>',
+                  '<wistia-player media-id="43wdr7dw38" wistia-popover="true" aspect="1.3333333333333333"></wistia-player>',
               }}
             />
           </div>
