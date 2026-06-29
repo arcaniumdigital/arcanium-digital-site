@@ -61,17 +61,6 @@ export function HowItWorksSection() {
       <div className="relative z-10 mx-auto max-w-[1400px] px-6 lg:px-12">
         <div className="relative mb-0 grid items-end gap-4 lg:mb-0 lg:grid-cols-2 lg:gap-12">
           <div className="overflow-hidden pb-0 lg:pb-32">
-            <div
-              className={`transition-all duration-1000 ${
-                isVisible ? "translate-x-0 opacity-100" : "-translate-x-12 opacity-0"
-              }`}
-            >
-              <span className="mb-8 inline-flex items-center gap-3 font-mono text-sm text-white/40">
-                <span className="h-px w-12 bg-white/20" />
-                Process
-              </span>
-            </div>
-
             <h2
               className={`font-display text-6xl leading-[0.85] tracking-tight transition-all delay-100 duration-1000 md:text-7xl lg:text-[128px] ${
                 isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"

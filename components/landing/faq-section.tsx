@@ -31,10 +31,6 @@ export function FaqSection() {
     <section id="faq" className="relative py-24 lg:py-32">
       <div className="mx-auto grid max-w-[1400px] gap-12 px-6 lg:grid-cols-12 lg:px-12">
         <div className="lg:col-span-5">
-          <span className="mb-6 inline-flex items-center gap-3 font-mono text-sm text-muted-foreground">
-            <span className="h-px w-10 bg-foreground/30" />
-            FAQ
-          </span>
           <h2 className="font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
             Questions before
             <br />

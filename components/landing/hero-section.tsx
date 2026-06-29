@@ -99,17 +99,6 @@ export function HeroSection() {
 
       <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 py-32 lg:px-12 lg:py-40">
         <div className="max-w-4xl">
-          <div
-            className={`mb-8 hidden transition-all duration-700 md:block ${
-              isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-            }`}
-          >
-            <span className="inline-flex items-center gap-3 font-mono text-sm text-white/65">
-              <span className="h-px w-8 bg-white/30" />
-              Personal websites for agents who want sellers to choose them first
-            </span>
-          </div>
-
           <h1
             className={`max-w-5xl overflow-visible text-left font-display text-[clamp(3rem,7vw,7.5rem)] leading-[1.02] tracking-tight text-white transition-all duration-1000 ${
               isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"

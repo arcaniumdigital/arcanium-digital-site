@@ -40,16 +40,6 @@ export function ConnectEverythingSection() {
   return (
     <section id="connect" ref={sectionRef} className="relative overflow-hidden">
       <div className="relative z-10 pt-24 text-center lg:pt-32">
-        <span
-          className={`mb-8 inline-flex items-center justify-center gap-4 font-mono text-sm text-muted-foreground transition-all duration-700 ${
-            isVisible ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <span className="h-px w-12 bg-foreground/20" />
-          Connections
-          <span className="h-px w-12 bg-foreground/20" />
-        </span>
-
         <h2
           className={`font-display text-6xl leading-[0.9] tracking-tight transition-all duration-1000 md:text-7xl lg:text-[128px] ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"

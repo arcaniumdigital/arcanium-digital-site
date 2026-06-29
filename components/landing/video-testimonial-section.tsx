@@ -9,10 +9,6 @@ export function VideoTestimonialSection() {
 
       <div className="relative z-10 mx-auto grid max-w-[1400px] gap-10 px-6 lg:grid-cols-12 lg:items-center lg:px-12">
         <div className="lg:col-span-5">
-          <span className="mb-6 inline-flex items-center gap-3 font-mono text-sm text-white/45">
-            <span className="h-px w-10 bg-white/25" />
-            Video testimonial
-          </span>
           <h2 className="font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
             Hear it from
             <br />

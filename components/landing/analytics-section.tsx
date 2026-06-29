@@ -44,10 +44,6 @@ export function AnalyticsSection() {
       <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
         <div className="mb-16 grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <span className="mb-6 inline-flex items-center gap-3 font-mono text-sm text-muted-foreground">
-              <span className="h-px w-10 bg-foreground/30" />
-              Data and analytics
-            </span>
             <h2 className="font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
               Know what is
               <br />

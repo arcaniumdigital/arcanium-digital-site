@@ -25,10 +25,6 @@ export function VslSection() {
 
       <div className="mx-auto grid max-w-[1400px] gap-8 px-6 lg:grid-cols-12 lg:items-center lg:px-12">
         <div className="lg:col-span-4">
-          <span className="mb-6 inline-flex items-center gap-3 font-mono text-sm text-muted-foreground">
-            <span className="h-px w-10 bg-foreground/30" />
-            01 / Video sales letter
-          </span>
           <h2 className="font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
             See the appraisal
             <br />

@@ -49,11 +49,6 @@ export function CtaSection() {
           }`}
         >
           <div className="mb-7 text-center">
-            <span className="mb-4 inline-flex items-center gap-3 font-mono text-sm text-muted-foreground">
-              <span className="h-px w-10 bg-foreground/30" />
-              Book the appraisal growth call
-              <span className="h-px w-10 bg-foreground/30" />
-            </span>
             <h2 className="mx-auto max-w-3xl font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
               See how your site could win more seller conversations.
             </h2>

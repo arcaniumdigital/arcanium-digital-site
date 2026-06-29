@@ -84,14 +84,6 @@ export function AutonomousSection() {
       <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
         <div className="mb-16 grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <span
-              className={`mb-6 inline-flex items-center gap-3 font-mono text-sm text-muted-foreground transition-all duration-700 ${
-                isVisible ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              <span className="h-px w-10 bg-foreground/30" />
-              Example site showcase
-            </span>
             <h2
               className={`font-display text-5xl leading-[0.95] tracking-tight transition-all duration-1000 md:text-7xl lg:text-[112px] ${
                 isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"

@@ -33,21 +33,12 @@ export function QuickCallSection() {
     <section id="quick-call" className="relative border-y border-foreground/10 bg-foreground/[0.025] py-16 lg:py-20">
       <div className="mx-auto grid max-w-[1120px] gap-8 px-6 lg:grid-cols-[1fr_420px] lg:items-center lg:px-12">
         <div>
-          <span className="mb-5 inline-flex items-center gap-3 font-mono text-sm text-muted-foreground">
-            <span className="h-px w-10 bg-foreground/30" />
-            Not ready to book yet?
-          </span>
           <h2 className="max-w-3xl font-display text-4xl leading-[0.95] tracking-tight md:text-6xl">
             Want a quick call before the full strategy session?
           </h2>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             Leave your name and mobile. Jordan will personally give you a 5-minute call to see if an agent site makes sense before you commit to a longer meeting.
           </p>
-          <div className="mt-6 grid gap-3 text-sm text-muted-foreground sm:grid-cols-3">
-            <span>No pressure</span>
-            <span>No long pitch</span>
-            <span>Just a quick fit check</span>
-          </div>
         </div>
 
         <form
@@ -59,8 +50,8 @@ export function QuickCallSection() {
               <PhoneCall className="size-5" />
             </span>
             <div>
-              <h3 className="font-display text-2xl">Call me first</h3>
-              <p className="text-sm text-muted-foreground">A lower-commitment first step.</p>
+              <h3 className="font-display text-2xl">5-minute vendor call</h3>
+              <p className="text-sm text-muted-foreground">A quick first step for agents who want more seller opportunities.</p>
             </div>
           </div>
 
@@ -95,7 +86,7 @@ export function QuickCallSection() {
             type="submit"
             className="group mt-5 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#eca8d6] px-6 text-sm font-semibold text-black transition-colors hover:bg-[#f1b7e0]"
           >
-            Call me for 5 minutes
+            I just want more vendors
             <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
           </button>
 
