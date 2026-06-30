@@ -31,7 +31,7 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section className="relative overflow-hidden bg-black px-6 pb-16 pt-28 text-white md:pb-20 md:pt-28 lg:min-h-[100svh] lg:px-12 lg:pt-28">
+    <section id="vsl" className="relative overflow-hidden bg-black px-6 pb-16 pt-28 text-white md:pb-20 md:pt-28 lg:min-h-[100svh] lg:px-12 lg:pt-28">
       <Script src="https://fast.wistia.com/player.js" strategy="afterInteractive" />
       <Script
         src="https://fast.wistia.com/embed/43wdr7dw38.js"
