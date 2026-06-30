@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import Script from "next/script";
+import { ArrowRight, CheckCircle2, PlayCircle } from "lucide-react";
 
 const words = ["appraisals", "listings", "trust", "seller calls"];
 const proofPoints = ["60-minute appraisal growth call", "No existing website needed", "Built to turn proof into enquiries"];
@@ -48,6 +49,36 @@ function BlurWord({ word }: { word: string }) {
   );
 }
 
+function HeroVideoCard({ className = "" }: { className?: string }) {
+  return (
+    <div className={className}>
+      <div className="group relative overflow-hidden border border-white/15 bg-black shadow-2xl shadow-black/40">
+        <div className="relative aspect-[4/3] bg-black">
+          <div
+            className="hero-wistia-player h-full w-full"
+            dangerouslySetInnerHTML={{
+              __html:
+                '<wistia-player media-id="43wdr7dw38" wistia-popover="true" aspect="1.3333333333333333"></wistia-player>',
+            }}
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent opacity-90 transition-opacity group-hover:opacity-65" />
+          <div className="pointer-events-none absolute inset-0 grid place-items-center">
+            <span className="grid size-20 place-items-center rounded-full border border-white/25 bg-white/18 text-white shadow-2xl shadow-black/40 backdrop-blur-md transition-transform duration-300 group-hover:scale-105">
+              <PlayCircle className="size-10 fill-white/20" />
+            </span>
+          </div>
+        </div>
+        <div className="border-t border-white/10 bg-black/78 p-4 text-white backdrop-blur-md">
+          <p className="mb-2 font-display text-xl leading-none">Watch the appraisal growth breakdown</p>
+          <p className="text-sm leading-relaxed text-white/70">
+            See how an agent site turns attention, proof, and local authority into booked seller conversations.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [wordIndex, setWordIndex] = useState(0);
@@ -65,6 +96,28 @@ export function HeroSection() {
 
   return (
     <section className="relative flex min-h-[100svh] flex-col items-start justify-center overflow-hidden bg-black">
+      <Script src="https://fast.wistia.com/player.js" strategy="afterInteractive" />
+      <Script
+        src="https://fast.wistia.com/embed/43wdr7dw38.js"
+        strategy="afterInteractive"
+        type="module"
+      />
+      <style jsx global>{`
+        .hero-wistia-player wistia-player[media-id="43wdr7dw38"] {
+          display: block;
+          height: 100%;
+          width: 100%;
+        }
+
+        .hero-wistia-player wistia-player[media-id="43wdr7dw38"]:not(:defined) {
+          background: center / cover no-repeat url("https://fast.wistia.com/embed/medias/43wdr7dw38/swatch");
+          display: block;
+          filter: blur(5px);
+          height: 100%;
+          width: 100%;
+        }
+      `}</style>
+
       <div className="absolute inset-0 z-0">
         <video
           autoPlay
@@ -72,12 +125,12 @@ export function HeroSection() {
           loop
           playsInline
           aria-hidden="true"
-          className="h-full w-[170%] max-w-none translate-x-[3%] -translate-y-[12%] scale-[1.7] object-contain object-center opacity-70 md:w-full md:translate-x-0 md:translate-y-0 md:scale-100 md:object-cover md:object-center"
+          className="h-full w-[170%] max-w-none translate-x-[3%] -translate-y-[12%] scale-[1.7] object-contain object-center opacity-35 md:w-full md:translate-x-0 md:translate-y-0 md:scale-100 md:object-cover md:object-center md:opacity-50"
         >
           <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bg-hero-0BnFGdr81Ifnj3WbBZoNt1KE4D5DMT.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/15" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/65" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/45" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/78" />
       </div>
 
       <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden opacity-20">
@@ -97,8 +150,9 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 py-32 lg:px-12 lg:py-40">
-        <div className="max-w-4xl">
+      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pb-16 pt-28 lg:px-12 lg:pb-24 lg:pt-36">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(360px,520px)] lg:items-center">
+          <div className="max-w-4xl">
           <h1
             className={`max-w-5xl overflow-visible text-left font-display text-[clamp(3rem,7vw,7.5rem)] leading-[1.02] tracking-tight text-white transition-all duration-1000 ${
               isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
@@ -121,8 +175,14 @@ export function HeroSection() {
             Your social posts, referrals, reviews, and recent sales already create attention. We build the site that turns that attention into trust, appraisal intent, and booked seller conversations.
           </p>
 
+          <HeroVideoCard
+            className={`mt-8 max-w-xl transition-all delay-200 duration-700 lg:hidden ${
+              isVisible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
+            }`}
+          />
+
           <div
-            className={`mt-10 flex flex-col gap-4 transition-all delay-300 duration-700 sm:flex-row ${
+            className={`mt-8 flex flex-col gap-4 transition-all delay-300 duration-700 sm:flex-row lg:mt-10 ${
               isVisible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
             }`}
           >
@@ -153,6 +213,13 @@ export function HeroSection() {
               </span>
             ))}
           </div>
+          </div>
+
+          <HeroVideoCard
+            className={`hidden transition-all delay-300 duration-700 lg:block ${
+              isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+            }`}
+          />
         </div>
       </div>
     </section>
