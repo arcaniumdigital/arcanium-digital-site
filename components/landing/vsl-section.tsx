@@ -10,12 +10,12 @@ export function VslSection() {
         type="module"
       />
       <style>{`
-        wistia-player[media-id='43wdr7dw38'] {
+        .vsl-wistia-player wistia-player[media-id='43wdr7dw38'] {
           display: block;
           width: 100%;
         }
 
-        wistia-player[media-id='43wdr7dw38']:not(:defined) {
+        .vsl-wistia-player wistia-player[media-id='43wdr7dw38']:not(:defined) {
           background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/43wdr7dw38/swatch');
           display: block;
           filter: blur(5px);
@@ -38,6 +38,7 @@ export function VslSection() {
         <div className="lg:col-span-8">
           <div className="overflow-hidden border border-foreground/15 bg-black shadow-2xl shadow-black/30">
             <div
+              className="vsl-wistia-player"
               dangerouslySetInnerHTML={{
                 __html:
                   '<wistia-player media-id="43wdr7dw38" wistia-popover="true" aspect="1.3333333333333333"></wistia-player>',
