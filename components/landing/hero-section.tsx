@@ -8,12 +8,12 @@ function HeroVideo() {
   return (
     <div className="mx-auto w-full max-w-[900px]">
       <div className="group relative overflow-hidden rounded-[18px] border border-white/10 bg-black shadow-2xl shadow-[#eca8d6]/10">
-        <div className="relative aspect-[4/3] bg-black sm:aspect-[16/9]">
+        <div className="relative aspect-video bg-black">
           <div
             className="hero-wistia-player h-full w-full"
             dangerouslySetInnerHTML={{
               __html:
-                '<wistia-player media-id="43wdr7dw38" wistia-popover="true" aspect="1.3333333333333333"></wistia-player>',
+                '<wistia-player media-id="huqke86lng" wistia-popover="true" aspect="1.7777777777777777"></wistia-player>',
             }}
           />
           <div className="pointer-events-none absolute inset-0 bg-black/10 transition-colors group-hover:bg-black/0" />
@@ -34,19 +34,19 @@ export function HeroSection() {
     <section id="vsl" className="relative overflow-hidden bg-black px-6 pb-16 pt-28 text-white md:pb-20 md:pt-28 lg:min-h-[100svh] lg:px-12 lg:pt-28">
       <Script src="https://fast.wistia.com/player.js" strategy="afterInteractive" />
       <Script
-        src="https://fast.wistia.com/embed/43wdr7dw38.js"
+        src="https://fast.wistia.com/embed/huqke86lng.js"
         strategy="afterInteractive"
         type="module"
       />
       <style jsx global>{`
-        .hero-wistia-player wistia-player[media-id="43wdr7dw38"] {
+        .hero-wistia-player wistia-player[media-id="huqke86lng"] {
           display: block;
           height: 100%;
           width: 100%;
         }
 
-        .hero-wistia-player wistia-player[media-id="43wdr7dw38"]:not(:defined) {
-          background: center / cover no-repeat url("https://fast.wistia.com/embed/medias/43wdr7dw38/swatch");
+        .hero-wistia-player wistia-player[media-id="huqke86lng"]:not(:defined) {
+          background: center / cover no-repeat url("https://fast.wistia.com/embed/medias/huqke86lng/swatch");
           display: block;
           height: 100%;
           width: 100%;

@@ -2,7 +2,6 @@
 
 import Cal, { getCalApi } from "@calcom/embed-react";
 import { useEffect, useRef, useState } from "react";
-import { CalendarDays } from "lucide-react";
 
 export function CtaSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -57,29 +56,17 @@ export function CtaSection() {
             </p>
           </div>
 
-          <div className="mx-auto max-w-5xl overflow-hidden border border-foreground/15 bg-[#0b0b0c] shadow-2xl shadow-foreground/5">
-            <div className="flex items-center justify-between gap-4 border-b border-white/10 bg-white/[0.03] px-5 py-3 lg:px-6">
-              <div>
-                <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/45">
-                  Arcanium Digital / appraisal growth
-                </span>
-                <h3 className="font-display text-2xl text-white">Choose a time to map your appraisal funnel</h3>
-              </div>
-              <CalendarDays className="hidden size-6 text-[#f68dff] sm:block" />
-            </div>
-
-            <div className="h-[545px] bg-[#0b0b0c]">
-              <Cal
-                namespace="magnet"
-                calLink="arcaniumdigital/magnet"
-                style={{ width: "100%", height: "100%", overflow: "scroll" }}
-                config={{
-                  layout: "month_view",
-                  useSlotsViewOnSmallScreen: "true",
-                  theme: "dark",
-                }}
-              />
-            </div>
+          <div className="mx-auto h-[545px] max-w-5xl overflow-hidden bg-[#0b0b0c]">
+            <Cal
+              namespace="magnet"
+              calLink="arcaniumdigital/magnet"
+              style={{ width: "100%", height: "100%", overflow: "scroll" }}
+              config={{
+                layout: "month_view",
+                useSlotsViewOnSmallScreen: "true",
+                theme: "dark",
+              }}
+            />
           </div>
         </div>
       </div>
