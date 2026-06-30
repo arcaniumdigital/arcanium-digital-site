@@ -43,7 +43,7 @@ export function Navigation() {
         >
           {/* Logo */}
           <a href="#" className="flex items-center gap-2 group">
-            <span className={`font-display tracking-tight transition-all duration-500 ${isScrolled ? "text-lg text-foreground md:text-xl" : "text-xl text-black md:text-2xl"}`}>Arcanium Digital</span>
+            <span className={`font-display tracking-tight transition-all duration-500 ${isScrolled ? "text-lg text-foreground md:text-xl" : "text-xl text-white md:text-2xl"}`}>Arcanium Digital</span>
           </a>
 
           {/* Desktop Navigation */}
@@ -52,22 +52,22 @@ export function Navigation() {
               <a
                 key={link.name}
                 href={link.href}
-                className={`text-sm transition-colors duration-300 relative group ${isScrolled ? "text-foreground/70 hover:text-foreground" : "text-black/60 hover:text-black"}`}
+                className={`text-sm transition-colors duration-300 relative group ${isScrolled ? "text-foreground/70 hover:text-foreground" : "text-white/62 hover:text-white"}`}
               >
                 {link.name}
-                <span className={`absolute -bottom-1 left-0 w-0 h-px transition-all duration-300 group-hover:w-full ${isScrolled ? "bg-foreground" : "bg-black"}`} />
+                <span className={`absolute -bottom-1 left-0 w-0 h-px transition-all duration-300 group-hover:w-full ${isScrolled ? "bg-foreground" : "bg-white"}`} />
               </a>
             ))}
           </div>
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="#vsl" className={`transition-all duration-500 ${isScrolled ? "text-xs text-foreground/70 hover:text-foreground" : "text-sm text-black/60 hover:text-black"}`}>
+            <a href="#vsl" className={`transition-all duration-500 ${isScrolled ? "text-xs text-foreground/70 hover:text-foreground" : "text-sm text-white/62 hover:text-white"}`}>
               Watch proof
             </a>
             <a
               href="#cta"
-              className={`inline-flex items-center justify-center rounded-full font-medium transition-all duration-500 ${isScrolled ? "h-8 bg-foreground px-4 text-xs text-background hover:bg-foreground/90" : "h-9 bg-black px-6 text-sm text-white hover:bg-black/85"}`}
+              className={`inline-flex items-center justify-center rounded-full font-medium transition-all duration-500 ${isScrolled ? "h-8 bg-foreground px-4 text-xs text-background hover:bg-foreground/90" : "h-9 bg-white px-6 text-sm text-black hover:bg-white/90"}`}
             >
               Press me
             </a>
@@ -76,7 +76,7 @@ export function Navigation() {
           <a
             href="#cta"
             className={`inline-flex h-10 items-center justify-center rounded-full px-4 text-sm font-semibold transition-all duration-500 md:hidden ${
-              isScrolled ? "bg-foreground text-background" : "bg-black text-white"
+              isScrolled ? "bg-foreground text-background" : "bg-white text-black"
             }`}
           >
             Press me

@@ -7,7 +7,7 @@ import { ArrowRight } from "lucide-react";
 function HeroVideo() {
   return (
     <div className="mx-auto w-full max-w-[900px]">
-      <div className="group relative overflow-hidden rounded-[18px] border border-black/10 bg-black shadow-2xl shadow-black/15">
+      <div className="group relative overflow-hidden rounded-[18px] border border-white/10 bg-black shadow-2xl shadow-[#eca8d6]/10">
         <div className="relative aspect-[4/3] bg-black sm:aspect-[16/9]">
           <div
             className="hero-wistia-player h-full w-full"
@@ -31,7 +31,7 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section className="relative overflow-hidden bg-[#f4f3f0] px-6 pb-16 pt-28 text-black md:pb-20 md:pt-28 lg:min-h-[100svh] lg:px-12 lg:pt-28">
+    <section className="relative overflow-hidden bg-black px-6 pb-16 pt-28 text-white md:pb-20 md:pt-28 lg:min-h-[100svh] lg:px-12 lg:pt-28">
       <Script src="https://fast.wistia.com/player.js" strategy="afterInteractive" />
       <Script
         src="https://fast.wistia.com/embed/43wdr7dw38.js"
@@ -58,11 +58,11 @@ export function HeroSection() {
           isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
         }`}
       >
-        <h1 className="max-w-[1300px] font-display text-[clamp(3rem,7vw,6.4rem)] font-semibold leading-[0.9] tracking-tight text-black">
+        <h1 className="max-w-[1300px] font-display text-[clamp(3rem,7vw,6.4rem)] font-semibold leading-[0.9] tracking-tight text-white">
           Want more appraisals?
         </h1>
 
-        <p className="mt-6 max-w-3xl text-lg leading-relaxed text-black/62 md:text-xl">
+        <p className="mt-6 max-w-3xl text-lg leading-relaxed text-white/64 md:text-xl">
           We build personal agent sites that turn your reviews, recent sales, local proof, and social attention into booked seller conversations.
         </p>
 
