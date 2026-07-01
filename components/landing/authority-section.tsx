@@ -18,7 +18,7 @@ const testimonials = [
     market: "Premium property",
   },
   {
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    avatar: "/images/testimonials/dave-mcloughlin.avif",
     quote:
       "Jordan is a driven young professional who genuinely looks for ways to create value. He listens carefully, brings practical ideas, and is focused on outcomes rather than just selling a service.",
     name: "Dave McLoughlin",
