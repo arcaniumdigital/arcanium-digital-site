@@ -21,9 +21,9 @@ const testimonials = [
     avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     quote:
       "Jordan is a driven young professional who genuinely looks for ways to create value. He listens carefully, brings practical ideas, and is focused on outcomes rather than just selling a service.",
-    name: "Mark Clayton",
-    role: "Business owner",
-    market: "Property services",
+    name: "Dave McLoughlin",
+    role: "Property professional",
+    market: "Sunshine Coast",
   },
 ];
 
