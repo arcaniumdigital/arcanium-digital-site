@@ -28,11 +28,11 @@ export function Navigation() {
         }`}
       >
         <a href="#" className="flex items-center gap-2">
-          <span className="grid size-8 overflow-hidden rounded-full bg-[#8f33ff]">
+          <span className="grid size-9 place-items-center overflow-hidden rounded-full bg-[#8f33ff] p-1">
             <img
               src="/images/brand/logo-ad.png"
               alt="Arcanium Digital"
-              className="h-full w-full scale-125 object-cover mix-blend-screen"
+              className="h-full w-full scale-[1.55] object-contain mix-blend-screen"
             />
           </span>
           <span className="hidden font-display text-sm font-semibold tracking-tight text-[#151319] sm:inline">

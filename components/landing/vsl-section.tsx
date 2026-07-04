@@ -41,7 +41,7 @@ export function VslSection() {
               className="vsl-wistia-player"
               dangerouslySetInnerHTML={{
                 __html:
-                  '<wistia-player media-id="huqke86lng" wistia-popover="true" aspect="1.7777777777777777"></wistia-player>',
+                  '<wistia-player media-id="huqke86lng" aspect="1.7777777777777777" player-color="#8f33ff" autoplay silent-autoplay="allow" volume="1"></wistia-player>',
               }}
             />
           </div>

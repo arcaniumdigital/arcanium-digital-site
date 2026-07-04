@@ -13,7 +13,7 @@ function HeroVideo() {
             className="hero-wistia-player h-full w-full"
             dangerouslySetInnerHTML={{
               __html:
-                '<wistia-player media-id="huqke86lng" wistia-popover="true" aspect="1.7777777777777777"></wistia-player>',
+                '<wistia-player media-id="huqke86lng" aspect="1.7777777777777777" player-color="#8f33ff" autoplay silent-autoplay="allow" volume="1"></wistia-player>',
             }}
           />
           <div className="pointer-events-none absolute inset-0 bg-black/5 transition-colors group-hover:bg-black/0" />
@@ -46,8 +46,9 @@ export function HeroSection() {
         }
 
         .hero-wistia-player wistia-player[media-id="huqke86lng"]:not(:defined) {
-          background: center / cover no-repeat url("https://fast.wistia.com/embed/medias/huqke86lng/swatch");
+          background: center / contain no-repeat url("https://fast.wistia.com/embed/medias/huqke86lng/swatch");
           display: block;
+          filter: blur(5px);
           height: 100%;
           width: 100%;
         }
