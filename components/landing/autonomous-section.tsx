@@ -7,12 +7,12 @@ const showcaseImages = [
     alt: "Mary-Ann McLoughlin real estate agent homepage example",
   },
   {
-    title: "Premium seller positioning",
+    title: "Premium vendor positioning",
     image: "/images/showcase/mary-ann-strategy.png",
     alt: "Mary-Ann McLoughlin website positioning section example",
   },
   {
-    title: "Proof sellers can scan",
+    title: "Proof vendors can scan",
     image: "/images/showcase/mary-ann-results.png",
     alt: "Mary-Ann McLoughlin results and property proof section example",
   },
@@ -27,7 +27,7 @@ export function AutonomousSection() {
             The conversion machine your personal brand should lead to.
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base font-medium leading-relaxed text-[#111114]/58 md:text-lg">
-            One clear site that shows sellers why you, why now, and what to do next.
+            One clear site that shows potential vendors why you, why now, and what to do next.
           </p>
         </div>
 
@@ -41,7 +41,7 @@ export function AutonomousSection() {
                 <img
                   src={item.image}
                   alt={item.alt}
-                  className="aspect-[16/10] w-full rounded-[12px] object-cover object-top"
+                  className="aspect-[16/10] w-full rounded-[12px] object-contain object-top"
                 />
               </div>
             </article>

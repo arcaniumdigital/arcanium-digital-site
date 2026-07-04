@@ -6,19 +6,18 @@ import { AuthoritySection } from "@/components/landing/authority-section";
 import { AnalyticsSection } from "@/components/landing/analytics-section";
 import { CtaSection } from "@/components/landing/cta-section";
 import { FinalCtaSection } from "@/components/landing/final-cta-section";
-import { FooterSection } from "@/components/landing/footer-section";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Real Estate Agent Websites Built for More Appraisals",
+  title: "Real Estate Agent Websites Built for More Vendors",
   description:
-    "Arcanium Digital builds personalised real estate agent websites that turn proof, reviews, local authority, and seller intent into booked appraisal conversations.",
+    "Arcanium Digital builds personalised real estate agent websites that turn proof, reviews, local authority, and vendor intent into more listing conversations.",
   keywords: [
     "real estate agent websites",
     "real estate landing page",
     "agent personal website",
-    "real estate seller leads",
-    "property appraisal website",
+    "real estate vendor leads",
+    "real estate listing website",
     "real estate SEO",
     "real estate agent branding",
   ],
@@ -26,9 +25,9 @@ export const metadata: Metadata = {
     canonical: siteUrl,
   },
   openGraph: {
-    title: "Real Estate Agent Websites Built for More Appraisals",
+    title: "Real Estate Agent Websites Built for More Vendors",
     description:
-      "Turn an agent's online presence into a trust-building path for local seller enquiries.",
+      "Turn an agent's online presence into a trust-building path for local vendor and listing enquiries.",
     url: siteUrl,
     siteName,
     type: "website",
@@ -50,7 +49,7 @@ const structuredData = [
     serviceType: "Real estate agent website design and lead generation",
     url: siteUrl,
     description:
-      "Personalised websites for real estate agents that build trust, prove local authority, and convert visitors into appraisal conversations.",
+      "Personalised websites for real estate agents that build trust, prove local authority, and convert visitors into vendor and listing conversations.",
     provider: {
       "@type": "Organization",
       name: siteName,
@@ -73,7 +72,6 @@ export default function Home() {
       <AuthoritySection />
       <AnalyticsSection />
       <FinalCtaSection />
-      <FooterSection />
     </main>
   );
 }

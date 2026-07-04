@@ -28,8 +28,12 @@ export function Navigation() {
         }`}
       >
         <a href="#" className="flex items-center gap-2">
-          <span className="grid size-7 place-items-center rounded-full bg-[#8f33ff] font-display text-xs font-bold text-white">
-            AD
+          <span className="grid size-8 overflow-hidden rounded-full bg-[#8f33ff]">
+            <img
+              src="/images/brand/logo-ad.png"
+              alt="Arcanium Digital"
+              className="h-full w-full scale-125 object-cover mix-blend-screen"
+            />
           </span>
           <span className="hidden font-display text-sm font-semibold tracking-tight text-[#151319] sm:inline">
             Arcanium Digital
@@ -48,7 +52,7 @@ export function Navigation() {
           href="#cta"
           className="group inline-flex h-10 items-center justify-center rounded-full bg-[#8f33ff] px-4 text-sm font-bold text-white shadow-[0_10px_28px_rgba(143,51,255,0.28)] transition-colors hover:bg-[#7b25e8]"
         >
-          Apply
+          Get Vendors
           <ArrowRight className="ml-1.5 size-4 transition-transform group-hover:translate-x-0.5" />
         </a>
       </nav>

@@ -4,7 +4,7 @@ const testimonials = [
   {
     avatar: "/images/testimonials/mary-ann-mcloughlin.jpg",
     quote:
-      "The site feels premium without feeling complicated. Sellers can quickly understand who I help, what I have sold, and how to start the right conversation with me.",
+      "The site feels premium without feeling complicated. Potential vendors can quickly understand who I help, what I have sold, and how to start the right conversation with me.",
     name: "Mary-Ann McLoughlin",
     role: "Real estate agent",
     market: "Sunshine Coast",

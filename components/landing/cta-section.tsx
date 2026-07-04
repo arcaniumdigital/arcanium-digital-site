@@ -48,12 +48,12 @@ export function CtaSection() {
           }`}
         >
           <h2 className="mx-auto mb-6 max-w-[760px] text-center font-display text-[clamp(2.4rem,5vw,4.8rem)] font-black leading-[0.92] tracking-tight text-[#111114]">
-            Apply for your appraisal growth plan below
+            Apply for your vendor growth plan below
           </h2>
 
           <div className="mx-auto overflow-hidden rounded-[18px] border border-black/10 bg-white shadow-[0_28px_80px_rgba(63,32,94,0.14)]">
             <div className="bg-[#8f33ff] px-4 py-3 text-center text-xs font-black uppercase tracking-[0.18em] text-white sm:text-sm">
-              Pick a time and we will map your seller funnel
+              Pick a time and we will map your vendor funnel
             </div>
             <div className="h-[540px] bg-white">
               <Cal
