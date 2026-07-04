@@ -21,43 +21,33 @@ const panels = [
   },
 ];
 
-function AnalyticsImage({ panel }: { panel: (typeof panels)[number] }) {
-  return (
-    <article className="group overflow-hidden border border-foreground/10 bg-foreground/[0.02]">
-      <div className="relative aspect-[4/3] overflow-hidden bg-black">
-        <img
-          src={panel.image}
-          alt={panel.alt}
-          className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.015]"
-        />
-      </div>
-      <div className="p-5">
-        <h3 className="font-display text-2xl">{panel.title}</h3>
-      </div>
-    </article>
-  );
-}
-
 export function AnalyticsSection() {
   return (
-    <section id="analytics" className="relative py-24 lg:py-32">
-      <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
-        <div className="mb-16 grid gap-8 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <h2 className="font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
-              Know what is
-              <br />
-              <span className="text-muted-foreground">creating intent.</span>
-            </h2>
-          </div>
-          <p className="text-lg leading-relaxed text-muted-foreground lg:col-span-5">
-            Once the site is live, you should know where sellers came from, what they looked at, and which actions are moving them closer to an appraisal conversation.
+    <section id="analytics" className="relative overflow-hidden bg-white px-5 py-20 sm:px-6 lg:px-12 lg:py-24">
+      <div className="mx-auto max-w-[1280px]">
+        <div className="mx-auto mb-10 max-w-[760px] text-center">
+          <h2 className="font-display text-[clamp(2.35rem,5vw,4.7rem)] font-black leading-[0.92] tracking-tight text-[#111114]">
+            More agent wins
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-base font-medium leading-relaxed text-[#111114]/58 md:text-lg">
+            Your site should show what is getting attention, where the right people are coming from, and what is creating seller intent.
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="-mx-5 flex snap-x gap-5 overflow-x-auto px-5 pb-2 sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0 lg:pb-0">
           {panels.map((panel) => (
-            <AnalyticsImage key={panel.title} panel={panel} />
+            <article key={panel.title} className="w-[78vw] shrink-0 snap-center overflow-hidden rounded-[18px] border border-black/10 bg-[#f6f4f8] shadow-[0_18px_50px_rgba(63,32,94,0.08)] sm:w-[58vw] lg:w-auto">
+              <div className="bg-[#8f33ff] px-3 py-3 text-center text-xs font-black text-white">
+                {panel.title}
+              </div>
+              <div className="bg-white p-2">
+                <img
+                  src={panel.image}
+                  alt={panel.alt}
+                  className="aspect-[4/3] w-full rounded-[12px] object-contain"
+                />
+              </div>
+            </article>
           ))}
         </div>
       </div>

@@ -2,16 +2,17 @@ import { ArrowRight } from "lucide-react";
 
 export function FinalCtaSection() {
   return (
-    <section className="bg-black px-6 py-20 text-white lg:px-12 lg:py-28">
-      <div className="mx-auto flex max-w-[1400px] flex-col justify-between gap-10 lg:flex-row lg:items-end">
-        <div>
-          <h2 className="max-w-4xl font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
-            Stop sending warm seller attention to a dead end.
-          </h2>
-        </div>
+    <section className="bg-[#f6f4f8] px-5 py-20 text-[#111114] sm:px-6 lg:px-12 lg:py-24">
+      <div className="mx-auto max-w-[980px] text-center">
+        <h2 className="font-display text-[clamp(2.4rem,5.4vw,5.2rem)] font-black leading-[0.92] tracking-tight">
+          Ready to turn seller attention into booked appraisal conversations?
+        </h2>
+        <p className="mx-auto mt-5 max-w-2xl text-base font-medium leading-relaxed text-[#111114]/58 md:text-lg">
+          Book the call, we will map the funnel, and you will see exactly what your personal agent site should say, show, and track.
+        </p>
         <a
           href="#cta"
-          className="group inline-flex h-14 shrink-0 items-center justify-center rounded-full bg-white px-7 text-sm font-semibold text-black transition-colors hover:bg-white/90"
+          className="group mt-8 inline-flex h-14 items-center justify-center rounded-full bg-[#8f33ff] px-8 text-sm font-black text-white shadow-[0_16px_42px_rgba(143,51,255,0.32)] transition-colors hover:bg-[#7b25e8]"
         >
           Show me how
           <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />

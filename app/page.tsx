@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Navigation } from "@/components/landing/navigation";
 import { HeroSection } from "@/components/landing/hero-section";
-import { MechanismSection } from "@/components/landing/mechanism-section";
 import { AutonomousSection } from "@/components/landing/autonomous-section";
-import { ConnectEverythingSection } from "@/components/landing/connect-everything-section";
-import { HowItWorksSection } from "@/components/landing/how-it-works-section";
 import { AuthoritySection } from "@/components/landing/authority-section";
 import { AnalyticsSection } from "@/components/landing/analytics-section";
 import { CtaSection } from "@/components/landing/cta-section";
@@ -71,15 +68,10 @@ export default function Home() {
       />
       <Navigation />
       <HeroSection />
-      <div className="hidden" aria-hidden="true">
-        <MechanismSection />
-      </div>
+      <CtaSection />
       <AutonomousSection />
-      <HowItWorksSection />
       <AuthoritySection />
       <AnalyticsSection />
-      <CtaSection />
-      <ConnectEverythingSection />
       <FinalCtaSection />
       <FooterSection />
     </main>

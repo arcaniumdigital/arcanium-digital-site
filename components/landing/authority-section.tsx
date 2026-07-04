@@ -12,7 +12,7 @@ const testimonials = [
   {
     avatar: "/images/testimonials/shana.jpg",
     quote:
-      "I was hesitant at first because I was not ready for more social exposure. Once I decided to move forward, the process felt considered, professional, and I have not regretted it.",
+      "I was hesitant because I was not ready for more social exposure. Once I decided to move forward, the process felt considered and professional, and I have not regretted it.",
     name: "Shana",
     role: "Real estate agent",
     market: "Premium property",
@@ -20,7 +20,7 @@ const testimonials = [
   {
     avatar: "/images/testimonials/dave-mcloughlin.avif",
     quote:
-      "Jordan is a driven young professional who genuinely looks for ways to create value. He listens carefully, brings practical ideas, and is focused on outcomes rather than just selling a service.",
+      "Jordan is a driven young professional who genuinely looks for ways to create value. He listens carefully, brings practical ideas, and stays focused on outcomes.",
     name: "Dave McLoughlin",
     role: "Property professional",
     market: "Sunshine Coast",
@@ -29,45 +29,41 @@ const testimonials = [
 
 export function AuthoritySection() {
   return (
-    <section id="testimonials" className="relative py-24 lg:py-32">
-      <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
-        <div className="mb-16 grid gap-8 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <h2 className="font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
-              Make sellers feel
-              <br />
-              <span className="text-muted-foreground">safe to enquire.</span>
-            </h2>
-          </div>
-          <p className="text-lg leading-relaxed text-muted-foreground lg:col-span-5">
-            The right proof lowers the risk of reaching out. Put reviews, recent results, and local confidence where sellers can see them before they book.
-          </p>
-        </div>
+    <section id="testimonials" className="relative overflow-hidden bg-[#f6f4f8] px-5 py-20 sm:px-6 lg:px-12 lg:py-24">
+      <div className="mx-auto max-w-[980px]">
+        <h2 className="mb-9 text-center font-display text-[clamp(2.35rem,5vw,4.7rem)] font-black leading-[0.92] tracking-tight text-[#111114]">
+          Client proof
+        </h2>
 
-        <div className="grid gap-4 lg:grid-cols-3">
+        <div className="space-y-5">
           {testimonials.map((testimonial) => (
-            <article key={testimonial.name} className="border border-foreground/10 bg-foreground/[0.02] p-7">
-              <div className="mb-8 flex items-center justify-between">
-                <Quote className="size-6 text-[#eca8d6]" />
-                <div className="flex gap-1 text-[#eca8d6]">
-                  {[...Array(5)].map((_, index) => (
-                    <Star key={index} className="size-4 fill-current" />
-                  ))}
-                </div>
+            <article key={testimonial.name} className="overflow-hidden rounded-[18px] border border-black/10 bg-white shadow-[0_18px_50px_rgba(63,32,94,0.08)]">
+              <div className="bg-[#8f33ff] px-5 py-3 text-center text-sm font-black text-white">
+                {testimonial.name} / {testimonial.market}
               </div>
-              <p className="text-lg leading-relaxed text-foreground/80">"{testimonial.quote}"</p>
-              <div className="mt-8 flex items-center gap-4 border-t border-foreground/10 pt-5">
-                <img
-                  src={testimonial.avatar}
-                  alt=""
-                  aria-hidden="true"
-                  className="size-12 rounded-full object-cover"
-                />
-                <div>
-                  <h3 className="font-display text-2xl">{testimonial.name}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {testimonial.role} / {testimonial.market}
-                  </p>
+              <div className="p-6 sm:p-7">
+                <div className="mb-5 flex items-center justify-between">
+                  <Quote className="size-6 text-[#8f33ff]" />
+                  <div className="flex gap-1 text-[#8f33ff]">
+                    {[...Array(5)].map((_, index) => (
+                      <Star key={index} className="size-4 fill-current" />
+                    ))}
+                  </div>
+                </div>
+                <p className="text-lg font-medium leading-relaxed text-[#111114]/74">"{testimonial.quote}"</p>
+                <div className="mt-6 flex items-center gap-4 border-t border-black/10 pt-5">
+                  <img
+                    src={testimonial.avatar}
+                    alt=""
+                    aria-hidden="true"
+                    className="size-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <h3 className="font-display text-2xl font-bold leading-none text-[#111114]">{testimonial.name}</h3>
+                    <p className="mt-1 text-sm font-medium text-[#111114]/50">
+                      {testimonial.role}
+                    </p>
+                  </div>
                 </div>
               </div>
             </article>

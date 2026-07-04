@@ -24,13 +24,13 @@ export function CtaSection() {
       const cal = await getCalApi({ namespace: "magnet" });
 
       cal("ui", {
-        theme: "dark",
+        theme: "light",
         cssVarsPerTheme: {
           light: {
-            "cal-brand": "#f68dff",
+            "cal-brand": "#8f33ff",
           },
           dark: {
-            "cal-brand": "#f68dff",
+            "cal-brand": "#8f33ff",
           },
         },
         hideEventTypeDetails: true,
@@ -40,33 +40,33 @@ export function CtaSection() {
   }, []);
 
   return (
-    <section id="cta" ref={sectionRef} className="relative overflow-hidden py-16 lg:py-20">
-      <div className="mx-auto max-w-[1120px] px-6 lg:px-12">
+    <section id="cta" ref={sectionRef} className="relative overflow-hidden bg-[#f6f4f8] px-5 pb-16 pt-4 sm:px-6 lg:px-12 lg:pb-24">
+      <div className="mx-auto max-w-[1080px]">
         <div
           className={`transition-all duration-1000 ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          <div className="mb-7 text-center">
-            <h2 className="mx-auto max-w-3xl font-display text-5xl leading-[0.95] tracking-tight md:text-7xl">
-              See how your site could win more seller conversations.
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Pick a time and we will map the fastest path from your existing proof to a site sellers can trust, remember, and book through.
-            </p>
-          </div>
+          <h2 className="mx-auto mb-6 max-w-[760px] text-center font-display text-[clamp(2.4rem,5vw,4.8rem)] font-black leading-[0.92] tracking-tight text-[#111114]">
+            Apply for your appraisal growth plan below
+          </h2>
 
-          <div className="mx-auto h-[545px] max-w-5xl overflow-hidden bg-[#0b0b0c]">
-            <Cal
-              namespace="magnet"
-              calLink="arcaniumdigital/magnet"
-              style={{ width: "100%", height: "100%", overflow: "scroll" }}
-              config={{
-                layout: "month_view",
-                useSlotsViewOnSmallScreen: "true",
-                theme: "dark",
-              }}
-            />
+          <div className="mx-auto overflow-hidden rounded-[18px] border border-black/10 bg-white shadow-[0_28px_80px_rgba(63,32,94,0.14)]">
+            <div className="bg-[#8f33ff] px-4 py-3 text-center text-xs font-black uppercase tracking-[0.18em] text-white sm:text-sm">
+              Pick a time and we will map your seller funnel
+            </div>
+            <div className="h-[540px] bg-white">
+              <Cal
+                namespace="magnet"
+                calLink="arcaniumdigital/magnet"
+                style={{ width: "100%", height: "100%", overflow: "scroll" }}
+                config={{
+                  layout: "month_view",
+                  useSlotsViewOnSmallScreen: "true",
+                  theme: "light",
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
