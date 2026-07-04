@@ -64,7 +64,7 @@ export function HeroSection() {
       >
         <h1 className="max-w-[1050px] font-display text-[clamp(2.65rem,6.8vw,6.45rem)] font-black leading-[0.9] tracking-tight text-[#111114]">
           How local agents turn their personal brand into{" "}
-          <span className="text-[#8f33ff]">more vendor opportunities.</span>
+          <span className="text-[#8f33ff]">endless vendors.</span>
         </h1>
 
         <p className="mt-6 max-w-[720px] text-base font-medium leading-relaxed text-[#111114]/58 md:text-xl">

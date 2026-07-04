@@ -5,7 +5,7 @@ export function FinalCtaSection() {
     <section className="bg-[#f6f4f8] px-5 py-20 text-[#111114] sm:px-6 lg:px-12 lg:py-24">
       <div className="mx-auto max-w-[980px] text-center">
         <h2 className="font-display text-[clamp(2.4rem,5.4vw,5.2rem)] font-black leading-[0.92] tracking-tight">
-          Ready to turn local attention into more vendor opportunities?
+          Ready to turn local attention into endless vendors?
         </h2>
         <p className="mx-auto mt-5 max-w-2xl text-base font-medium leading-relaxed text-[#111114]/58 md:text-lg">
           Book the call, we will map the funnel, and you will see exactly what your personal agent site should say, show, and track to create more listing intent.

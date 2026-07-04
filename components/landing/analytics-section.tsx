@@ -1,11 +1,11 @@
 const panels = [
   {
-    title: "May Vendor Analytics",
+    title: "May Client Analytics",
     image: "/images/analytics/traffic-overview.jpg",
     alt: "Analytics dashboard showing visitors, pageviews, bounce rate, session duration, sources, and top pages",
   },
   {
-    title: "June Vendor Analytics",
+    title: "June Client Analytics",
     image: "/images/analytics/traffic-trend.jpg",
     alt: "Analytics dashboard showing a monthly visitor and pageview trend",
   },
@@ -27,7 +27,7 @@ export function AnalyticsSection() {
   return (
     <section id="analytics" className="relative overflow-hidden bg-white px-5 py-20 sm:px-6 lg:px-12 lg:py-24">
       <style>{`
-        @keyframes vendor-wins-scroll {
+        @keyframes client-wins-scroll {
           from {
             transform: translateX(0);
           }
@@ -40,7 +40,7 @@ export function AnalyticsSection() {
       <div className="mx-auto max-w-[1280px]">
         <div className="mx-auto mb-10 max-w-[760px] text-center">
           <h2 className="font-display text-[clamp(2.35rem,5vw,4.7rem)] font-black leading-[0.92] tracking-tight text-[#111114]">
-            More vendor wins
+            More client wins
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base font-medium leading-relaxed text-[#111114]/58 md:text-lg">
             Your site should show what is getting attention, where the right vendors are coming from, and what is creating listing intent.
@@ -48,7 +48,7 @@ export function AnalyticsSection() {
         </div>
 
         <div className="-mx-5 overflow-hidden sm:-mx-6 lg:mx-0">
-          <div className="flex w-max gap-5 px-5 pb-2 [animation:vendor-wins-scroll_32s_linear_infinite] hover:[animation-play-state:paused] sm:px-6 lg:px-0">
+          <div className="flex w-max gap-5 px-5 pb-2 [animation:client-wins-scroll_32s_linear_infinite] hover:[animation-play-state:paused] sm:px-6 lg:px-0">
             {scrollingPanels.map((panel, index) => (
               <article key={`${panel.title}-${index}`} className="w-[78vw] shrink-0 overflow-hidden rounded-[18px] border border-black/10 bg-[#f6f4f8] shadow-[0_18px_50px_rgba(63,32,94,0.08)] sm:w-[430px] lg:w-[360px]">
                 <div className="bg-[#8f33ff] px-3 py-3 text-center text-xs font-black text-white">
