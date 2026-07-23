@@ -24,10 +24,10 @@ export function AutonomousSection() {
       <div className="mx-auto max-w-[1180px]">
         <div className="mx-auto mb-10 max-w-[780px] text-center">
           <h2 className="font-display text-[clamp(2.35rem,5vw,4.7rem)] font-black leading-[0.92] tracking-tight text-[#111114]">
-            The conversion machine your personal brand should lead to.
+            The proof vendors need before they pick up the phone.
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base font-medium leading-relaxed text-[#111114]/58 md:text-lg">
-            One clear site that shows potential vendors why you, why now, and what to do next.
+            When someone searches your name, they should quickly see local proof, recent results, and a clear reason to believe delaying the conversation could cost them.
           </p>
         </div>
 

@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 const navLinks = [
   { name: "Video", href: "#vsl" },
   { name: "Proof", href: "#testimonials" },
-  { name: "Book", href: "#cta" },
+  { name: "Audit", href: "#audit" },
 ];
 
 export function Navigation() {
@@ -49,10 +49,10 @@ export function Navigation() {
         </div>
 
         <a
-          href="#cta"
+          href="#audit"
           className="group inline-flex h-10 items-center justify-center rounded-full bg-[#8f33ff] px-4 text-sm font-bold text-white shadow-[0_10px_28px_rgba(143,51,255,0.28)] transition-colors hover:bg-[#7b25e8]"
         >
-          Get Vendors
+          Get audit
           <ArrowRight className="ml-1.5 size-4 transition-transform group-hover:translate-x-0.5" />
         </a>
       </nav>

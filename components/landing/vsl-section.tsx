@@ -5,18 +5,18 @@ export function VslSection() {
     <section id="vsl" className="relative overflow-hidden bg-background py-20 lg:py-28">
       <Script src="https://fast.wistia.com/player.js" strategy="afterInteractive" />
       <Script
-        src="https://fast.wistia.com/embed/huqke86lng.js"
+        src="https://fast.wistia.com/embed/46st4epgrb.js"
         strategy="afterInteractive"
         type="module"
       />
       <style>{`
-        .vsl-wistia-player wistia-player[media-id='huqke86lng'] {
+        .vsl-wistia-player wistia-player[media-id='46st4epgrb'] {
           display: block;
           width: 100%;
         }
 
-        .vsl-wistia-player wistia-player[media-id='huqke86lng']:not(:defined) {
-          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/huqke86lng/swatch');
+        .vsl-wistia-player wistia-player[media-id='46st4epgrb']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/46st4epgrb/swatch');
           display: block;
           filter: blur(5px);
           padding-top: 56.25%;
@@ -41,7 +41,7 @@ export function VslSection() {
               className="vsl-wistia-player"
               dangerouslySetInnerHTML={{
                 __html:
-                  '<wistia-player media-id="huqke86lng" aspect="1.7777777777777777" player-color="#8f33ff" autoplay silent-autoplay="allow" volume="1"></wistia-player>',
+                  '<wistia-player media-id="46st4epgrb" aspect="1.7777777777777777" player-color="#8f33ff" autoplay silent-autoplay="allow" volume="1"></wistia-player>',
               }}
             />
           </div>
