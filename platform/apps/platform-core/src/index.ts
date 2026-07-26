@@ -1,3 +1,8 @@
+import {
+  validateAutomationResultCandidate,
+  type AutomationResult,
+} from "../../../packages/contracts/src/automation-result";
+
 export interface Env {
   ENVIRONMENT: "test" | "production";
   EVENT_HMAC_SECRET?: string;
@@ -334,6 +339,177 @@ async function handleEvent(request: Request, env: Env): Promise<Response> {
   return json(response, 202);
 }
 
+async function persistAutomationResult(result: AutomationResult, env: Env): Promise<void> {
+  const createdAt = now();
+  const error = result.error ?? null;
+  const statements = [
+    env.PLATFORM_OPS_DB.prepare(
+      "INSERT INTO platform_automation_runs (result_id, run_id, idempotency_key, environment, client_id, automation_id, provider, status, correlation_id, started_at, completed_at, input_count, accepted_count, rejected_count, output_count, error_code, error_classification, retryable, limitations_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    ).bind(
+      result.result_id,
+      result.run_id,
+      result.idempotency_key,
+      result.environment,
+      result.client_id,
+      result.automation_id,
+      result.provider,
+      result.status,
+      result.correlation_id,
+      result.started_at,
+      result.completed_at,
+      result.input_count,
+      result.accepted_count,
+      result.rejected_count,
+      result.output_count,
+      error?.code ?? null,
+      error?.classification ?? null,
+      error?.retryable ? 1 : 0,
+      JSON.stringify(result.limitations ?? []),
+      createdAt,
+    ),
+    env.PLATFORM_OPS_DB.prepare(
+      "INSERT INTO platform_reconciliation_results (result_id, environment, client_id, automation_id, expected_count, observed_count, balanced, method, evidence_ref, reconciled_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    ).bind(
+      result.result_id,
+      result.environment,
+      result.client_id,
+      result.automation_id,
+      result.reconciliation.expected_count,
+      result.reconciliation.observed_count,
+      result.reconciliation.balanced ? 1 : 0,
+      result.reconciliation.method,
+      result.reconciliation.evidence_ref ?? null,
+      createdAt,
+    ),
+  ];
+
+  for (const action of result.actions) {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT OR IGNORE INTO platform_operator_actions (environment, client_id, automation_id, result_id, action_id, dedup_key, action_type, severity, mutation_kind, approval_required, owner_group, due_at, evidence_ref, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'open', ?, ?)",
+      ).bind(
+        result.environment,
+        result.client_id,
+        result.automation_id,
+        result.result_id,
+        action.action_id,
+        action.dedup_key,
+        action.action_type,
+        action.severity,
+        action.mutation_kind,
+        action.approval_required ? 1 : 0,
+        action.owner_group ?? null,
+        action.due_at ?? null,
+        action.evidence_ref ?? null,
+        createdAt,
+        createdAt,
+      ),
+    );
+    if (action.approval_required) {
+      statements.push(
+        env.PLATFORM_OPS_DB.prepare(
+          "INSERT OR IGNORE INTO platform_approval_requests (environment, client_id, action_id, automation_id, mutation_kind, status, requested_at) VALUES (?, ?, ?, ?, ?, 'pending', ?)",
+        ).bind(
+          result.environment,
+          result.client_id,
+          action.action_id,
+          result.automation_id,
+          action.mutation_kind,
+          createdAt,
+        ),
+      );
+    }
+  }
+
+  if (result.status === "failed" || !result.reconciliation.balanced) {
+    const classification = error?.classification ?? "permanent";
+    const errorCode = error?.code ?? "RECONCILIATION_UNBALANCED";
+    const severity = classification === "security" || classification === "isolation"
+      ? "critical"
+      : result.status === "failed"
+        ? "error"
+        : "warning";
+    const dedupKey = `${result.automation_id}:${result.provider}:${classification}:${errorCode}`;
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO platform_result_incidents (environment, client_id, incident_id, dedup_key, automation_id, result_id, provider, severity, classification, error_code, retryable, status, first_seen, last_seen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'open', ?, ?) ON CONFLICT(environment, client_id, dedup_key) DO UPDATE SET result_id = excluded.result_id, severity = excluded.severity, retryable = excluded.retryable, last_seen = excluded.last_seen",
+      ).bind(
+        result.environment,
+        result.client_id,
+        `incident:${result.result_id}`,
+        dedupKey,
+        result.automation_id,
+        result.result_id,
+        result.provider,
+        severity,
+        classification,
+        errorCode,
+        error?.retryable ? 1 : 0,
+        createdAt,
+        createdAt,
+      ),
+    );
+  }
+
+  await env.PLATFORM_OPS_DB.batch(statements);
+}
+
+async function handleAutomationResult(request: Request, env: Env): Promise<Response> {
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return failure("CONTENT_TYPE_REQUIRED", 415);
+  }
+  const raw = await request.text();
+  const maxBytes = Number(env.MAX_EVENT_BYTES);
+  if (!Number.isFinite(maxBytes) || maxBytes < 1) return failure("SERVER_CONFIGURATION_ERROR", 500);
+  if (encode(raw).byteLength > maxBytes) return failure("PAYLOAD_TOO_LARGE", 413);
+
+  const authFailure = await verifySignature(request, raw, env);
+  if (authFailure) return authFailure;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return failure("INVALID_JSON", 400);
+  }
+  const allowedClients = env.TEST_CLIENT_IDS.split(",").map((value) => value.trim()).filter(Boolean);
+  const validated = validateAutomationResultCandidate(parsed, env.ENVIRONMENT, allowedClients);
+  if (!validated.ok) return failure(validated.code, validated.status);
+  const result = validated.result;
+
+  const previous = await env.PLATFORM_OPS_DB.prepare(
+    "SELECT result_id, correlation_id FROM platform_automation_runs WHERE environment = ? AND client_id = ? AND idempotency_key = ?",
+  ).bind(result.environment, result.client_id, result.idempotency_key)
+    .first<{ result_id: string; correlation_id: string }>();
+  if (previous) {
+    return json({
+      ok: true,
+      data: {
+        accepted: true,
+        duplicate: true,
+        result_id: previous.result_id,
+        correlation_id: previous.correlation_id,
+        environment: env.ENVIRONMENT,
+      },
+    });
+  }
+
+  await persistAutomationResult(result, env);
+  return json({
+    ok: true,
+    data: {
+      accepted: true,
+      duplicate: false,
+      result_id: result.result_id,
+      correlation_id: result.correlation_id,
+      actions_recorded: result.actions.length,
+      approvals_pending: result.actions.filter((action) => action.approval_required).length,
+      incident_opened: result.status === "failed" || !result.reconciliation.balanced,
+      environment: env.ENVIRONMENT,
+    },
+  }, 202);
+}
+
 function health(env: Env): Response {
   const safety = {
     scenario_activation: env.ALLOW_SCENARIO_ACTIVATION,
@@ -353,7 +529,16 @@ function health(env: Env): Response {
       service: "arcanium-platform-core",
       version: "0.2.0",
       environment: env.ENVIRONMENT,
-      operations: ["A1-A15_EVENT", "A13_PROJECT", "A14_EXPERIMENT", "A15_COST_IMPORT"],
+      operations: [
+        "A1-A15_EVENT",
+        "A1-A15_RESULT",
+        "A1-A15_ACTION",
+        "A1-A15_RECONCILIATION",
+        "A12_INCIDENT",
+        "A13_PROJECT",
+        "A14_EXPERIMENT",
+        "A15_COST_IMPORT",
+      ],
       production_actions_enabled: Object.values(safety).some((value) => value === "true"),
       safety,
     },
@@ -372,6 +557,9 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     if (request.method === "GET" && url.pathname === "/health") return health(env);
+    if (request.method === "POST" && url.pathname === "/v1/results") {
+      return handleAutomationResult(request, env);
+    }
     if (request.method === "POST" && eventRoutes.has(url.pathname)) return handleEvent(request, env);
     return failure("NOT_FOUND", 404);
   },

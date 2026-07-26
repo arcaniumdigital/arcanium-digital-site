@@ -16,7 +16,7 @@
     {"automation_id":"A9","scenario_id":6665249,"hook_id":3448427,"mode":"safe_ingress_only"},
     {"automation_id":"A10","scenario_id":6665251,"hook_id":3448428,"mode":"safe_ingress_only"},
     {"automation_id":"A11","scenario_id":6665253,"hook_id":3448429,"mode":"safe_ingress_only"},
-    {"automation_id":"A12","scenario_id":6665254,"hook_id":3448431,"mode":"safe_ingress_only"},
+    {"automation_id":"A12","scenario_id":6665254,"hook_id":3448431,"mode":"signed_result_reconciliation","schedule":"immediate","last_test_result_id":"result:a12-result-1785051375416"},
     {"automation_id":"A13","scenario_id":6691548,"hook_id":3445306,"mode":"domain_ingress"},
     {"automation_id":"A14","scenario_id":6691550,"hook_id":3445307,"mode":"domain_ingress"},
     {"automation_id":"A15","scenario_id":6691553,"hook_id":3445308,"mode":"domain_ingress"}

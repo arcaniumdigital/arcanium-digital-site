@@ -5,7 +5,12 @@ import {
   evaluateActivationGate,
   type AutomationActivationEvidence,
 } from "../../../packages/contracts/src/activation-gate";
+import {
+  AUTOMATION_ACTION_CEILINGS,
+  validateAutomationResultCandidate,
+} from "../../../packages/contracts/src/automation-result";
 import goldenEvents from "../../../packages/test-fixtures/golden-events.json";
+import resultFixtures from "../../../packages/test-fixtures/automation-results.json";
 import activationGates from "../../../readiness/TEST-0001/ACTIVATION_GATES.json";
 
 const validEvent = {
@@ -218,5 +223,148 @@ describe("automation activation gates", () => {
       blockers: [],
     });
     expect(evaluateActivationGate({ ...ready, environment: "test" }).production_ready).toBe(false);
+  });
+});
+
+const validAutomationResult = {
+  schema_version: "1.0",
+  result_id: "result-a2-1",
+  run_id: "run-a2-1",
+  idempotency_key: "result-idem-a2-1",
+  correlation_id: "corr-a2-1",
+  automation_id: "A2",
+  client_id: "TEST-0001",
+  environment: "test",
+  provider: "fixture",
+  status: "completed",
+  started_at: "2026-07-26T00:00:00.000Z",
+  completed_at: "2026-07-26T00:00:01.000Z",
+  input_count: 1,
+  accepted_count: 1,
+  rejected_count: 0,
+  output_count: 1,
+  actions: [{
+    action_id: "action-a2-1",
+    dedup_key: "listing:fixture:1",
+    action_type: "listing.review",
+    severity: "warning",
+    mutation_kind: "none",
+    approval_required: false,
+    evidence_ref: "fixture://a2/evidence/1",
+  }],
+  reconciliation: {
+    expected_count: 1,
+    observed_count: 1,
+    balanced: true,
+    method: "source count equals accepted plus rejected",
+    evidence_ref: "fixture://a2/reconciliation/1",
+  },
+  limitations: ["TEST fixture only"],
+};
+
+describe("automation result contract", () => {
+  it("accepts a balanced, tenant-isolated TEST result", () => {
+    expect(validateAutomationResultCandidate(
+      validAutomationResult,
+      "test",
+      ["TEST-0001"],
+    )).toMatchObject({ ok: true });
+  });
+
+  it("has a safe executable result fixture for A2-A12", () => {
+    expect(resultFixtures.fixtures.map((fixture) => fixture.automation_id))
+      .toEqual(Array.from({ length: 11 }, (_, index) => `A${index + 2}`));
+    expect(resultFixtures.forbidden_side_effects).toContain("dangerous_replay");
+
+    for (const [index, fixture] of resultFixtures.fixtures.entries()) {
+      const result = {
+        ...validAutomationResult,
+        result_id: `result-${fixture.automation_id}-${index}`,
+        run_id: `run-${fixture.automation_id}-${index}`,
+        idempotency_key: `idem-${fixture.automation_id}-${index}`,
+        correlation_id: `corr-${fixture.automation_id}-${index}`,
+        automation_id: fixture.automation_id,
+        provider: fixture.provider,
+        actions: [{
+          ...validAutomationResult.actions[0],
+          action_id: `action-${fixture.automation_id}-${index}`,
+          dedup_key: `dedup-${fixture.automation_id}-${index}`,
+          action_type: fixture.action_type,
+        }],
+        reconciliation: {
+          ...validAutomationResult.reconciliation,
+          method: fixture.reconciliation_method,
+        },
+      };
+      expect(validateAutomationResultCandidate(
+        result,
+        "test",
+        ["TEST-0001"],
+      )).toMatchObject({ ok: true });
+    }
+  });
+
+  it.each([
+    [{ ...validAutomationResult, environment: "production" }, "ENVIRONMENT_MISMATCH"],
+    [{ ...validAutomationResult, client_id: "TEST-0002" }, "CLIENT_NOT_ALLOWED"],
+    [{ ...validAutomationResult, accepted_count: 0 }, "RESULT_COUNTS_UNBALANCED"],
+    [{
+      ...validAutomationResult,
+      reconciliation: {
+        ...validAutomationResult.reconciliation,
+        observed_count: 0,
+      },
+    }, "RECONCILIATION_MISMATCH"],
+    [{ ...validAutomationResult, status: "failed", error: null }, "FAILED_RESULT_REQUIRES_ERROR"],
+  ])("rejects an unsafe or inconsistent result with %s", (result, code) => {
+    expect(validateAutomationResultCandidate(
+      result,
+      "test",
+      ["TEST-0001"],
+    )).toMatchObject({ ok: false, code });
+  });
+
+  it("enforces the lower of the specification ceiling and configured cap", () => {
+    const actions = Array.from({ length: 6 }, (_, index) => ({
+      ...validAutomationResult.actions[0],
+      action_id: `action-${index}`,
+      dedup_key: `dedup-${index}`,
+    }));
+    expect(validateAutomationResultCandidate(
+      { ...validAutomationResult, actions },
+      "test",
+      ["TEST-0001"],
+      5,
+    )).toMatchObject({ ok: false, code: "ACTION_CAP_EXCEEDED" });
+    expect(AUTOMATION_ACTION_CEILINGS.A5).toBe(5);
+    expect(AUTOMATION_ACTION_CEILINGS.A12).toBe(25);
+  });
+
+  it("requires approval for every side-effecting mutation", () => {
+    const unsafeAction = {
+      ...validAutomationResult.actions[0],
+      mutation_kind: "email",
+      approval_required: false,
+    };
+    expect(validateAutomationResultCandidate(
+      { ...validAutomationResult, actions: [unsafeAction] },
+      "test",
+      ["TEST-0001"],
+    )).toMatchObject({ ok: false, code: "MUTATION_REQUIRES_APPROVAL" });
+  });
+
+  it("rejects retry for security, isolation and permanent failures", () => {
+    expect(validateAutomationResultCandidate({
+      ...validAutomationResult,
+      status: "failed",
+      error: {
+        code: "CROSS_CLIENT_CANARY_FAILED",
+        classification: "isolation",
+        retryable: true,
+      },
+    }, "test", ["TEST-0001"])).toMatchObject({
+      ok: false,
+      code: "UNSAFE_RETRY_CLASSIFICATION",
+    });
   });
 });

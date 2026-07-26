@@ -6,15 +6,16 @@ to inactive. No production action was enabled.
 ## Deployment and local gates
 
 - Worker: `arcanium-platform-core-test`
-- Current version: `777d22fe-ce05-4103-9185-74664903f164`
+- Current version: `bb58a853-7af2-4d32-953a-711c1048b466`
 - Health version: `0.2.0`
-- D1 migrations: `006_platform_core_registry.sql` and
-  `007_queue_delivery_audit.sql`
+- D1 migrations: `006_platform_core_registry.sql`,
+  `007_queue_delivery_audit.sql`, and
+  `008_automation_results_and_tasks.sql`
 - Production action flags: all `false`
 - Public send, content publish, GBP mutation, outreach send, and dangerous
   replay flags: all `false`
 - TypeScript: passed
-- Vitest: 17/17 passed
+- Vitest: 27/27 passed
 - Wrangler bundle/deployment: passed
 - Next.js production build: passed
 
@@ -25,6 +26,7 @@ to inactive. No production action was enabled.
 | A1 | `cacd51df6fb445469f513711d978f3f5` | Client config `TEST-0001` / `1.0-phase2c` |
 | A6 | `63886f1ae6de4426b16ec3f1e3d49163` | Audit event `event-phase2-a6-950b5c1eacbb4a36bb1ff87fc807d52f` |
 | A8 | `477000cc227b43e1ad0a614282aae2c1` | Review event `event-phase2-a8-49b2d7040bfb4036b1fdd5dac5df75f2` |
+| A12 | controlled queued webhook run at 2026-07-26 17:36 AEST | Result `result:a12-result-1785051375416`, action `action:a12-result-1785051375416`, balanced 1/1 reconciliation |
 | A13 | `8af7db5bec9248d4a79c7413151f1cd0` | Project `project-phase2-72a1b72d7d6349e98b83a06c6caf6319` |
 | A14 | `500615bd3c404b4c91fd245ec3428875` | Experiment `experiment-phase2-41ca3f061892480ea2b40af7e8f8320b` |
 | A15 | `6c6abc7a04954b96aa998b57167f0453` | Cost entry `entry-phase2-57271d97a8464a988c130e179fcc480c` |
@@ -32,6 +34,20 @@ to inactive. No production action was enabled.
 All fifteen automation identifiers have a successful signed TEST ingress
 execution in `readiness/TEST-0001/INGRESS_MATRIX.json`. For A2-A12 this is an
 ingress baseline, not a claim that provider branches are implemented.
+
+The shared `/v1/results` endpoint now validates and durably records compact
+provider results for A1-A15. It enforces the lower of the implementation-spec
+action ceiling and configured cap, requires approval for publish/email/SMS/GBP/
+outreach/destructive/replay actions, rejects unsafe retry classifications,
+requires completed results to reconcile, and opens a deduplicated A12 incident
+for failed or unbalanced runs.
+
+The A12 TEST clone is now `TEST CLONE — A12 — Operations Result Ingress`.
+Its shared signed module returned success and D1 recorded a completed run, one
+`mutation_kind=none` action, and a balanced reconciliation. The webhook-response
+module showed a warning only because the request had first queued while the
+run-once listener had expired; signing and persistence both succeeded. The
+scenario was restored to `Immediately as data arrives` and left inactive.
 
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform
@@ -89,6 +105,7 @@ field-specific missing-auth diagnostics while still rejecting incomplete,
 invalid, or replayed signatures.
 
 Cost caps, approval groups, reconciliation rules, and rollback methods are
-declared for A1-A15. Operator replay from the DLQ, A2-A12 provider branches,
-remote enforcement and reconciliation, provider-resource isolation, and
-rollback drills remain incomplete. Production approval remains false.
+declared for A1-A15. Shared result enforcement and durable reconciliation are
+now live in TEST. Operator replay from the DLQ, A2-A11 provider branches, the
+remaining A12 provider-health/recovery branches, provider-resource isolation,
+and rollback drills remain incomplete. Production approval remains false.

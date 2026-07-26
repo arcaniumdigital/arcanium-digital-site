@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "environment": "test",
+  "client_id": "TEST-0001",
+  "endpoint": "/v1/results",
+  "fixtures": [
+    {
+      "automation_id": "A2",
+      "provider": "listing-fixture",
+      "action_type": "listing.issue.review",
+      "reconciliation_method": "source listing count equals accepted plus rejected"
+    },
+    {
+      "automation_id": "A3",
+      "provider": "sanity",
+      "action_type": "content.draft.review",
+      "reconciliation_method": "draft and publication status totals"
+    },
+    {
+      "automation_id": "A4",
+      "provider": "gbp-fixture",
+      "action_type": "gbp.review.operator_action",
+      "reconciliation_method": "GBP source events equal reviewed actions"
+    },
+    {
+      "automation_id": "A5",
+      "provider": "search-fixture",
+      "action_type": "search.growth.priority",
+      "reconciliation_method": "provider task identifiers and cost ledger"
+    },
+    {
+      "automation_id": "A6",
+      "provider": "technical-fixture",
+      "action_type": "technical.issue.review",
+      "reconciliation_method": "deployment and technical-check evidence"
+    },
+    {
+      "automation_id": "A7",
+      "provider": "local-geo-fixture",
+      "action_type": "local.visibility.review",
+      "reconciliation_method": "location term provider task matrix"
+    },
+    {
+      "automation_id": "A8",
+      "provider": "delivery-fixture",
+      "action_type": "lead.delivery.review",
+      "reconciliation_method": "accepted enquiries equal delivered plus failed"
+    },
+    {
+      "automation_id": "A9",
+      "provider": "evidence-fixture",
+      "action_type": "content.evidence.review",
+      "reconciliation_method": "evidence sources equal approved drafts plus rejected"
+    },
+    {
+      "automation_id": "A10",
+      "provider": "authority-fixture",
+      "action_type": "authority.opportunity.review",
+      "reconciliation_method": "citation opportunities equal reviewed outreach tasks"
+    },
+    {
+      "automation_id": "A11",
+      "provider": "analytics-fixture",
+      "action_type": "report.input.review",
+      "reconciliation_method": "report inputs and destination artifact hash"
+    },
+    {
+      "automation_id": "A12",
+      "provider": "ops-fixture",
+      "action_type": "incident.remediation.review",
+      "reconciliation_method": "incident retry dead-letter and provider-cost ledgers"
+    }
+  ],
+  "forbidden_side_effects": [
+    "public_message",
+    "content_publish",
+    "gbp_mutation",
+    "outreach_send",
+    "destructive_action",
+    "dangerous_replay"
+  ]
+}
