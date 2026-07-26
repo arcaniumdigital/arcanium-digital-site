@@ -43,6 +43,12 @@
       "database_id": "3d76527c-ae04-4c65-a8e1-e5cfa79fede5"
     }
   ],
+  "services": [
+    {
+      "binding": "ACCESS_CHECKS",
+      "service": "arcanium-access-checks-test"
+    }
+  ],
   "queues": {
     "producers": [
       {

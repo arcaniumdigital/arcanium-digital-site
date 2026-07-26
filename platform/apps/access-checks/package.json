@@ -1,0 +1,17 @@
+{
+  "name": "@arcanium/access-checks",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "check": "tsc --project tsconfig.json",
+    "test": "vitest run",
+    "deploy:test": "wrangler deploy --config wrangler.test.jsonc"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260724.1",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.30.0"
+  }
+}

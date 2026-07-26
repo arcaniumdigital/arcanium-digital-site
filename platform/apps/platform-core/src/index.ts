@@ -16,6 +16,7 @@ export interface Env {
   ENVIRONMENT: "test" | "production";
   EVENT_HMAC_SECRET?: string;
   OPS_HMAC_SECRET?: string;
+  ACCESS_CHECKS_HMAC_SECRET?: string;
   TEST_CLIENT_IDS: string;
   MAX_EVENT_BYTES: string;
   REPLAY_WINDOW_SECONDS: string;
@@ -36,6 +37,9 @@ export interface Env {
   A14_DB: D1Database;
   A15_DB: D1Database;
   PLATFORM_EVENTS: Queue;
+  ACCESS_CHECKS: {
+    fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+  };
 }
 
 export type AutomationId =
@@ -89,6 +93,17 @@ function hex(bytes: ArrayBuffer): string {
 
 async function sha256(value: string): Promise<string> {
   return hex(await crypto.subtle.digest("SHA-256", encode(value)));
+}
+
+async function hmacSha256(secret: string, value: string): Promise<string> {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  return hex(await crypto.subtle.sign("HMAC", key, encode(value)));
 }
 
 export function constantTimeEqual(left: string, right: string): boolean {
@@ -167,14 +182,7 @@ async function verifySignature(
     return failure("TIMESTAMP_OUT_OF_WINDOW", 401);
   }
 
-  const key = await crypto.subtle.importKey(
-    "raw",
-    encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"],
-  );
-  const expected = hex(await crypto.subtle.sign("HMAC", key, encode(`${timestamp}.${nonce}.${rawBody}`)));
+  const expected = await hmacSha256(secret, `${timestamp}.${nonce}.${rawBody}`);
   const signature = supplied.replace(/^sha256[:=]/i, "").toLowerCase();
   if (!/^[a-f0-9]{64}$/.test(signature) || !constantTimeEqual(expected, signature)) {
     return failure("INVALID_SIGNATURE", 401);
@@ -186,6 +194,89 @@ async function verifySignature(
   ).bind(nonce, expiresAt).run();
   if ((inserted.meta.changes ?? 0) !== 1) return failure("REPLAY_REJECTED", 409);
   return null;
+}
+
+export function validateAccessProxyCandidate(
+  candidate: unknown,
+  environment: Env["ENVIRONMENT"],
+  allowedClientIds: string[],
+  expectedCheckType: "site" | "http_provider",
+): string | null {
+  if (!isRecord(candidate)) return "INVALID_ACCESS_CHECK";
+  if (candidate.environment !== environment) return "ENVIRONMENT_MISMATCH";
+  if (typeof candidate.client_id !== "string" || !allowedClientIds.includes(candidate.client_id)) {
+    return "CLIENT_NOT_ALLOWED";
+  }
+  if (candidate.check_type !== expectedCheckType) return "INVALID_CHECK_TYPE";
+  return null;
+}
+
+async function handleAccessCheckProxy(
+  request: Request,
+  env: Env,
+  upstreamPath: "/check/site" | "/check/http-provider",
+): Promise<Response> {
+  const contentLength = Number(request.headers.get("content-length") ?? "0");
+  const maxBytes = Number(env.MAX_EVENT_BYTES);
+  if (
+    !Number.isFinite(maxBytes)
+    || maxBytes < 1
+    || (Number.isFinite(contentLength) && contentLength > maxBytes)
+  ) {
+    return failure("PAYLOAD_TOO_LARGE", 413);
+  }
+
+  const raw = await request.text();
+  if (encode(raw).byteLength > maxBytes) return failure("PAYLOAD_TOO_LARGE", 413);
+  const authFailure = await verifySignature(request, raw, env);
+  if (authFailure) return authFailure;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return failure("INVALID_JSON", 400);
+  }
+  const expectedCheckType = upstreamPath === "/check/site" ? "site" : "http_provider";
+  const validationFailure = validateAccessProxyCandidate(
+    parsed,
+    env.ENVIRONMENT,
+    env.TEST_CLIENT_IDS.split(",").map((value) => value.trim()).filter(Boolean),
+    expectedCheckType,
+  );
+  if (validationFailure) return failure(validationFailure, validationFailure === "INVALID_ACCESS_CHECK" ? 400 : 403);
+  if (!env.ACCESS_CHECKS_HMAC_SECRET) return failure("ACCESS_CHECKS_HMAC_NOT_CONFIGURED", 500);
+
+  const timestamp = now();
+  const nonce = `a1-proxy-${crypto.randomUUID()}`;
+  const signature = await hmacSha256(
+    env.ACCESS_CHECKS_HMAC_SECRET,
+    `${timestamp}.${nonce}.${raw}`,
+  );
+  try {
+    const upstream = await env.ACCESS_CHECKS.fetch(
+      `https://access-checks.internal${upstreamPath}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Automation-Timestamp": timestamp,
+          "X-Automation-Nonce": nonce,
+          "X-Automation-Signature": `sha256=${signature}`,
+        },
+        body: raw,
+      },
+    );
+    return new Response(await upstream.arrayBuffer(), {
+      status: upstream.status,
+      headers: {
+        "Content-Type": upstream.headers.get("content-type") ?? "application/json; charset=utf-8",
+        "Cache-Control": "no-store",
+      },
+    });
+  } catch {
+    return failure("ACCESS_CHECKS_UNAVAILABLE", 503);
+  }
 }
 
 async function persistAutomationRequest(event: AutomationEvent, env: Env): Promise<void> {
@@ -952,12 +1043,14 @@ function health(env: Env): Response {
       version: "0.2.0",
       environment: env.ENVIRONMENT,
       ops_intake_configured: Boolean(env.OPS_HMAC_SECRET),
+      access_checks_proxy_configured: Boolean(env.ACCESS_CHECKS_HMAC_SECRET && env.ACCESS_CHECKS),
       operations: [
         "A1-A15_EVENT",
         "A1-A15_RESULT",
         "A1-A15_ACTION",
         "A1-A15_ACTION_RESOLUTION",
         "A1-A15_RECONCILIATION",
+        "A1_ACCESS_CHECK",
         "A12_INCIDENT",
         "A12_OPS_CONTROL",
         "A12_VERIFIED_RESOLUTION",
@@ -992,6 +1085,12 @@ export default {
     }
     if (request.method === "POST" && url.pathname === "/v1/ops/events") {
       return handleOpsControlEvent(request, env);
+    }
+    if (request.method === "POST" && url.pathname === "/v1/a1/access-check/site") {
+      return handleAccessCheckProxy(request, env, "/check/site");
+    }
+    if (request.method === "POST" && url.pathname === "/v1/a1/access-check/http-provider") {
+      return handleAccessCheckProxy(request, env, "/check/http-provider");
     }
     if (request.method === "POST" && eventRoutes.has(url.pathname)) return handleEvent(request, env);
     return failure("NOT_FOUND", 404);

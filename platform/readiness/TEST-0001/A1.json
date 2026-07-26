@@ -3,34 +3,77 @@
   "client_id": "TEST-0001",
   "automation_id": "A1",
   "environment": "test",
+  "status": "test_ready",
   "worker_deployed": true,
-  "deployment_version": "f83929c8-7553-4f6b-920f-d6df393dd96f",
-  "d1_migrations_applied": true,
-  "secrets_installed": true,
-  "make_scenario_id": "6665241",
-  "make_webhook_id": "3448383",
-  "make_blueprint_valid": true,
-  "make_connections_valid": true,
-  "webhook_round_trip_passed": true,
-  "client_registry_write_passed": true,
-  "provider_provisioning_passed": false,
-  "cross_client_test_passed": false,
-  "cost_caps_configured": false,
-  "approval_owners_configured": false,
-  "rollback_tested": false,
-  "manual_dependencies_complete": false,
-  "production_approved": false,
-  "evidence": {
-    "make_execution_id": "cacd51df6fb445469f513711d978f3f5",
-    "event_id": "event-phase2-a1-d58dee3f43d544eebb0314ce60aad536",
-    "client_config_version": "1.0-phase2c",
-    "config_hash": "2c5b8933a71c57c60bc2589c8c52579dd33f52c90be22e5228c7fb12ebee62da"
+  "access_checks_worker": {
+    "name": "arcanium-access-checks-test",
+    "url": "https://arcanium-access-checks-test.enquiries-432.workers.dev",
+    "source_deployment_version": "0d0e973a-f81f-4dcf-95d3-f359bd22a3a8",
+    "active_version": "e882203c-2aab-4f90-80e1-74e1526a9a11",
+    "direct_public_mutation_enabled": false
   },
+  "platform_gateway": {
+    "name": "arcanium-platform-core-test",
+    "url": "https://arcanium-platform-core-test.enquiries-432.workers.dev",
+    "deployment_version": "071faa42-313f-4782-916d-c9263b4f34f4",
+    "signed_proxy_configured": true
+  },
+  "secrets_installed": true,
+  "make": {
+    "scenario_id": "6665241",
+    "scenario_name": "TEST CLONE — A1 — Client Configuration, Access and Governance",
+    "active": false,
+    "invalid": false,
+    "schedule": {
+      "type": "indefinitely",
+      "interval_seconds": 21600
+    },
+    "blueprint_valid": true,
+    "connections_valid": true,
+    "google_sheets_connection_id": "9299159",
+    "platform_core_connection_id": "9288408",
+    "resend_connection_id": "9218511"
+  },
+  "control_workbook": {
+    "spreadsheet_id": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+    "required_tabs_present": 10,
+    "seed_client_id": "TEST-0001"
+  },
+  "data_stores": {
+    "locks": 151406,
+    "dedup": 151407,
+    "config_hashes": 151408,
+    "retry_state": 151409
+  },
+  "validation": {
+    "make_execution_id": "4bfc2656ebad4e089be2672601303666",
+    "status": "success",
+    "operations": 18,
+    "duration_ms": 6859,
+    "signed_worker_round_trip_passed": true,
+    "due_task_only_filter_passed": true,
+    "queue_completion_passed": true,
+    "integration_status_write_passed": true,
+    "review_date_write_passed": true,
+    "access_log_write_passed": true,
+    "dedup_write_passed": true,
+    "config_hash_write_passed": true,
+    "lock_released": true,
+    "consolidated_test_email_passed": true
+  },
+  "safety": {
+    "production_activation_enabled": false,
+    "public_send_enabled": false,
+    "provider_mutation_enabled": false,
+    "llm_modules_present": false,
+    "secrets_stored_in_sheets": false
+  },
+  "cross_client_test_passed": false,
+  "rollback_tested": false,
+  "production_approved": false,
   "blocking_reasons": [
-    "Google, Sanity, Vercel and communications provisioning are not implemented",
-    "Cross-client isolation needs a second approved test client",
-    "Cost caps and approval owners are not configured",
-    "Rollback has not been tested",
-    "Production approval has not been requested"
+    "A second approved test client is required for cross-client isolation proof",
+    "Rollback rehearsal has not been run against an approved disposable TEST deployment",
+    "Production activation requires explicit owner approval and remains disabled"
   ]
 }

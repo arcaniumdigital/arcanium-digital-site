@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "environment": "test",
+  "scenario_id": "6665241",
+  "schedule_seconds": 21600,
+  "queue_batch_limit": 25,
+  "enabled_integrations_limit": 50,
+  "validated_test_execution_operations": 18,
+  "provider_mutations_per_run": 0,
+  "llm_calls_per_run": 0,
+  "operator_summaries_per_client_run": 1
+}

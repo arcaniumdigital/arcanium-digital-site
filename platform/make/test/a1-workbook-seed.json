@@ -1,0 +1,156 @@
+{
+  "name": "TEST — A1 Control Workbook Seed",
+  "flow": [
+    {
+      "id": 1,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": { "__IMTCONN__": 9299159 },
+      "mapper": {
+        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+        "sheetId": "Clients",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "TEST-0001",
+          "1": "Arcanium Digital TEST",
+          "2": "test",
+          "3": "onboarding",
+          "4": "TRUE",
+          "5": "https://www.arcaniumdigital.com",
+          "6": "www.arcaniumdigital.com",
+          "7": "Australia/Brisbane",
+          "8": "AUD",
+          "9": "",
+          "10": "{{now}}",
+          "11": "{{now}}"
+        }
+      },
+      "metadata": { "designer": { "x": 0, "y": 0 } }
+    },
+    {
+      "id": 2,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": { "__IMTCONN__": 9299159 },
+      "mapper": {
+        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+        "sheetId": "Integrations",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "TEST-0001-site",
+          "1": "TEST-0001",
+          "2": "website",
+          "3": "TRUE",
+          "4": "TRUE",
+          "5": "site_health",
+          "6": "platform_core_test",
+          "7": "24",
+          "8": "2026-07-27T00:00:00.000Z",
+          "9": "pending",
+          "10": "",
+          "11": ""
+        }
+      },
+      "metadata": { "designer": { "x": 250, "y": 0 } }
+    },
+    {
+      "id": 3,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": { "__IMTCONN__": 9299159 },
+      "mapper": {
+        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+        "sheetId": "Provider_Rules",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "website",
+          "1": "site_health",
+          "2": "worker_signed",
+          "3": "200",
+          "4": "5000",
+          "5": "FALSE",
+          "6": "{{now}}"
+        }
+      },
+      "metadata": { "designer": { "x": 500, "y": 0 } }
+    },
+    {
+      "id": 4,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": { "__IMTCONN__": 9299159 },
+      "mapper": {
+        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+        "sheetId": "Alert_Thresholds",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "TEST-0001-site-health",
+          "1": "TEST-0001",
+          "2": "site_health_failure",
+          "3": "1",
+          "4": "1",
+          "5": "TRUE",
+          "6": "{{now}}"
+        }
+      },
+      "metadata": { "designer": { "x": 750, "y": 0 } }
+    },
+    {
+      "id": 5,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": { "__IMTCONN__": 9299159 },
+      "mapper": {
+        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+        "sheetId": "Work_Queue",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "task-a1-full-20260727-001",
+          "1": "TEST-0001",
+          "2": "CLIENT_VALIDATE_FULL",
+          "3": "pending",
+          "4": "2026-07-27T00:00:00.000Z",
+          "5": "0",
+          "6": "a1-test-full-20260727-001",
+          "7": "",
+          "8": "",
+          "9": "{{now}}",
+          "10": "{{now}}",
+          "11": ""
+        }
+      },
+      "metadata": { "designer": { "x": 1000, "y": 0 } }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": true,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": true,
+      "freshVariables": false
+    },
+    "designer": { "orphans": [] }
+  }
+}

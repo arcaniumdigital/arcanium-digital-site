@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildOpsMakeSignedRequests,
   constantTimeEqual,
+  validateAccessProxyCandidate,
   validateEventCandidate,
 } from "../src/index";
 import { validateClientConfigCandidate } from "../../../packages/contracts/src/client-config";
@@ -68,6 +69,33 @@ describe("signature comparison", () => {
   it("rejects different values and lengths", () => {
     expect(constantTimeEqual("a".repeat(64), "b".repeat(64))).toBe(false);
     expect(constantTimeEqual("a", "aa")).toBe(false);
+  });
+});
+
+describe("A1 access-check proxy envelope", () => {
+  const siteCheck = {
+    schema_version: "1.0",
+    request_id: "request-a1-1",
+    idempotency_key: "idem-a1-1",
+    correlation_id: "corr-a1-1",
+    client_id: "TEST-0001",
+    environment: "test",
+    check_type: "site",
+    timeout_ms: 5000,
+    url: "https://arcaniumdigital.com",
+    preferred_host: "www.arcaniumdigital.com",
+  };
+
+  it("accepts a tenant-scoped TEST site check", () => {
+    expect(validateAccessProxyCandidate(siteCheck, "test", ["TEST-0001"], "site")).toBeNull();
+  });
+
+  it.each([
+    [{ ...siteCheck, environment: "production" }, "ENVIRONMENT_MISMATCH"],
+    [{ ...siteCheck, client_id: "TEST-9999" }, "CLIENT_NOT_ALLOWED"],
+    [{ ...siteCheck, check_type: "http_provider" }, "INVALID_CHECK_TYPE"],
+  ])("rejects unsafe proxy envelope with %s", (candidate, code) => {
+    expect(validateAccessProxyCandidate(candidate, "test", ["TEST-0001"], "site")).toBe(code);
   });
 });
 

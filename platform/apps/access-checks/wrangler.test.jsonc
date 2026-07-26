@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "arcanium-access-checks-test",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-25",
+  "workers_dev": true,
+  "vars": {
+    "ENVIRONMENT": "test",
+    "TEST_CLIENT_IDS": "TEST-0001,TEST-0002",
+    "ALLOWED_CHECK_HOSTS": "arcaniumdigital.com,www.arcaniumdigital.com",
+    "MAX_RESPONSE_BYTES": "262144",
+    "MAX_TIMEOUT_MS": "10000",
+    "REPLAY_WINDOW_SECONDS": "300",
+    "ALLOW_PRODUCTION_CHECKS": "false",
+    "ALLOW_HTTP_MUTATION": "false",
+    "ALLOW_CLIENT_ACTIVATION": "false",
+    "ALLOW_PUBLIC_SEND": "false"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "environment": "test",
+  "stores": {
+    "TEST_A1_LOCKS": {
+      "id": 151406,
+      "data_structure_id": 503291,
+      "purpose": "Per-client execution lock with a 30-minute expiry"
+    },
+    "TEST_A1_DEDUP": {
+      "id": 151407,
+      "data_structure_id": 503292,
+      "purpose": "Completed idempotency keys"
+    },
+    "TEST_A1_CONFIG_HASHES": {
+      "id": 151408,
+      "data_structure_id": 503293,
+      "purpose": "Last checked client configuration hash"
+    },
+    "TEST_A1_RETRY_STATE": {
+      "id": 151409,
+      "data_structure_id": 503294,
+      "purpose": "Reserved bounded retry state"
+    }
+  }
+}
