@@ -179,10 +179,15 @@ alert/digest branch remain to be connected and tested. The scenario uses
 immediate webhook scheduling and remains inactive.
 
 `make/test/a2-operator-actions.draft.json` is a source-controlled draft of the
-capped iterator and Platform Core result/task mapping. It has not been imported
-or executed successfully in Make and is not deployment evidence. Dispatch must
-remain false until that graph is imported, inspected, exercised with a
-controlled TEST fixture, and reconciled against both D1 stores.
+capped iterator and Platform Core result/task mapping. The five-module graph is
+imported and saved in inactive scenario `6665242` with immediate webhook
+scheduling. Controlled run `a2-operator-1785060436971` passed webhook ingress,
+the signed A2 event, and the iterator, then Platform Core rejected malformed
+result JSON from an over-escaped `mutation_kind` expression. No public action
+ran and no malformed result was persisted. The expression was corrected and
+the blueprint reimported, but the rerun has not completed, so this is not
+deployment evidence. Dispatch must remain false until the corrected graph is
+exercised and reconciled against both D1 stores.
 
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform
