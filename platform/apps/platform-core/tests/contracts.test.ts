@@ -9,6 +9,7 @@ import {
   AUTOMATION_ACTION_CEILINGS,
   validateAutomationResultCandidate,
 } from "../../../packages/contracts/src/automation-result";
+import { validateActionResolutionCandidate } from "../../../packages/contracts/src/action-resolution";
 import goldenEvents from "../../../packages/test-fixtures/golden-events.json";
 import resultFixtures from "../../../packages/test-fixtures/automation-results.json";
 import activationGates from "../../../readiness/TEST-0001/ACTIVATION_GATES.json";
@@ -205,7 +206,11 @@ describe("automation activation gates", () => {
       } else {
         expect(decision.blockers).toContain("cross_client_isolation_passed");
       }
-      expect(decision.blockers).toContain("rollback_tested");
+      if (item.rollback_tested) {
+        expect(decision.blockers).not.toContain("rollback_tested");
+      } else {
+        expect(decision.blockers).toContain("rollback_tested");
+      }
       expect(decision.blockers).toContain("production_approved");
     }
   });
@@ -370,5 +375,52 @@ describe("automation result contract", () => {
       ok: false,
       code: "UNSAFE_RETRY_CLASSIFICATION",
     });
+  });
+});
+
+describe("operator action resolution contract", () => {
+  const validResolution = {
+    schema_version: "1.0",
+    resolution_id: "resolution-a2-1",
+    idempotency_key: "resolution-idem-a2-1",
+    correlation_id: "run-a2-rollback-1",
+    automation_id: "A2",
+    client_id: "TEST-0001",
+    environment: "test",
+    occurred_at: "2026-07-27T00:00:00.000Z",
+    resolutions: [{
+      action_id: "action:sold_evidence:L-100:fixture",
+      dedup_key: "sold_evidence:L-100:fixture",
+      disposition: "superseded",
+      reason: "Verified source snapshot restored the listing to active",
+      evidence_ref: "listing-control://run-a2-rollback-1/L-100",
+    }],
+  };
+
+  it("accepts a tenant-scoped, non-destructive resolution", () => {
+    expect(validateActionResolutionCandidate(
+      validResolution,
+      "test",
+      ["TEST-0001"],
+    )).toMatchObject({ ok: true });
+  });
+
+  it.each([
+    [{ ...validResolution, environment: "production" }, "ENVIRONMENT_MISMATCH"],
+    [{ ...validResolution, client_id: "TEST-0002" }, "CLIENT_NOT_ALLOWED"],
+    [{ ...validResolution, resolutions: [] }, "INVALID_RESOLUTIONS"],
+    [{
+      ...validResolution,
+      resolutions: [
+        ...validResolution.resolutions,
+        validResolution.resolutions[0],
+      ],
+    }, "DUPLICATE_RESOLUTION_ITEM"],
+  ])("rejects an unsafe or invalid resolution with %s", (resolution, code) => {
+    expect(validateActionResolutionCandidate(
+      resolution,
+      "test",
+      ["TEST-0001"],
+    )).toMatchObject({ ok: false, code });
   });
 });

@@ -7,7 +7,8 @@
     "check": "tsc --project tsconfig.json",
     "test": "vitest run",
     "deploy:test": "wrangler deploy --config wrangler.test.jsonc",
-    "d1:migrate:test": "wrangler d1 execute test-listing-content-state --remote --file ../../cloudflare/migrations/009_listing_control.sql"
+    "d1:migrate:test": "wrangler d1 execute test-listing-content-state --remote --file ../../cloudflare/migrations/009_listing_control.sql",
+    "d1:migrate:resolutions:test": "wrangler d1 execute test-listing-content-state --remote --file ../../cloudflare/migrations/011_listing_action_resolutions.sql"
   },
   "dependencies": {
     "fast-xml-parser": "^5.2.5"

@@ -19,6 +19,20 @@ interface SyncRequest {
   raw_feed: string;
 }
 
+export interface ListingActionResolution {
+  actionId: string;
+  dedupKey: string;
+  disposition: "superseded";
+  reason: string;
+  evidenceRef: string;
+}
+
+export interface MakeSignedRequest {
+  requestId: string;
+  endpointPath: "/v1/results" | "/v1/action-resolutions";
+  eventBody: string;
+}
+
 export interface Env {
   ENVIRONMENT: "test" | "production";
   LISTING_HMAC_SECRET?: string;
@@ -120,11 +134,157 @@ async function loadPrevious(env: Env, request: SyncRequest): Promise<NormalizedL
   });
 }
 
+export function resolutionReason(
+  actionType: string,
+  actionReason: string,
+  listing: NormalizedListing | undefined,
+): string | null {
+  if (actionType === "feed_security_critical") {
+    return "A subsequent signed feed passed parsing, freshness, and reconciliation safeguards";
+  }
+  if (!listing) return null;
+  if (actionType === "sold_evidence" && listing.lifecycle !== "sold") {
+    return "Verified source snapshot no longer reports the listing as sold";
+  }
+  if (actionType === "removal_approval") {
+    return "Verified source snapshot contains the listing again";
+  }
+  if (
+    actionType === "missing_data"
+    && actionReason.includes("address or canonical URL")
+    && listing.address
+    && listing.canonicalUrl
+  ) {
+    return "Verified source snapshot now includes an address and canonical URL";
+  }
+  if (
+    actionType === "missing_data"
+    && actionReason.includes("image URL")
+    && listing.imageUrls.length > 0
+  ) {
+    return "Verified source snapshot now includes a valid HTTP image URL";
+  }
+  return null;
+}
+
+async function loadActionResolutions(
+  env: Env,
+  request: SyncRequest,
+  listings: NormalizedListing[],
+  result: ReconciliationResult,
+): Promise<ListingActionResolution[]> {
+  if (!result.accepted) return [];
+  const open = await env.LISTING_DB.prepare(
+    "SELECT action_id, dedup_key, listing_id, action_type, reason FROM listing_operator_actions WHERE environment = ? AND client_id = ? AND feed_id = ? AND status = 'open' ORDER BY created_at",
+  ).bind(env.ENVIRONMENT, request.client_id, request.feed_id).all<{
+    action_id: string;
+    dedup_key: string;
+    listing_id: string | null;
+    action_type: string;
+    reason: string;
+  }>();
+  const current = new Map(listings.map((listing) => [listing.listingId, listing]));
+  return open.results.flatMap((row) => {
+    const reason = resolutionReason(
+      String(row.action_type),
+      String(row.reason),
+      row.listing_id ? current.get(String(row.listing_id)) : undefined,
+    );
+    return reason ? [{
+      actionId: String(row.action_id),
+      dedupKey: String(row.dedup_key),
+      disposition: "superseded" as const,
+      reason,
+      evidenceRef: `listing-control://${request.run_id}/${row.dedup_key}`,
+    }] : [];
+  }).slice(0, 20);
+}
+
+export function buildMakeSignedRequests(
+  request: Pick<SyncRequest, "run_id" | "idempotency_key" | "client_id" | "captured_at">,
+  result: ReconciliationResult,
+  resolutions: ListingActionResolution[],
+): MakeSignedRequest[] {
+  const requests: MakeSignedRequest[] = [];
+  if (result.operatorActions.length > 0) {
+    const resultId = `result:${request.run_id}:operator-actions`;
+    requests.push({
+      requestId: resultId,
+      endpointPath: "/v1/results",
+      eventBody: JSON.stringify({
+        schema_version: "1.0",
+        result_id: resultId,
+        run_id: request.run_id,
+        idempotency_key: `result:${request.idempotency_key}:operator-actions`,
+        correlation_id: request.run_id,
+        automation_id: "A2",
+        client_id: request.client_id,
+        environment: "test",
+        provider: "listing-control+make",
+        status: "completed",
+        started_at: request.captured_at,
+        completed_at: request.captured_at,
+        input_count: result.operatorActions.length,
+        accepted_count: result.operatorActions.length,
+        rejected_count: 0,
+        output_count: result.operatorActions.length,
+        actions: result.operatorActions.map((item) => ({
+          action_id: item.actionId,
+          dedup_key: item.dedupKey,
+          action_type: item.actionType,
+          severity: item.severity,
+          mutation_kind: item.actionType === "removal_approval" ? "destructive" : "none",
+          approval_required: item.approvalRequired,
+          owner_group: item.ownerGroup,
+          evidence_ref: `listing-control://${request.run_id}/${item.dedupKey}`,
+        })),
+        reconciliation: {
+          expected_count: result.operatorActions.length,
+          observed_count: result.operatorActions.length,
+          balanced: true,
+          method: "capped compact A2 operator actions persisted by Make",
+          evidence_ref: `listing-control://${request.run_id}/operator-actions`,
+        },
+        limitations: [
+          "TEST operator task only",
+          "No public write, sold-price publish, removal, IndexNow, revalidation, email, or SMS",
+        ],
+      }),
+    });
+  }
+  if (resolutions.length > 0) {
+    const resolutionId = `resolution:${request.run_id}`;
+    requests.push({
+      requestId: resolutionId,
+      endpointPath: "/v1/action-resolutions",
+      eventBody: JSON.stringify({
+        schema_version: "1.0",
+        resolution_id: resolutionId,
+        idempotency_key: `resolution:${request.idempotency_key}`,
+        correlation_id: request.run_id,
+        automation_id: "A2",
+        client_id: request.client_id,
+        environment: "test",
+        occurred_at: request.captured_at,
+        resolutions: resolutions.map((item) => ({
+          action_id: item.actionId,
+          dedup_key: item.dedupKey,
+          disposition: item.disposition,
+          reason: item.reason,
+          evidence_ref: item.evidenceRef,
+        })),
+      }),
+    });
+  }
+  return requests;
+}
+
 async function persistRun(
   env: Env,
   request: SyncRequest,
   listings: NormalizedListing[],
   result: ReconciliationResult,
+  resolutions: ListingActionResolution[],
 ): Promise<void> {
   const completedAt = now();
   const statements = [
@@ -172,6 +332,23 @@ async function persistRun(
       `listing-control://${request.run_id}/${item.dedupKey}`, completedAt, completedAt,
     ));
   }
+  for (const item of resolutions) {
+    statements.push(
+      env.LISTING_DB.prepare(
+        "UPDATE listing_operator_actions SET status = ?, updated_at = ? WHERE environment = ? AND client_id = ? AND feed_id = ? AND action_id = ? AND dedup_key = ? AND status = 'open'",
+      ).bind(
+        item.disposition, completedAt, env.ENVIRONMENT, request.client_id,
+        request.feed_id, item.actionId, item.dedupKey,
+      ),
+      env.LISTING_DB.prepare(
+        "INSERT INTO listing_action_resolutions (environment, client_id, feed_id, run_id, resolution_id, action_id, dedup_key, disposition, reason, evidence_ref, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      ).bind(
+        env.ENVIRONMENT, request.client_id, request.feed_id, request.run_id,
+        `resolution:${request.run_id}`, item.actionId, item.dedupKey,
+        item.disposition, item.reason, item.evidenceRef, completedAt,
+      ),
+    );
+  }
   await env.LISTING_DB.batch(statements);
 }
 
@@ -195,7 +372,9 @@ async function processSync(request: SyncRequest, env: Env): Promise<Response> {
       maxCountDropRatio: Number(env.MAX_COUNT_DROP_RATIO),
       maxOperatorActions: Math.min(20, Number(env.MAX_OPERATOR_ACTIONS)),
     });
-    await persistRun(env, request, parseResult.listings, result);
+    const resolutions = await loadActionResolutions(env, request, parseResult.listings, result);
+    await persistRun(env, request, parseResult.listings, result, resolutions);
+    const makeRequests = buildMakeSignedRequests(request, result, resolutions);
     await env.LISTING_ACTIONS.send({
       schema_version: "1.0",
       event_id: `a2-sync:${request.run_id}`,
@@ -217,6 +396,8 @@ async function processSync(request: SyncRequest, env: Env): Promise<Response> {
         ...result.counts,
       },
       operator_actions: result.operatorActions,
+      resolved_actions: resolutions,
+      make_requests: makeRequests,
       overflow_action_count: result.overflowActionCount,
       action_flags: {
         public_write: false,

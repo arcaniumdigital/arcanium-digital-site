@@ -2,6 +2,10 @@ import {
   validateAutomationResultCandidate,
   type AutomationResult,
 } from "../../../packages/contracts/src/automation-result";
+import {
+  validateActionResolutionCandidate,
+  type ActionResolutionRequest,
+} from "../../../packages/contracts/src/action-resolution";
 
 export interface Env {
   ENVIRONMENT: "test" | "production";
@@ -510,6 +514,139 @@ async function handleAutomationResult(request: Request, env: Env): Promise<Respo
   }, 202);
 }
 
+async function persistActionResolution(
+  resolution: ActionResolutionRequest,
+  env: Env,
+): Promise<void> {
+  const recordedAt = now();
+  const statements = [
+    env.PLATFORM_OPS_DB.prepare(
+      "INSERT INTO platform_action_resolution_runs (resolution_id, idempotency_key, correlation_id, environment, client_id, automation_id, occurred_at, resolution_count, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    ).bind(
+      resolution.resolution_id,
+      resolution.idempotency_key,
+      resolution.correlation_id,
+      resolution.environment,
+      resolution.client_id,
+      resolution.automation_id,
+      resolution.occurred_at,
+      resolution.resolutions.length,
+      recordedAt,
+    ),
+  ];
+
+  for (const item of resolution.resolutions) {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO platform_action_resolution_items (resolution_id, environment, client_id, automation_id, action_id, dedup_key, disposition, reason, evidence_ref, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      ).bind(
+        resolution.resolution_id,
+        resolution.environment,
+        resolution.client_id,
+        resolution.automation_id,
+        item.action_id,
+        item.dedup_key,
+        item.disposition,
+        item.reason,
+        item.evidence_ref ?? null,
+        recordedAt,
+      ),
+      env.PLATFORM_OPS_DB.prepare(
+        "UPDATE platform_operator_actions SET status = ?, updated_at = ? WHERE environment = ? AND client_id = ? AND automation_id = ? AND action_id = ? AND dedup_key = ? AND status = 'open'",
+      ).bind(
+        item.disposition,
+        recordedAt,
+        resolution.environment,
+        resolution.client_id,
+        resolution.automation_id,
+        item.action_id,
+        item.dedup_key,
+      ),
+      env.PLATFORM_OPS_DB.prepare(
+        "UPDATE platform_approval_requests SET status = ?, decided_at = ?, decided_by = ?, decision_evidence_ref = ? WHERE environment = ? AND client_id = ? AND automation_id = ? AND action_id = ? AND status = 'pending'",
+      ).bind(
+        item.disposition,
+        recordedAt,
+        `automation:${resolution.automation_id}`,
+        item.evidence_ref ?? null,
+        resolution.environment,
+        resolution.client_id,
+        resolution.automation_id,
+        item.action_id,
+      ),
+    );
+  }
+  await env.PLATFORM_OPS_DB.batch(statements);
+}
+
+async function handleActionResolution(request: Request, env: Env): Promise<Response> {
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return failure("CONTENT_TYPE_REQUIRED", 415);
+  }
+  const raw = await request.text();
+  const maxBytes = Number(env.MAX_EVENT_BYTES);
+  if (!Number.isFinite(maxBytes) || maxBytes < 1) return failure("SERVER_CONFIGURATION_ERROR", 500);
+  if (encode(raw).byteLength > maxBytes) return failure("PAYLOAD_TOO_LARGE", 413);
+
+  const authFailure = await verifySignature(request, raw, env);
+  if (authFailure) return authFailure;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return failure("INVALID_JSON", 400);
+  }
+  const allowedClients = env.TEST_CLIENT_IDS.split(",").map((value) => value.trim()).filter(Boolean);
+  const validated = validateActionResolutionCandidate(parsed, env.ENVIRONMENT, allowedClients);
+  if (!validated.ok) return failure(validated.code, validated.status);
+  const resolution = validated.resolution;
+
+  const previous = await env.PLATFORM_OPS_DB.prepare(
+    "SELECT resolution_id, correlation_id FROM platform_action_resolution_runs WHERE environment = ? AND client_id = ? AND idempotency_key = ?",
+  ).bind(resolution.environment, resolution.client_id, resolution.idempotency_key)
+    .first<{ resolution_id: string; correlation_id: string }>();
+  if (previous) {
+    return json({
+      ok: true,
+      data: {
+        accepted: true,
+        duplicate: true,
+        resolution_id: previous.resolution_id,
+        correlation_id: previous.correlation_id,
+        environment: env.ENVIRONMENT,
+      },
+    });
+  }
+
+  for (const item of resolution.resolutions) {
+    const target = await env.PLATFORM_OPS_DB.prepare(
+      "SELECT status FROM platform_operator_actions WHERE environment = ? AND client_id = ? AND automation_id = ? AND action_id = ? AND dedup_key = ?",
+    ).bind(
+      resolution.environment,
+      resolution.client_id,
+      resolution.automation_id,
+      item.action_id,
+      item.dedup_key,
+    ).first<{ status: string }>();
+    if (!target) return failure("ACTION_NOT_FOUND", 404);
+    if (target.status !== "open") return failure("ACTION_ALREADY_RESOLVED", 409);
+  }
+
+  await persistActionResolution(resolution, env);
+  return json({
+    ok: true,
+    data: {
+      accepted: true,
+      duplicate: false,
+      resolution_id: resolution.resolution_id,
+      correlation_id: resolution.correlation_id,
+      actions_resolved: resolution.resolutions.length,
+      environment: env.ENVIRONMENT,
+    },
+  }, 202);
+}
+
 function health(env: Env): Response {
   const safety = {
     scenario_activation: env.ALLOW_SCENARIO_ACTIVATION,
@@ -533,6 +670,7 @@ function health(env: Env): Response {
         "A1-A15_EVENT",
         "A1-A15_RESULT",
         "A1-A15_ACTION",
+        "A1-A15_ACTION_RESOLUTION",
         "A1-A15_RECONCILIATION",
         "A12_INCIDENT",
         "A13_PROJECT",
@@ -559,6 +697,9 @@ export default {
     if (request.method === "GET" && url.pathname === "/health") return health(env);
     if (request.method === "POST" && url.pathname === "/v1/results") {
       return handleAutomationResult(request, env);
+    }
+    if (request.method === "POST" && url.pathname === "/v1/action-resolutions") {
+      return handleActionResolution(request, env);
     }
     if (request.method === "POST" && eventRoutes.has(url.pathname)) return handleEvent(request, env);
     return failure("NOT_FOUND", 404);

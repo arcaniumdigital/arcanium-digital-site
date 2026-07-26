@@ -1,24 +1,25 @@
 # Phase 2 TEST evidence
 
-Recorded 2026-07-26 Australia/Brisbane. All exercised scenarios were returned
+Recorded through 2026-07-27 Australia/Brisbane. All exercised scenarios were returned
 to inactive. No production action was enabled.
 
 ## Deployment and local gates
 
 - Worker: `arcanium-platform-core-test`
 - A2 Worker: `arcanium-listing-control-test`, current version
-  `d9427ff9-5254-42ed-8edf-62cbbff52178`
-- Current version: `bb58a853-7af2-4d32-953a-711c1048b466`
+  `6e63f659-5117-49bc-8fa6-f62403f7fa79`
+- Current version: `a06ed0c7-14c8-4b07-bcd9-e6d46b2fc793`
 - Health version: `0.2.0`
 - D1 migrations: `006_platform_core_registry.sql`,
   `007_queue_delivery_audit.sql`, and
-  `008_automation_results_and_tasks.sql`; A2 listing D1 migration
-  `009_listing_control.sql`
+  `008_automation_results_and_tasks.sql`,
+  `010_platform_action_resolutions.sql`; A2 listing D1 migrations
+  `009_listing_control.sql` and `011_listing_action_resolutions.sql`
 - Production action flags: all `false`
 - Public send, content publish, GBP mutation, outreach send, and dangerous
   replay flags: all `false`
 - TypeScript: passed
-- Vitest: 27/27 passed
+- Relevant Worker Vitest suites: 51/51 passed
 - Wrangler bundle/deployment: passed
 - Next.js production build: passed
 
@@ -28,6 +29,7 @@ to inactive. No production action was enabled.
 |---|---|---|
 | A1 | `cacd51df6fb445469f513711d978f3f5` | Client config `TEST-0001` / `1.0-phase2c` |
 | A2 | Worker run `a2-initial-1785058511884` plus controlled Make run at 2026-07-26 19:38 AEST | Three synthetic JSON listings normalized and persisted; queue delivery audited on attempt 1; Make result `result:a2-health-1785058717712` balanced 1/1 |
+| A2 | Worker run `a2-resolution-1785080485164` plus Make execution `d84427f6494542ca82d7a9db8efe226f` | Verified source replay superseded one stale sold-evidence action and its approval across both D1 stores; queue delivered on attempt 1; all five Make modules succeeded |
 | A3 | controlled webhook run at 2026-07-26 18:42 AEST | Result `result:a3-sanity-1785055340442`; Sanity publication-provider count read completed; balanced 1/1; no publish or indexing request |
 | A4 | controlled webhook run at 2026-07-26 17:58 AEST | Result `result:a4-gbp-1785052729231`; Business Profile account read completed; balanced 1/1; no GBP mutation |
 | A5 | controlled webhook run at 2026-07-26 17:50 AEST | Result `result:a5-provider-1785052234506`; Search Console + GA4 + DataForSEO completed; balanced 3/3 |
@@ -162,7 +164,7 @@ last-known-good preservation, lifecycle events, approval-gated sold/removal
 decisions, action overflow, and absence of Google Indexing API behavior. Two
 queue tests cover held delivery and missing-endpoint fail-closed behavior.
 
-The current stable version `d9427ff9-5254-42ed-8edf-62cbbff52178` retains
+The current stable version `6e63f659-5117-49bc-8fa6-f62403f7fa79` retains
 the independent
 `ALLOW_MAKE_DISPATCH=false` gate. The consumer records queued batches as
 `held_for_operator_workflow` instead of calling Make. The listing sync and
@@ -205,7 +207,9 @@ temporary Make endpoint secret was deleted, and final health reports
 the original `LISTING_HMAC_SECRET` remains. Cloudflare rollback restored the
 code and original HMAC secret but retained newer variable/secret bindings, so
 the false configuration was explicitly redeployed and the temporary endpoint
-secret explicitly deleted. Functional listing rollback remains unproven.
+secret explicitly deleted. The later signed action-resolution proof repeated
+that restoration discipline: original HMAC restored, false dispatch
+configuration explicitly redeployed, and temporary endpoint secret deleted.
 
 A2 tenant isolation is also proven. Signed Worker run
 `a2-isolation-1785078078539` persisted one active `ISO-200` listing for
@@ -216,20 +220,32 @@ and D1 contains zero rejected-client sync, listing, action, or queue rows. The
 temporary signing-secret version was rolled back to the original HMAC version;
 final health and secret inventory remained unchanged.
 
-The declared source-snapshot rollback method was drilled with run
+The declared source-snapshot rollback method was first drilled with run
 `a2-rollback-1785078447830`. Replaying the prior three-listing snapshot
 restored `L-100` from sold to active, completed 3/3, emitted one UPDATED event,
 created zero new actions, and recorded its queue batch as
-`held_for_operator_workflow`. The historical `sold_evidence` approval task
-remains open, which preserves its audit history but is not an operator-lifecycle
-resolution. Therefore `source_snapshot_rollback_verified` is true while the
-overall `rollback_tested` activation gate remains false pending signed,
-cross-store action resolution.
+`held_for_operator_workflow`.
+
+Signed replay `a2-resolution-1785080485164` then completed the operator
+lifecycle. Listing D1 records a 3/3 no-mutation sync, the historical
+`sold_evidence` action as `superseded`, one matching resolution audit row, and
+queue delivery on attempt 1. The generic signed-request Make blueprint sent
+that resolution to `/v1/action-resolutions`; execution
+`d84427f6494542ca82d7a9db8efe226f` succeeded in all five modules. Platform D1
+records the same resolution/action/dedup keys, superseded the original
+operator action and pending approval, and identifies `automation:A2` with the
+listing resolution evidence. Scenario `6665242` was saved with immediate
+webhook scheduling and left inactive. Final Worker health reports dispatch
+false and every public/destructive flag false; secret inventory contains only
+`LISTING_HMAC_SECRET`. Therefore A2
+`source_snapshot_rollback_verified`, `operator_action_resolution_verified`,
+and `rollback_tested` are true.
 
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform
 activation evidence. All TEST contract gates pass; every production activation
-remains blocked by explicit isolation, rollback, and approval evidence.
+remains blocked by its remaining evidence gates and explicit production
+approval.
 
 ## Scheduled companion jobs
 

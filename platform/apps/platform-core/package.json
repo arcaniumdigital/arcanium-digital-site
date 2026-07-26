@@ -9,7 +9,8 @@
     "deploy:test": "wrangler deploy --config wrangler.test.jsonc",
     "d1:migrate:test": "wrangler d1 execute test-platform-ops-state --remote --file ../../cloudflare/migrations/006_platform_core_registry.sql",
     "d1:migrate:queue:test": "wrangler d1 execute test-platform-ops-state --remote --file ../../cloudflare/migrations/007_queue_delivery_audit.sql",
-    "d1:migrate:results:test": "wrangler d1 execute test-platform-ops-state --remote --file ../../cloudflare/migrations/008_automation_results_and_tasks.sql"
+    "d1:migrate:results:test": "wrangler d1 execute test-platform-ops-state --remote --file ../../cloudflare/migrations/008_automation_results_and_tasks.sql",
+    "d1:migrate:resolutions:test": "wrangler d1 execute test-platform-ops-state --remote --file ../../cloudflare/migrations/010_platform_action_resolutions.sql"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260724.1",

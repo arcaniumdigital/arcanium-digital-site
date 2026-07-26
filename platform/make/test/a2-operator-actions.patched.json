@@ -25,7 +25,7 @@
       },
       "mapper": {
         "nonce": "{{ifempty(1.nonce; executionId)}}",
-        "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"{{1.event_id}}\",\"idempotency_key\":\"{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A2\",\"event_type\":\"listing.sync_batch\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"{{1.severity}}\",\"payload\":{\"feed_id\":\"{{1.feed_id}}\",\"run_id\":\"{{1.run_id}}\",\"status\":\"{{1.summary.status}}\",\"input_count\":{{1.summary.input_count}},\"accepted_count\":{{1.summary.accepted_count}},\"operator_action_count\":{{length(1.operator_actions)}},\"overflow_action_count\":{{1.overflow_action_count}},\"safe_test\":true,\"external_actions_enabled\":false}}",
+        "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"{{1.event_id}}\",\"idempotency_key\":\"{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A2\",\"event_type\":\"listing.sync_batch\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"{{1.severity}}\",\"payload\":{\"feed_id\":\"{{1.feed_id}}\",\"run_id\":\"{{1.run_id}}\",\"status\":\"{{1.summary.status}}\",\"input_count\":{{1.summary.input_count}},\"accepted_count\":{{1.summary.accepted_count}},\"operator_action_count\":{{length(1.operator_actions)}},\"resolved_action_count\":{{length(1.resolved_actions)}},\"signed_request_count\":{{length(1.make_requests)}},\"overflow_action_count\":{{1.overflow_action_count}},\"safe_test\":true,\"external_actions_enabled\":false}}",
         "timestamp": "{{1.occurred_at}}",
         "endpointPath": "/v1/events"
       },
@@ -42,7 +42,7 @@
       "version": 1,
       "parameters": {},
       "mapper": {
-        "array": "{{slice(1.operator_actions; 0; 20)}}"
+        "array": "{{slice(1.make_requests; 0; 20)}}"
       },
       "metadata": {
         "designer": {
@@ -59,10 +59,10 @@
         "__IMTCONN__": 9288408
       },
       "mapper": {
-        "nonce": "{{ifempty(1.nonce; executionId)}}-action-{{3.actionId}}",
-        "eventBody": "{\"schema_version\":\"1.0\",\"result_id\":\"result:{{1.run_id}}:{{3.actionId}}\",\"run_id\":\"{{1.run_id}}\",\"idempotency_key\":\"result:{{1.run_id}}:{{3.dedupKey}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A2\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"provider\":\"listing-control+make\",\"status\":\"completed\",\"started_at\":\"{{1.occurred_at}}\",\"completed_at\":\"{{1.occurred_at}}\",\"input_count\":1,\"accepted_count\":1,\"rejected_count\":0,\"output_count\":1,\"actions\":[{\"action_id\":\"{{3.actionId}}\",\"dedup_key\":\"{{3.dedupKey}}\",\"action_type\":\"{{3.actionType}}\",\"severity\":\"{{3.severity}}\",\"mutation_kind\":\"{{if(3.actionType = \"removal_approval\"; \"destructive\"; \"none\")}}\",\"approval_required\":{{3.approvalRequired}},\"owner_group\":\"{{3.ownerGroup}}\",\"evidence_ref\":\"listing-control://{{1.run_id}}/{{3.dedupKey}}\"}],\"reconciliation\":{\"expected_count\":1,\"observed_count\":1,\"balanced\":true,\"method\":\"one capped compact A2 operator action persisted by Make\",\"evidence_ref\":\"make://scenario/6665242/run/{{1.run_id}}\"},\"limitations\":[\"TEST operator task only\",\"No public write, sold-price publish, removal, IndexNow, revalidation, email, or SMS\"]}",
+        "nonce": "{{ifempty(1.nonce; executionId)}}-request-{{3.requestId}}",
+        "eventBody": "{{3.eventBody}}",
         "timestamp": "{{1.occurred_at}}",
-        "endpointPath": "/v1/results"
+        "endpointPath": "{{3.endpointPath}}"
       },
       "metadata": {
         "designer": {
@@ -77,7 +77,7 @@
       "version": 1,
       "parameters": {},
       "mapper": {
-        "body": "{\"status\":\"accepted\",\"environment\":\"test\",\"automation_id\":\"A2\",\"run_id\":\"{{1.run_id}}\",\"action_id\":\"{{3.actionId}}\",\"task_persisted\":true,\"external_actions\":false}",
+        "body": "{\"status\":\"accepted\",\"environment\":\"test\",\"automation_id\":\"A2\",\"run_id\":\"{{1.run_id}}\",\"request_id\":\"{{3.requestId}}\",\"signed_request_persisted\":true,\"external_actions\":false}",
         "status": 202
       },
       "metadata": {

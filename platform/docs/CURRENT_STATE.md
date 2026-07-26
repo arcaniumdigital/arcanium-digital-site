@@ -1,4 +1,4 @@
-# Current state — 2026-07-26
+# Current state — 2026-07-27
 
 ## Confirmed TEST resources
 
@@ -7,9 +7,9 @@
 - A13-A15 scheduled companions: converted from unauthenticated placeholders to
   signed Platform Core events, successfully exercised, and inactive.
 - Cloudflare Worker: `arcanium-platform-core-test`, version
-  `bb58a853-7af2-4d32-953a-711c1048b466`.
+  `a06ed0c7-14c8-4b07-bcd9-e6d46b2fc793`.
 - A2 Cloudflare Worker: `arcanium-listing-control-test`, version
-  `d9427ff9-5254-42ed-8edf-62cbbff52178`, TEST-only with all
+  `6e63f659-5117-49bc-8fa6-f62403f7fa79`, TEST-only with all
   public/destructive action flags false and Make dispatch held.
 - Cloudflare TEST D1 databases: platform operations, listing/content, and
   search/reporting.
@@ -95,9 +95,14 @@ performed. Every scenario exercised by this phase was returned to inactive.
 22. A2 source rollback drill: replay run `a2-rollback-1785078447830`
     restored `L-100` from the synthetic sold state to active, reconciled 3/3,
     emitted one UPDATED event, created no new action, and held its queue batch.
-    The earlier approval task remains open as durable audit state, so the full
-    rollback gate remains false until explicit action-resolution handling is
-    implemented and verified.
+23. A2 signed action-resolution proof: replay run
+    `a2-resolution-1785080485164` detected that the verified source no longer
+    reported `L-100` as sold, superseded the original listing-side action,
+    delivered the queue message on attempt 1, and sent a signed generic
+    resolution through Make execution `d84427f6494542ca82d7a9db8efe226f`.
+    Platform Core persisted the matching resolution, superseded the operator
+    action and approval request, and retained the original audit history.
+    The A2 source rollback and cross-store action lifecycle are now verified.
 
 ## Remaining external blockers
 
@@ -112,10 +117,11 @@ performed. Every scenario exercised by this phase was returned to inactive.
    A2 now has its Worker-heavy reconciliation foundation and Make health
    branch. Its capped compact-action iterator and same-run Worker-to-Make queue
    path are verified in the inactive TEST scenario. Dispatch remains disabled
-   by default. The remaining operator task destinations,
+   by default, and signed cross-store action resolution is verified. The
+   remaining operator task destinations,
    reporting annotation, alert/digest, live feed adapter credentials, website
-   revalidation endpoint, IndexNow key, public-page inspection, and rollback
-   action-resolution drill remain incomplete.
+   revalidation endpoint, IndexNow key, and public-page inspection remain
+   incomplete.
    A5 now has a verified read-only provider-health branch, but the full compact
    search-growth aggregation and action-prioritisation workflow remains
    incomplete. A4 now has verified read-only account health, but review/post/
