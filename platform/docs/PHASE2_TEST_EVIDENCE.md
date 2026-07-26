@@ -6,11 +6,13 @@ to inactive. No production action was enabled.
 ## Deployment and local gates
 
 - Worker: `arcanium-platform-core-test`
-- Version: `4849fb52-0ce7-4971-b339-6c4de8cac2a1`
+- Current version: `e12504b5-9af0-4dcb-b54e-fe98804fc799`
 - Health version: `0.2.0`
 - D1 migrations: `006_platform_core_registry.sql` and
   `007_queue_delivery_audit.sql`
 - Production action flags: all `false`
+- Public send, content publish, GBP mutation, outreach send, and dangerous
+  replay flags: all `false`
 - TypeScript: passed
 - Vitest: 10/10 passed
 - Wrangler bundle/deployment: passed

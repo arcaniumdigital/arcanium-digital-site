@@ -7,7 +7,7 @@
 - A13-A15 scheduled companions: converted from unauthenticated placeholders to
   signed Platform Core events, successfully exercised, and inactive.
 - Cloudflare Worker: `arcanium-platform-core-test`, version
-  `4849fb52-0ce7-4971-b339-6c4de8cac2a1`.
+  `e12504b5-9af0-4dcb-b54e-fe98804fc799`.
 - Cloudflare TEST D1 databases: platform operations, listing/content, and
   search/reporting.
 - Cloudflare TEST event queue and DLQ: producer, retry, acknowledgement, and

@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "environment": "test",
+  "providers": {
+    "cloudflare": {"access_status":"available","credential_ref":"CLOUDFLARE_API_TOKEN","capabilities":["workers","d1","queues"],"limitations":["production disabled"],"fallback":"","owner":"platform"},
+    "make": {"access_status":"available","credential_ref":"MAKE_CONNECTION","capabilities":["orchestration","approvals"],"limitations":["connector availability can be transient"],"fallback":"operator task","owner":"automation"},
+    "github": {"access_status":"available","credential_ref":"GITHUB_KEYRING","capabilities":["repository","actions","pull_requests"],"limitations":[],"fallback":"","owner":"platform"},
+    "vercel": {"access_status":"available","credential_ref":"VERCEL_CONNECTION","capabilities":["preview_deployment"],"limitations":["production disabled"],"fallback":"","owner":"website"},
+    "sanity": {"access_status":"available","credential_ref":"SANITY_API_TOKEN","capabilities":["content_read"],"limitations":["live read pending"],"fallback":"manual content task","owner":"content"},
+    "google_sheets": {"access_status":"available","credential_ref":"MAKE_GOOGLE_SHEETS","capabilities":["spreadsheets","drive_file"],"limitations":[],"fallback":"operator CSV","owner":"reporting"},
+    "search_console": {"access_status":"available","credential_ref":"MAKE_SEARCH_CONSOLE","capabilities":["site_owner_read"],"limitations":["read only"],"fallback":"manual export","owner":"search"},
+    "ga4": {"access_status":"available","credential_ref":"MAKE_GA4","capabilities":["analytics_read"],"limitations":["read only"],"fallback":"manual export","owner":"analytics"},
+    "bigquery": {"access_status":"pending","credential_ref":"","capabilities":[],"limitations":["connection not verified"],"fallback":"bounded API reports","owner":"analytics"},
+    "gbp": {"access_status":"available","credential_ref":"MAKE_GBP","capabilities":["account_read","location_read"],"limitations":["mutations disabled"],"fallback":"manual GBP task","owner":"local"},
+    "google_pubsub": {"access_status":"pending","credential_ref":"","capabilities":[],"limitations":["not configured"],"fallback":"scheduled polling","owner":"local"},
+    "dataforseo": {"access_status":"available","credential_ref":"DATAFORSEO_CONNECTION","capabilities":["account_read","approved_tasks"],"limitations":["bulk tasks disabled by default"],"fallback":"manual diagnostic","owner":"search"},
+    "brightlocal": {"access_status":"unavailable","credential_ref":"","capabilities":[],"limitations":["no approved account"],"fallback":"DataForSEO/manual","owner":"local"},
+    "local_falcon": {"access_status":"unavailable","credential_ref":"","capabilities":[],"limitations":["no approved account"],"fallback":"manual grid evidence","owner":"local"},
+    "resend": {"access_status":"available","credential_ref":"RESEND_CONNECTION","capabilities":["test_email"],"limitations":["public send disabled"],"fallback":"operator email","owner":"communications"},
+    "clicksend": {"access_status":"available","credential_ref":"CLICKSEND_CONNECTION","capabilities":["sms","history_read"],"limitations":["public send disabled"],"fallback":"email","owner":"communications"},
+    "sentry": {"access_status":"available","credential_ref":"SENTRY_CONNECTION","capabilities":["organization_read"],"limitations":[],"fallback":"Cloudflare logs","owner":"operations"},
+    "uptimerobot": {"access_status":"unavailable","credential_ref":"","capabilities":[],"limitations":["not configured"],"fallback":"Cloudflare health checks","owner":"operations"},
+    "clarity": {"access_status":"pending","credential_ref":"","capabilities":[],"limitations":["not configured"],"fallback":"GA4","owner":"analytics"},
+    "bing_webmaster": {"access_status":"pending","credential_ref":"","capabilities":[],"limitations":["not configured"],"fallback":"Search Console","owner":"search"},
+    "youtube": {"access_status":"unavailable","credential_ref":"","capabilities":[],"limitations":["not configured"],"fallback":"manual publishing task","owner":"content"},
+    "reaxml_rea_export": {"access_status":"pending","credential_ref":"","capabilities":[],"limitations":["no client feed supplied"],"fallback":"manual listing fixture","owner":"listings"},
+    "ahrefs_webmaster_tools": {"access_status":"unavailable","credential_ref":"","capabilities":[],"limitations":["not configured"],"fallback":"Search Console/DataForSEO","owner":"search"},
+    "pageoptimizer_pro": {"access_status":"unavailable","credential_ref":"","capabilities":[],"limitations":["not configured"],"fallback":"manual content review","owner":"content"},
+    "google_trends_api": {"access_status":"unavailable","credential_ref":"","capabilities":[],"limitations":["no approved API"],"fallback":"manual Trends evidence","owner":"content"},
+    "keyword_planner": {"access_status":"pending","credential_ref":"","capabilities":[],"limitations":["manual access only"],"fallback":"DataForSEO","owner":"search"}
+  }
+}

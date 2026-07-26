@@ -6,6 +6,11 @@ export interface Env {
   REPLAY_WINDOW_SECONDS: string;
   ALLOW_SCENARIO_ACTIVATION: "true" | "false";
   ALLOW_PRODUCTION_DEPLOY: "true" | "false";
+  ALLOW_PUBLIC_SEND: "true" | "false";
+  ALLOW_CONTENT_PUBLISH: "true" | "false";
+  ALLOW_GBP_MUTATION: "true" | "false";
+  ALLOW_OUTREACH_SEND: "true" | "false";
+  ALLOW_DANGEROUS_REPLAY: "true" | "false";
   ALLOW_SITE_LAUNCH: "true" | "false";
   ALLOW_EXPERIMENT_LAUNCH: "true" | "false";
   ALLOW_PRICING_CHANGE: "true" | "false";
@@ -329,6 +334,18 @@ async function handleEvent(request: Request, env: Env): Promise<Response> {
 }
 
 function health(env: Env): Response {
+  const safety = {
+    scenario_activation: env.ALLOW_SCENARIO_ACTIVATION,
+    production_deploy: env.ALLOW_PRODUCTION_DEPLOY,
+    public_send: env.ALLOW_PUBLIC_SEND,
+    content_publish: env.ALLOW_CONTENT_PUBLISH,
+    gbp_mutation: env.ALLOW_GBP_MUTATION,
+    outreach_send: env.ALLOW_OUTREACH_SEND,
+    dangerous_replay: env.ALLOW_DANGEROUS_REPLAY,
+    site_launch: env.ALLOW_SITE_LAUNCH,
+    experiment_launch: env.ALLOW_EXPERIMENT_LAUNCH,
+    pricing_change: env.ALLOW_PRICING_CHANGE,
+  };
   return json({
     ok: true,
     data: {
@@ -336,14 +353,8 @@ function health(env: Env): Response {
       version: "0.2.0",
       environment: env.ENVIRONMENT,
       operations: ["A1-A15_EVENT", "A13_PROJECT", "A14_EXPERIMENT", "A15_COST_IMPORT"],
-      production_actions_enabled: false,
-      safety: {
-        scenario_activation: env.ALLOW_SCENARIO_ACTIVATION,
-        production_deploy: env.ALLOW_PRODUCTION_DEPLOY,
-        site_launch: env.ALLOW_SITE_LAUNCH,
-        experiment_launch: env.ALLOW_EXPERIMENT_LAUNCH,
-        pricing_change: env.ALLOW_PRICING_CHANGE,
-      },
+      production_actions_enabled: Object.values(safety).some((value) => value === "true"),
+      safety,
     },
   });
 }

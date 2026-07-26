@@ -21,6 +21,18 @@
     "sitemapUrl": "https://test-0002.invalid/sitemap.xml",
     "robotsUrl": "https://test-0002.invalid/robots.txt"
   },
+  "google": {
+    "businessProfileLocationIds": []
+  },
+  "search": {
+    "targetTerms": [],
+    "targetLocations": [],
+    "competitorDomains": [],
+    "pageOwnership": []
+  },
+  "listings": {
+    "sourceType": "manual"
+  },
   "communications": {
     "operatorEmails": [],
     "approvalEmails": [],
@@ -33,6 +45,7 @@
     "actionCaps": {},
     "providerBudgets": {}
   },
+  "service": {},
   "approvals": {
     "websiteLaunchOwners": [],
     "contentOwners": [],

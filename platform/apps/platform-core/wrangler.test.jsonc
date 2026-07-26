@@ -11,6 +11,11 @@
     "REPLAY_WINDOW_SECONDS": "300",
     "ALLOW_SCENARIO_ACTIVATION": "false",
     "ALLOW_PRODUCTION_DEPLOY": "false",
+    "ALLOW_PUBLIC_SEND": "false",
+    "ALLOW_CONTENT_PUBLISH": "false",
+    "ALLOW_GBP_MUTATION": "false",
+    "ALLOW_OUTREACH_SEND": "false",
+    "ALLOW_DANGEROUS_REPLAY": "false",
     "ALLOW_SITE_LAUNCH": "false",
     "ALLOW_EXPERIMENT_LAUNCH": "false",
     "ALLOW_PRICING_CHANGE": "false"

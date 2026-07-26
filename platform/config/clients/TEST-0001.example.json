@@ -21,6 +21,21 @@
     "sitemapUrl": "https://arcaniumdigital.com/sitemap.xml",
     "robotsUrl": "https://arcaniumdigital.com/robots.txt"
   },
+  "google": {
+    "searchConsoleProperty": "sc-domain:arcaniumdigital.com",
+    "ga4PropertyId": "523714543",
+    "businessProfileAccountId": "110699917417848284923",
+    "businessProfileLocationIds": ["14233252135907647359"]
+  },
+  "search": {
+    "targetTerms": [],
+    "targetLocations": ["Brisbane"],
+    "competitorDomains": [],
+    "pageOwnership": []
+  },
+  "listings": {
+    "sourceType": "manual"
+  },
   "communications": {
     "operatorEmails": [],
     "approvalEmails": [],
@@ -33,6 +48,7 @@
     "actionCaps": {},
     "providerBudgets": {}
   },
+  "service": {},
   "approvals": {
     "websiteLaunchOwners": [],
     "contentOwners": [],
