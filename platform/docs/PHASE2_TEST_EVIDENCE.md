@@ -178,16 +178,20 @@ operator-action iterator, task routing, summary annotation, and one
 alert/digest branch remain to be connected and tested. The scenario uses
 immediate webhook scheduling and remains inactive.
 
-`make/test/a2-operator-actions.draft.json` is a source-controlled draft of the
-capped iterator and Platform Core result/task mapping. The five-module graph is
-imported and saved in inactive scenario `6665242` with immediate webhook
-scheduling. Controlled run `a2-operator-1785060436971` passed webhook ingress,
-the signed A2 event, and the iterator, then Platform Core rejected malformed
-result JSON from an over-escaped `mutation_kind` expression. No public action
-ran and no malformed result was persisted. The expression was corrected and
-the blueprint reimported, but the rerun has not completed, so this is not
-deployment evidence. Dispatch must remain false until the corrected graph is
-exercised and reconciled against both D1 stores.
+`make/test/a2-operator-actions.patched.json` is the source-controlled capped
+iterator and Platform Core result/task mapping. The five-module graph is
+imported and saved as `TEST CLONE - A2 - Compact Operator Actions` in inactive
+scenario `6665242` with immediate webhook scheduling. Controlled run
+`a2-operator-1785060436971` exposed an over-escaped `mutation_kind` expression;
+Platform Core rejected the malformed JSON and no result or public action was
+persisted. After correction, Make execution
+`700c30dbb6af4cd78dc75ef10c7b740d` completed 5/5 operations for run
+`a2-operator-1785060916010`. Platform D1 records a completed 1/1 result, one
+open `listing_review` action with `mutation_kind=none` and no approval
+requirement, and balanced 1/1 reconciliation. This proves the manual
+Worker-shaped Make iterator path. Queue dispatch remains false because a
+same-run Worker-to-Make replay and source/action cross-store join have not yet
+been proven.
 
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform

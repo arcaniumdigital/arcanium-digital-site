@@ -93,9 +93,11 @@ performed. Every scenario exercised by this phase was returned to inactive.
    preflight, canonical validation, approval, publishing, post-publication
    verification, revalidation, and indexing routes remain incomplete.
    A2 now has its Worker-heavy reconciliation foundation and Make health
-   branch. A capped compact-action iterator blueprint is imported and saved in
-   the inactive TEST scenario, but remains unverified; dispatch stays disabled
-   until it is exercised successfully. The operator task destinations,
+   branch. Its capped compact-action iterator is imported and verified in the
+   inactive TEST scenario: one controlled action persisted as a non-mutating
+   open operator task with balanced 1/1 reconciliation. Dispatch remains
+   disabled pending same-run Worker-to-Make replay evidence. The remaining
+   operator task destinations,
    reporting annotation, alert/digest, live feed adapter credentials, website
    revalidation endpoint, IndexNow key, public-page inspection, and rollback
    drill remain incomplete.
