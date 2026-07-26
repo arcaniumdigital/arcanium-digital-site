@@ -7,7 +7,7 @@ to inactive. No production action was enabled.
 
 - Worker: `arcanium-platform-core-test`
 - A2 Worker: `arcanium-listing-control-test`, current version
-  `f4aa9966-6729-420b-bfd7-e1d342b3f40e`
+  `47176ed8-4566-4f3b-81e9-581ac2f3f4e4`
 - Current version: `bb58a853-7af2-4d32-953a-711c1048b466`
 - Health version: `0.2.0`
 - D1 migrations: `006_platform_core_registry.sql`,
@@ -162,7 +162,8 @@ last-known-good preservation, lifecycle events, approval-gated sold/removal
 decisions, action overflow, and absence of Google Indexing API behavior. Two
 queue tests cover held delivery and missing-endpoint fail-closed behavior.
 
-Version `f4aa9966-6729-420b-bfd7-e1d342b3f40e` adds an independent
+The current restored version `47176ed8-4566-4f3b-81e9-581ac2f3f4e4` retains
+the independent
 `ALLOW_MAKE_DISPATCH=false` gate. The consumer records queued batches as
 `held_for_operator_workflow` instead of calling Make. The listing sync and
 capped operator actions remain durable in D1, so disabling delivery does not
@@ -170,13 +171,9 @@ discard the operator work represented by the batch. The Make endpoint is not a
 deployed binding; even an accidental flag change is fail-closed and retries
 with `MAKE_ENDPOINT_NOT_CONFIGURED`.
 
-The A2 Make clone is now
-`TEST CLONE - A2 - Listing Control Health + Result`. Its five-module health
-run completed and persisted provider `listing-control` with balanced 1/1
-reconciliation. No raw feed or listing array entered Make. The compact
-operator-action iterator, task routing, summary annotation, and one
-alert/digest branch remain to be connected and tested. The scenario uses
-immediate webhook scheduling and remains inactive.
+The earlier A2 health baseline was replaced by
+`TEST CLONE - A2 - Compact Operator Actions`. The scenario uses immediate
+webhook scheduling and remains inactive.
 
 `make/test/a2-operator-actions.patched.json` is the source-controlled capped
 iterator and Platform Core result/task mapping. The five-module graph is
@@ -189,9 +186,26 @@ persisted. After correction, Make execution
 `a2-operator-1785060916010`. Platform D1 records a completed 1/1 result, one
 open `listing_review` action with `mutation_kind=none` and no approval
 requirement, and balanced 1/1 reconciliation. This proves the manual
-Worker-shaped Make iterator path. Queue dispatch remains false because a
-same-run Worker-to-Make replay and source/action cross-store join have not yet
-been proven.
+Worker-shaped Make iterator path.
+
+The same-run gate is proven by signed Worker run
+`a2-cross-store-1785077536611`. Listing D1 records a completed 3/3 sync,
+one sold transition, one open approval-gated `sold_evidence` action, no
+overflow, and queue delivery on attempt 1. Draining the accepted webhook batch
+through inactive Make execution `bcb83b9032204c4ea2efe55e4cd51478`
+persisted the identical action and dedup keys in Platform D1, a completed 1/1
+result, and balanced 1/1 reconciliation. Make reports a warning only because a
+queued webhook cannot return its response to the original caller; all five
+modules ran.
+
+The isolated test used temporary Worker version
+`fca2ad7d-48ac-40a3-a6c7-d8086fdd3956`. The deployment was restored, the
+temporary Make endpoint secret was deleted, and final health reports
+`make_dispatch_enabled=false` with every public/destructive flag false. Only
+the original `LISTING_HMAC_SECRET` remains. Cloudflare rollback restored the
+code and original HMAC secret but retained newer variable/secret bindings, so
+the false configuration was explicitly redeployed and the temporary endpoint
+secret explicitly deleted. Functional listing rollback remains unproven.
 
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform

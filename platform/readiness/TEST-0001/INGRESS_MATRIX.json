@@ -24,7 +24,7 @@
   ],
   "limitations": [
     "Ingress success is not provider workflow success",
-    "A2-A12 provider branches remain unimplemented",
+    "A2 same-run Worker, queue, Make iterator, action, and reconciliation path is verified; A3-A12 substantive provider branches remain incomplete",
     "A13-A15 signed scheduled companions are tested but remain inactive",
     "Cross-client persistence and allowlist rejection are proven; provider-resource isolation remains unproven",
     "Rollback drills remain unproven",

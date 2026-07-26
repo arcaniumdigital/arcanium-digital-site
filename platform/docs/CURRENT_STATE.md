@@ -9,7 +9,7 @@
 - Cloudflare Worker: `arcanium-platform-core-test`, version
   `bb58a853-7af2-4d32-953a-711c1048b466`.
 - A2 Cloudflare Worker: `arcanium-listing-control-test`, version
-  `f4aa9966-6729-420b-bfd7-e1d342b3f40e`, TEST-only with all
+  `47176ed8-4566-4f3b-81e9-581ac2f3f4e4`, TEST-only with all
   public/destructive action flags false and Make dispatch held.
 - Cloudflare TEST D1 databases: platform operations, listing/content, and
   search/reporting.
@@ -79,25 +79,29 @@ performed. Every scenario exercised by this phase was returned to inactive.
 19. A2 queue-to-Make delivery now has a separate
     `ALLOW_MAKE_DISPATCH=false` deployment gate. Queued batches remain durably
     represented by the listing sync, operator-action, and queue-audit rows
-    while the unverified Make iterator is held.
+    while default Make dispatch is held.
+20. A2 same-run cross-store proof: signed Worker run
+    `a2-cross-store-1785077536611` persisted a 3/3 listing sync and one
+    approval-gated `sold_evidence` action, delivered its queue message on
+    attempt 1, and produced the matching Platform Core result/action keys with
+    balanced 1/1 reconciliation. Make execution
+    `bcb83b9032204c4ea2efe55e4cd51478` completed all five modules; its warning
+    is limited to the webhook response being unavailable for queued data.
 
 ## Remaining external blockers
 
 1. Sanity project metadata and its encrypted Make credential are configured.
    A read-only query passed through Make execution
    `ef7b094a11684dd593fd80aa134ec3fe`.
-2. The substantive A2-A4, A6-A10, and A11 provider branches
-   are not yet implemented;
+2. Remaining substantive work in A2-A4, A6-A10, and A11 is not yet complete;
    their current TEST scenarios are truthful signed-ingress/health baselines
    only. A3 now has verified Sanity publication-provider health, but its
    preflight, canonical validation, approval, publishing, post-publication
    verification, revalidation, and indexing routes remain incomplete.
    A2 now has its Worker-heavy reconciliation foundation and Make health
-   branch. Its capped compact-action iterator is imported and verified in the
-   inactive TEST scenario: one controlled action persisted as a non-mutating
-   open operator task with balanced 1/1 reconciliation. Dispatch remains
-   disabled pending same-run Worker-to-Make replay evidence. The remaining
-   operator task destinations,
+   branch. Its capped compact-action iterator and same-run Worker-to-Make queue
+   path are verified in the inactive TEST scenario. Dispatch remains disabled
+   by default. The remaining operator task destinations,
    reporting annotation, alert/digest, live feed adapter credentials, website
    revalidation endpoint, IndexNow key, public-page inspection, and rollback
    drill remain incomplete.
