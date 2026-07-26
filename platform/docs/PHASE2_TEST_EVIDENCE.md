@@ -28,7 +28,11 @@ to inactive. No production action was enabled.
 | A5 | controlled webhook run at 2026-07-26 17:50 AEST | Result `result:a5-provider-1785052234506`; Search Console + GA4 + DataForSEO completed; balanced 3/3 |
 | A6 | controlled webhook run at 2026-07-26 18:05 AEST | Result `result:a6-sentry-1785053136505`; Sentry organisation read completed; balanced 1/1; no technical mutation |
 | A6 | `63886f1ae6de4426b16ec3f1e3d49163` | Audit event `event-phase2-a6-950b5c1eacbb4a36bb1ff87fc807d52f` |
+| A7 | controlled webhook run at 2026-07-26 18:19 AEST | Result `result:a7-provider-1785053957681`; DataForSEO account read completed; balanced 1/1; no task order, spend, or GBP mutation |
 | A8 | `477000cc227b43e1ad0a614282aae2c1` | Review event `event-phase2-a8-49b2d7040bfb4036b1fdd5dac5df75f2` |
+| A8 | controlled webhook run at 2026-07-26 18:30 AEST | Result `result:a8-clicksend-1785054599487`; ClickSend SMS history read completed; balanced 1/1; no communication sent |
+| A9 | controlled queued webhook run at 2026-07-26 18:37 AEST | Result `result:a9-sanity-1785055010475`; Sanity dataset count read completed; balanced 1/1; no document mutation or publish |
+| A10 | controlled webhook run at 2026-07-26 18:21 AEST | Result `result:a10-provider-1785054097475`; DataForSEO account read completed; balanced 1/1; no competitor task, spend, outreach, or content mutation |
 | A11 | controlled webhook run at 2026-07-26 17:54 AEST | Result `result:a11-analytics-1785052443686`; Search Console + GA4 completed; balanced 2/2; no report sent |
 | A12 | controlled queued webhook run at 2026-07-26 17:36 AEST | Result `result:a12-result-1785051375416`, action `action:a12-result-1785051375416`, balanced 1/1 reconciliation |
 | A13 | `8af7db5bec9248d4a79c7413151f1cd0` | Project `project-phase2-72a1b72d7d6349e98b83a06c6caf6319` |
@@ -92,6 +96,46 @@ authenticated organisation health only, not the full technical-control
 workflow. The scenario was restored to immediate webhook scheduling and left
 inactive.
 
+The A7 TEST clone is now
+`TEST CLONE - A7 - GEO Provider Health + Result`. Its five modules completed:
+webhook, signed event, DataForSEO `GET /appendix/user_data`, signed result, and
+webhook response. D1 recorded provider `dataforseo`, counts 1/1/0, output 1,
+and a balanced 1/1 reconciliation. No GEO grid or AI-visibility task was
+ordered, no provider spend occurred, and no GBP mutation was attempted. This
+proves authenticated account health only, not the full local-visibility
+workflow. The scenario uses immediate webhook scheduling and remains inactive.
+
+The A10 TEST clone is now
+`TEST CLONE - A10 - Competitor Provider Health + Result`. Its five modules
+completed: webhook, signed event, DataForSEO `GET /appendix/user_data`, signed
+result, and webhook response. D1 recorded provider `dataforseo`, counts 1/1/0,
+output 1, and a balanced 1/1 reconciliation. No competitor-data task was
+ordered and no spend, outreach, or content mutation occurred. This proves
+authenticated account health only, not the full citations/backlinks/entity
+workflow. The scenario uses immediate webhook scheduling and remains inactive.
+
+The A8 TEST clone is now
+`TEST CLONE - A8 - ClickSend History Health + Result`. Its five modules
+completed: webhook, signed event, ClickSend `GET /v3/sms/history`, signed
+result, and webhook response. D1 recorded provider `clicksend`, counts 1/1/0,
+output 1, and a balanced 1/1 reconciliation. The run read only five history
+records; it sent no SMS or email and changed no lead, CRM, or public
+communication state. This proves authenticated provider-history health only,
+not the full forms/enquiry/delivery workflow. The scenario uses immediate
+webhook scheduling and remains inactive.
+
+The A9 TEST clone is now
+`TEST CLONE - A9 - Sanity Dataset Health + Result`. Its first four substantive
+modules completed: webhook, signed event, authenticated Sanity production
+dataset `count(*)` query, and signed result. D1 recorded provider `sanity`,
+counts 1/1/0, output 1, and a balanced 1/1 reconciliation. The webhook-response
+module warned only because the request had queued after the first run-once
+listener expired; provider read, signing, and persistence all succeeded. No
+document body entered Make, and no draft, mutation, publish, or communication
+occurred. This proves authenticated dataset health only, not the full campaign-
+evidence/content workflow. The scenario uses immediate webhook scheduling and
+remains inactive.
+
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform
 activation evidence. All TEST contract gates pass; every production activation
@@ -150,7 +194,7 @@ invalid, or replayed signatures.
 Cost caps, approval groups, reconciliation rules, and rollback methods are
 declared for A1-A15. Shared result enforcement and durable reconciliation are
 now live in TEST. Operator replay from the DLQ, substantive A2-A4 and A6-A10
-provider branches (A4 account health and A6 Sentry health are verified), the full A5 analysis branch,
+provider branches (A4 and A6-A10 account/provider health are verified), the full A5 analysis branch,
 the full A11 reporting branch,
 the remaining A12
 provider-health/recovery branches, provider-resource isolation, and rollback

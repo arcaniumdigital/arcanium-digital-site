@@ -52,6 +52,18 @@ performed. Every scenario exercised by this phase was returned to inactive.
 12. A6 read-only Sentry organisation-health branch. The five-module Make run
     completed and persisted a 1/1 balanced result without deployment,
     rollback, redirect, canonical, removal, or other technical mutation.
+13. A7 read-only DataForSEO account-health branch. The five-module Make run
+    completed and persisted a 1/1 balanced result without ordering GEO/AI
+    visibility data, incurring provider spend, or mutating GBP.
+14. A10 read-only DataForSEO account-health branch. The five-module Make run
+    completed and persisted a 1/1 balanced result without ordering competitor
+    data, incurring provider spend, sending outreach, or mutating content.
+15. A8 read-only ClickSend history-health branch. The five-module Make run
+    completed and persisted a 1/1 balanced result without sending SMS, email,
+    or any other public communication.
+16. A9 read-only Sanity dataset-health branch. The authenticated count query
+    and signed result persisted a 1/1 balance without reading document bodies,
+    creating drafts, mutating content, publishing, or communicating.
 
 ## Remaining external blockers
 
@@ -66,7 +78,15 @@ performed. Every scenario exercised by this phase was returned to inactive.
    incomplete. A4 now has verified read-only account health, but review/post/
    performance event handling and approvals remain incomplete. A6 now has
    verified Sentry organisation health, but probes, deployment events,
-   technical issue normalisation, and approval routes remain incomplete. A11 now has a
+   technical issue normalisation, and approval routes remain incomplete. A7
+   and A10 now have verified DataForSEO account health, but their GEO/
+   AI-visibility and competitor/citation data tasks, compact transformations,
+   and approval routes remain incomplete. A8 now has verified ClickSend
+   history health, but form normalisation, consent/routing logic, CRM writes,
+   Resend assembly, delivery-state processing, and approval routes remain
+   incomplete. A9 now has verified Sanity dataset health, but campaign
+   evidence extraction, compact content drafting, approval, publishing, and
+   measurement routes remain incomplete. A11 now has a
    verified read-only analytics-health branch, but
    its compact KPI transformation, approval, and reporting workflow remains
    incomplete. A12 now has verified result/reconciliation ingress, but its full

@@ -1,0 +1,117 @@
+{
+  "name": "TEST CLONE - A10 - Competitor Provider Health + Result",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 3448428
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}",
+        "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"{{1.event_id}}\",\"idempotency_key\":\"{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A10\",\"event_type\":\"competitor.provider_health.requested\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"info\",\"payload\":{\"mode\":\"provider_health_read_only\",\"safe_test\":true,\"external_actions_enabled\":false,\"communications_enabled\":false,\"provider_spend_enabled\":false}}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "/v1/events"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "dataforseo:universalModule",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9246246
+      },
+      "mapper": {
+        "qs": [],
+        "url": "/appendix/user_data",
+        "method": "GET",
+        "headers": []
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}-result",
+        "eventBody": "{\"schema_version\":\"1.0\",\"result_id\":\"result:{{1.event_id}}\",\"run_id\":\"run:{{1.event_id}}\",\"idempotency_key\":\"result:{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A10\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"provider\":\"dataforseo\",\"status\":\"completed\",\"started_at\":\"{{1.occurred_at}}\",\"completed_at\":\"{{1.occurred_at}}\",\"input_count\":1,\"accepted_count\":1,\"rejected_count\":0,\"output_count\":1,\"actions\":[],\"reconciliation\":{\"expected_count\":1,\"observed_count\":1,\"balanced\":true,\"method\":\"authenticated read-only DataForSEO account health call completed\",\"evidence_ref\":\"make://scenario/6665251/execution/{{1.event_id}}\"},\"limitations\":[\"Provider account health only\",\"No competitor data task was ordered\",\"No outreach, provider spend, or content mutation\"]}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "/v1/results"
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "gateway:WebhookRespond",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "body": "{\"status\":\"accepted\",\"environment\":\"test\",\"automation_id\":\"A10\",\"provider_health\":\"verified\",\"safe_test\":true,\"external_actions\":false}",
+        "status": 202
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "eu1.make.com",
+    "notes": []
+  }
+}

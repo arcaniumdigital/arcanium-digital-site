@@ -38,6 +38,25 @@ activated.
   controlled five-operation run persisted
   `result:a6-sentry-1785053136505` with balanced 1/1 reconciliation and
   explicitly performed no technical mutation.
+- A7 TEST scenario `6674990` reuses DataForSEO connection `9246246`. Its
+  controlled five-operation run persisted
+  `result:a7-provider-1785053957681` with balanced 1/1 reconciliation. It
+  ordered no GEO/AI visibility task, incurred no spend, and performed no GBP
+  mutation.
+- A10 TEST scenario `6665251` reuses DataForSEO connection `9246246`. Its
+  controlled five-operation run persisted
+  `result:a10-provider-1785054097475` with balanced 1/1 reconciliation. It
+  ordered no competitor-data task and performed no spend, outreach, or
+  content mutation.
+- A8 TEST scenario `6665248` reuses ClickSend connection `9218600`. Its
+  controlled five-operation run persisted
+  `result:a8-clicksend-1785054599487` with balanced 1/1 reconciliation. It
+  performed only `GET /v3/sms/history`; no SMS or email was sent.
+- A9 TEST scenario `6665249` reuses the encrypted Sanity API-key credential
+  `207338`. Its controlled queued run persisted
+  `result:a9-sanity-1785055010475` with balanced 1/1 reconciliation after an
+  authenticated production-dataset `count(*)` query. It read no document
+  bodies and performed no content mutation or publish action.
 
 ## Google ownership and scope
 
