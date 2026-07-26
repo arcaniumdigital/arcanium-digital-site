@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "client_id": "TEST-0001",
+  "automation_id": "A6",
+  "environment": "test",
+  "worker_deployed": true,
+  "deployment_version": "f83929c8-7553-4f6b-920f-d6df393dd96f",
+  "make_scenario_id": "6665247",
+  "make_webhook_id": "3448404",
+  "legacy_signer_removed_from_test_path": true,
+  "make_blueprint_valid": true,
+  "make_connections_valid": true,
+  "webhook_round_trip_passed": true,
+  "audit_event_persisted": true,
+  "technical_audit_implemented": false,
+  "mutation_enabled": false,
+  "cross_client_test_passed": false,
+  "rollback_tested": false,
+  "production_approved": false,
+  "evidence": {
+    "make_execution_id": "63886f1ae6de4426b16ec3f1e3d49163",
+    "event_id": "event-phase2-a6-950b5c1eacbb4a36bb1ff87fc807d52f"
+  },
+  "blocking_reasons": [
+    "Technical audit provider and remediation branches are not implemented",
+    "Cross-client isolation and rollback are not tested",
+    "Production approval has not been requested"
+  ]
+}

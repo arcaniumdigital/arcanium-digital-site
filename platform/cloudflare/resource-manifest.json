@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "environment": "test",
+  "account_id": "432cead2590c126874503304ecfdfc69",
+  "existing": {
+    "workers": [
+      "test-platform-ops",
+      "test-technical-control",
+      "arcmcp-platform-test"
+    ],
+    "d1_databases": [
+      "test-platform-ops-state",
+      "test-listing-content-state",
+      "test-local-authority-state",
+      "test-search-reporting-state"
+    ]
+  },
+  "required_bindings": {
+    "platform_ops": {
+      "d1": "test-platform-ops-state",
+      "queues": [
+        "test-platform-events",
+        "test-platform-events-dlq"
+      ]
+    },
+    "site_provisioning": {
+      "queues": [
+        "site-provisioning-jobs-test",
+        "site-provisioning-dlq-test",
+        "migration-jobs-test",
+        "migration-dlq-test"
+      ]
+    },
+    "cro": {
+      "queues": [
+        "cro-analysis-test",
+        "cro-analysis-dlq-test"
+      ]
+    },
+    "agency_ops": {
+      "queues": [
+        "cost-imports-test",
+        "cost-imports-dlq-test"
+      ]
+    }
+  },
+  "production": {
+    "enabled": false,
+    "resource_creation": false
+  }
+}

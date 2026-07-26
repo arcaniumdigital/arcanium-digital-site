@@ -1,0 +1,9 @@
+{
+  "name": "idempotent duplicate",
+  "first_request": "valid signed fixture",
+  "second_request": "new nonce, same idempotency_key",
+  "expected_first_status": 202,
+  "expected_second_status": 200,
+  "expected_d1_business_writes": 1,
+  "expected_queue_messages": 1
+}

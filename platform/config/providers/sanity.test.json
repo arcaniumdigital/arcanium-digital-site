@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "environment": "test",
+  "organization_id": "oXzX64BpF",
+  "project_id": "fefsnr86",
+  "dataset": "production",
+  "api_version": "2025-02-19",
+  "token_source": "make_encrypted_api_key",
+  "mutations_enabled": false
+}

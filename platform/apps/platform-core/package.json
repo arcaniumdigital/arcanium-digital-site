@@ -1,0 +1,19 @@
+{
+  "name": "@arcanium/platform-core",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "check": "tsc --project tsconfig.json",
+    "test": "vitest run",
+    "deploy:test": "wrangler deploy --config wrangler.test.jsonc",
+    "d1:migrate:test": "wrangler d1 execute test-platform-ops-state --remote --file ../../cloudflare/migrations/006_platform_core_registry.sql",
+    "d1:migrate:queue:test": "wrangler d1 execute test-platform-ops-state --remote --file ../../cloudflare/migrations/007_queue_delivery_audit.sql"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260724.1",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.30.0"
+  }
+}

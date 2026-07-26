@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "client_id": "TEST-0001",
+  "automation_id": "A15",
+  "environment": "test",
+  "worker_deployed": true,
+  "deployment_version": "f83929c8-7553-4f6b-920f-d6df393dd96f",
+  "d1_migrations_applied": true,
+  "queues_bound": true,
+  "durable_objects_bound": false,
+  "secrets_installed": true,
+  "make_scenario_id": "6691553",
+  "make_blueprint_valid": true,
+  "make_connections_valid": true,
+  "webhook_round_trip_passed": true,
+  "golden_fixtures_passed": true,
+  "monthly_companion_passed": true,
+  "weekly_companion_passed": true,
+  "cross_client_test_passed": false,
+  "a12_incident_path_passed": true,
+  "cost_caps_configured": false,
+  "approval_owners_configured": false,
+  "rollback_tested": false,
+  "manual_dependencies_complete": false,
+  "production_approved": false,
+  "evidence": {
+    "make_execution_id": "6c6abc7a04954b96aa998b57167f0453",
+    "monthly_execution_id": "9eadc6f0ceb14d1aad7f3100ef3fdb37",
+    "weekly_execution_id": "fa991c9b80414cc5ad963f2156f11065",
+    "d1_record_id": "entry-phase2-57271d97a8464a988c130e179fcc480c"
+  },
+  "blocking_reasons": [
+    "Cross-client isolation needs a second approved test client",
+    "Cost caps and source reconciliation are not configured",
+    "Approval owners and rollback are not configured",
+    "Pricing changes remain disabled",
+    "Production approval has not been requested"
+  ]
+}

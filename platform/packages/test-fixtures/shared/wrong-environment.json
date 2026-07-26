@@ -1,0 +1,7 @@
+{
+  "name": "wrong environment",
+  "event_overrides": { "environment": "production" },
+  "expected_status": 403,
+  "expected_error": "ENVIRONMENT_MISMATCH",
+  "forbidden_side_effects": ["d1_business_write", "queue_send", "make_webhook"]
+}

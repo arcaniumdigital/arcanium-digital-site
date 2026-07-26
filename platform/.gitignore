@@ -1,0 +1,4 @@
+make/*.local.json
+config/*.local.json
+.env*
+.wrangler/

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0",
+  "environment": "test",
+  "clientId": "TEST-0002",
+  "displayName": "Isolated synthetic test client",
+  "status": "onboarding",
+  "timezone": "Australia/Brisbane",
+  "currency": "AUD",
+  "entity": {
+    "agentName": "Isolation Fixture",
+    "agencyName": "Synthetic Test Agency",
+    "serviceAreas": ["Test Only"],
+    "websiteOrigin": "https://test-0002.invalid",
+    "sameAs": []
+  },
+  "website": {
+    "githubRepository": "synthetic/not-connected",
+    "vercelProjectId": "not-connected",
+    "canonicalDomain": "https://test-0002.invalid",
+    "previewOrigin": "https://preview.test-0002.invalid",
+    "sitemapUrl": "https://test-0002.invalid/sitemap.xml",
+    "robotsUrl": "https://test-0002.invalid/robots.txt"
+  },
+  "communications": {
+    "operatorEmails": [],
+    "approvalEmails": [],
+    "testEmails": [],
+    "testPhones": []
+  },
+  "automation": {
+    "enabled": {},
+    "schedules": {},
+    "actionCaps": {},
+    "providerBudgets": {}
+  },
+  "approvals": {
+    "websiteLaunchOwners": [],
+    "contentOwners": [],
+    "gbpOwners": [],
+    "outreachOwners": [],
+    "financialOwners": []
+  }
+}

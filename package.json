@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev --hostname localhost --port 3000",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "check:platform": "npm --prefix platform/apps/platform-core run check && npm --prefix platform/packages/contracts run check",
+    "test:platform": "npm --prefix platform/apps/platform-core test",
+    "verify": "npm run check:platform && npm run test:platform && npm run build"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",
