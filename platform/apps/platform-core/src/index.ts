@@ -6,10 +6,16 @@ import {
   validateActionResolutionCandidate,
   type ActionResolutionRequest,
 } from "../../../packages/contracts/src/action-resolution";
+import {
+  opsActionId,
+  validateOpsControlCandidate,
+  type OpsControlEvent,
+} from "../../../packages/contracts/src/ops-control";
 
 export interface Env {
   ENVIRONMENT: "test" | "production";
   EVENT_HMAC_SECRET?: string;
+  OPS_HMAC_SECRET?: string;
   TEST_CLIENT_IDS: string;
   MAX_EVENT_BYTES: string;
   REPLAY_WINDOW_SECONDS: string;
@@ -23,6 +29,8 @@ export interface Env {
   ALLOW_SITE_LAUNCH: "true" | "false";
   ALLOW_EXPERIMENT_LAUNCH: "true" | "false";
   ALLOW_PRICING_CHANGE: "true" | "false";
+  ALLOW_MAKE_A12_DISPATCH: "true" | "false";
+  MAKE_A12_WEBHOOK_URL?: string;
   PLATFORM_OPS_DB: D1Database;
   A13_DB: D1Database;
   A14_DB: D1Database;
@@ -53,6 +61,12 @@ export interface AutomationEvent {
 type ValidationResult =
   | { ok: true; event: AutomationEvent }
   | { ok: false; code: string; status: number };
+
+export interface OpsMakeSignedRequest {
+  requestId: string;
+  endpointPath: "/v1/results" | "/v1/action-resolutions";
+  eventBody: string;
+}
 
 const MAX_IDENTIFIER_LENGTH = 160;
 const MAX_EVENT_TYPE_LENGTH = 120;
@@ -129,11 +143,16 @@ export function validateEventCandidate(
   return { ok: true, event: candidate as unknown as AutomationEvent };
 }
 
-async function verifySignature(request: Request, rawBody: string, env: Env): Promise<Response | null> {
+async function verifySignature(
+  request: Request,
+  rawBody: string,
+  env: Env,
+  secret = env.EVENT_HMAC_SECRET,
+): Promise<Response | null> {
   const timestamp = request.headers.get("X-Automation-Timestamp");
   const nonce = request.headers.get("X-Automation-Nonce");
   const supplied = request.headers.get("X-Automation-Signature");
-  if (!env.EVENT_HMAC_SECRET) return failure("SERVER_HMAC_NOT_CONFIGURED", 500);
+  if (!secret) return failure("SERVER_HMAC_NOT_CONFIGURED", 500);
   if (!timestamp) return failure("TIMESTAMP_HEADER_REQUIRED", 401);
   if (!nonce) return failure("NONCE_HEADER_REQUIRED", 401);
   if (!supplied) return failure("SIGNATURE_HEADER_REQUIRED", 401);
@@ -150,7 +169,7 @@ async function verifySignature(request: Request, rawBody: string, env: Env): Pro
 
   const key = await crypto.subtle.importKey(
     "raw",
-    encode(env.EVENT_HMAC_SECRET),
+    encode(secret),
     { name: "HMAC", hash: "SHA-256" },
     false,
     ["sign"],
@@ -647,6 +666,271 @@ async function handleActionResolution(request: Request, env: Env): Promise<Respo
   }, 202);
 }
 
+export function buildOpsMakeSignedRequests(
+  event: OpsControlEvent,
+  incidentId: string,
+): OpsMakeSignedRequest[] {
+  const recoveryAction = event.category === "RECOVERY_REQUIRED";
+  const actionId = recoveryAction
+    ? `action:recovery:${event.event_id}`
+    : opsActionId(incidentId);
+  const actionDedupKey = recoveryAction
+    ? `ops:recovery:${event.event_id}`
+    : `ops:${incidentId}`;
+  const evidenceRef = event.verification_evidence_ref ?? event.payload_ref ?? `ops-control://${event.event_id}`;
+  if (event.category === "RESOLVED") {
+    const resolutionId = `resolution:${event.event_id}`;
+    return [{
+      requestId: resolutionId,
+      endpointPath: "/v1/action-resolutions",
+      eventBody: JSON.stringify({
+        schema_version: "1.0",
+        resolution_id: resolutionId,
+        idempotency_key: `resolution:${event.idempotency_key}`,
+        correlation_id: event.correlation_id,
+        automation_id: "A12",
+        client_id: event.client_id,
+        environment: event.environment,
+        occurred_at: event.occurred_at,
+        resolutions: [{
+          action_id: actionId,
+          dedup_key: actionDedupKey,
+          disposition: "completed",
+          reason: event.summary,
+          evidence_ref: evidenceRef,
+        }],
+      }),
+    }];
+  }
+
+  const resultId = `result:${event.event_id}`;
+  return [{
+    requestId: resultId,
+    endpointPath: "/v1/results",
+    eventBody: JSON.stringify({
+      schema_version: "1.0",
+      result_id: resultId,
+      run_id: `run:${event.event_id}`,
+      idempotency_key: `result:${event.idempotency_key}`,
+      correlation_id: event.correlation_id,
+      automation_id: "A12",
+      client_id: event.client_id,
+      environment: event.environment,
+      provider: event.provider,
+      status: "completed",
+      started_at: event.occurred_at,
+      completed_at: event.occurred_at,
+      input_count: 1,
+      accepted_count: 1,
+      rejected_count: 0,
+      output_count: 1,
+      actions: [{
+        action_id: actionId,
+        dedup_key: actionDedupKey,
+        action_type: `ops.${event.category.toLowerCase()}`,
+        severity: event.severity,
+        mutation_kind: recoveryAction ? "replay" : "none",
+        approval_required: recoveryAction,
+        owner_group: "financialOwners",
+        evidence_ref: evidenceRef,
+      }],
+      reconciliation: {
+        expected_count: 1,
+        observed_count: 1,
+        balanced: true,
+        method: "one compact A12 incident action reconciled by incident identifier",
+        evidence_ref: `ops-control://${incidentId}`,
+      },
+      limitations: [
+        "TEST operations task only",
+        "No raw telemetry, secret, public send, publish, GBP mutation, or automatic replay",
+      ],
+    }),
+  }];
+}
+
+async function persistOpsControlEvent(
+  event: OpsControlEvent,
+  incidentId: string,
+  env: Env,
+): Promise<void> {
+  const recordedAt = now();
+  const statements = [
+    env.PLATFORM_OPS_DB.prepare(
+      "INSERT INTO a12_ops_events (event_id, idempotency_key, correlation_id, environment, client_id, automation_id, category, severity, provider, summary, incident_id, dedup_key, classification, retryable, replay_kind, payload_ref, occurred_at, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    ).bind(
+      event.event_id, event.idempotency_key, event.correlation_id, event.environment,
+      event.client_id, event.automation_id, event.category, event.severity,
+      event.provider, event.summary, incidentId, event.dedup_key,
+      event.classification, event.retryable ? 1 : 0, event.replay_kind,
+      event.payload_ref ?? null, event.occurred_at, recordedAt,
+    ),
+  ];
+
+  if (event.category === "RESOLVED") {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "UPDATE a12_ops_incidents SET status = 'resolved', last_seen = ?, resolved_at = ?, verification_evidence_ref = ? WHERE environment = ? AND client_id = ? AND incident_id = ? AND status = 'open'",
+      ).bind(
+        event.occurred_at, recordedAt, event.verification_evidence_ref,
+        event.environment, event.client_id, incidentId,
+      ),
+    );
+  } else {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO a12_ops_incidents (environment, client_id, incident_id, dedup_key, automation_id, provider, category, severity, classification, error_code, summary, affected_count, data_loss_window_minutes, retryable, replay_kind, owner_group, status, first_seen, last_seen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'financialOwners', 'open', ?, ?) ON CONFLICT(environment, client_id, dedup_key) DO UPDATE SET category = excluded.category, severity = excluded.severity, classification = excluded.classification, error_code = excluded.error_code, summary = excluded.summary, affected_count = excluded.affected_count, data_loss_window_minutes = excluded.data_loss_window_minutes, retryable = excluded.retryable, replay_kind = excluded.replay_kind, last_seen = excluded.last_seen",
+      ).bind(
+        event.environment, event.client_id, incidentId, event.dedup_key,
+        event.automation_id, event.provider, event.category, event.severity,
+        event.classification, event.error_code ?? null, event.summary,
+        event.affected_count, event.data_loss_window_minutes,
+        event.retryable ? 1 : 0, event.replay_kind,
+        event.occurred_at, event.occurred_at,
+      ),
+    );
+  }
+
+  statements.push(
+    env.PLATFORM_OPS_DB.prepare(
+      "INSERT INTO a12_ops_incident_timeline (environment, client_id, incident_id, event_id, category, severity, summary, evidence_ref, occurred_at, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    ).bind(
+      event.environment, event.client_id, incidentId, event.event_id,
+      event.category, event.severity, event.summary,
+      event.verification_evidence_ref ?? event.payload_ref ?? null,
+      event.occurred_at, recordedAt,
+    ),
+  );
+
+  if (event.category === "RECOVERY_REQUIRED") {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO a12_recovery_requests (environment, client_id, recovery_id, incident_id, event_id, replay_kind, approval_id, approval_required, approved, executed, status, requested_at) VALUES (?, ?, ?, ?, ?, ?, ?, 1, 0, 0, 'approval_required', ?)",
+      ).bind(
+        event.environment, event.client_id, `recovery:${event.event_id}`,
+        incidentId, event.event_id, event.replay_kind,
+        event.approval_id ?? null, recordedAt,
+      ),
+    );
+  }
+
+  if (event.health) {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO a12_provider_health (environment, client_id, provider, automation_id, status, freshness_age_seconds, checked_at, evidence_ref, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(environment, client_id, provider, automation_id) DO UPDATE SET status = excluded.status, freshness_age_seconds = excluded.freshness_age_seconds, checked_at = excluded.checked_at, evidence_ref = excluded.evidence_ref, updated_at = excluded.updated_at",
+      ).bind(
+        event.environment, event.client_id, event.provider, event.automation_id,
+        event.health.status, event.health.freshness_age_seconds ?? null,
+        event.health.checked_at, event.payload_ref ?? null, recordedAt,
+      ),
+    );
+  }
+
+  if (event.cost) {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO a12_cost_health (environment, client_id, provider, automation_id, service_period, currency, amount_minor, threshold_minor, threshold_exceeded, evidence_ref, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(environment, client_id, provider, automation_id, service_period) DO UPDATE SET currency = excluded.currency, amount_minor = excluded.amount_minor, threshold_minor = excluded.threshold_minor, threshold_exceeded = excluded.threshold_exceeded, evidence_ref = excluded.evidence_ref, updated_at = excluded.updated_at",
+      ).bind(
+        event.environment, event.client_id, event.provider, event.automation_id,
+        event.cost.service_period, event.cost.currency, event.cost.amount_minor,
+        event.cost.threshold_minor,
+        event.cost.amount_minor >= event.cost.threshold_minor ? 1 : 0,
+        event.payload_ref ?? null, recordedAt,
+      ),
+    );
+  }
+  await env.PLATFORM_OPS_DB.batch(statements);
+}
+
+async function handleOpsControlEvent(request: Request, env: Env): Promise<Response> {
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return failure("CONTENT_TYPE_REQUIRED", 415);
+  }
+  const raw = await request.text();
+  const maxBytes = Number(env.MAX_EVENT_BYTES);
+  if (!Number.isFinite(maxBytes) || maxBytes < 1) return failure("SERVER_CONFIGURATION_ERROR", 500);
+  if (encode(raw).byteLength > maxBytes) return failure("PAYLOAD_TOO_LARGE", 413);
+  const authFailure = await verifySignature(request, raw, env, env.OPS_HMAC_SECRET);
+  if (authFailure) return authFailure;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return failure("INVALID_JSON", 400);
+  }
+  const allowedClients = env.TEST_CLIENT_IDS.split(",").map((value) => value.trim()).filter(Boolean);
+  const validated = validateOpsControlCandidate(parsed, env.ENVIRONMENT, allowedClients);
+  if (!validated.ok) return failure(validated.code, validated.status);
+  const event = validated.event;
+
+  const duplicate = await env.PLATFORM_OPS_DB.prepare(
+    "SELECT event_id, incident_id FROM a12_ops_events WHERE environment = ? AND client_id = ? AND idempotency_key = ?",
+  ).bind(event.environment, event.client_id, event.idempotency_key)
+    .first<{ event_id: string; incident_id: string }>();
+  if (duplicate) {
+    return json({
+      ok: true,
+      data: {
+        accepted: true,
+        duplicate: true,
+        event_id: duplicate.event_id,
+        incident_id: duplicate.incident_id,
+        environment: env.ENVIRONMENT,
+      },
+    });
+  }
+
+  const requiresExistingIncident =
+    event.category === "RESOLVED" || event.category === "RECOVERY_REQUIRED";
+  const existingIncident = requiresExistingIncident
+    ? await env.PLATFORM_OPS_DB.prepare(
+      "SELECT incident_id, status FROM a12_ops_incidents WHERE environment = ? AND client_id = ? AND incident_id = ?",
+    ).bind(event.environment, event.client_id, event.incident_id).first<{ incident_id: string; status: string }>()
+    : await env.PLATFORM_OPS_DB.prepare(
+      "SELECT incident_id, status FROM a12_ops_incidents WHERE environment = ? AND client_id = ? AND dedup_key = ?",
+    ).bind(event.environment, event.client_id, event.dedup_key).first<{ incident_id: string; status: string }>();
+  if (requiresExistingIncident && !existingIncident) return failure("INCIDENT_NOT_FOUND", 404);
+  if (requiresExistingIncident && existingIncident?.status !== "open") {
+    return failure("INCIDENT_ALREADY_RESOLVED", 409);
+  }
+  const incidentId = existingIncident?.incident_id ?? event.incident_id ?? `incident:${event.event_id}`;
+  await persistOpsControlEvent(event, incidentId, env);
+  const makeRequests = buildOpsMakeSignedRequests(event, incidentId);
+  await env.PLATFORM_EVENTS.send({
+    schema_version: "1.0",
+    ops_control: true,
+    event_id: event.event_id,
+    idempotency_key: event.idempotency_key,
+    correlation_id: event.correlation_id,
+    automation_id: "A12",
+    client_id: event.client_id,
+    environment: event.environment,
+    occurred_at: event.occurred_at,
+    category: event.category,
+    severity: event.severity,
+    provider: event.provider,
+    incident_id: incidentId,
+    summary: event.summary,
+    make_requests: makeRequests,
+    safe_test: true,
+    external_actions_enabled: false,
+  });
+  return json({
+    ok: true,
+    data: {
+      accepted: true,
+      duplicate: false,
+      event_id: event.event_id,
+      incident_id: incidentId,
+      category: event.category,
+      recovery_executed: false,
+      dangerous_replay_enabled: false,
+      environment: env.ENVIRONMENT,
+    },
+  }, 202);
+}
+
 function health(env: Env): Response {
   const safety = {
     scenario_activation: env.ALLOW_SCENARIO_ACTIVATION,
@@ -659,6 +943,7 @@ function health(env: Env): Response {
     site_launch: env.ALLOW_SITE_LAUNCH,
     experiment_launch: env.ALLOW_EXPERIMENT_LAUNCH,
     pricing_change: env.ALLOW_PRICING_CHANGE,
+    make_a12_dispatch: env.ALLOW_MAKE_A12_DISPATCH,
   };
   return json({
     ok: true,
@@ -666,6 +951,7 @@ function health(env: Env): Response {
       service: "arcanium-platform-core",
       version: "0.2.0",
       environment: env.ENVIRONMENT,
+      ops_intake_configured: Boolean(env.OPS_HMAC_SECRET),
       operations: [
         "A1-A15_EVENT",
         "A1-A15_RESULT",
@@ -673,6 +959,9 @@ function health(env: Env): Response {
         "A1-A15_ACTION_RESOLUTION",
         "A1-A15_RECONCILIATION",
         "A12_INCIDENT",
+        "A12_OPS_CONTROL",
+        "A12_VERIFIED_RESOLUTION",
+        "A12_RECOVERY_APPROVAL",
         "A13_PROJECT",
         "A14_EXPERIMENT",
         "A15_COST_IMPORT",
@@ -701,6 +990,9 @@ export default {
     if (request.method === "POST" && url.pathname === "/v1/action-resolutions") {
       return handleActionResolution(request, env);
     }
+    if (request.method === "POST" && url.pathname === "/v1/ops/events") {
+      return handleOpsControlEvent(request, env);
+    }
     if (request.method === "POST" && eventRoutes.has(url.pathname)) return handleEvent(request, env);
     return failure("NOT_FOUND", 404);
   },
@@ -710,11 +1002,30 @@ export default {
       const body = isRecord(message.body) ? message.body : {};
       const eventId = typeof body.event_id === "string" ? body.event_id : message.id;
       const forceFailure = body.test_force_failure === true;
-      const disposition = isDeadLetterQueue
+      const opsControl = body.ops_control === true;
+      let disposition = isDeadLetterQueue
         ? "dead_letter"
         : forceFailure
           ? "retry_requested"
           : "acknowledged";
+      if (opsControl && !isDeadLetterQueue) {
+        if (env.ALLOW_MAKE_A12_DISPATCH !== "true") {
+          disposition = "held_for_operator_workflow";
+        } else if (!env.MAKE_A12_WEBHOOK_URL) {
+          disposition = "delivery_blocked_missing_endpoint";
+        } else {
+          try {
+            const response = await fetch(env.MAKE_A12_WEBHOOK_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            });
+            disposition = response.ok ? "delivered" : `delivery_failed_http_${response.status}`;
+          } catch {
+            disposition = "delivery_failed_network";
+          }
+        }
+      }
 
       await env.PLATFORM_OPS_DB.prepare(
         "INSERT OR REPLACE INTO platform_queue_delivery (event_id, message_id, queue_name, attempt, disposition, body_json, observed_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -728,7 +1039,14 @@ export default {
         now(),
       ).run();
 
-      if (forceFailure && !isDeadLetterQueue) {
+      if (
+        !isDeadLetterQueue
+        && (
+          forceFailure
+          || disposition === "delivery_blocked_missing_endpoint"
+          || disposition.startsWith("delivery_failed_")
+        )
+      ) {
         message.retry();
       } else {
         message.ack();

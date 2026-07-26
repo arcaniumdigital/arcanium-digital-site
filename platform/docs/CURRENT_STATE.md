@@ -7,7 +7,7 @@
 - A13-A15 scheduled companions: converted from unauthenticated placeholders to
   signed Platform Core events, successfully exercised, and inactive.
 - Cloudflare Worker: `arcanium-platform-core-test`, version
-  `a06ed0c7-14c8-4b07-bcd9-e6d46b2fc793`.
+  `cbb46b0e-cad1-4b4d-95f9-2f15d127da9e`.
 - A2 Cloudflare Worker: `arcanium-listing-control-test`, version
   `6e63f659-5117-49bc-8fa6-f62403f7fa79`, TEST-only with all
   public/destructive action flags false and Make dispatch held.
@@ -39,10 +39,14 @@ performed. Every scenario exercised by this phase was returned to inactive.
    requires scenario, connection, contract, A12 incident, provider workflow,
    tenant isolation, cost cap, approval owner, rollback, and explicit
    production-approval evidence.
-8. A12 signed result ingress from Make through the shared signer to Cloudflare
-   and D1. The verified fixture persisted a completed TEST run, one
-   non-mutating operator action, and a balanced 1/1 reconciliation with no
-   incident.
+8. A12 signed operations control from a dedicated HMAC intake through the
+   Cloudflare queue, inactive Make iterator, shared signer, result endpoint,
+   and verified action-resolution endpoint. Proof
+   `a12-control-1785082830242` persisted one provider incident and health
+   snapshot, delivered both queue events on attempt 1, recorded completed A12
+   result `result:ops-incident-1785082830242`, resolved the incident with
+   fixture evidence, and completed the matching operator action. The temporary
+   Make-dispatch window was closed after proof.
 9. A5 read-only provider-health branch through Search Console, GA4, and
    DataForSEO. The seven-module Make run completed and persisted a 3/3 balanced
    result without raw analytics rows, provider spend, or mutations.
@@ -138,8 +142,11 @@ performed. Every scenario exercised by this phase was returned to inactive.
    measurement routes remain incomplete. A11 now has a
    verified read-only analytics-health branch, but
    its compact KPI transformation, approval, and reporting workflow remains
-   incomplete. A12 now has verified result/reconciliation ingress, but its full
-   provider-health, recovery, and quarterly-review branches remain incomplete.
+   incomplete. A12 now has verified signed incident intake, compact provider
+   health persistence, queue-to-Make action creation, verified resolution,
+   approval-gated recovery contracts, and dispatch rollback. Automatic
+   provider polling, live provider cost feeds, approved recovery execution,
+   and quarterly-review branches remain incomplete.
 3. Cost caps, approval groups, reconciliation rules, and rollback methods are
    now declared for A1-A15. The result endpoint remotely enforces hard action
    ceilings, approval requirements, result balance, failure classification,

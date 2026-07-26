@@ -1,5 +1,5 @@
 {
-  "name": "TEST CLONE — A12 — Operations Result Ingress",
+  "name": "TEST CLONE - A12 - Operations Control Actions",
   "flow": [
     {
       "id": 1,
@@ -18,16 +18,11 @@
     },
     {
       "id": 2,
-      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "module": "builtin:BasicFeeder",
       "version": 1,
-      "parameters": {
-        "__IMTCONN__": 9288408
-      },
+      "parameters": {},
       "mapper": {
-        "nonce": "{{ifempty(1.nonce; 1.event_id)}}",
-        "eventBody": "{\"schema_version\":\"1.0\",\"result_id\":\"result:{{1.event_id}}\",\"run_id\":\"run:{{1.event_id}}\",\"idempotency_key\":\"{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A12\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"provider\":\"make-a12-test\",\"status\":\"completed\",\"started_at\":\"{{1.occurred_at}}\",\"completed_at\":\"{{1.occurred_at}}\",\"input_count\":1,\"accepted_count\":1,\"rejected_count\":0,\"output_count\":1,\"actions\":[{\"action_id\":\"action:{{1.event_id}}\",\"dedup_key\":\"{{1.event_type}}:{{1.event_id}}\",\"action_type\":\"incident.fixture.review\",\"severity\":\"warning\",\"mutation_kind\":\"none\",\"approval_required\":false,\"owner_group\":\"financialOwners\",\"evidence_ref\":\"make://scenario/6665254/execution/{{1.event_id}}\"}],\"reconciliation\":{\"expected_count\":1,\"observed_count\":1,\"balanced\":true,\"method\":\"incident retry dead-letter and provider-cost ledgers\",\"evidence_ref\":\"make://scenario/6665254/execution/{{1.event_id}}\"},\"limitations\":[\"TEST fixture only; no provider or public action\"]}",
-        "timestamp": "{{1.occurred_at}}",
-        "endpointPath": "/v1/results"
+        "array": "{{slice(1.make_requests; 0; 25)}}"
       },
       "metadata": {
         "designer": {
@@ -38,16 +33,36 @@
     },
     {
       "id": 3,
-      "module": "gateway:WebhookRespond",
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
       "version": 1,
-      "parameters": {},
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
       "mapper": {
-        "body": "{\"status\":\"accepted\",\"environment\":\"test\",\"automation_id\":\"A12\",\"result_contract\":\"1.0\",\"safe_test\":true,\"external_actions\":false}",
-        "status": 202
+        "nonce": "{{ifempty(1.event_id; executionId)}}-request-{{2.requestId}}",
+        "eventBody": "{{2.eventBody}}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "{{2.endpointPath}}"
       },
       "metadata": {
         "designer": {
           "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "gateway:WebhookRespond",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "body": "{\"status\":\"accepted\",\"environment\":\"test\",\"automation_id\":\"A12\",\"incident_id\":\"{{1.incident_id}}\",\"category\":\"{{1.category}}\",\"request_id\":\"{{2.requestId}}\",\"signed_request_persisted\":true,\"external_actions\":false,\"dangerous_replay\":false}",
+        "status": 202
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
           "y": 0
         }
       }

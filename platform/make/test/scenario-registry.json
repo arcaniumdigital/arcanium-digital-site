@@ -16,7 +16,7 @@
     {"automation_id":"A9","scenario_id":6665249,"hook_id":3448427,"mode":"signed_ingress_plus_sanity_health_result","schedule":"immediate","last_test_result_id":"result:a9-sanity-1785055010475"},
     {"automation_id":"A10","scenario_id":6665251,"hook_id":3448428,"mode":"signed_ingress_plus_dataforseo_health_result","schedule":"immediate","last_test_result_id":"result:a10-provider-1785054097475"},
     {"automation_id":"A11","scenario_id":6665253,"hook_id":3448429,"mode":"signed_ingress_plus_analytics_health_result","schedule":"immediate","last_test_result_id":"result:a11-analytics-1785052443686"},
-    {"automation_id":"A12","scenario_id":6665254,"hook_id":3448431,"mode":"signed_result_reconciliation","schedule":"immediate","last_test_result_id":"result:a12-result-1785051375416"},
+    {"automation_id":"A12","scenario_id":6665254,"hook_id":3448431,"mode":"signed_ops_incident_action_resolution","schedule":"immediate","active":false,"dispatch_enabled":false,"provider_workflow_verified":true,"dispatch_rollback_verified":true,"last_proof_id":"a12-control-1785082830242","last_test_result_id":"result:ops-incident-1785082830242","last_resolution_id":"resolution:ops-resolved-1785082830242","last_successful_execution_id":"6529a2c2960444a2bac7c427df48f865","last_execution_status":"warning_webhook_response_only"},
     {"automation_id":"A13","scenario_id":6691548,"hook_id":3445306,"mode":"domain_ingress"},
     {"automation_id":"A14","scenario_id":6691550,"hook_id":3445307,"mode":"domain_ingress"},
     {"automation_id":"A15","scenario_id":6691553,"hook_id":3445308,"mode":"domain_ingress"}

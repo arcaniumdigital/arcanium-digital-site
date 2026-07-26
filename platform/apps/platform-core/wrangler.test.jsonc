@@ -18,7 +18,8 @@
     "ALLOW_DANGEROUS_REPLAY": "false",
     "ALLOW_SITE_LAUNCH": "false",
     "ALLOW_EXPERIMENT_LAUNCH": "false",
-    "ALLOW_PRICING_CHANGE": "false"
+    "ALLOW_PRICING_CHANGE": "false",
+    "ALLOW_MAKE_A12_DISPATCH": "false"
   },
   "d1_databases": [
     {

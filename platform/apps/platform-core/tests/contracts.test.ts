@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { constantTimeEqual, validateEventCandidate } from "../src/index";
+import {
+  buildOpsMakeSignedRequests,
+  constantTimeEqual,
+  validateEventCandidate,
+} from "../src/index";
 import { validateClientConfigCandidate } from "../../../packages/contracts/src/client-config";
 import {
   evaluateActivationGate,
@@ -10,6 +14,7 @@ import {
   validateAutomationResultCandidate,
 } from "../../../packages/contracts/src/automation-result";
 import { validateActionResolutionCandidate } from "../../../packages/contracts/src/action-resolution";
+import { validateOpsControlCandidate } from "../../../packages/contracts/src/ops-control";
 import goldenEvents from "../../../packages/test-fixtures/golden-events.json";
 import resultFixtures from "../../../packages/test-fixtures/automation-results.json";
 import activationGates from "../../../readiness/TEST-0001/ACTIVATION_GATES.json";
@@ -63,6 +68,145 @@ describe("signature comparison", () => {
   it("rejects different values and lengths", () => {
     expect(constantTimeEqual("a".repeat(64), "b".repeat(64))).toBe(false);
     expect(constantTimeEqual("a", "aa")).toBe(false);
+  });
+});
+
+const validOpsEvent = {
+  schema_version: "1.0",
+  event_id: "ops-event-a12-1",
+  idempotency_key: "ops-idem-a12-1",
+  correlation_id: "ops-corr-a12-1",
+  automation_id: "A6",
+  client_id: "TEST-0001",
+  environment: "test",
+  category: "PROVIDER_INCIDENT",
+  severity: "error",
+  provider: "sentry",
+  occurred_at: "2026-07-27T00:00:00.000Z",
+  summary: "Synthetic TEST provider health incident",
+  dedup_key: "A6:sentry:synthetic-health",
+  classification: "temporary",
+  retryable: true,
+  affected_count: 1,
+  data_loss_window_minutes: 0,
+  replay_kind: "none",
+  payload_ref: "fixture://a12/provider-health",
+  health: {
+    status: "degraded",
+    checked_at: "2026-07-27T00:00:00.000Z",
+    freshness_age_seconds: 60,
+  },
+} as const;
+
+describe("A12 operations control contract", () => {
+  it("accepts a compact tenant-scoped incident without raw telemetry", () => {
+    expect(validateOpsControlCandidate(validOpsEvent, "test", ["TEST-0001"]))
+      .toMatchObject({ ok: true });
+  });
+
+  it.each([
+    [{ ...validOpsEvent, environment: "production" }, "ENVIRONMENT_MISMATCH"],
+    [{ ...validOpsEvent, client_id: "TEST-0002" }, "CLIENT_NOT_ALLOWED"],
+    [{ ...validOpsEvent, automation_id: "A13" }, "INVALID_AUTOMATION"],
+    [{ ...validOpsEvent, raw_logs: ["secret"] }, "UNKNOWN_OPS_FIELD"],
+    [{
+      ...validOpsEvent,
+      classification: "security",
+      retryable: true,
+    }, "UNSAFE_RETRY_CLASSIFICATION"],
+    [{
+      ...validOpsEvent,
+      category: "RESOLVED",
+      incident_id: "incident:ops-event-a12-1",
+      verification_evidence_ref: null,
+    }, "RESOLUTION_EVIDENCE_REQUIRED"],
+    [{
+      ...validOpsEvent,
+      category: "RECOVERY_REQUIRED",
+      incident_id: "incident:ops-event-a12-1",
+      replay_kind: "none",
+    }, "RECOVERY_DETAILS_REQUIRED"],
+    [{
+      ...validOpsEvent,
+      category: "CROSS_CLIENT_ISOLATION_FAILURE",
+      classification: "isolation",
+      retryable: false,
+      severity: "error",
+    }, "ISOLATION_FAILURE_MUST_BE_CRITICAL"],
+    [{
+      ...validOpsEvent,
+      category: "SECURITY_ANOMALY",
+      classification: "temporary",
+      retryable: false,
+      severity: "critical",
+    }, "SECURITY_ANOMALY_MUST_BE_CRITICAL"],
+  ])("rejects unsafe or invalid ops event with %s", (event, code) => {
+    expect(validateOpsControlCandidate(event, "test", ["TEST-0001"]))
+      .toMatchObject({ ok: false, code });
+  });
+
+  it("builds one compact signed result request for a material incident", () => {
+    const request = buildOpsMakeSignedRequests(
+      validOpsEvent,
+      "incident:ops-event-a12-1",
+    )[0];
+    expect(request.endpointPath).toBe("/v1/results");
+    const body = JSON.parse(request.eventBody);
+    expect(body).toMatchObject({
+      automation_id: "A12",
+      environment: "test",
+      actions: [{
+        action_id: "action:incident:ops-event-a12-1",
+        mutation_kind: "none",
+        approval_required: false,
+      }],
+    });
+    expect(request.eventBody).not.toContain("raw_logs");
+  });
+
+  it("requires approval and never executes a recovery request", () => {
+    const recovery = {
+      ...validOpsEvent,
+      event_id: "ops-recovery-a12-1",
+      idempotency_key: "ops-recovery-idem-a12-1",
+      category: "RECOVERY_REQUIRED",
+      incident_id: "incident:ops-event-a12-1",
+      replay_kind: "dangerous",
+      retryable: false,
+    } as const;
+    expect(validateOpsControlCandidate(recovery, "test", ["TEST-0001"]))
+      .toMatchObject({ ok: true });
+    const body = JSON.parse(
+      buildOpsMakeSignedRequests(recovery, recovery.incident_id)[0].eventBody,
+    );
+    expect(body.actions[0]).toMatchObject({
+      action_id: "action:recovery:ops-recovery-a12-1",
+      dedup_key: "ops:recovery:ops-recovery-a12-1",
+      mutation_kind: "replay",
+      approval_required: true,
+    });
+  });
+
+  it("builds a verified action resolution request only for RESOLVED", () => {
+    const resolved = {
+      ...validOpsEvent,
+      event_id: "ops-resolved-a12-1",
+      idempotency_key: "ops-resolved-idem-a12-1",
+      category: "RESOLVED",
+      severity: "info",
+      incident_id: "incident:ops-event-a12-1",
+      retryable: false,
+      verification_evidence_ref: "fixture://a12/resolution-proof",
+    } as const;
+    expect(validateOpsControlCandidate(resolved, "test", ["TEST-0001"]))
+      .toMatchObject({ ok: true });
+    const request = buildOpsMakeSignedRequests(resolved, resolved.incident_id)[0];
+    expect(request.endpointPath).toBe("/v1/action-resolutions");
+    expect(JSON.parse(request.eventBody).resolutions[0]).toMatchObject({
+      action_id: "action:incident:ops-event-a12-1",
+      disposition: "completed",
+      evidence_ref: "fixture://a12/resolution-proof",
+    });
   });
 });
 

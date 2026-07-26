@@ -8,18 +8,20 @@ to inactive. No production action was enabled.
 - Worker: `arcanium-platform-core-test`
 - A2 Worker: `arcanium-listing-control-test`, current version
   `6e63f659-5117-49bc-8fa6-f62403f7fa79`
-- Current version: `a06ed0c7-14c8-4b07-bcd9-e6d46b2fc793`
+- Current version: `cbb46b0e-cad1-4b4d-95f9-2f15d127da9e`
 - Health version: `0.2.0`
 - D1 migrations: `006_platform_core_registry.sql`,
   `007_queue_delivery_audit.sql`, and
   `008_automation_results_and_tasks.sql`,
-  `010_platform_action_resolutions.sql`; A2 listing D1 migrations
+  `010_platform_action_resolutions.sql`, and
+  `012_a12_ops_control.sql`; A2 listing D1 migrations
   `009_listing_control.sql` and `011_listing_action_resolutions.sql`
 - Production action flags: all `false`
 - Public send, content publish, GBP mutation, outreach send, and dangerous
   replay flags: all `false`
+- Dedicated A12 ops HMAC intake: configured; Make A12 dispatch: `false`
 - TypeScript: passed
-- Relevant Worker Vitest suites: 51/51 passed
+- Relevant Worker Vitest suites: 64/64 passed
 - Wrangler bundle/deployment: passed
 - Next.js production build: passed
 
@@ -41,7 +43,7 @@ to inactive. No production action was enabled.
 | A9 | controlled queued webhook run at 2026-07-26 18:37 AEST | Result `result:a9-sanity-1785055010475`; Sanity dataset count read completed; balanced 1/1; no document mutation or publish |
 | A10 | controlled webhook run at 2026-07-26 18:21 AEST | Result `result:a10-provider-1785054097475`; DataForSEO account read completed; balanced 1/1; no competitor task, spend, outreach, or content mutation |
 | A11 | controlled webhook run at 2026-07-26 17:54 AEST | Result `result:a11-analytics-1785052443686`; Search Console + GA4 completed; balanced 2/2; no report sent |
-| A12 | controlled queued webhook run at 2026-07-26 17:36 AEST | Result `result:a12-result-1785051375416`, action `action:a12-result-1785051375416`, balanced 1/1 reconciliation |
+| A12 | proof `a12-control-1785082830242`; Make executions `35e7f71c412741eb9e15c7c4223c6364` and `6529a2c2960444a2bac7c427df48f865` | Signed provider incident and verified resolution; both queue events delivered on attempt 1; result `result:ops-incident-1785082830242`; action completed with fixture evidence |
 | A13 | `8af7db5bec9248d4a79c7413151f1cd0` | Project `project-phase2-72a1b72d7d6349e98b83a06c6caf6319` |
 | A14 | `500615bd3c404b4c91fd245ec3428875` | Experiment `experiment-phase2-41ca3f061892480ea2b40af7e8f8320b` |
 | A15 | `6c6abc7a04954b96aa998b57167f0453` | Cost entry `entry-phase2-57271d97a8464a988c130e179fcc480c` |
@@ -57,12 +59,19 @@ outreach/destructive/replay actions, rejects unsafe retry classifications,
 requires completed results to reconcile, and opens a deduplicated A12 incident
 for failed or unbalanced runs.
 
-The A12 TEST clone is now `TEST CLONE — A12 — Operations Result Ingress`.
-Its shared signed module returned success and D1 recorded a completed run, one
-`mutation_kind=none` action, and a balanced reconciliation. The webhook-response
-module showed a warning only because the request had first queued while the
-run-once listener had expired; signing and persistence both succeeded. The
-scenario was restored to `Immediately as data arrives` and left inactive.
+The A12 TEST clone is now
+`TEST CLONE - A12 - Operations Control Actions`. It accepts only capped compact
+request arrays from the Platform Core queue, iterates a maximum of 25 signed
+result or resolution requests, and never executes recovery. The dedicated
+`/v1/ops/events` intake validates tenant, environment, strict schema, HMAC,
+timestamp, nonce, incident state, idempotency, unsafe retry classification,
+and resolution evidence. Proof `a12-control-1785082830242` persisted incident
+and provider-health state, delivered both events on attempt 1, recorded a
+completed A12 result, then completed the action through a signed resolution.
+The two Make runs completed all four modules; their warnings were limited to
+the webhook-response module being unable to respond to data that had queued
+while the listener was closed. The scenario is `Immediately as data arrives`,
+inactive, and Worker dispatch was restored to `false`.
 
 The A5 TEST clone is now
 `TEST CLONE — A5 — Search Provider Health + Result`. Its seven modules
@@ -301,7 +310,7 @@ Cost caps, approval groups, reconciliation rules, and rollback methods are
 declared for A1-A15. Shared result enforcement and durable reconciliation are
 now live in TEST. Operator replay from the DLQ, substantive A2-A4 and A6-A10
 provider branches (A4 and A6-A10 account/provider health are verified), the full A5 analysis branch,
-the full A11 reporting branch,
-the remaining A12
-provider-health/recovery branches, provider-resource isolation, and rollback
-drills remain incomplete. Production approval remains false.
+the full A11 reporting branch, automatic A12 provider polling and live cost
+feeds, approved A12 recovery execution, quarterly review, provider-resource
+isolation, and rollback drills outside the verified A2 source and A12 dispatch
+paths remain incomplete. Production approval remains false.

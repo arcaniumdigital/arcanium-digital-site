@@ -17,14 +17,18 @@ require direct verification before promotion.
 | A9 | 11 | 3 | Safe signed ingress proven; provider workflow incomplete |
 | A10 | 8 | 3 | Safe signed ingress proven; scheduled/provider workflow incomplete |
 | A11 | 9 | 3 | Safe signed ingress proven; scheduled/reporting workflow incomplete |
-| A12 | 9 | 3 | Safe signed ingress proven; incident notification workflow incomplete |
+| A12 | 9 | 4 | Signed incident/action/resolution control proven; live polling and approved recovery execution incomplete |
 
 ## Required patches before promotion
 
 - A1 requires TEST provider provisioning and reconciliation branches.
 - A6 and A8 ingress now uses Platform Core connection `9288408`; their provider,
   mutation, publishing, and remediation branches remain blocked.
-- A2–A5, A7, and A9–A12 signed TEST ingress is proven. Their provider
+- A2–A5, A7, and A9–A11 signed TEST ingress is proven. Their provider
   mappings, reconciliation, scheduling, failure routes, and output delivery
   remain to be implemented and verified.
+- A12 signed incident intake, compact provider-health persistence, action
+  creation, verified resolution, and dispatch rollback are proven. Live
+  provider polling, cost ingestion, approved recovery execution, and quarterly
+  review remain incomplete.
 - No production scenario may be activated from this report.
