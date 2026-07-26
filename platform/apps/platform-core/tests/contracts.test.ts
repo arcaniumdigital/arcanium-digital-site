@@ -200,7 +200,11 @@ describe("automation activation gates", () => {
       } as AutomationActivationEvidence);
       expect(decision.test_ready).toBe(true);
       expect(decision.production_ready).toBe(false);
-      expect(decision.blockers).toContain("cross_client_isolation_passed");
+      if (item.cross_client_isolation_passed) {
+        expect(decision.blockers).not.toContain("cross_client_isolation_passed");
+      } else {
+        expect(decision.blockers).toContain("cross_client_isolation_passed");
+      }
       expect(decision.blockers).toContain("rollback_tested");
       expect(decision.blockers).toContain("production_approved");
     }

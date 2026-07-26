@@ -26,7 +26,7 @@
     "Ingress success is not provider workflow success",
     "A2 same-run Worker, queue, Make iterator, action, and reconciliation path is verified; A3-A12 substantive provider branches remain incomplete",
     "A13-A15 signed scheduled companions are tested but remain inactive",
-    "Cross-client persistence and allowlist rejection are proven; provider-resource isolation remains unproven",
+    "A2 listing-state tenant isolation and allowlist rejection are proven; provider-resource isolation remains unproven for the other automations",
     "Rollback drills remain unproven",
     "Production approval remains false"
   ]

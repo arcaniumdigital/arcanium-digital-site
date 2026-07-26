@@ -207,6 +207,15 @@ code and original HMAC secret but retained newer variable/secret bindings, so
 the false configuration was explicitly redeployed and the temporary endpoint
 secret explicitly deleted. Functional listing rollback remains unproven.
 
+A2 tenant isolation is also proven. Signed Worker run
+`a2-isolation-1785078078539` persisted one active `ISO-200` listing for
+`TEST-0002` under `tenant-isolation-feed`; the same feed has zero `TEST-0001`
+rows. The queue audit records `held_for_operator_workflow` on attempt 1 because
+dispatch was false. A separately signed `TEST-9999` request returned HTTP 400,
+and D1 contains zero rejected-client sync, listing, action, or queue rows. The
+temporary signing-secret version was rolled back to the original HMAC version;
+final health and secret inventory remained unchanged.
+
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform
 activation evidence. All TEST contract gates pass; every production activation

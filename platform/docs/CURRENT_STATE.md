@@ -87,6 +87,11 @@ performed. Every scenario exercised by this phase was returned to inactive.
     balanced 1/1 reconciliation. Make execution
     `bcb83b9032204c4ea2efe55e4cd51478` completed all five modules; its warning
     is limited to the webhook response being unavailable for queued data.
+21. A2 tenant isolation: signed run `a2-isolation-1785078078539` persisted
+    exactly one `TEST-0002` listing under `tenant-isolation-feed`, with zero
+    matching `TEST-0001` rows. A separately signed `TEST-9999` request was
+    rejected with HTTP 400 and produced zero sync, listing, action, or queue
+    rows. Its permitted queue batch was held because dispatch was false.
 
 ## Remaining external blockers
 
