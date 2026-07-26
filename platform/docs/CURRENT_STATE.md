@@ -64,6 +64,9 @@ performed. Every scenario exercised by this phase was returned to inactive.
 16. A9 read-only Sanity dataset-health branch. The authenticated count query
     and signed result persisted a 1/1 balance without reading document bodies,
     creating drafts, mutating content, publishing, or communicating.
+17. A3 read-only Sanity publication-provider health branch. The five-module
+    Make run completed and persisted a 1/1 balanced result without preflight,
+    draft, mutation, publishing, indexing, or communication.
 
 ## Remaining external blockers
 
@@ -72,7 +75,10 @@ performed. Every scenario exercised by this phase was returned to inactive.
    `ef7b094a11684dd593fd80aa134ec3fe`.
 2. The A2-A3, substantive A4, substantive A6-A10, and substantive A11 provider branches
    are not yet implemented;
-   their current TEST scenarios are truthful signed-ingress baselines only.
+   their current TEST scenarios are truthful signed-ingress/health baselines
+   only. A3 now has verified Sanity publication-provider health, but its
+   preflight, canonical validation, approval, publishing, post-publication
+   verification, revalidation, and indexing routes remain incomplete.
    A5 now has a verified read-only provider-health branch, but the full compact
    search-growth aggregation and action-prioritisation workflow remains
    incomplete. A4 now has verified read-only account health, but review/post/

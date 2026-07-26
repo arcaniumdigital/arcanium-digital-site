@@ -24,6 +24,7 @@ to inactive. No production action was enabled.
 | Automation | Make execution | Durable evidence |
 |---|---|---|
 | A1 | `cacd51df6fb445469f513711d978f3f5` | Client config `TEST-0001` / `1.0-phase2c` |
+| A3 | controlled webhook run at 2026-07-26 18:42 AEST | Result `result:a3-sanity-1785055340442`; Sanity publication-provider count read completed; balanced 1/1; no publish or indexing request |
 | A4 | controlled webhook run at 2026-07-26 17:58 AEST | Result `result:a4-gbp-1785052729231`; Business Profile account read completed; balanced 1/1; no GBP mutation |
 | A5 | controlled webhook run at 2026-07-26 17:50 AEST | Result `result:a5-provider-1785052234506`; Search Console + GA4 + DataForSEO completed; balanced 3/3 |
 | A6 | controlled webhook run at 2026-07-26 18:05 AEST | Result `result:a6-sentry-1785053136505`; Sentry organisation read completed; balanced 1/1; no technical mutation |
@@ -95,6 +96,16 @@ rollback, redirect, canonical or removal action occurred. This proves
 authenticated organisation health only, not the full technical-control
 workflow. The scenario was restored to immediate webhook scheduling and left
 inactive.
+
+The A3 TEST clone is now
+`TEST CLONE - A3 - Sanity Publication Health + Result`. Its five modules
+completed: webhook, signed event, authenticated Sanity production-dataset
+`count(*)` query, signed result, and webhook response. D1 recorded provider
+`sanity`, counts 1/1/0, output 1, and a balanced 1/1 reconciliation. No
+document body entered Make, and no preflight, draft, mutation, publication,
+indexing request, or communication occurred. This proves authenticated
+publication-provider health only, not the full publication/validation/indexing
+workflow. The scenario uses immediate webhook scheduling and remains inactive.
 
 The A7 TEST clone is now
 `TEST CLONE - A7 - GEO Provider Health + Result`. Its five modules completed:

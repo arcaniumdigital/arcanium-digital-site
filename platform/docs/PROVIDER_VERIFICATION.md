@@ -57,6 +57,11 @@ activated.
   `result:a9-sanity-1785055010475` with balanced 1/1 reconciliation after an
   authenticated production-dataset `count(*)` query. It read no document
   bodies and performed no content mutation or publish action.
+- A3 TEST scenario `6665243` now reuses the same encrypted Sanity credential
+  in a five-module publication-provider health flow. Its controlled run
+  persisted `result:a3-sanity-1785055340442` with balanced 1/1
+  reconciliation. It performed only the dataset count query and explicitly
+  made no publish or indexing request.
 
 ## Google ownership and scope
 
