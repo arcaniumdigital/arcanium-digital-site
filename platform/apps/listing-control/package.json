@@ -1,0 +1,21 @@
+{
+  "name": "@arcanium/listing-control",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "check": "tsc --project tsconfig.json",
+    "test": "vitest run",
+    "deploy:test": "wrangler deploy --config wrangler.test.jsonc",
+    "d1:migrate:test": "wrangler d1 execute test-listing-content-state --remote --file ../../cloudflare/migrations/009_listing_control.sql"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.2.5"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260724.1",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.30.0"
+  }
+}

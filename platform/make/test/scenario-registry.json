@@ -6,7 +6,7 @@
   "all_platform_scenarios_inactive_after_test": true,
   "scenarios": [
     {"automation_id":"A1","scenario_id":6665241,"hook_id":3448383,"mode":"client_config_only"},
-    {"automation_id":"A2","scenario_id":6665242,"hook_id":3448422,"mode":"safe_ingress_only"},
+    {"automation_id":"A2","scenario_id":6665242,"hook_id":3448422,"mode":"signed_ingress_plus_listing_control_health_result","schedule":"immediate","last_test_result_id":"result:a2-health-1785058717712"},
     {"automation_id":"A3","scenario_id":6665243,"hook_id":3448423,"mode":"signed_ingress_plus_sanity_health_result","schedule":"immediate","last_test_result_id":"result:a3-sanity-1785055340442"},
     {"automation_id":"A4","scenario_id":6665244,"hook_id":3448424,"mode":"signed_ingress_plus_gbp_health_result","schedule":"immediate","last_test_result_id":"result:a4-gbp-1785052729231"},
     {"automation_id":"A5","scenario_id":6665246,"hook_id":3448425,"mode":"signed_ingress_plus_provider_health_result","schedule":"immediate","last_test_result_id":"result:a5-provider-1785052234506"},

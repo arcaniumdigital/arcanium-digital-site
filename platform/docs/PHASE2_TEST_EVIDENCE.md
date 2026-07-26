@@ -6,11 +6,14 @@ to inactive. No production action was enabled.
 ## Deployment and local gates
 
 - Worker: `arcanium-platform-core-test`
+- A2 Worker: `arcanium-listing-control-test`, current version
+  `8a409f90-849a-46b0-ad04-5822145abb0c`
 - Current version: `bb58a853-7af2-4d32-953a-711c1048b466`
 - Health version: `0.2.0`
 - D1 migrations: `006_platform_core_registry.sql`,
   `007_queue_delivery_audit.sql`, and
-  `008_automation_results_and_tasks.sql`
+  `008_automation_results_and_tasks.sql`; A2 listing D1 migration
+  `009_listing_control.sql`
 - Production action flags: all `false`
 - Public send, content publish, GBP mutation, outreach send, and dangerous
   replay flags: all `false`
@@ -24,6 +27,7 @@ to inactive. No production action was enabled.
 | Automation | Make execution | Durable evidence |
 |---|---|---|
 | A1 | `cacd51df6fb445469f513711d978f3f5` | Client config `TEST-0001` / `1.0-phase2c` |
+| A2 | Worker run `a2-initial-1785058511884` plus controlled Make run at 2026-07-26 19:38 AEST | Three synthetic JSON listings normalized and persisted; queue delivery audited on attempt 1; Make result `result:a2-health-1785058717712` balanced 1/1 |
 | A3 | controlled webhook run at 2026-07-26 18:42 AEST | Result `result:a3-sanity-1785055340442`; Sanity publication-provider count read completed; balanced 1/1; no publish or indexing request |
 | A4 | controlled webhook run at 2026-07-26 17:58 AEST | Result `result:a4-gbp-1785052729231`; Business Profile account read completed; balanced 1/1; no GBP mutation |
 | A5 | controlled webhook run at 2026-07-26 17:50 AEST | Result `result:a5-provider-1785052234506`; Search Console + GA4 + DataForSEO completed; balanced 3/3 |
@@ -146,6 +150,24 @@ document body entered Make, and no draft, mutation, publish, or communication
 occurred. This proves authenticated dataset health only, not the full campaign-
 evidence/content workflow. The scenario uses immediate webhook scheduling and
 remains inactive.
+
+The A2 listing-control TEST Worker is deployed at
+`arcanium-listing-control-test.enquiries-432.workers.dev`. Its first signed
+synthetic JSON run normalized and persisted three listings, emitted three
+`NEW` events, queued one compact `listing.sync_batch`, and recorded queue
+delivery on attempt 1. All public-write, sold-price, destructive URL,
+IndexNow, and revalidation flags are false. Eleven local tests cover JSON and
+REAXML parsing, malformed/empty/stale feeds, abnormal count drops,
+last-known-good preservation, lifecycle events, approval-gated sold/removal
+decisions, action overflow, and absence of Google Indexing API behavior.
+
+The A2 Make clone is now
+`TEST CLONE - A2 - Listing Control Health + Result`. Its five-module health
+run completed and persisted provider `listing-control` with balanced 1/1
+reconciliation. No raw feed or listing array entered Make. The compact
+operator-action iterator, task routing, summary annotation, and one
+alert/digest branch remain to be connected and tested. The scenario uses
+immediate webhook scheduling and remains inactive.
 
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform

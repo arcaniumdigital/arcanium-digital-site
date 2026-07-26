@@ -6,7 +6,8 @@
     "workers": [
       "test-platform-ops",
       "test-technical-control",
-      "arcmcp-platform-test"
+      "arcmcp-platform-test",
+      "arcanium-listing-control-test"
     ],
     "d1_databases": [
       "test-platform-ops-state",
@@ -22,6 +23,14 @@
         "test-platform-events",
         "test-platform-events-dlq"
       ]
+    },
+    "listing_control": {
+      "d1": "test-listing-content-state",
+      "queues": [
+        "test-listing-actions",
+        "test-listing-actions-dlq"
+      ],
+      "durable_object": "ListingFeedLock"
     },
     "site_provisioning": {
       "queues": [

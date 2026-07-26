@@ -8,6 +8,9 @@
   signed Platform Core events, successfully exercised, and inactive.
 - Cloudflare Worker: `arcanium-platform-core-test`, version
   `bb58a853-7af2-4d32-953a-711c1048b466`.
+- A2 Cloudflare Worker: `arcanium-listing-control-test`, version
+  `8a409f90-849a-46b0-ad04-5822145abb0c`, TEST-only with all
+  public/destructive action flags false.
 - Cloudflare TEST D1 databases: platform operations, listing/content, and
   search/reporting.
 - Cloudflare TEST event queue and DLQ: producer, retry, acknowledgement, and
@@ -67,18 +70,29 @@ performed. Every scenario exercised by this phase was returned to inactive.
 17. A3 read-only Sanity publication-provider health branch. The five-module
     Make run completed and persisted a 1/1 balanced result without preflight,
     draft, mutation, publishing, indexing, or communication.
+18. A2 listing-control foundation: JSON and REAXML normalization,
+    last-known-good safeguards, lifecycle/material-event reconciliation,
+    approval-gated sold/removal actions, D1 state, Durable Object locking,
+    capped compact operator actions, and queue delivery auditing. A signed
+    synthetic run persisted three listings and the Make health branch recorded
+    a balanced 1/1 result.
 
 ## Remaining external blockers
 
 1. Sanity project metadata and its encrypted Make credential are configured.
    A read-only query passed through Make execution
    `ef7b094a11684dd593fd80aa134ec3fe`.
-2. The A2-A3, substantive A4, substantive A6-A10, and substantive A11 provider branches
+2. The substantive A2-A4, A6-A10, and A11 provider branches
    are not yet implemented;
    their current TEST scenarios are truthful signed-ingress/health baselines
    only. A3 now has verified Sanity publication-provider health, but its
    preflight, canonical validation, approval, publishing, post-publication
    verification, revalidation, and indexing routes remain incomplete.
+   A2 now has its Worker-heavy reconciliation foundation and Make health
+   branch, but the Make compact-action iterator, operator task destinations,
+   reporting annotation, alert/digest, live feed adapter credentials, website
+   revalidation endpoint, IndexNow key, public-page inspection, and rollback
+   drill remain incomplete.
    A5 now has a verified read-only provider-health branch, but the full compact
    search-growth aggregation and action-prioritisation workflow remains
    incomplete. A4 now has verified read-only account health, but review/post/
