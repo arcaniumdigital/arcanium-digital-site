@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { constantTimeEqual, validateEventCandidate } from "../src/index";
 import { validateClientConfigCandidate } from "../../../packages/contracts/src/client-config";
+import {
+  evaluateActivationGate,
+  type AutomationActivationEvidence,
+} from "../../../packages/contracts/src/activation-gate";
+import goldenEvents from "../../../packages/test-fixtures/golden-events.json";
+import activationGates from "../../../readiness/TEST-0001/ACTIVATION_GATES.json";
 
 const validEvent = {
   schema_version: "1.0",
@@ -152,5 +158,65 @@ describe("client configuration contract", () => {
       "production config must not contain test recipients",
       "production config must not reference test website resources",
     ]));
+  });
+});
+
+describe("A1-A15 golden fixtures", () => {
+  it("covers every automation exactly once with safe TEST payloads", () => {
+    const ids = goldenEvents.fixtures.map((fixture) => fixture.automation_id);
+    expect(ids).toEqual(Array.from({ length: 15 }, (_, index) => `A${index + 1}`));
+    expect(new Set(ids).size).toBe(15);
+    expect(goldenEvents.environment).toBe("test");
+    expect(goldenEvents.defaults.forbidden_side_effects).toContain("public_message");
+    expect(goldenEvents.defaults.forbidden_side_effects).toContain("dangerous_replay");
+
+    for (const fixture of goldenEvents.fixtures) {
+      expect(fixture.payload).toMatchObject({ test_only: true });
+      expect(validateEventCandidate({
+        ...validEvent,
+        automation_id: fixture.automation_id,
+        event_type: fixture.event_type,
+        payload: fixture.payload,
+      }, "test", ["TEST-0001"])).toMatchObject({ ok: true });
+    }
+  });
+});
+
+describe("automation activation gates", () => {
+  it("covers A1-A15 and blocks every production activation", () => {
+    const ids = activationGates.automations.map((item) => item.automation_id);
+    expect(ids).toEqual(Array.from({ length: 15 }, (_, index) => `A${index + 1}`));
+
+    for (const item of activationGates.automations) {
+      const decision = evaluateActivationGate({
+        ...item,
+        client_id: activationGates.client_id,
+        environment: activationGates.environment,
+      } as AutomationActivationEvidence);
+      expect(decision.test_ready).toBe(true);
+      expect(decision.production_ready).toBe(false);
+      expect(decision.blockers).toContain("cross_client_isolation_passed");
+      expect(decision.blockers).toContain("rollback_tested");
+      expect(decision.blockers).toContain("production_approved");
+    }
+  });
+
+  it("requires an explicit production environment and every production gate", () => {
+    const ready = {
+      ...activationGates.automations[0],
+      client_id: activationGates.client_id,
+      environment: "production",
+      provider_workflow_verified: true,
+      cross_client_isolation_passed: true,
+      rollback_tested: true,
+      production_approved: true,
+    } as AutomationActivationEvidence;
+
+    expect(evaluateActivationGate(ready)).toEqual({
+      test_ready: true,
+      production_ready: true,
+      blockers: [],
+    });
+    expect(evaluateActivationGate({ ...ready, environment: "test" }).production_ready).toBe(false);
   });
 });

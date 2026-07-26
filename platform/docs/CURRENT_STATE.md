@@ -31,6 +31,10 @@ performed. Every scenario exercised by this phase was returned to inactive.
    request for non-allowlisted `TEST-9999` was rejected and wrote no rows.
 6. Safe connection checks for Resend, ClickSend, DataForSEO, Sentry, Google
    Sheets/Drive, Search Console, GA4, and Business Profile.
+7. Canonical A1-A15 golden fixture coverage and a uniform activation gate that
+   requires scenario, connection, contract, A12 incident, provider workflow,
+   tenant isolation, cost cap, approval owner, rollback, and explicit
+   production-approval evidence.
 
 ## Remaining external blockers
 
@@ -39,7 +43,9 @@ performed. Every scenario exercised by this phase was returned to inactive.
    immediately after authorization.
 2. The A2-A12 provider branches are not yet implemented; their current TEST
    scenarios are truthful signed-ingress baselines only.
-3. Operator replay from the DLQ, provider budgets/caps, named approval owners,
-   reconciliation jobs, and production rollback drills remain unproven.
+3. Cost caps, approval groups, reconciliation rules, and rollback methods are
+   now declared for A1-A15. Remote enforcement of those controls, operator
+   replay from the DLQ, reconciliation jobs, provider-resource isolation, and
+   production rollback drills remain unproven.
 
 Production approval remains false.

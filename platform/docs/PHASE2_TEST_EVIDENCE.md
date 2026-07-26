@@ -14,7 +14,7 @@ to inactive. No production action was enabled.
 - Public send, content publish, GBP mutation, outreach send, and dangerous
   replay flags: all `false`
 - TypeScript: passed
-- Vitest: 10/10 passed
+- Vitest: 17/17 passed
 - Wrangler bundle/deployment: passed
 - Next.js production build: passed
 
@@ -32,6 +32,11 @@ to inactive. No production action was enabled.
 All fifteen automation identifiers have a successful signed TEST ingress
 execution in `readiness/TEST-0001/INGRESS_MATRIX.json`. For A2-A12 this is an
 ingress baseline, not a claim that provider branches are implemented.
+
+`packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
+for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform
+activation evidence. All TEST contract gates pass; every production activation
+remains blocked by explicit isolation, rollback, and approval evidence.
 
 ## Scheduled companion jobs
 
@@ -77,6 +82,7 @@ TEST calls. The Sanity project and encrypted Make credential are configured;
 the post-authorization live read remains pending due to temporary Make
 connector unavailability.
 
-Operator replay from the DLQ, A2-A12 provider branches, cost caps, named
-approval owners, reconciliation, and rollback drills remain incomplete.
-Production approval remains false.
+Cost caps, approval groups, reconciliation rules, and rollback methods are
+declared for A1-A15. Operator replay from the DLQ, A2-A12 provider branches,
+remote enforcement and reconciliation, provider-resource isolation, and
+rollback drills remain incomplete. Production approval remains false.
