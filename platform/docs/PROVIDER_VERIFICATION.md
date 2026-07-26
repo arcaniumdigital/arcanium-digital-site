@@ -16,6 +16,25 @@ activated.
 | Sentry | `6700539` | `cf112e2dba9c4427b34832565e209ba7` | Passed with an organisation-list read |
 | Sanity | `6665243` | `ef7b094a11684dd593fd80aa134ec3fe` | Passed; authenticated read-only `production` dataset query returned HTTP 200 |
 
+## Connected provider-health branches
+
+- A5 TEST scenario `6665246` reuses the verified Search Console connection
+  `9299162`, GA4 connection `9299173`, and DataForSEO connection `9246246`.
+- Its controlled seven-operation run completed all three authenticated
+  read-only calls and persisted result `result:a5-provider-1785052234506` with
+  a balanced 3/3 reconciliation.
+- The branch performs no query-row loops, provider spend, search mutation,
+  client reporting, or public communication. Full search-growth analysis
+  remains blocked pending its aggregation/task implementation.
+- A11 TEST scenario `6665253` reuses Search Console `9299162` and GA4
+  `9299173`. Its controlled six-operation run persisted
+  `result:a11-analytics-1785052443686` with balanced 2/2 reconciliation and
+  explicitly sent no report.
+- A4 TEST scenario `6665244` reuses Business Profile connection `9299176`.
+  Its controlled five-operation run persisted
+  `result:a4-gbp-1785052729231` with balanced 1/1 reconciliation and
+  explicitly performed no GBP mutation.
+
 ## Google ownership and scope
 
 Credential request `ca593de9-7837-4f08-86a7-ad7c654c8ab1` is fully

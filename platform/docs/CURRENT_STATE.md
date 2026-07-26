@@ -40,16 +40,32 @@ performed. Every scenario exercised by this phase was returned to inactive.
    and D1. The verified fixture persisted a completed TEST run, one
    non-mutating operator action, and a balanced 1/1 reconciliation with no
    incident.
+9. A5 read-only provider-health branch through Search Console, GA4, and
+   DataForSEO. The seven-module Make run completed and persisted a 3/3 balanced
+   result without raw analytics rows, provider spend, or mutations.
+10. A11 read-only analytics-health branch through Search Console and GA4. The
+    six-module Make run completed and persisted a 2/2 balanced result without
+    raw rows, report generation, or client delivery.
+11. A4 read-only Business Profile account-health branch. The five-module Make
+    run completed and persisted a 1/1 balanced result with all GBP mutation,
+    review reply, post, category, profile, and Q&A actions disabled.
 
 ## Remaining external blockers
 
 1. Sanity project metadata and its encrypted Make credential are configured.
    A read-only query passed through Make execution
    `ef7b094a11684dd593fd80aa134ec3fe`.
-2. The A2-A11 provider branches are not yet implemented; their current TEST
-   scenarios are truthful signed-ingress baselines only. A12 now has a
-   verified result/reconciliation ingress, but its full provider-health,
-   recovery, and quarterly-review branches remain incomplete.
+2. The A2-A3, substantive A4, A6-A10, and substantive A11 provider branches
+   are not yet implemented;
+   their current TEST scenarios are truthful signed-ingress baselines only.
+   A5 now has a verified read-only provider-health branch, but the full compact
+   search-growth aggregation and action-prioritisation workflow remains
+   incomplete. A4 now has verified read-only account health, but review/post/
+   performance event handling and approvals remain incomplete. A11 now has a
+   verified read-only analytics-health branch, but
+   its compact KPI transformation, approval, and reporting workflow remains
+   incomplete. A12 now has verified result/reconciliation ingress, but its full
+   provider-health, recovery, and quarterly-review branches remain incomplete.
 3. Cost caps, approval groups, reconciliation rules, and rollback methods are
    now declared for A1-A15. The result endpoint remotely enforces hard action
    ceilings, approval requirements, result balance, failure classification,

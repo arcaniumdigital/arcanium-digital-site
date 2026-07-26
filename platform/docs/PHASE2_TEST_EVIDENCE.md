@@ -24,8 +24,11 @@ to inactive. No production action was enabled.
 | Automation | Make execution | Durable evidence |
 |---|---|---|
 | A1 | `cacd51df6fb445469f513711d978f3f5` | Client config `TEST-0001` / `1.0-phase2c` |
+| A4 | controlled webhook run at 2026-07-26 17:58 AEST | Result `result:a4-gbp-1785052729231`; Business Profile account read completed; balanced 1/1; no GBP mutation |
+| A5 | controlled webhook run at 2026-07-26 17:50 AEST | Result `result:a5-provider-1785052234506`; Search Console + GA4 + DataForSEO completed; balanced 3/3 |
 | A6 | `63886f1ae6de4426b16ec3f1e3d49163` | Audit event `event-phase2-a6-950b5c1eacbb4a36bb1ff87fc807d52f` |
 | A8 | `477000cc227b43e1ad0a614282aae2c1` | Review event `event-phase2-a8-49b2d7040bfb4036b1fdd5dac5df75f2` |
+| A11 | controlled webhook run at 2026-07-26 17:54 AEST | Result `result:a11-analytics-1785052443686`; Search Console + GA4 completed; balanced 2/2; no report sent |
 | A12 | controlled queued webhook run at 2026-07-26 17:36 AEST | Result `result:a12-result-1785051375416`, action `action:a12-result-1785051375416`, balanced 1/1 reconciliation |
 | A13 | `8af7db5bec9248d4a79c7413151f1cd0` | Project `project-phase2-72a1b72d7d6349e98b83a06c6caf6319` |
 | A14 | `500615bd3c404b4c91fd245ec3428875` | Experiment `experiment-phase2-41ca3f061892480ea2b40af7e8f8320b` |
@@ -48,6 +51,35 @@ Its shared signed module returned success and D1 recorded a completed run, one
 module showed a warning only because the request had first queued while the
 run-once listener had expired; signing and persistence both succeeded. The
 scenario was restored to `Immediately as data arrives` and left inactive.
+
+The A5 TEST clone is now
+`TEST CLONE — A5 — Search Provider Health + Result`. Its seven modules
+completed successfully: webhook, signed event, Search Console `GET /v3/sites`,
+GA4 `GET /accountSummaries`, DataForSEO `GET /appendix/user_data`, signed
+result, and webhook response. D1 recorded provider
+`search-console+ga4+dataforseo`, counts 3/3/0, output 3, and a balanced 3/3
+reconciliation. These are authenticated read-only health/account-visibility
+checks, not a claim that the full A5 search-growth analysis is implemented.
+The scenario was restored to immediate webhook scheduling and left inactive.
+
+The A11 TEST clone is now
+`TEST CLONE — A11 — Analytics Health + Result`. Its six modules completed
+successfully: webhook, signed event, Search Console `GET /v3/sites`, GA4
+`GET /accountSummaries`, signed result, and webhook response. D1 recorded
+provider `search-console+ga4`, counts 2/2/0, output 2, and a balanced 2/2
+reconciliation. No raw analytics rows entered Make and no draft or report was
+sent. This proves authenticated provider health, not the full A11 KPI
+transformation/reporting workflow. The scenario was restored to immediate
+webhook scheduling and left inactive.
+
+The A4 TEST clone is now
+`TEST CLONE — A4 — GBP Account Health + Result`. Its five modules completed:
+webhook, signed event, Business Profile `GET /v1/accounts`, signed result, and
+webhook response. D1 recorded provider `google-business-profile`, counts
+1/1/0, output 1, and a balanced 1/1 reconciliation. The response confirmed no
+GBP mutation. This proves authenticated account visibility only; review,
+performance, post and approval routes are not yet implemented. The scenario
+was restored to immediate webhook scheduling and left inactive.
 
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform
@@ -106,6 +138,9 @@ invalid, or replayed signatures.
 
 Cost caps, approval groups, reconciliation rules, and rollback methods are
 declared for A1-A15. Shared result enforcement and durable reconciliation are
-now live in TEST. Operator replay from the DLQ, A2-A11 provider branches, the
-remaining A12 provider-health/recovery branches, provider-resource isolation,
-and rollback drills remain incomplete. Production approval remains false.
+now live in TEST. Operator replay from the DLQ, substantive A2-A4 and A6-A10
+provider branches (A4 account health is verified), the full A5 analysis branch,
+the full A11 reporting branch,
+the remaining A12
+provider-health/recovery branches, provider-resource isolation, and rollback
+drills remain incomplete. Production approval remains false.
