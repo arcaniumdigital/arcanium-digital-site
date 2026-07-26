@@ -7,7 +7,7 @@ to inactive. No production action was enabled.
 
 - Worker: `arcanium-platform-core-test`
 - A2 Worker: `arcanium-listing-control-test`, current version
-  `47176ed8-4566-4f3b-81e9-581ac2f3f4e4`
+  `d9427ff9-5254-42ed-8edf-62cbbff52178`
 - Current version: `bb58a853-7af2-4d32-953a-711c1048b466`
 - Health version: `0.2.0`
 - D1 migrations: `006_platform_core_registry.sql`,
@@ -162,7 +162,7 @@ last-known-good preservation, lifecycle events, approval-gated sold/removal
 decisions, action overflow, and absence of Google Indexing API behavior. Two
 queue tests cover held delivery and missing-endpoint fail-closed behavior.
 
-The current restored version `47176ed8-4566-4f3b-81e9-581ac2f3f4e4` retains
+The current stable version `d9427ff9-5254-42ed-8edf-62cbbff52178` retains
 the independent
 `ALLOW_MAKE_DISPATCH=false` gate. The consumer records queued batches as
 `held_for_operator_workflow` instead of calling Make. The listing sync and
@@ -215,6 +215,16 @@ dispatch was false. A separately signed `TEST-9999` request returned HTTP 400,
 and D1 contains zero rejected-client sync, listing, action, or queue rows. The
 temporary signing-secret version was rolled back to the original HMAC version;
 final health and secret inventory remained unchanged.
+
+The declared source-snapshot rollback method was drilled with run
+`a2-rollback-1785078447830`. Replaying the prior three-listing snapshot
+restored `L-100` from sold to active, completed 3/3, emitted one UPDATED event,
+created zero new actions, and recorded its queue batch as
+`held_for_operator_workflow`. The historical `sold_evidence` approval task
+remains open, which preserves its audit history but is not an operator-lifecycle
+resolution. Therefore `source_snapshot_rollback_verified` is true while the
+overall `rollback_tested` activation gate remains false pending signed,
+cross-store action resolution.
 
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform

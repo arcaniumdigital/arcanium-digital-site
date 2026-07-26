@@ -9,7 +9,7 @@
 - Cloudflare Worker: `arcanium-platform-core-test`, version
   `bb58a853-7af2-4d32-953a-711c1048b466`.
 - A2 Cloudflare Worker: `arcanium-listing-control-test`, version
-  `47176ed8-4566-4f3b-81e9-581ac2f3f4e4`, TEST-only with all
+  `d9427ff9-5254-42ed-8edf-62cbbff52178`, TEST-only with all
   public/destructive action flags false and Make dispatch held.
 - Cloudflare TEST D1 databases: platform operations, listing/content, and
   search/reporting.
@@ -92,6 +92,12 @@ performed. Every scenario exercised by this phase was returned to inactive.
     matching `TEST-0001` rows. A separately signed `TEST-9999` request was
     rejected with HTTP 400 and produced zero sync, listing, action, or queue
     rows. Its permitted queue batch was held because dispatch was false.
+22. A2 source rollback drill: replay run `a2-rollback-1785078447830`
+    restored `L-100` from the synthetic sold state to active, reconciled 3/3,
+    emitted one UPDATED event, created no new action, and held its queue batch.
+    The earlier approval task remains open as durable audit state, so the full
+    rollback gate remains false until explicit action-resolution handling is
+    implemented and verified.
 
 ## Remaining external blockers
 
@@ -109,7 +115,7 @@ performed. Every scenario exercised by this phase was returned to inactive.
    by default. The remaining operator task destinations,
    reporting annotation, alert/digest, live feed adapter credentials, website
    revalidation endpoint, IndexNow key, public-page inspection, and rollback
-   drill remain incomplete.
+   action-resolution drill remain incomplete.
    A5 now has a verified read-only provider-health branch, but the full compact
    search-growth aggregation and action-prioritisation workflow remains
    incomplete. A4 now has verified read-only account health, but review/post/
