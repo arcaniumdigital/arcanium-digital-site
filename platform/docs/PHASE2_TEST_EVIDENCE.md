@@ -7,7 +7,7 @@ to inactive. No production action was enabled.
 
 - Worker: `arcanium-platform-core-test`
 - A2 Worker: `arcanium-listing-control-test`, current version
-  `8a409f90-849a-46b0-ad04-5822145abb0c`
+  `f4aa9966-6729-420b-bfd7-e1d342b3f40e`
 - Current version: `bb58a853-7af2-4d32-953a-711c1048b466`
 - Health version: `0.2.0`
 - D1 migrations: `006_platform_core_registry.sql`,
@@ -156,10 +156,19 @@ The A2 listing-control TEST Worker is deployed at
 synthetic JSON run normalized and persisted three listings, emitted three
 `NEW` events, queued one compact `listing.sync_batch`, and recorded queue
 delivery on attempt 1. All public-write, sold-price, destructive URL,
-IndexNow, and revalidation flags are false. Eleven local tests cover JSON and
+IndexNow, and revalidation flags are false. Eleven domain tests cover JSON and
 REAXML parsing, malformed/empty/stale feeds, abnormal count drops,
 last-known-good preservation, lifecycle events, approval-gated sold/removal
-decisions, action overflow, and absence of Google Indexing API behavior.
+decisions, action overflow, and absence of Google Indexing API behavior. Two
+queue tests cover held delivery and missing-endpoint fail-closed behavior.
+
+Version `f4aa9966-6729-420b-bfd7-e1d342b3f40e` adds an independent
+`ALLOW_MAKE_DISPATCH=false` gate. The consumer records queued batches as
+`held_for_operator_workflow` instead of calling Make. The listing sync and
+capped operator actions remain durable in D1, so disabling delivery does not
+discard the operator work represented by the batch. The Make endpoint is not a
+deployed binding; even an accidental flag change is fail-closed and retries
+with `MAKE_ENDPOINT_NOT_CONFIGURED`.
 
 The A2 Make clone is now
 `TEST CLONE - A2 - Listing Control Health + Result`. Its five-module health
@@ -168,6 +177,12 @@ reconciliation. No raw feed or listing array entered Make. The compact
 operator-action iterator, task routing, summary annotation, and one
 alert/digest branch remain to be connected and tested. The scenario uses
 immediate webhook scheduling and remains inactive.
+
+`make/test/a2-operator-actions.draft.json` is a source-controlled draft of the
+capped iterator and Platform Core result/task mapping. It has not been imported
+or executed successfully in Make and is not deployment evidence. Dispatch must
+remain false until that graph is imported, inspected, exercised with a
+controlled TEST fixture, and reconciled against both D1 stores.
 
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform

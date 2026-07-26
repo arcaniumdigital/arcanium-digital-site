@@ -9,8 +9,8 @@
 - Cloudflare Worker: `arcanium-platform-core-test`, version
   `bb58a853-7af2-4d32-953a-711c1048b466`.
 - A2 Cloudflare Worker: `arcanium-listing-control-test`, version
-  `8a409f90-849a-46b0-ad04-5822145abb0c`, TEST-only with all
-  public/destructive action flags false.
+  `f4aa9966-6729-420b-bfd7-e1d342b3f40e`, TEST-only with all
+  public/destructive action flags false and Make dispatch held.
 - Cloudflare TEST D1 databases: platform operations, listing/content, and
   search/reporting.
 - Cloudflare TEST event queue and DLQ: producer, retry, acknowledgement, and
@@ -76,6 +76,10 @@ performed. Every scenario exercised by this phase was returned to inactive.
     capped compact operator actions, and queue delivery auditing. A signed
     synthetic run persisted three listings and the Make health branch recorded
     a balanced 1/1 result.
+19. A2 queue-to-Make delivery now has a separate
+    `ALLOW_MAKE_DISPATCH=false` deployment gate. Queued batches remain durably
+    represented by the listing sync, operator-action, and queue-audit rows
+    while the unverified Make iterator is held.
 
 ## Remaining external blockers
 
@@ -89,7 +93,9 @@ performed. Every scenario exercised by this phase was returned to inactive.
    preflight, canonical validation, approval, publishing, post-publication
    verification, revalidation, and indexing routes remain incomplete.
    A2 now has its Worker-heavy reconciliation foundation and Make health
-   branch, but the Make compact-action iterator, operator task destinations,
+   branch. A capped compact-action iterator blueprint exists only as an
+   unverified draft; dispatch remains disabled until it is imported and
+   exercised successfully. The operator task destinations,
    reporting annotation, alert/digest, live feed adapter credentials, website
    revalidation endpoint, IndexNow key, public-page inspection, and rollback
    drill remain incomplete.

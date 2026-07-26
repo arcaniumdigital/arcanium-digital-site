@@ -28,6 +28,8 @@ export interface Env {
   MAX_OPERATOR_ACTIONS: string;
   MAX_COUNT_DROP_RATIO: string;
   MAX_FEED_AGE_SECONDS: string;
+  MAKE_A2_WEBHOOK_URL?: string;
+  ALLOW_MAKE_DISPATCH: "true" | "false";
   ALLOW_PRODUCTION_DEPLOY: "true" | "false";
   ALLOW_PUBLIC_WRITE: "true" | "false";
   ALLOW_SOLD_PRICE_PUBLISH: "true" | "false";
@@ -196,10 +198,15 @@ async function processSync(request: SyncRequest, env: Env): Promise<Response> {
     await persistRun(env, request, parseResult.listings, result);
     await env.LISTING_ACTIONS.send({
       schema_version: "1.0",
+      event_id: `a2-sync:${request.run_id}`,
+      idempotency_key: `a2-sync:${request.idempotency_key}`,
+      correlation_id: request.run_id,
       automation_id: "A2",
       event_type: "listing.sync_batch",
       environment: env.ENVIRONMENT,
       client_id: request.client_id,
+      occurred_at: now(),
+      severity: result.accepted ? "info" : "critical",
       feed_id: request.feed_id,
       run_id: request.run_id,
       summary: {
@@ -260,6 +267,7 @@ export default {
         service: "arcanium-listing-control",
         environment: env.ENVIRONMENT,
         production_enabled: false,
+        make_dispatch_enabled: env.ALLOW_MAKE_DISPATCH === "true",
         actions: {
           public_write: env.ALLOW_PUBLIC_WRITE === "true",
           sold_price_publish: env.ALLOW_SOLD_PRICE_PUBLISH === "true",
@@ -294,8 +302,30 @@ export default {
   async queue(batch: MessageBatch, env: Env): Promise<void> {
     for (const message of batch.messages) {
       const body = isRecord(message.body) ? message.body : {};
+      let deliveryStatus = "held_for_operator_workflow";
+      let deliveryError: string | null = null;
+      if (env.ALLOW_MAKE_DISPATCH === "true") {
+        if (!env.MAKE_A2_WEBHOOK_URL) {
+          deliveryStatus = "delivery_blocked_missing_endpoint";
+          deliveryError = "MAKE_ENDPOINT_NOT_CONFIGURED";
+        } else try {
+          deliveryStatus = "delivered";
+          const response = await fetch(env.MAKE_A2_WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          if (!response.ok) {
+            deliveryStatus = "delivery_failed";
+            deliveryError = `MAKE_HTTP_${response.status}`;
+          }
+        } catch {
+          deliveryStatus = "delivery_failed";
+          deliveryError = "MAKE_NETWORK_ERROR";
+        }
+      }
       await env.LISTING_DB.prepare(
-        "INSERT OR IGNORE INTO listing_retry_queue_audit (environment, client_id, feed_id, run_id, message_id, event_type, attempt, status, error_code, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?, 'delivered', NULL, ?)",
+        "INSERT OR IGNORE INTO listing_retry_queue_audit (environment, client_id, feed_id, run_id, message_id, event_type, attempt, status, error_code, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       ).bind(
         env.ENVIRONMENT,
         String(body.client_id ?? "unknown"),
@@ -304,9 +334,12 @@ export default {
         message.id,
         String(body.event_type ?? "listing.sync_batch"),
         message.attempts,
+        deliveryStatus,
+        deliveryError,
         now(),
       ).run();
-      message.ack();
+      if (deliveryStatus === "delivered" || deliveryStatus === "held_for_operator_workflow") message.ack();
+      else message.retry();
     }
   },
 };

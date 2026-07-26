@@ -12,7 +12,7 @@
   },
   "automations": {
     "A1": {"approval_group":"financialOwners","action_cap":10,"reconciliation":"client registry version/hash","rollback":"restore previous config version"},
-    "A2": {"approval_group":"contentOwners","action_cap":25,"reconciliation":"source listing count equals accepted plus rejected","rollback":"replay previous listing snapshot"},
+    "A2": {"approval_group":"contentOwners","action_cap":20,"reconciliation":"source listing count equals accepted plus rejected","rollback":"replay previous listing snapshot"},
     "A3": {"approval_group":"contentOwners","action_cap":10,"reconciliation":"draft/published/indexing status totals","rollback":"restore previous Sanity revision and deployment"},
     "A4": {"approval_group":"gbpOwners","action_cap":5,"reconciliation":"GBP source events equal reviewed actions","rollback":"create manual GBP reversal task"},
     "A5": {"approval_group":"contentOwners","action_cap":10,"reconciliation":"provider task IDs and cost ledger","rollback":"cancel pending tasks and retain prior plan"},
