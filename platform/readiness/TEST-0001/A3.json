@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "client_id": "TEST-0001",
+  "automation_id": "A3",
+  "environment": "test",
+  "worker_deployed": true,
+  "deployment_version": "777d22fe-ce05-4103-9185-74664903f164",
+  "make_scenario_id": "6665243",
+  "make_webhook_id": "3448423",
+  "make_blueprint_valid": true,
+  "make_connections_valid": true,
+  "shared_hmac_signer_passed": true,
+  "sanity_read_passed": true,
+  "sanity_mutations_enabled": false,
+  "content_workflow_implemented": false,
+  "publishing_enabled": false,
+  "cross_client_test_passed": false,
+  "rollback_tested": false,
+  "production_approved": false,
+  "evidence": {
+    "make_execution_id": "ef7b094a11684dd593fd80aa134ec3fe",
+    "make_operations": 4,
+    "webhook_status": 202,
+    "sanity_status": 200,
+    "sanity_project_id": "fefsnr86",
+    "sanity_dataset": "production"
+  },
+  "blocking_reasons": [
+    "Draft, validation, approval, publish, deployment and indexing branches are not implemented",
+    "Cross-client provider-resource isolation and rollback are not tested",
+    "Content publishing remains disabled",
+    "Sanity token must be rotated before production approval",
+    "Production approval has not been requested"
+  ]
+}

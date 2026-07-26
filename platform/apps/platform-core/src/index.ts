@@ -124,9 +124,10 @@ async function verifySignature(request: Request, rawBody: string, env: Env): Pro
   const timestamp = request.headers.get("X-Automation-Timestamp");
   const nonce = request.headers.get("X-Automation-Nonce");
   const supplied = request.headers.get("X-Automation-Signature");
-  if (!timestamp || !nonce || !supplied || !env.EVENT_HMAC_SECRET) {
-    return failure("AUTH_REQUIRED", 401);
-  }
+  if (!env.EVENT_HMAC_SECRET) return failure("SERVER_HMAC_NOT_CONFIGURED", 500);
+  if (!timestamp) return failure("TIMESTAMP_HEADER_REQUIRED", 401);
+  if (!nonce) return failure("NONCE_HEADER_REQUIRED", 401);
+  if (!supplied) return failure("SIGNATURE_HEADER_REQUIRED", 401);
   if (nonce.length > MAX_IDENTIFIER_LENGTH) return failure("INVALID_NONCE", 400);
 
   const timestampMs = Date.parse(timestamp);

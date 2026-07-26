@@ -7,7 +7,7 @@
 - A13-A15 scheduled companions: converted from unauthenticated placeholders to
   signed Platform Core events, successfully exercised, and inactive.
 - Cloudflare Worker: `arcanium-platform-core-test`, version
-  `e12504b5-9af0-4dcb-b54e-fe98804fc799`.
+  `777d22fe-ce05-4103-9185-74664903f164`.
 - Cloudflare TEST D1 databases: platform operations, listing/content, and
   search/reporting.
 - Cloudflare TEST event queue and DLQ: producer, retry, acknowledgement, and
@@ -30,7 +30,7 @@ performed. Every scenario exercised by this phase was returned to inactive.
 5. Separate persisted configuration for `TEST-0001` and `TEST-0002`; a signed
    request for non-allowlisted `TEST-9999` was rejected and wrote no rows.
 6. Safe connection checks for Resend, ClickSend, DataForSEO, Sentry, Google
-   Sheets/Drive, Search Console, GA4, and Business Profile.
+   Sheets/Drive, Search Console, GA4, Business Profile, and Sanity.
 7. Canonical A1-A15 golden fixture coverage and a uniform activation gate that
    requires scenario, connection, contract, A12 incident, provider workflow,
    tenant isolation, cost cap, approval owner, rollback, and explicit
@@ -39,8 +39,8 @@ performed. Every scenario exercised by this phase was returned to inactive.
 ## Remaining external blockers
 
 1. Sanity project metadata and its encrypted Make credential are configured.
-   A live read remains pending because the Make connector was unavailable
-   immediately after authorization.
+   A read-only query passed through Make execution
+   `ef7b094a11684dd593fd80aa134ec3fe`.
 2. The A2-A12 provider branches are not yet implemented; their current TEST
    scenarios are truthful signed-ingress baselines only.
 3. Cost caps, approval groups, reconciliation rules, and rollback methods are
@@ -49,3 +49,8 @@ performed. Every scenario exercised by this phase was returned to inactive.
    production rollback drills remain unproven.
 
 Production approval remains false.
+
+The shared Make signer now derives a nonce from `executionId` when legacy
+scenario mappings leave the nonce field blank. Its TEST HMAC secret was rotated
+and synchronized with Cloudflare. This restored the common signed-event path
+without weakening replay protection.

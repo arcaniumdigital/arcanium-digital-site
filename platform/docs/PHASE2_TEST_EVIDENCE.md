@@ -6,7 +6,7 @@ to inactive. No production action was enabled.
 ## Deployment and local gates
 
 - Worker: `arcanium-platform-core-test`
-- Current version: `e12504b5-9af0-4dcb-b54e-fe98804fc799`
+- Current version: `777d22fe-ce05-4103-9185-74664903f164`
 - Health version: `0.2.0`
 - D1 migrations: `006_platform_core_registry.sql` and
   `007_queue_delivery_audit.sql`
@@ -77,10 +77,16 @@ events. All four jobs remain inactive.
 ## Provider checks and remaining blockers
 
 See `PROVIDER_VERIFICATION.md`. Resend, ClickSend, DataForSEO, Sentry, Google
-Sheets/Drive, Search Console, GA4, and Business Profile completed controlled
-TEST calls. The Sanity project and encrypted Make credential are configured;
-the post-authorization live read remains pending due to temporary Make
-connector unavailability.
+Sheets/Drive, Search Console, GA4, Business Profile, and Sanity completed
+controlled TEST calls. Sanity returned HTTP 200 in A3 execution
+`ef7b094a11684dd593fd80aa134ec3fe`; the full execution completed four
+operations successfully and the webhook returned HTTP 202.
+
+The A3 test exposed a missing legacy `nonce` mapping in the shared Make custom
+app. The app now uses the Make `executionId` as a nonce fallback, and the shared
+TEST HMAC secret was rotated and synchronized with the Worker. The Worker keeps
+field-specific missing-auth diagnostics while still rejecting incomplete,
+invalid, or replayed signatures.
 
 Cost caps, approval groups, reconciliation rules, and rollback methods are
 declared for A1-A15. Operator replay from the DLQ, A2-A12 provider branches,

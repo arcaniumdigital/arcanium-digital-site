@@ -7,7 +7,7 @@
   "scenarios": [
     {"automation_id":"A1","scenario_id":6665241,"hook_id":3448383,"mode":"client_config_only"},
     {"automation_id":"A2","scenario_id":6665242,"hook_id":3448422,"mode":"safe_ingress_only"},
-    {"automation_id":"A3","scenario_id":6665243,"hook_id":3448423,"mode":"safe_ingress_only"},
+    {"automation_id":"A3","scenario_id":6665243,"hook_id":3448423,"mode":"signed_ingress_plus_sanity_read"},
     {"automation_id":"A4","scenario_id":6665244,"hook_id":3448424,"mode":"safe_ingress_only"},
     {"automation_id":"A5","scenario_id":6665246,"hook_id":3448425,"mode":"safe_ingress_only"},
     {"automation_id":"A6","scenario_id":6665247,"hook_id":3448404,"mode":"audit_ingress_only"},

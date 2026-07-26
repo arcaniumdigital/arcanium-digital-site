@@ -14,6 +14,7 @@ activated.
 | Business Profile | `6703614` | `bc935236084c4e7eaf3b5798e4a9ae17` | Passed; location `Arcanium Digital` visible |
 | DataForSEO | `6700523` | `58310b4ce56d497ab35103fd81a88a87` | Passed with a zero-cost account-data read |
 | Sentry | `6700539` | `cf112e2dba9c4427b34832565e209ba7` | Passed with an organisation-list read |
+| Sanity | `6665243` | `ef7b094a11684dd593fd80aa134ec3fe` | Passed; authenticated read-only `production` dataset query returned HTTP 200 |
 
 ## Google ownership and scope
 
@@ -45,8 +46,10 @@ rather than automation-confirmed.
 - Make secure credential request:
   `8264b2d5-5072-4d15-bd93-991303372726`
 
-The encrypted Make credential request was reported authorized by the operator.
-The API token is intentionally absent from source control and scenario
-blueprints. A live read remains pending because the Make connector was
-temporarily unavailable immediately after authorization. Because a token was
-pasted into chat, rotate it after the secure connection is established.
+The encrypted Make credential is installed as an HTTP API-key credential with
+the required `Bearer` prefix. A direct module check returned HTTP 200, followed
+by a successful four-operation A3 webhook execution through the shared HMAC
+signer, Cloudflare Worker, and Sanity read. The API token is intentionally
+absent from source control and scenario blueprints. Because the token was
+pasted into chat, rotate it in Sanity and update the encrypted Make key before
+production approval.
