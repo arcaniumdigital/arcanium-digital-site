@@ -34,6 +34,10 @@ activated.
   Its controlled five-operation run persisted
   `result:a4-gbp-1785052729231` with balanced 1/1 reconciliation and
   explicitly performed no GBP mutation.
+- A6 TEST scenario `6665247` reuses Sentry connection `9270294`. Its
+  controlled five-operation run persisted
+  `result:a6-sentry-1785053136505` with balanced 1/1 reconciliation and
+  explicitly performed no technical mutation.
 
 ## Google ownership and scope
 

@@ -49,19 +49,24 @@ performed. Every scenario exercised by this phase was returned to inactive.
 11. A4 read-only Business Profile account-health branch. The five-module Make
     run completed and persisted a 1/1 balanced result with all GBP mutation,
     review reply, post, category, profile, and Q&A actions disabled.
+12. A6 read-only Sentry organisation-health branch. The five-module Make run
+    completed and persisted a 1/1 balanced result without deployment,
+    rollback, redirect, canonical, removal, or other technical mutation.
 
 ## Remaining external blockers
 
 1. Sanity project metadata and its encrypted Make credential are configured.
    A read-only query passed through Make execution
    `ef7b094a11684dd593fd80aa134ec3fe`.
-2. The A2-A3, substantive A4, A6-A10, and substantive A11 provider branches
+2. The A2-A3, substantive A4, substantive A6-A10, and substantive A11 provider branches
    are not yet implemented;
    their current TEST scenarios are truthful signed-ingress baselines only.
    A5 now has a verified read-only provider-health branch, but the full compact
    search-growth aggregation and action-prioritisation workflow remains
    incomplete. A4 now has verified read-only account health, but review/post/
-   performance event handling and approvals remain incomplete. A11 now has a
+   performance event handling and approvals remain incomplete. A6 now has
+   verified Sentry organisation health, but probes, deployment events,
+   technical issue normalisation, and approval routes remain incomplete. A11 now has a
    verified read-only analytics-health branch, but
    its compact KPI transformation, approval, and reporting workflow remains
    incomplete. A12 now has verified result/reconciliation ingress, but its full

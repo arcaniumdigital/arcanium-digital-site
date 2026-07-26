@@ -26,6 +26,7 @@ to inactive. No production action was enabled.
 | A1 | `cacd51df6fb445469f513711d978f3f5` | Client config `TEST-0001` / `1.0-phase2c` |
 | A4 | controlled webhook run at 2026-07-26 17:58 AEST | Result `result:a4-gbp-1785052729231`; Business Profile account read completed; balanced 1/1; no GBP mutation |
 | A5 | controlled webhook run at 2026-07-26 17:50 AEST | Result `result:a5-provider-1785052234506`; Search Console + GA4 + DataForSEO completed; balanced 3/3 |
+| A6 | controlled webhook run at 2026-07-26 18:05 AEST | Result `result:a6-sentry-1785053136505`; Sentry organisation read completed; balanced 1/1; no technical mutation |
 | A6 | `63886f1ae6de4426b16ec3f1e3d49163` | Audit event `event-phase2-a6-950b5c1eacbb4a36bb1ff87fc807d52f` |
 | A8 | `477000cc227b43e1ad0a614282aae2c1` | Review event `event-phase2-a8-49b2d7040bfb4036b1fdd5dac5df75f2` |
 | A11 | controlled webhook run at 2026-07-26 17:54 AEST | Result `result:a11-analytics-1785052443686`; Search Console + GA4 completed; balanced 2/2; no report sent |
@@ -80,6 +81,16 @@ webhook response. D1 recorded provider `google-business-profile`, counts
 GBP mutation. This proves authenticated account visibility only; review,
 performance, post and approval routes are not yet implemented. The scenario
 was restored to immediate webhook scheduling and left inactive.
+
+The A6 TEST clone is now
+`TEST CLONE — A6 — Sentry Health + Result`. Its five modules completed:
+webhook, signed event, Sentry `List Organizations`, signed result, and webhook
+response. D1 recorded provider `sentry`, counts 1/1/0, output 1, and a balanced
+1/1 reconciliation. No raw issue stream entered Make and no deployment,
+rollback, redirect, canonical or removal action occurred. This proves
+authenticated organisation health only, not the full technical-control
+workflow. The scenario was restored to immediate webhook scheduling and left
+inactive.
 
 `packages/test-fixtures/golden-events.json` supplies canonical safe TEST input
 for A1-A15. `readiness/TEST-0001/ACTIVATION_GATES.json` records the uniform
@@ -139,7 +150,7 @@ invalid, or replayed signatures.
 Cost caps, approval groups, reconciliation rules, and rollback methods are
 declared for A1-A15. Shared result enforcement and durable reconciliation are
 now live in TEST. Operator replay from the DLQ, substantive A2-A4 and A6-A10
-provider branches (A4 account health is verified), the full A5 analysis branch,
+provider branches (A4 account health and A6 Sentry health are verified), the full A5 analysis branch,
 the full A11 reporting branch,
 the remaining A12
 provider-health/recovery branches, provider-resource isolation, and rollback

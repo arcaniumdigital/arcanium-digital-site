@@ -10,7 +10,7 @@
     {"automation_id":"A3","scenario_id":6665243,"hook_id":3448423,"mode":"signed_ingress_plus_sanity_read"},
     {"automation_id":"A4","scenario_id":6665244,"hook_id":3448424,"mode":"signed_ingress_plus_gbp_health_result","schedule":"immediate","last_test_result_id":"result:a4-gbp-1785052729231"},
     {"automation_id":"A5","scenario_id":6665246,"hook_id":3448425,"mode":"signed_ingress_plus_provider_health_result","schedule":"immediate","last_test_result_id":"result:a5-provider-1785052234506"},
-    {"automation_id":"A6","scenario_id":6665247,"hook_id":3448404,"mode":"audit_ingress_only"},
+    {"automation_id":"A6","scenario_id":6665247,"hook_id":3448404,"mode":"signed_ingress_plus_sentry_health_result","schedule":"immediate","last_test_result_id":"result:a6-sentry-1785053136505"},
     {"automation_id":"A7","scenario_id":6674990,"hook_id":3448426,"mode":"safe_ingress_only"},
     {"automation_id":"A8","scenario_id":6665248,"hook_id":3448407,"mode":"review_ingress_only"},
     {"automation_id":"A9","scenario_id":6665249,"hook_id":3448427,"mode":"safe_ingress_only"},
