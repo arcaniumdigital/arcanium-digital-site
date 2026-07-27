@@ -1,27 +1,8 @@
 import type { ReactNode } from "react"
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { siteDescription, siteName, siteUrl } from '@/lib/site'
 import './globals.css'
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: '--font-inter',
-  display: "swap",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: '--font-space-grotesk',
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({ 
-  subsets: ["latin"],
-  variable: '--font-jetbrains',
-  display: "swap",
-});
 
 const metaPixelId = "1750359556313305";
 
@@ -77,7 +58,7 @@ export default function RootLayout({
       <head>
         <script id="meta-pixel" dangerouslySetInnerHTML={{ __html: metaPixelScript }} />
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+      <body className="font-sans antialiased">
         <noscript>
           <img
             height="1"
