@@ -1,0 +1,4 @@
+import { describe, expect, it } from "vitest";
+import { handleRequest, type Env } from "../src/index";
+const env:Env={ENVIRONMENT:"test",TEST_CLIENT_IDS:"TEST-0001",A5_HMAC_SECRET:"test",MAX_ACTIONS_PER_CLIENT:"5",SEARCH_DB:{prepare:()=>{throw new Error("no persistence in boundary tests");}}};
+describe("search-growth Worker boundary",()=>{it("is TEST-only with LLM and spend disabled",async()=>{const b=await(await handleRequest(new Request("https://a5.test/health"),env)).json() as {data:{environment:string;llm_enabled:boolean;provider_spend_enabled:boolean}};expect(b.data).toEqual(expect.objectContaining({environment:"test",llm_enabled:false,provider_spend_enabled:false}));});it("rejects unsigned runs",async()=>expect((await handleRequest(new Request("https://a5.test/v1/run",{method:"POST",headers:{"content-type":"application/json"},body:"{}"}),env)).status).toBe(401));});
