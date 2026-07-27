@@ -42,7 +42,8 @@
         "nonce": "{{ifempty(1.event_id; executionId)}}-request-{{2.requestId}}",
         "eventBody": "{{2.eventBody}}",
         "timestamp": "{{1.occurred_at}}",
-        "endpointPath": "{{2.endpointPath}}"
+        "endpointPath": "{{2.endpointPath}}",
+        "correlationId": "{{1.correlation_id}}"
       },
       "metadata": {
         "designer": {

@@ -205,7 +205,8 @@
                         "endpointPath": "/v1/a1/access-check/site",
                         "timestamp": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ss.SSS[Z]\"; \"UTC\")}}",
                         "nonce": "a1:{{1.`0`}}:{{executionId}}",
-                        "eventBody": "{\"schema_version\":\"1.0\",\"request_id\":\"a1:{{1.`0`}}:{{executionId}}\",\"idempotency_key\":\"{{1.`6`}}\",\"correlation_id\":\"a1:{{1.`0`}}:{{executionId}}\",\"client_id\":\"{{1.`1`}}\",\"environment\":\"test\",\"check_type\":\"site\",\"timeout_ms\":5000,\"url\":\"https://arcaniumdigital.com\",\"preferred_host\":\"www.arcaniumdigital.com\",\"expected_canonical_origin\":\"https://www.arcaniumdigital.com\"}"
+                        "eventBody": "{\"schema_version\":\"1.0\",\"request_id\":\"a1:{{1.`0`}}:{{executionId}}\",\"idempotency_key\":\"{{1.`6`}}\",\"correlation_id\":\"a1:{{1.`0`}}:{{executionId}}\",\"client_id\":\"{{1.`1`}}\",\"environment\":\"test\",\"check_type\":\"site\",\"timeout_ms\":5000,\"url\":\"https://arcaniumdigital.com\",\"preferred_host\":\"www.arcaniumdigital.com\",\"expected_canonical_origin\":\"https://www.arcaniumdigital.com\"}",
+                        "correlationId": "a1:{{1.`0`}}:{{executionId}}"
                       },
                       "metadata": {
                         "designer": { "x": 2500, "y": -300, "label": "Signed access-check Worker via platform gateway" }

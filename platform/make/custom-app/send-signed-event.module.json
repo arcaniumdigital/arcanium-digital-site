@@ -26,6 +26,9 @@
   "endpoint_paths": [
     "/v1/platform/events/verify",
     "/v1/events",
+    "/v1/a1/access-check/site",
+    "/v1/a1/access-check/http-provider",
+    "/v1/a1/client-configs",
     "/v1/a13/projects",
     "/v1/a14/experiments",
     "/v1/a15/cost-imports",
