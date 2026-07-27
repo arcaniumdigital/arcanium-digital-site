@@ -90,32 +90,36 @@ performed. Every scenario exercised by this phase was returned to inactive.
     revision/location-bound future publish permission. Its signed source Worker
     accepts compact reconciliation and denies reply publication while
     `ALLOW_GBP_MUTATION=false`; thirteen tests pass and nothing is deployed.
-19. A2 listing-control foundation: JSON and REAXML normalization,
+19. A5 search-growth domain foundation: parameterised aggregate query shape,
+    data-sufficiency limits, deterministic final action scoring/deduplication
+    and five-action cap. Six tests pass; there is no Worker deployment, raw-row
+    transfer to Make, provider spend, SEO change or public send.
+20. A2 listing-control foundation: JSON and REAXML normalization,
     last-known-good safeguards, lifecycle/material-event reconciliation,
     approval-gated sold/removal actions, D1 state, Durable Object locking,
     capped compact operator actions, and queue delivery auditing. A signed
     synthetic run persisted three listings and the Make health branch recorded
     a balanced 1/1 result.
-20. A2 queue-to-Make delivery now has a separate
+21. A2 queue-to-Make delivery now has a separate
     `ALLOW_MAKE_DISPATCH=false` deployment gate. Queued batches remain durably
     represented by the listing sync, operator-action, and queue-audit rows
     while default Make dispatch is held.
-21. A2 same-run cross-store proof: signed Worker run
+22. A2 same-run cross-store proof: signed Worker run
     `a2-cross-store-1785077536611` persisted a 3/3 listing sync and one
     approval-gated `sold_evidence` action, delivered its queue message on
     attempt 1, and produced the matching Platform Core result/action keys with
     balanced 1/1 reconciliation. Make execution
     `bcb83b9032204c4ea2efe55e4cd51478` completed all five modules; its warning
     is limited to the webhook response being unavailable for queued data.
-22. A2 tenant isolation: signed run `a2-isolation-1785078078539` persisted
+23. A2 tenant isolation: signed run `a2-isolation-1785078078539` persisted
     exactly one `TEST-0002` listing under `tenant-isolation-feed`, with zero
     matching `TEST-0001` rows. A separately signed `TEST-9999` request was
     rejected with HTTP 400 and produced zero sync, listing, action, or queue
     rows. Its permitted queue batch was held because dispatch was false.
-23. A2 source rollback drill: replay run `a2-rollback-1785078447830`
+24. A2 source rollback drill: replay run `a2-rollback-1785078447830`
     restored `L-100` from the synthetic sold state to active, reconciled 3/3,
     emitted one UPDATED event, created no new action, and held its queue batch.
-24. A2 signed action-resolution proof: replay run
+25. A2 signed action-resolution proof: replay run
     `a2-resolution-1785080485164` detected that the verified source no longer
     reported `L-100` as sold, superseded the original listing-side action,
     delivered the queue message on attempt 1, and sent a signed generic
@@ -123,7 +127,7 @@ performed. Every scenario exercised by this phase was returned to inactive.
     Platform Core persisted the matching resolution, superseded the operator
     action and approval request, and retained the original audit history.
     The A2 source rollback and cross-store action lifecycle are now verified.
-25. A1 control-workbook governance: all ten required Google Sheets tabs and
+26. A1 control-workbook governance: all ten required Google Sheets tabs and
     four typed Make data stores are provisioned. Inactive scenario `6665241`
     is configured for every six hours and execution
     `4bfc2656ebad4e089be2672601303666` completed 18 operations. It selected one

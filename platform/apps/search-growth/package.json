@@ -1,0 +1,8 @@
+{
+  "name": "@arcanium/search-growth",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": { "check": "tsc --project tsconfig.json", "test": "vitest run" },
+  "devDependencies": { "typescript": "^5.9.2", "vitest": "^3.2.4" }
+}
