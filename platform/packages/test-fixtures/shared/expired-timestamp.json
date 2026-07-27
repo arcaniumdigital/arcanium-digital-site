@@ -1,0 +1,11 @@
+{
+  "name": "expired timestamp",
+  "request_headers": {
+    "X-Automation-Timestamp": "2020-01-01T00:00:00.000Z",
+    "X-Automation-Nonce": "fixture-expired-timestamp",
+    "X-Automation-Signature": "sha256:fixture-signature"
+  },
+  "expected_status": 401,
+  "expected_error": "TIMESTAMP_OUT_OF_WINDOW",
+  "forbidden_side_effects": ["d1_write", "queue_send", "make_webhook"]
+}

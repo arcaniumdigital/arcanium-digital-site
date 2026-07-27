@@ -17,6 +17,27 @@
       }
     },
     {
+      "id": 7,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}-verify",
+        "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"{{1.event_id}}\",\"idempotency_key\":\"{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A11\",\"event_type\":\"analytics.provider_health.requested\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"info\",\"payload\":{\"mode\":\"provider_health_read_only\",\"safe_test\":true,\"raw_rows_allowed\":false,\"report_send_allowed\":false,\"communications_enabled\":false}}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "/v1/platform/events/verify",
+        "correlationId": "{{1.correlation_id}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 150,
+          "y": 0
+        }
+      }
+    },
+    {
       "id": 2,
       "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
       "version": 1,
@@ -27,7 +48,8 @@
         "nonce": "{{ifempty(1.nonce; executionId)}}",
         "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"{{1.event_id}}\",\"idempotency_key\":\"{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A11\",\"event_type\":\"analytics.provider_health.requested\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"info\",\"payload\":{\"mode\":\"provider_health_read_only\",\"safe_test\":true,\"raw_rows_allowed\":false,\"report_send_allowed\":false,\"communications_enabled\":false}}",
         "timestamp": "{{1.occurred_at}}",
-        "endpointPath": "/v1/events"
+        "endpointPath": "/v1/events",
+        "correlationId": "{{1.correlation_id}}"
       },
       "metadata": {
         "designer": {

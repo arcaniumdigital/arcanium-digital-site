@@ -4,6 +4,7 @@ import {
   constantTimeEqual,
   validateAccessProxyCandidate,
   validateEventCandidate,
+  validatePayloadTenantReferences,
 } from "../src/index";
 import { validateClientConfigCandidate } from "../../../packages/contracts/src/client-config";
 import {
@@ -46,6 +47,7 @@ describe("event contract", () => {
     [{ ...validEvent, severity: "debug" }, "INVALID_SEVERITY"],
     [{ ...validEvent, occurred_at: "not-a-date" }, "INVALID_OCCURRED_AT"],
     [{ ...validEvent, payload: [] }, "INVALID_PAYLOAD"],
+    [{ ...validEvent, payload: { nested: { referenced_client_id: "TEST-0002" } } }, "CROSS_CLIENT_REFERENCE"],
   ])("rejects invalid event with %s", (event, code) => {
     expect(validateEventCandidate(event, "test", ["TEST-0001"])).toMatchObject({ ok: false, code });
   });
@@ -58,6 +60,13 @@ describe("event contract", () => {
         ["TEST-0001"],
       )).toMatchObject({ ok: true });
     }
+  });
+
+  it("accepts same-client references and rejects cross-client references at any nesting depth", () => {
+    expect(validatePayloadTenantReferences({ client_id: "TEST-0001" }, "TEST-0001")).toBeNull();
+    expect(validatePayloadTenantReferences({
+      records: [{ owner_client_id: "TEST-0001" }, { target_client_id: "TEST-0002" }],
+    }, "TEST-0001")).toBe("CROSS_CLIENT_REFERENCE");
   });
 });
 

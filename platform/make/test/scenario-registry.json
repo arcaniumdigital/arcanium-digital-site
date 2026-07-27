@@ -5,26 +5,200 @@
   "platform_core_connection_id": 9288408,
   "all_platform_scenarios_inactive_after_test": true,
   "scenarios": [
-    {"automation_id":"A1","scenario_id":6665241,"hook_id":3448383,"mode":"client_config_only"},
-    {"automation_id":"A2","scenario_id":6665242,"hook_id":3448422,"mode":"signed_worker_queue_plus_generic_action_lifecycle","schedule":"immediate","active":false,"dispatch_enabled":false,"operator_iterator_verified":true,"cross_store_same_run_verified":true,"tenant_isolation_verified":true,"source_snapshot_rollback_verified":true,"operator_action_resolution_verified":true,"last_isolation_run_id":"a2-isolation-1785078078539","last_rollback_run_id":"a2-rollback-1785078447830","last_resolution_run_id":"a2-resolution-1785080485164","last_resolution_id":"resolution:a2-resolution-1785080485164","last_successful_execution_id":"d84427f6494542ca82d7a9db8efe226f","last_execution_status":"success","last_failed_fixture_run_id":"a2-operator-1785060436971"},
-    {"automation_id":"A3","scenario_id":6665243,"hook_id":3448423,"mode":"signed_ingress_plus_sanity_health_result","schedule":"immediate","last_test_result_id":"result:a3-sanity-1785055340442"},
-    {"automation_id":"A4","scenario_id":6665244,"hook_id":3448424,"mode":"signed_ingress_plus_gbp_health_result","schedule":"immediate","last_test_result_id":"result:a4-gbp-1785052729231"},
-    {"automation_id":"A5","scenario_id":6665246,"hook_id":3448425,"mode":"signed_ingress_plus_provider_health_result","schedule":"immediate","last_test_result_id":"result:a5-provider-1785052234506"},
-    {"automation_id":"A6","scenario_id":6665247,"hook_id":3448404,"mode":"signed_ingress_plus_sentry_health_result","schedule":"immediate","last_test_result_id":"result:a6-sentry-1785053136505"},
-    {"automation_id":"A7","scenario_id":6674990,"hook_id":3448426,"mode":"signed_ingress_plus_dataforseo_health_result","schedule":"immediate","last_test_result_id":"result:a7-provider-1785053957681"},
-    {"automation_id":"A8","scenario_id":6665248,"hook_id":3448407,"mode":"signed_ingress_plus_clicksend_history_result","schedule":"immediate","last_test_result_id":"result:a8-clicksend-1785054599487"},
-    {"automation_id":"A9","scenario_id":6665249,"hook_id":3448427,"mode":"signed_ingress_plus_sanity_health_result","schedule":"immediate","last_test_result_id":"result:a9-sanity-1785055010475"},
-    {"automation_id":"A10","scenario_id":6665251,"hook_id":3448428,"mode":"signed_ingress_plus_dataforseo_health_result","schedule":"immediate","last_test_result_id":"result:a10-provider-1785054097475"},
-    {"automation_id":"A11","scenario_id":6665253,"hook_id":3448429,"mode":"signed_ingress_plus_analytics_health_result","schedule":"immediate","last_test_result_id":"result:a11-analytics-1785052443686"},
-    {"automation_id":"A12","scenario_id":6665254,"hook_id":3448431,"mode":"signed_ops_incident_action_resolution","schedule":"immediate","active":false,"dispatch_enabled":false,"provider_workflow_verified":true,"dispatch_rollback_verified":true,"last_proof_id":"a12-control-1785082830242","last_test_result_id":"result:ops-incident-1785082830242","last_resolution_id":"resolution:ops-resolved-1785082830242","last_successful_execution_id":"6529a2c2960444a2bac7c427df48f865","last_execution_status":"warning_webhook_response_only"},
-    {"automation_id":"A13","scenario_id":6691548,"hook_id":3445306,"mode":"domain_ingress"},
-    {"automation_id":"A14","scenario_id":6691550,"hook_id":3445307,"mode":"domain_ingress"},
-    {"automation_id":"A15","scenario_id":6691553,"hook_id":3445308,"mode":"domain_ingress"}
+    {
+      "automation_id": "A1",
+      "scenario_id": 6665241,
+      "hook_id": 3448383,
+      "mode": "client_config_only"
+    },
+    {
+      "automation_id": "A2",
+      "scenario_id": 6665242,
+      "hook_id": 3448422,
+      "mode": "signed_worker_queue_plus_generic_action_lifecycle",
+      "schedule": "immediate",
+      "active": false,
+      "dispatch_enabled": false,
+      "operator_iterator_verified": true,
+      "cross_store_same_run_verified": true,
+      "tenant_isolation_verified": true,
+      "source_snapshot_rollback_verified": true,
+      "operator_action_resolution_verified": true,
+      "last_isolation_run_id": "a2-isolation-1785078078539",
+      "last_rollback_run_id": "a2-rollback-1785078447830",
+      "last_resolution_run_id": "a2-resolution-1785080485164",
+      "last_resolution_id": "resolution:a2-resolution-1785080485164",
+      "last_successful_execution_id": "d84427f6494542ca82d7a9db8efe226f",
+      "last_execution_status": "success",
+      "last_failed_fixture_run_id": "a2-operator-1785060436971"
+    },
+    {
+      "automation_id": "A3",
+      "scenario_id": 6665243,
+      "hook_id": 3448423,
+      "mode": "signed_ingress_plus_sanity_health_result",
+      "schedule": "immediate",
+      "last_test_result_id": "result:a3-sanity-1785055340442",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 6
+    },
+    {
+      "automation_id": "A4",
+      "scenario_id": 6665244,
+      "hook_id": 3448424,
+      "mode": "signed_ingress_plus_gbp_health_result",
+      "schedule": "immediate",
+      "last_test_result_id": "result:a4-gbp-1785052729231",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 6
+    },
+    {
+      "automation_id": "A5",
+      "scenario_id": 6665246,
+      "hook_id": 3448425,
+      "mode": "signed_verification_plus_ingress_plus_provider_health_result",
+      "schedule": "immediate",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 8,
+      "last_test_result_id": "result:a5-provider-1785052234506"
+    },
+    {
+      "automation_id": "A6",
+      "scenario_id": 6665247,
+      "hook_id": 3448404,
+      "mode": "signed_ingress_plus_sentry_health_result",
+      "schedule": "immediate",
+      "last_test_result_id": "result:a6-sentry-1785053136505",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 6
+    },
+    {
+      "automation_id": "A7",
+      "scenario_id": 6674990,
+      "hook_id": 3448426,
+      "mode": "signed_ingress_plus_dataforseo_health_result",
+      "schedule": "immediate",
+      "last_test_result_id": "result:a7-provider-1785053957681",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 6
+    },
+    {
+      "automation_id": "A8",
+      "scenario_id": 6665248,
+      "hook_id": 3448407,
+      "mode": "signed_ingress_plus_clicksend_history_result",
+      "schedule": "immediate",
+      "last_test_result_id": "result:a8-clicksend-1785054599487",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 6
+    },
+    {
+      "automation_id": "A9",
+      "scenario_id": 6665249,
+      "hook_id": 3448427,
+      "mode": "signed_ingress_plus_sanity_health_result",
+      "schedule": "immediate",
+      "last_test_result_id": "result:a9-sanity-1785055010475",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 6
+    },
+    {
+      "automation_id": "A10",
+      "scenario_id": 6665251,
+      "hook_id": 3448428,
+      "mode": "signed_ingress_plus_dataforseo_health_result",
+      "schedule": "immediate",
+      "last_test_result_id": "result:a10-provider-1785054097475",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 6
+    },
+    {
+      "automation_id": "A11",
+      "scenario_id": 6665253,
+      "hook_id": 3448429,
+      "mode": "signed_ingress_plus_analytics_health_result",
+      "schedule": "immediate",
+      "last_test_result_id": "result:a11-analytics-1785052443686",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 7
+    },
+    {
+      "automation_id": "A12",
+      "scenario_id": 6665254,
+      "hook_id": 3448431,
+      "mode": "signed_ops_incident_action_resolution",
+      "schedule": "immediate",
+      "active": false,
+      "dispatch_enabled": false,
+      "provider_workflow_verified": true,
+      "dispatch_rollback_verified": true,
+      "last_proof_id": "a12-control-1785082830242",
+      "last_test_result_id": "result:ops-incident-1785082830242",
+      "last_resolution_id": "resolution:ops-resolved-1785082830242",
+      "last_successful_execution_id": "6529a2c2960444a2bac7c427df48f865",
+      "last_execution_status": "warning_webhook_response_only"
+    },
+    {
+      "automation_id": "A13",
+      "scenario_id": 6691548,
+      "hook_id": 3445306,
+      "mode": "domain_ingress",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 6
+    },
+    {
+      "automation_id": "A14",
+      "scenario_id": 6691550,
+      "hook_id": 3445307,
+      "mode": "domain_ingress",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 6
+    },
+    {
+      "automation_id": "A15",
+      "scenario_id": 6691553,
+      "hook_id": 3445308,
+      "mode": "domain_ingress",
+      "active": false,
+      "verification_preflight_wired": true,
+      "verification_module_id": 6
+    }
   ],
   "scheduled_companions": [
-    {"automation_id":"A13","scenario_id":6691549,"schedule":"daily 09:00","last_test_execution_id":"9ade4dcb49d541f3bf0265dada9ef031"},
-    {"automation_id":"A14","scenario_id":6691551,"schedule":"daily 09:00","last_test_execution_id":"d0dcce9a57e34ffd8a15e042bc972609"},
-    {"automation_id":"A15","scenario_id":6691554,"schedule":"monthly day 1 09:00","last_test_execution_id":"9eadc6f0ceb14d1aad7f3100ef3fdb37"},
-    {"automation_id":"A15","scenario_id":6691555,"schedule":"weekly Monday 09:00","last_test_execution_id":"fa991c9b80414cc5ad963f2156f11065"}
+    {
+      "automation_id": "A13",
+      "scenario_id": 6691549,
+      "schedule": "daily 09:00",
+      "last_test_execution_id": "9ade4dcb49d541f3bf0265dada9ef031"
+    },
+    {
+      "automation_id": "A14",
+      "scenario_id": 6691551,
+      "schedule": "daily 09:00",
+      "last_test_execution_id": "d0dcce9a57e34ffd8a15e042bc972609"
+    },
+    {
+      "automation_id": "A15",
+      "scenario_id": 6691554,
+      "schedule": "monthly day 1 09:00",
+      "last_test_execution_id": "9eadc6f0ceb14d1aad7f3100ef3fdb37"
+    },
+    {
+      "automation_id": "A15",
+      "scenario_id": 6691555,
+      "schedule": "weekly Monday 09:00",
+      "last_test_execution_id": "fa991c9b80414cc5ad963f2156f11065"
+    }
   ]
 }

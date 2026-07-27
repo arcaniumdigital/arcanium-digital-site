@@ -7,7 +7,7 @@
 - A13-A15 scheduled companions: converted from unauthenticated placeholders to
   signed Platform Core events, successfully exercised, and inactive.
 - Cloudflare Worker: `arcanium-platform-core-test`, version
-  `071faa42-313f-4782-916d-c9263b4f34f4`.
+  `7d8cefff-c2b6-4d15-9e00-5f1f5756e969`.
 - A1 access-check Worker: `arcanium-access-checks-test`, source deployment
   `0d0e973a-f81f-4dcf-95d3-f359bd22a3a8`, active through secret-rotation
   version `e882203c-2aab-4f90-80e1-74e1526a9a11`.
@@ -35,7 +35,10 @@ performed. Every scenario exercised by this phase was returned to inactive.
 ## What is proven
 
 1. Exact-body HMAC verification, timestamp windows, nonce replay prevention,
-   payload validation, client allowlisting, and scoped idempotency.
+   payload validation, client allowlisting, and scoped idempotency. The shared
+   `/v1/platform/events/verify` TEST route additionally requires a matching
+   correlation header, rejects nested cross-client references, and stores only
+   verification identifiers in D1.
 2. Signed Make-to-Cloudflare ingress for every automation identifier A1-A15.
 3. Durable domain writes for A1, A13, A14, and A15, plus a shared
    A1-A15 result/action/approval/reconciliation contract.

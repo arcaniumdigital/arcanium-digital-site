@@ -13,22 +13,31 @@ to inactive. No production action was enabled.
 - A4 Worker: `arcanium-gbp-control-test`, current version
   `7296e820-88b1-4e88-9368-e9152a025332`; its read-only health proof
   confirmed TEST environment and `gbp_mutation_enabled=false`
-- Current version: `cbb46b0e-cad1-4b4d-95f9-2f15d127da9e`
+- Current version: `7d8cefff-c2b6-4d15-9e00-5f1f5756e969`
 - Health version: `0.2.0`
 - D1 migrations: `006_platform_core_registry.sql`,
   `007_queue_delivery_audit.sql`, and
   `008_automation_results_and_tasks.sql`,
   `010_platform_action_resolutions.sql`, and
-  `012_a12_ops_control.sql`; A2 listing D1 migrations
+  `012_a12_ops_control.sql`, and
+  `015_event_verification_registry.sql`; A2 listing D1 migrations
   `009_listing_control.sql` and `011_listing_action_resolutions.sql`
 - Production action flags: all `false`
 - Public send, content publish, GBP mutation, outreach send, and dangerous
   replay flags: all `false`
 - Dedicated A12 ops HMAC intake: configured; Make A12 dispatch: `false`
 - TypeScript: passed
-- Relevant Worker Vitest suites: 64/64 passed
+- Repository-wide control suites: 141/141 passed
 - Wrangler bundle/deployment: passed
 - Next.js production build: passed
+
+The shared event-verification foundation was deployed to TEST on 2026-07-27.
+The Worker advertises `A1-A15_EVENT_VERIFY`; an unauthenticated live negative
+smoke test returned `401 TIMESTAMP_HEADER_REQUIRED`, proving fail-closed route
+availability without creating a verification. Local endpoint tests prove HMAC
+verification, correlation matching, scoped idempotency, nested cross-client
+rejection, and oversized-body rejection. This route is not yet wired into
+every Make scenario blueprint.
 
 ## Make-to-Cloudflare roundtrips
 

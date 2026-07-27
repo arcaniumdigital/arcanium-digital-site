@@ -14,5 +14,8 @@
     "execution_id": "ccaef98beedb4a33943f512583196c5a",
     "status": "success",
     "d1_record_id": "entry-make-a15-d2e859387bd8471c9ae1948034c3887c"
-  }
+  },
+  "verification_endpoint": "/v1/platform/events/verify",
+  "verification_module_id": 6,
+  "correlation_header_mapping": "{{1.correlation_id}}"
 }

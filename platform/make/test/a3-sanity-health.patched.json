@@ -17,6 +17,27 @@
       }
     },
     {
+      "id": 6,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}-verify",
+        "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"event:{{1.publication_id}}\",\"idempotency_key\":\"event:{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A3\",\"event_type\":\"publication.validation.completed\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"info\",\"payload\":{\"publication_id\":\"{{1.publication_id}}\",\"document_id\":\"{{1.document_id}}\",\"revision_id\":\"{{1.revision_id}}\",\"action\":\"{{1.action}}\",\"url\":\"{{1.url}}\",\"status\":\"{{1.status}}\",\"deterministic_passed\":\"{{1.deterministic_passed}}\",\"live_verified\":\"{{1.live_verified}}\",\"operator_action_count\":\"{{1.operator_action_count}}\",\"overflow_action_count\":\"{{1.overflow_action_count}}\",\"mode\":\"publication_result_compact\",\"safe_test\":true,\"document_body_in_make\":false,\"external_actions_enabled\":false,\"communications_enabled\":false,\"content_publish_enabled\":false,\"indexing_enabled\":false}}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "/v1/platform/events/verify",
+        "correlationId": "{{1.correlation_id}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 150,
+          "y": 0
+        }
+      }
+    },
+    {
       "id": 2,
       "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
       "version": 1,
@@ -27,7 +48,8 @@
         "nonce": "{{ifempty(1.nonce; executionId)}}",
         "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"event:{{1.publication_id}}\",\"idempotency_key\":\"event:{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A3\",\"event_type\":\"publication.validation.completed\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"info\",\"payload\":{\"publication_id\":\"{{1.publication_id}}\",\"document_id\":\"{{1.document_id}}\",\"revision_id\":\"{{1.revision_id}}\",\"action\":\"{{1.action}}\",\"url\":\"{{1.url}}\",\"status\":\"{{1.status}}\",\"deterministic_passed\":\"{{1.deterministic_passed}}\",\"live_verified\":\"{{1.live_verified}}\",\"operator_action_count\":\"{{1.operator_action_count}}\",\"overflow_action_count\":\"{{1.overflow_action_count}}\",\"mode\":\"publication_result_compact\",\"safe_test\":true,\"document_body_in_make\":false,\"external_actions_enabled\":false,\"communications_enabled\":false,\"content_publish_enabled\":false,\"indexing_enabled\":false}}",
         "timestamp": "{{1.occurred_at}}",
-        "endpointPath": "/v1/events"
+        "endpointPath": "/v1/events",
+        "correlationId": "{{1.correlation_id}}"
       },
       "metadata": {
         "designer": {

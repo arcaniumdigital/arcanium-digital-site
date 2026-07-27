@@ -26,16 +26,20 @@ jobs:
         with:
           node-version: 24
           cache: npm
-          cache-dependency-path: platform/apps/platform-core/package-lock.json
+          cache-dependency-path: |
+            package-lock.json
+            platform/apps/platform-core/package-lock.json
+            platform/apps/listing-control/package-lock.json
+            platform/apps/access-checks/package-lock.json
+            platform/apps/publication-control/package-lock.json
+            platform/packages/contracts/package-lock.json
       - run: npm ci
-        working-directory: platform/apps/platform-core
-      - run: npm run check
-        working-directory: platform/apps/platform-core
+      - run: npm ci --prefix platform/apps/platform-core
+      - run: npm ci --prefix platform/apps/listing-control
+      - run: npm ci --prefix platform/apps/access-checks
+      - run: npm ci --prefix platform/apps/publication-control
+      - run: npm ci --prefix platform/packages/contracts
+      - run: npm run lint
+      - run: npm run typecheck
       - run: npm test
-        working-directory: platform/apps/platform-core
-      - run: npm run check:control-foundations
-      - run: npm run test:control-foundations
-      - run: npm ci
-        working-directory: platform/packages/contracts
-      - run: npm run check
-        working-directory: platform/packages/contracts
+      - run: npm run build

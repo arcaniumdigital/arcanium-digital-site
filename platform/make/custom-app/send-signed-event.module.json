@@ -1,0 +1,46 @@
+{
+  "app": "app#arcaniumplatformcore-f8xrap",
+  "app_version": 1,
+  "module": "sendSignedEvent",
+  "environment": "test",
+  "connection_id": 9288408,
+  "communication": {
+    "url": "{{parameters.endpointPath}}",
+    "method": "POST",
+    "type": "text",
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Automation-Timestamp": "{{parameters.timestamp}}",
+      "X-Automation-Nonce": "{{ifempty(parameters.nonce, executionId)}}",
+      "X-Automation-Signature": "{{sha256(parameters.timestamp + '.' + ifempty(parameters.nonce, executionId) + '.' + parameters.eventBody, 'hex', connection.hmacSecret)}}",
+      "X-Correlation-ID": "{{parameters.correlationId}}"
+    },
+    "body": "{{parameters.eventBody}}",
+    "log": {
+      "sanitize": [
+        "request.headers.X-Automation-Signature",
+        "request.body"
+      ]
+    }
+  },
+  "endpoint_paths": [
+    "/v1/platform/events/verify",
+    "/v1/events",
+    "/v1/a13/projects",
+    "/v1/a14/experiments",
+    "/v1/a15/cost-imports",
+    "/v1/results",
+    "/v1/action-resolutions",
+    "/v1/ops/events"
+  ],
+  "mappable_parameters": [
+    "endpointPath",
+    "eventBody",
+    "timestamp",
+    "nonce",
+    "correlationId"
+  ],
+  "secret_material_committed": false,
+  "verified_in_make": true,
+  "scenario_activation_required_for_live_signed_smoke": true
+}

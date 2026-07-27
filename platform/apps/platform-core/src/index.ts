@@ -87,6 +87,34 @@ const encode = (value: string) => new TextEncoder().encode(value);
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
+const tenantReferenceKeys = new Set([
+  "client_id",
+  "owner_client_id",
+  "referenced_client_id",
+  "target_client_id",
+]);
+
+export function validatePayloadTenantReferences(payload: unknown, expectedClientId: string): string | null {
+  const pending: unknown[] = [payload];
+  let inspected = 0;
+  while (pending.length > 0) {
+    const current = pending.pop();
+    inspected += 1;
+    if (inspected > 1_000) return "PAYLOAD_STRUCTURE_TOO_COMPLEX";
+    if (Array.isArray(current)) {
+      pending.push(...current);
+    } else if (isRecord(current)) {
+      for (const [key, value] of Object.entries(current)) {
+        if (tenantReferenceKeys.has(key) && typeof value === "string" && value !== expectedClientId) {
+          return "CROSS_CLIENT_REFERENCE";
+        }
+        pending.push(value);
+      }
+    }
+  }
+  return null;
+}
+
 function hex(bytes: ArrayBuffer): string {
   return [...new Uint8Array(bytes)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
@@ -152,6 +180,10 @@ export function validateEventCandidate(
     return { ok: false, code: "EVENT_TYPE_TOO_LONG", status: 400 };
   }
   if (!isRecord(candidate.payload)) return { ok: false, code: "INVALID_PAYLOAD", status: 400 };
+  const tenantReferenceError = validatePayloadTenantReferences(candidate.payload, candidate.client_id as string);
+  if (tenantReferenceError) {
+    return { ok: false, code: tenantReferenceError, status: 403 };
+  }
   if (candidate.payload_ref !== undefined && candidate.payload_ref !== null && typeof candidate.payload_ref !== "string") {
     return { ok: false, code: "INVALID_PAYLOAD_REF", status: 400 };
   }
@@ -451,6 +483,78 @@ async function handleEvent(request: Request, env: Env): Promise<Response> {
     "INSERT OR IGNORE INTO a12_idempotency (key, client_id, automation_id, created_at, response_json) VALUES (?, ?, ?, ?, ?)",
   ).bind(event.idempotency_key, event.client_id, event.automation_id, now(), JSON.stringify(response)).run();
   return json(response, 202);
+}
+
+async function handleEventVerification(request: Request, env: Env): Promise<Response> {
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return failure("CONTENT_TYPE_REQUIRED", 415);
+  }
+  const raw = await request.text();
+  const maxBytes = Number(env.MAX_EVENT_BYTES);
+  if (!Number.isFinite(maxBytes) || maxBytes < 1) return failure("SERVER_CONFIGURATION_ERROR", 500);
+  if (encode(raw).byteLength > maxBytes) return failure("PAYLOAD_TOO_LARGE", 413);
+
+  const authFailure = await verifySignature(request, raw, env);
+  if (authFailure) return authFailure;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return failure("INVALID_JSON", 400);
+  }
+
+  const allowedClients = env.TEST_CLIENT_IDS.split(",").map((value) => value.trim()).filter(Boolean);
+  const validated = validateEventCandidate(parsed, env.ENVIRONMENT, allowedClients);
+  if (!validated.ok) return failure(validated.code, validated.status);
+  const event = validated.event;
+
+  const correlationId = request.headers.get("X-Correlation-ID");
+  if (!correlationId || correlationId !== event.correlation_id) {
+    return failure("CORRELATION_ID_MISMATCH", 400);
+  }
+
+  const previous = await env.PLATFORM_OPS_DB.prepare(
+    "SELECT event_id FROM platform_event_verifications WHERE environment = ? AND client_id = ? AND idempotency_key = ?",
+  ).bind(event.environment, event.client_id, event.idempotency_key).first<{ event_id: string }>();
+
+  if (previous) {
+    return json({
+      ok: true,
+      data: {
+        verified: true,
+        event_id: previous.event_id,
+        correlation_id: event.correlation_id,
+        client_id: event.client_id,
+        environment: event.environment,
+        deduplicated: true,
+      },
+    });
+  }
+
+  await env.PLATFORM_OPS_DB.prepare(
+    "INSERT INTO platform_event_verifications (environment, client_id, idempotency_key, event_id, correlation_id, event_type, verified_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+  ).bind(
+    event.environment,
+    event.client_id,
+    event.idempotency_key,
+    event.event_id,
+    event.correlation_id,
+    event.event_type,
+    now(),
+  ).run();
+
+  return json({
+    ok: true,
+    data: {
+      verified: true,
+      event_id: event.event_id,
+      correlation_id: event.correlation_id,
+      client_id: event.client_id,
+      environment: event.environment,
+      deduplicated: false,
+    },
+  });
 }
 
 async function persistAutomationResult(result: AutomationResult, env: Env): Promise<void> {
@@ -1052,6 +1156,7 @@ function health(env: Env): Response {
         "A1-A15_RECONCILIATION",
         "A1_ACCESS_CHECK",
         "A12_INCIDENT",
+        "A1-A15_EVENT_VERIFY",
         "A12_OPS_CONTROL",
         "A12_VERIFIED_RESOLUTION",
         "A12_RECOVERY_APPROVAL",
@@ -1085,6 +1190,9 @@ export default {
     }
     if (request.method === "POST" && url.pathname === "/v1/ops/events") {
       return handleOpsControlEvent(request, env);
+    }
+    if (request.method === "POST" && url.pathname === "/v1/platform/events/verify") {
+      return handleEventVerification(request, env);
     }
     if (request.method === "POST" && url.pathname === "/v1/a1/access-check/site") {
       return handleAccessCheckProxy(request, env, "/check/site");
