@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "arcanium-technical-control-test",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-25",
+  "workers_dev": true,
+  "vars": {
+    "ENVIRONMENT": "test",
+    "TEST_CLIENT_IDS": "TEST-0001,TEST-0002",
+    "MAX_GROUPED_ACTIONS": "20",
+    "ALLOW_PRODUCTION_ROLLBACK": "false"
+  },
+  "d1_databases": [{
+    "binding": "TECHNICAL_DB",
+    "database_name": "test-platform-ops-state",
+    "database_id": "3d76527c-ae04-4c65-a8e1-e5cfa79fede5"
+  }]
+}
