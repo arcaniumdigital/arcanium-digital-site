@@ -7,7 +7,10 @@
 - A13-A15 scheduled companions: converted from unauthenticated placeholders to
   signed Platform Core events, successfully exercised, and inactive.
 - Cloudflare Worker: `arcanium-platform-core-test`, version
-  `cbb46b0e-cad1-4b4d-95f9-2f15d127da9e`.
+  `071faa42-313f-4782-916d-c9263b4f34f4`.
+- A1 access-check Worker: `arcanium-access-checks-test`, source deployment
+  `0d0e973a-f81f-4dcf-95d3-f359bd22a3a8`, active through secret-rotation
+  version `e882203c-2aab-4f90-80e1-74e1526a9a11`.
 - A2 Cloudflare Worker: `arcanium-listing-control-test`, version
   `6e63f659-5117-49bc-8fa6-f62403f7fa79`, TEST-only with all
   public/destructive action flags false and Make dispatch held.
@@ -71,9 +74,16 @@ performed. Every scenario exercised by this phase was returned to inactive.
 16. A9 read-only Sanity dataset-health branch. The authenticated count query
     and signed result persisted a 1/1 balance without reading document bodies,
     creating drafts, mutating content, publishing, or communicating.
-17. A3 read-only Sanity publication-provider health branch. The five-module
-    Make run completed and persisted a 1/1 balanced result without preflight,
-    draft, mutation, publishing, indexing, or communication.
+17. A3 publication-control foundation: signed preflight with replay protection,
+    URL ownership and deterministic metadata/content/schema/approval checks;
+    short-lived revision-bound single-use tokens; safe live-page inspection;
+    durable URL, result, issue and capped operator-action records; and a
+    fail-closed Sanity server publish gate. Inactive Make execution
+    `16926beb61414053b9bf1e9c74eff7d3` ran all five compact modules, including
+    an authenticated Sanity read, and persisted
+    `result:pub-a3-make-proof-0001` with four operator actions. Publish,
+    unpublish, revalidation, indexing, LLM and public-send permissions remained
+    false.
 18. A2 listing-control foundation: JSON and REAXML normalization,
     last-known-good safeguards, lifecycle/material-event reconciliation,
     approval-gated sold/removal actions, D1 state, Durable Object locking,
@@ -107,17 +117,32 @@ performed. Every scenario exercised by this phase was returned to inactive.
     Platform Core persisted the matching resolution, superseded the operator
     action and approval request, and retained the original audit history.
     The A2 source rollback and cross-store action lifecycle are now verified.
+24. A1 control-workbook governance: all ten required Google Sheets tabs and
+    four typed Make data stores are provisioned. Inactive scenario `6665241`
+    is configured for every six hours and execution
+    `4bfc2656ebad4e089be2672601303666` completed 18 operations. It selected one
+    pending due task, enforced deduplication and the tenant lock, loaded client
+    and integration configuration, completed a separately signed access check
+    through the Platform Core service binding, wrote status/review/audit
+    evidence, sent one TEST operator summary, completed the queue record,
+    stored the config hash, and released the lock. Production activation,
+    public sends, provider mutation, and LLM use remain disabled.
 
 ## Remaining external blockers
 
 1. Sanity project metadata and its encrypted Make credential are configured.
-   A read-only query passed through Make execution
-   `ef7b094a11684dd593fd80aa134ec3fe`.
+   A read-only query passed inside A3 Make execution
+   `16926beb61414053b9bf1e9c74eff7d3`.
 2. Remaining substantive work in A2-A4, A6-A10, and A11 is not yet complete;
    their current TEST scenarios are truthful signed-ingress/health baselines
-   only. A3 now has verified Sanity publication-provider health, but its
-   preflight, canonical validation, approval, publishing, post-publication
-   verification, revalidation, and indexing routes remain incomplete.
+   or control foundations only. A3 now has verified preflight, canonical/
+   metadata/content/schema/approval validation, token binding, compact Make
+   result ingestion and a fail-closed Sanity publish adapter. It still needs
+   redeployment and repeat proof of the final atomic token-consumption
+   hardening, integration into the deployed Studio or trusted publication
+   service, automatic Worker-to-Make delivery, live post-publication proof,
+   revalidation and IndexNow test endpoints, cross-client provider isolation,
+   rollback, credential rotation and production approval.
    A2 now has its Worker-heavy reconciliation foundation and Make health
    branch. Its capped compact-action iterator and same-run Worker-to-Make queue
    path are verified in the inactive TEST scenario. Dispatch remains disabled
@@ -147,7 +172,10 @@ performed. Every scenario exercised by this phase was returned to inactive.
    approval-gated recovery contracts, and dispatch rollback. Automatic
    provider polling, live provider cost feeds, approved recovery execution,
    and quarterly-review branches remain incomplete.
-3. Cost caps, approval groups, reconciliation rules, and rollback methods are
+3. A1 still requires a second approved TEST client for cross-client workflow
+   proof and a rollback rehearsal against an approved disposable TEST
+   deployment.
+4. Cost caps, approval groups, reconciliation rules, and rollback methods are
    now declared for A1-A15. The result endpoint remotely enforces hard action
    ceilings, approval requirements, result balance, failure classification,
    and incident creation. Operator replay from the DLQ, scheduled

@@ -32,7 +32,7 @@ to inactive. No production action was enabled.
 | A1 | `cacd51df6fb445469f513711d978f3f5` | Client config `TEST-0001` / `1.0-phase2c` |
 | A2 | Worker run `a2-initial-1785058511884` plus controlled Make run at 2026-07-26 19:38 AEST | Three synthetic JSON listings normalized and persisted; queue delivery audited on attempt 1; Make result `result:a2-health-1785058717712` balanced 1/1 |
 | A2 | Worker run `a2-resolution-1785080485164` plus Make execution `d84427f6494542ca82d7a9db8efe226f` | Verified source replay superseded one stale sold-evidence action and its approval across both D1 stores; queue delivered on attempt 1; all five Make modules succeeded |
-| A3 | controlled webhook run at 2026-07-26 18:42 AEST | Result `result:a3-sanity-1785055340442`; Sanity publication-provider count read completed; balanced 1/1; no publish or indexing request |
+| A3 | Worker proof `pub-a3-make-proof-0001` plus Make execution `16926beb61414053b9bf1e9c74eff7d3` | Signed preflight/token/result path passed; Sanity read returned 200; four capped actions persisted; all mutation/public permissions false |
 | A4 | controlled webhook run at 2026-07-26 17:58 AEST | Result `result:a4-gbp-1785052729231`; Business Profile account read completed; balanced 1/1; no GBP mutation |
 | A5 | controlled webhook run at 2026-07-26 17:50 AEST | Result `result:a5-provider-1785052234506`; Search Console + GA4 + DataForSEO completed; balanced 3/3 |
 | A6 | controlled webhook run at 2026-07-26 18:05 AEST | Result `result:a6-sentry-1785053136505`; Sentry organisation read completed; balanced 1/1; no technical mutation |
@@ -113,14 +113,21 @@ workflow. The scenario was restored to immediate webhook scheduling and left
 inactive.
 
 The A3 TEST clone is now
-`TEST CLONE - A3 - Sanity Publication Health + Result`. Its five modules
-completed: webhook, signed event, authenticated Sanity production-dataset
-`count(*)` query, signed result, and webhook response. D1 recorded provider
-`sanity`, counts 1/1/0, output 1, and a balanced 1/1 reconciliation. No
-document body entered Make, and no preflight, draft, mutation, publication,
-indexing request, or communication occurred. This proves authenticated
-publication-provider health only, not the full publication/validation/indexing
-workflow. The scenario uses immediate webhook scheduling and remains inactive.
+`TEST CLONE - A3 - Publication Validation + Sanity Read + Result`. The
+publication-control Worker validates signed exact-body preflight requests,
+replay/client/environment/URL ownership, metadata, canonical, content, schema
+and approval evidence before issuing a short-lived revision-bound token. Its
+result endpoint persists compact publication state, validation issues and at
+most 15 deduplicated operator actions. Controlled proof
+`pub-a3-make-proof-0001` passed preflight, consumed its token once and stored
+four actions with zero overflow while both publish permissions remained false.
+Make execution `16926beb61414053b9bf1e9c74eff7d3` ran all five modules:
+webhook, signed Platform Core event, authenticated Sanity production-dataset
+count, signed compact result and webhook response. Make labels the execution
+as a warning only because queued manual data could not respond to the original
+listener; all five modules ran. The scenario remains inactive. No document
+body entered Make and no mutation, publication, revalidation, indexing, LLM
+or public communication occurred.
 
 The A7 TEST clone is now
 `TEST CLONE - A7 - GEO Provider Health + Result`. Its five modules completed:
@@ -297,8 +304,8 @@ events. All four jobs remain inactive.
 See `PROVIDER_VERIFICATION.md`. Resend, ClickSend, DataForSEO, Sentry, Google
 Sheets/Drive, Search Console, GA4, Business Profile, and Sanity completed
 controlled TEST calls. Sanity returned HTTP 200 in A3 execution
-`ef7b094a11684dd593fd80aa134ec3fe`; the full execution completed four
-operations successfully and the webhook returned HTTP 202.
+`16926beb61414053b9bf1e9c74eff7d3`; all five modules ran and the only warning
+was the unavailable response channel for queued manual webhook data.
 
 The A3 test exposed a missing legacy `nonce` mapping in the shared Make custom
 app. The app now uses the Make `executionId` as a nonce fallback, and the shared
@@ -308,8 +315,12 @@ invalid, or replayed signatures.
 
 Cost caps, approval groups, reconciliation rules, and rollback methods are
 declared for A1-A15. Shared result enforcement and durable reconciliation are
-now live in TEST. Operator replay from the DLQ, substantive A2-A4 and A6-A10
-provider branches (A4 and A6-A10 account/provider health are verified), the full A5 analysis branch,
+now live in TEST. A3 has a verified validation/control foundation but still
+needs redeployment/retest of the final atomic token-consumption hardening,
+deployed Sanity-gate integration, automatic dispatch, live-page proof,
+revalidation, IndexNow, isolation and rollback. Operator replay from the DLQ,
+the remaining substantive A2/A4 and A6-A10 provider branches (A4 and A6-A10
+account/provider health are verified), the full A5 analysis branch,
 the full A11 reporting branch, automatic A12 provider polling and live cost
 feeds, approved A12 recovery execution, quarterly review, provider-resource
 isolation, and rollback drills outside the verified A2 source and A12 dispatch

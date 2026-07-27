@@ -14,7 +14,7 @@ activated.
 | Business Profile | `6703614` | `bc935236084c4e7eaf3b5798e4a9ae17` | Passed; location `Arcanium Digital` visible |
 | DataForSEO | `6700523` | `58310b4ce56d497ab35103fd81a88a87` | Passed with a zero-cost account-data read |
 | Sentry | `6700539` | `cf112e2dba9c4427b34832565e209ba7` | Passed with an organisation-list read |
-| Sanity | `6665243` | `ef7b094a11684dd593fd80aa134ec3fe` | Passed; authenticated read-only `production` dataset query returned HTTP 200 |
+| Sanity | `6665243` | `16926beb61414053b9bf1e9c74eff7d3` | Passed; all five compact A3 modules ran and the authenticated read-only `production` dataset query returned HTTP 200 |
 
 ## Connected provider-health branches
 
@@ -58,10 +58,13 @@ activated.
   authenticated production-dataset `count(*)` query. It read no document
   bodies and performed no content mutation or publish action.
 - A3 TEST scenario `6665243` now reuses the same encrypted Sanity credential
-  in a five-module publication-provider health flow. Its controlled run
-  persisted `result:a3-sanity-1785055340442` with balanced 1/1
-  reconciliation. It performed only the dataset count query and explicitly
-  made no publish or indexing request.
+  in a five-module compact publication-result flow. Controlled Worker proof
+  `pub-a3-make-proof-0001` passed preflight and single-use token consumption,
+  then persisted `result:pub-a3-make-proof-0001` and four capped operator
+  actions. Make execution `16926beb61414053b9bf1e9c74eff7d3`
+  completed every module, including the read-only dataset count. Its warning
+  is limited to the unavailable webhook-response channel for queued manual
+  data. Publish, unpublish, revalidation and indexing remained disabled.
 
 ## Google ownership and scope
 
@@ -95,8 +98,9 @@ rather than automation-confirmed.
 
 The encrypted Make credential is installed as an HTTP API-key credential with
 the required `Bearer` prefix. A direct module check returned HTTP 200, followed
-by a successful four-operation A3 webhook execution through the shared HMAC
-signer, Cloudflare Worker, and Sanity read. The API token is intentionally
-absent from source control and scenario blueprints. Because the token was
-pasted into chat, rotate it in Sanity and update the encrypted Make key before
-production approval.
+by the five-module A3 execution through the shared signer, Platform Core and
+Sanity read. The separate publication-control Worker also passed signed
+preflight, token binding and compact result ingestion without authorising a
+publish. The API token is intentionally absent from source control and
+scenario blueprints. Because the token was pasted into chat, rotate it in
+Sanity and update the encrypted Make key before production approval.

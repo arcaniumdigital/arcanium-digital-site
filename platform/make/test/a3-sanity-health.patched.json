@@ -1,5 +1,5 @@
 {
-  "name": "TEST CLONE - A3 - Sanity Publication Health + Result",
+  "name": "TEST CLONE - A3 - Publication Validation + Sanity Read + Result",
   "flow": [
     {
       "id": 1,
@@ -25,7 +25,7 @@
       },
       "mapper": {
         "nonce": "{{ifempty(1.nonce; executionId)}}",
-        "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"{{1.event_id}}\",\"idempotency_key\":\"{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A3\",\"event_type\":\"publication.provider_health.requested\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"info\",\"payload\":{\"mode\":\"dataset_health_read_only\",\"safe_test\":true,\"external_actions_enabled\":false,\"communications_enabled\":false,\"content_publish_enabled\":false,\"indexing_enabled\":false}}",
+        "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"event:{{1.publication_id}}\",\"idempotency_key\":\"event:{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A3\",\"event_type\":\"publication.validation.completed\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"info\",\"payload\":{\"publication_id\":\"{{1.publication_id}}\",\"document_id\":\"{{1.document_id}}\",\"revision_id\":\"{{1.revision_id}}\",\"action\":\"{{1.action}}\",\"url\":\"{{1.url}}\",\"status\":\"{{1.status}}\",\"deterministic_passed\":\"{{1.deterministic_passed}}\",\"live_verified\":\"{{1.live_verified}}\",\"operator_action_count\":\"{{1.operator_action_count}}\",\"overflow_action_count\":\"{{1.overflow_action_count}}\",\"mode\":\"publication_result_compact\",\"safe_test\":true,\"document_body_in_make\":false,\"external_actions_enabled\":false,\"communications_enabled\":false,\"content_publish_enabled\":false,\"indexing_enabled\":false}}",
         "timestamp": "{{1.occurred_at}}",
         "endpointPath": "/v1/events"
       },
@@ -70,7 +70,7 @@
       },
       "mapper": {
         "nonce": "{{ifempty(1.nonce; executionId)}}-result",
-        "eventBody": "{\"schema_version\":\"1.0\",\"result_id\":\"result:{{1.event_id}}\",\"run_id\":\"run:{{1.event_id}}\",\"idempotency_key\":\"result:{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A3\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"provider\":\"sanity\",\"status\":\"completed\",\"started_at\":\"{{1.occurred_at}}\",\"completed_at\":\"{{1.occurred_at}}\",\"input_count\":1,\"accepted_count\":1,\"rejected_count\":0,\"output_count\":1,\"actions\":[],\"reconciliation\":{\"expected_count\":1,\"observed_count\":1,\"balanced\":true,\"method\":\"authenticated read-only Sanity production dataset count query completed\",\"evidence_ref\":\"make://scenario/6665243/execution/{{1.event_id}}\"},\"limitations\":[\"Publication-provider health and document count only\",\"No document body entered Make\",\"No preflight, draft, mutation, publish, indexing, or communication\"]}",
+        "eventBody": "{\"schema_version\":\"1.0\",\"result_id\":\"result:{{1.publication_id}}\",\"run_id\":\"run:{{1.publication_id}}\",\"idempotency_key\":\"result:{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A3\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"provider\":\"sanity+cloudflare-publication-control\",\"status\":\"completed\",\"started_at\":\"{{1.occurred_at}}\",\"completed_at\":\"{{1.occurred_at}}\",\"input_count\":1,\"accepted_count\":1,\"rejected_count\":0,\"output_count\":1,\"actions\":[],\"reconciliation\":{\"expected_count\":1,\"observed_count\":1,\"balanced\":true,\"method\":\"signed compact publication result persisted by Cloudflare; authenticated read-only Sanity dataset query completed; operator actions capped before Make\",\"evidence_ref\":\"{{1.evidence_ref}}\"},\"limitations\":[\"Operator action records remain authoritative in publication-control D1; Make receives counts and compact summaries only\",\"No document body entered Make\",\"Sanity publish and unpublish disabled\",\"IndexNow, Google Indexing API, website revalidation, LLM review, and public communication disabled\"]}",
         "timestamp": "{{1.occurred_at}}",
         "endpointPath": "/v1/results"
       },
@@ -87,7 +87,7 @@
       "version": 1,
       "parameters": {},
       "mapper": {
-        "body": "{\"status\":\"accepted\",\"environment\":\"test\",\"automation_id\":\"A3\",\"provider_health\":\"verified\",\"safe_test\":true,\"content_published\":false,\"indexing_requested\":false}",
+        "body": "{\"status\":\"accepted\",\"environment\":\"test\",\"automation_id\":\"A3\",\"publication_id\":\"{{1.publication_id}}\",\"validation_status\":\"{{1.status}}\",\"operator_action_count\":\"{{1.operator_action_count}}\",\"overflow_action_count\":\"{{1.overflow_action_count}}\",\"provider_health\":\"verified\",\"safe_test\":true,\"content_published\":false,\"content_unpublished\":false,\"indexing_requested\":false,\"website_revalidation_requested\":false,\"public_communication_sent\":false}",
         "status": 202
       },
       "metadata": {

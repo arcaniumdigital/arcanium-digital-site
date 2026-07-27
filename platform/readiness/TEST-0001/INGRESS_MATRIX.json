@@ -2,13 +2,13 @@
   "schema_version": "1.0",
   "client_id": "TEST-0001",
   "environment": "test",
-  "worker_version": "cbb46b0e-cad1-4b4d-95f9-2f15d127da9e",
+  "worker_version": "071faa42-313f-4782-916d-c9263b4f34f4",
   "all_scenarios_inactive_after_test": true,
   "external_actions_enabled": false,
   "results": [
-    {"automation_id":"A1","scenario_id":6665241,"execution_id":"cacd51df6fb445469f513711d978f3f5","event_id":"event-phase2-a1-d58dee3f43d544eebb0314ce60aad536","passed":true},
+    {"automation_id":"A1","scenario_id":6665241,"execution_id":"4bfc2656ebad4e089be2672601303666","event_id":"task-a1-full-20260727-001","passed":true},
     {"automation_id":"A2","scenario_id":6665242,"execution_id":"48a167f32b0447019e820785acbe117f","event_id":"event-phase2-a2-a18529644ae74f7f8a8e456f0ba7ae21","passed":true},
-    {"automation_id":"A3","scenario_id":6665243,"execution_id":"305743b3c8f746aca8075638a4b5f6c1","event_id":"event-phase2-a3-f6cade736b7b4e73856cf5301256f2f7","passed":true},
+    {"automation_id":"A3","scenario_id":6665243,"execution_id":"16926beb61414053b9bf1e9c74eff7d3","event_id":"event:pub-a3-make-proof-0001","passed":true,"status":"warning_webhook_response_only"},
     {"automation_id":"A4","scenario_id":6665244,"execution_id":"99c9661e002a493ab4798f7bd4997733","event_id":"event-phase2-a4-0d613f843c7140c2a581051aac0330a2","passed":true},
     {"automation_id":"A5","scenario_id":6665246,"execution_id":"15ef3557132a4b1b94f2116a3576409c","event_id":"event-phase2-a5-7d4b9bbdc7054b458eb6f12172f61301","passed":true},
     {"automation_id":"A6","scenario_id":6665247,"execution_id":"63886f1ae6de4426b16ec3f1e3d49163","event_id":"event-phase2-a6-950b5c1eacbb4a36bb1ff87fc807d52f","passed":true},
@@ -23,8 +23,8 @@
     {"automation_id":"A15","scenario_id":6691553,"execution_id":"6c6abc7a04954b96aa998b57167f0453","event_id":"event-phase2-a15-57271d97a8464a988c130e179fcc480c","passed":true}
   ],
   "limitations": [
-    "Ingress success is not provider workflow success",
-    "A2 same-run Worker, queue, Make iterator, action, and reconciliation path is verified; A12 signed incident-to-resolution control is verified; A3-A11 substantive provider branches remain incomplete",
+    "Ingress success is not provider workflow success; A1 now has separate full workflow evidence",
+    "A2 same-run Worker, queue, Make iterator, action, and reconciliation path is verified; A3 publication preflight, token, compact Make result, Sanity read and operator-action path is verified; A12 signed incident-to-resolution control is verified; A4-A11 substantive provider branches remain incomplete",
     "A13-A15 signed scheduled companions are tested but remain inactive",
     "A2 listing-state tenant isolation and allowlist rejection are proven; provider-resource isolation remains unproven for the other automations",
     "A2 source rollback and A12 dispatch rollback are verified; remaining rollback drills are unproven",

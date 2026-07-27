@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "arcanium-publication-control-test",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-25",
+  "workers_dev": true,
+  "vars": {
+    "ENVIRONMENT": "test",
+    "TEST_CLIENT_IDS": "TEST-0001,TEST-0002",
+    "ALLOWED_PUBLICATION_HOSTS": "arcaniumdigital.com,www.arcaniumdigital.com",
+    "MAX_REQUEST_BYTES": "65536",
+    "MAX_HTML_BYTES": "262144",
+    "MAX_TIMEOUT_MS": "10000",
+    "MAX_OPERATOR_ACTIONS": "15",
+    "PREFLIGHT_TTL_SECONDS": "600",
+    "REPLAY_WINDOW_SECONDS": "300",
+    "ALLOW_SANITY_PUBLISH": "false",
+    "ALLOW_SANITY_UNPUBLISH": "false",
+    "ALLOW_INDEXNOW_SUBMIT": "false",
+    "ALLOW_WEBSITE_REVALIDATION": "false",
+    "ALLOW_LLM_REVIEW": "false",
+    "ALLOW_PUBLIC_SEND": "false"
+  },
+  "d1_databases": [
+    {
+      "binding": "PUBLICATION_DB",
+      "database_name": "test-listing-content-state",
+      "database_id": "0422f453-e542-47dd-905e-51f5e451e427"
+    }
+  ]
+}
