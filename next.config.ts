@@ -1,12 +1,13 @@
 import { withSentryConfig } from "@sentry/nextjs";
 
-const nextConfig = {};
+const nextConfig = {
+  output: "export",
+};
 
 export default withSentryConfig(nextConfig, {
   org: "arcaniumdigital",
   project: "javascript-nextjs",
   silent: !process.env.CI,
-  tunnelRoute: "/monitoring",
   sourcemaps: {
     disable: !process.env.SENTRY_AUTH_TOKEN,
   },
