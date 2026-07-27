@@ -8,6 +8,11 @@ to inactive. No production action was enabled.
 - Worker: `arcanium-platform-core-test`
 - A2 Worker: `arcanium-listing-control-test`, current version
   `6e63f659-5117-49bc-8fa6-f62403f7fa79`
+- A3 Worker: `arcanium-publication-control-test`, current version
+  `7ddd399f-e8a2-417e-b0e3-2cb6da026bbf`
+- A4 Worker: `arcanium-gbp-control-test`, current version
+  `7296e820-88b1-4e88-9368-e9152a025332`; its read-only health proof
+  confirmed TEST environment and `gbp_mutation_enabled=false`
 - Current version: `cbb46b0e-cad1-4b4d-95f9-2f15d127da9e`
 - Health version: `0.2.0`
 - D1 migrations: `006_platform_core_registry.sql`,

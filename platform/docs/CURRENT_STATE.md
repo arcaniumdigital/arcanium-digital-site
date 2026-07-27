@@ -14,6 +14,12 @@
 - A2 Cloudflare Worker: `arcanium-listing-control-test`, version
   `6e63f659-5117-49bc-8fa6-f62403f7fa79`, TEST-only with all
   public/destructive action flags false and Make dispatch held.
+- A3 Cloudflare Worker: `arcanium-publication-control-test`, version
+  `7ddd399f-e8a2-417e-b0e3-2cb6da026bbf`, redeployed with all
+  publication, revalidation, indexing and public-send flags false.
+- A4 Cloudflare Worker: `arcanium-gbp-control-test`, version
+  `7296e820-88b1-4e88-9368-e9152a025332`; its health proof confirmed
+  `gbp_mutation_enabled=false`.
 - Cloudflare TEST D1 databases: platform operations, listing/content, and
   search/reporting.
 - Cloudflare TEST event queue and DLQ: producer, retry, acknowledgement, and
@@ -88,8 +94,8 @@ performed. Every scenario exercised by this phase was returned to inactive.
     template routing, sensitive/negative approval requirements, safe
     two-complete-scan deletion review, capped 25-item batches and
     revision/location-bound future publish permission. Its signed source Worker
-    accepts compact reconciliation and denies reply publication while
-    `ALLOW_GBP_MUTATION=false`; thirteen tests pass and nothing is deployed.
+    is deployed to TEST, accepts compact reconciliation and denies reply
+    publication while `ALLOW_GBP_MUTATION=false`; thirteen tests pass.
 19. A5 search-growth domain foundation: parameterised aggregate query shape,
     data-sufficiency limits, deterministic final action scoring/deduplication
     and five-action cap. Six tests pass; there is no Worker deployment, raw-row
@@ -147,9 +153,10 @@ performed. Every scenario exercised by this phase was returned to inactive.
    their current TEST scenarios are truthful signed-ingress/health baselines
    or control foundations only. A3 now has verified preflight, canonical/
    metadata/content/schema/approval validation, token binding, compact Make
-   result ingestion and a fail-closed Sanity publish adapter. It still needs
-   redeployment and repeat proof of the final atomic token-consumption
-   hardening, integration into the deployed Studio or trusted publication
+   result ingestion and a fail-closed Sanity publish adapter. The final source
+   was redeployed to TEST on 2026-07-27. It still needs repeat proof of the
+   final atomic token-consumption hardening, integration into the deployed
+   Studio or trusted publication
    service, automatic Worker-to-Make delivery, live post-publication proof,
    revalidation and IndexNow test endpoints, cross-client provider isolation,
    rollback, credential rotation and production approval.
