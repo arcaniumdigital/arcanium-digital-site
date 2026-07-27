@@ -121,3 +121,9 @@ export async function handleRequest(request: Request, env: Env): Promise<Respons
   if (url.pathname === "/v1/replies/authorise") return authoriseReply(request, env);
   return response({ ok: false, error: "NOT_FOUND" }, 404);
 }
+
+export default {
+  fetch(request: Request, env: Env): Promise<Response> {
+    return handleRequest(request, env);
+  },
+};
