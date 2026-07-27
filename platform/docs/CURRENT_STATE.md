@@ -87,8 +87,9 @@ performed. Every scenario exercised by this phase was returned to inactive.
 18. A4 GBP-control domain foundation: deterministic severity, rating-only
     template routing, sensitive/negative approval requirements, safe
     two-complete-scan deletion review, capped 25-item batches and
-    revision/location-bound future publish permission. Nine tests pass; no
-    Worker or mutation path is deployed and `ALLOW_GBP_MUTATION` remains false.
+    revision/location-bound future publish permission. Its signed source Worker
+    accepts compact reconciliation and denies reply publication while
+    `ALLOW_GBP_MUTATION=false`; twelve tests pass and nothing is deployed.
 19. A2 listing-control foundation: JSON and REAXML normalization,
     last-known-good safeguards, lifecycle/material-event reconciliation,
     approval-gated sold/removal actions, D1 state, Durable Object locking,

@@ -5,8 +5,9 @@ foundation already makes review severity deterministic, uses templates for
 rating-only reviews, requires approval for negative or sensitive replies,
 requires two complete scan misses before a deletion-review candidate, caps Make
 batches at 25 and binds any future publish to one approved location and source
-revision. Manual Q&A tasks are supported as operator actions; no discontinued
-Q&A API is used.
+revision. A signed Worker interface accepts compact reconciliation and reply
+authorisation requests, but returns denied while mutation is disabled. Manual
+Q&A tasks are supported as operator actions; no discontinued Q&A API is used.
 
 No GBP OAuth credential, review reply, post, profile mutation or public send is
 implemented or enabled by this foundation.
