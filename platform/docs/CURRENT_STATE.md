@@ -89,7 +89,7 @@ performed. Every scenario exercised by this phase was returned to inactive.
     two-complete-scan deletion review, capped 25-item batches and
     revision/location-bound future publish permission. Its signed source Worker
     accepts compact reconciliation and denies reply publication while
-    `ALLOW_GBP_MUTATION=false`; twelve tests pass and nothing is deployed.
+    `ALLOW_GBP_MUTATION=false`; thirteen tests pass and nothing is deployed.
 19. A2 listing-control foundation: JSON and REAXML normalization,
     last-known-good safeguards, lifecycle/material-event reconciliation,
     approval-gated sold/removal actions, D1 state, Durable Object locking,

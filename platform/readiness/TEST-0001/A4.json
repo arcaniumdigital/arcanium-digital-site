@@ -7,7 +7,7 @@
   "make_scenario_inactive": true,
   "gbp_provider_health_passed": true,
   "control_domain_implemented": true,
-  "control_domain_tests_passed": 12,
+  "control_domain_tests_passed": 13,
   "worker_source_implemented": true,
   "worker_deployed": false,
   "gbp_mutations_enabled": false,

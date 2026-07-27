@@ -1,5 +1,8 @@
 -- Forward-only TEST schema for A4 compact GBP review reconciliation.
 -- Stores no contact destinations, OAuth credentials or full public reply text.
+CREATE TABLE IF NOT EXISTS gbp_control_nonces (
+  nonce TEXT PRIMARY KEY, expires_at INTEGER NOT NULL
+);
 CREATE TABLE IF NOT EXISTS gbp_reviews (
   environment TEXT NOT NULL, client_id TEXT NOT NULL, location_id TEXT NOT NULL,
   review_id TEXT NOT NULL, revision_hash TEXT NOT NULL, rating INTEGER NOT NULL,
