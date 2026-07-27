@@ -1,1 +1,1 @@
-{"name":"@arcanium/evidence-control","private":true,"version":"0.1.0","type":"module","scripts":{"check":"tsc --project tsconfig.json","test":"vitest run"},"devDependencies":{"typescript":"^5.9.2","vitest":"^3.2.4"}}
+{"name":"@arcanium/evidence-control","private":true,"version":"0.1.0","type":"module","scripts":{"check":"tsc --project tsconfig.json","test":"vitest run","d1:migrate:test":"wrangler d1 execute test-platform-ops-state --remote --file ../../cloudflare/migrations/018_evidence_control.sql"},"devDependencies":{"typescript":"^5.9.2","vitest":"^3.2.4"}}
