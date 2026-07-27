@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "arcanium-gbp-control-test",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-25",
+  "workers_dev": true,
+  "vars": {
+    "ENVIRONMENT": "test",
+    "TEST_CLIENT_IDS": "TEST-0001,TEST-0002",
+    "MAX_REVIEW_ACTIONS": "25",
+    "ALLOW_GBP_MUTATION": "false"
+  },
+  "d1_databases": [{
+    "binding": "GBP_DB",
+    "database_name": "test-listing-content-state",
+    "database_id": "0422f453-e542-47dd-905e-51f5e451e427"
+  }]
+}

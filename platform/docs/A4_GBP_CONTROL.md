@@ -11,3 +11,8 @@ Q&A tasks are supported as operator actions; no discontinued Q&A API is used.
 
 No GBP OAuth credential, review reply, post, profile mutation or public send is
 implemented or enabled by this foundation.
+
+`wrangler.test.jsonc` is deployment-ready for the TEST D1 database and has no
+public mutation flag enabled. It still requires a newly created
+`A4_HMAC_SECRET`, a migration run, deployment, and a controlled inactive Make
+proof before it can be described as provider-workflow verified.
