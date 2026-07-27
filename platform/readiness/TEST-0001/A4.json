@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "client_id": "TEST-0001",
+  "automation_id": "A4",
+  "environment": "test",
+  "make_scenario_id": "6665244",
+  "make_scenario_inactive": true,
+  "gbp_provider_health_passed": true,
+  "control_domain_implemented": true,
+  "control_domain_tests_passed": 9,
+  "worker_deployed": false,
+  "gbp_mutations_enabled": false,
+  "llm_enabled": false,
+  "provider_workflow_verified": false,
+  "production_approved": false,
+  "blocking_reasons": [
+    "GBP-control Worker and TEST D1 migration are source-ready but not deployed",
+    "No GBP account/location IDs, Pub/Sub topic or approved profile baseline have been provided",
+    "Review pagination, OAuth adapter, reply/post endpoint and Make approval workflow remain unimplemented",
+    "All GBP mutation and public-send paths remain disabled",
+    "Cross-client isolation, rollback and production approval remain unproven"
+  ]
+}
