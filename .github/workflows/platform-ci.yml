@@ -33,6 +33,8 @@ jobs:
         working-directory: platform/apps/platform-core
       - run: npm test
         working-directory: platform/apps/platform-core
+      - run: npm run check:control-foundations
+      - run: npm run test:control-foundations
       - run: npm ci
         working-directory: platform/packages/contracts
       - run: npm run check

@@ -6,8 +6,10 @@
     "dev": "next dev --hostname localhost --port 3000",
     "build": "next build",
     "start": "next start",
-    "check:platform": "npm --prefix platform/apps/platform-core run check && npm --prefix platform/apps/listing-control run check && npm --prefix platform/apps/access-checks run check && npm --prefix platform/apps/publication-control run check && npm --prefix platform/packages/contracts run check",
-    "test:platform": "npm --prefix platform/apps/platform-core test && npm --prefix platform/apps/listing-control test && npm --prefix platform/apps/access-checks test && npm --prefix platform/apps/publication-control test",
+    "check:control-foundations": "node platform/scripts/verify-control-foundations.mjs check",
+    "test:control-foundations": "node platform/scripts/verify-control-foundations.mjs test",
+    "check:platform": "npm --prefix platform/apps/platform-core run check && npm --prefix platform/apps/listing-control run check && npm --prefix platform/apps/access-checks run check && npm --prefix platform/apps/publication-control run check && npm --prefix platform/packages/contracts run check && npm run check:control-foundations",
+    "test:platform": "npm --prefix platform/apps/platform-core test && npm --prefix platform/apps/listing-control test && npm --prefix platform/apps/access-checks test && npm --prefix platform/apps/publication-control test && npm run test:control-foundations",
     "verify": "npm run check:platform && npm run test:platform && npm run build"
   },
   "dependencies": {
