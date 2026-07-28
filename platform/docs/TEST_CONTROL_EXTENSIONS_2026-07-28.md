@@ -16,3 +16,5 @@ A6 remains a signed technical-control foundation and A1?A3/A12?A15 retain their 
 ## Tenant-isolation evidence
 
 A10 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733328 (hook 3461655), successful execution 54a7d1dc1a284ee98ef7d6f7c4185584. The TEST D1 aggregate returned one approval-required action for each of TEST-0001 and TEST-0002; no outreach, order, LLM, provider spend, or public action occurred.
+
+A9 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733430 (hook 3461710), successful execution 40a80eb237614f8c966172c30fedc971. The TEST D1 aggregate returned one evidence record and one approval-pending draft per tenant, with LLM calls and publication enabled both at zero.
