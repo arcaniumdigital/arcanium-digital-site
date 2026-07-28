@@ -38,3 +38,5 @@ A13 was independently exercised for TEST-0002 through inactive-by-default Make s
 A14 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733790 (hook 3461874), successful execution 1db956f25a87470f843c2e4c3fc27774. The dedicated TEST D1 aggregate returned separate draft experiment records for both tenants; experiment launch remained disabled.
 
 A15 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733816 (hook 3461886), successful execution a9528ac9e82241c78829efd9a2763e85. The TEST D1 aggregate returned separate unallocated cost entries for both tenants; pricing changes and external charges remained disabled.
+
+A3 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733889 (hook 3461912), successful execution 57cb35a16eb04bf0a68e5ea79ed94f30. The platform-core TEST D1 aggregate returned separate persisted A3 requests for both tenants; content publication remained disabled.
