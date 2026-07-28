@@ -13,3 +13,6 @@ This record supplements the earlier provider-health evidence. All scenarios belo
 | A11 | Make `a4946bdb32ef404f9ed8bb42121afec0` | Reconciled internal report state; no raw analytics or public delivery | KPI transformation, approval/destination workflow and report send |
 
 A6 remains a signed technical-control foundation and A1?A3/A12?A15 retain their earlier test evidence. Production activation remains false for every automation.
+## Tenant-isolation evidence
+
+A10 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733328 (hook 3461655), successful execution 54a7d1dc1a284ee98ef7d6f7c4185584. The TEST D1 aggregate returned one approval-required action for each of TEST-0001 and TEST-0002; no outreach, order, LLM, provider spend, or public action occurred.
