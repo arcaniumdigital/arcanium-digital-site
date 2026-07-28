@@ -1,0 +1,8 @@
+{
+  "name": "oversized payload",
+  "configured_max_bytes": 65536,
+  "request_body_bytes": 65537,
+  "expected_status": 413,
+  "expected_error": "PAYLOAD_TOO_LARGE",
+  "forbidden_side_effects": ["nonce_write", "d1_write", "queue_send", "make_webhook"]
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "arcanium-listing-control-test",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-25",
+  "workers_dev": true,
+  "vars": {
+    "ENVIRONMENT": "test",
+    "TEST_CLIENT_IDS": "TEST-0001,TEST-0002",
+    "MAX_FEED_BYTES": "1048576",
+    "REPLAY_WINDOW_SECONDS": "300",
+    "MAX_OPERATOR_ACTIONS": "20",
+    "MAX_COUNT_DROP_RATIO": "0.35",
+    "MAX_FEED_AGE_SECONDS": "3600",
+    "ALLOW_MAKE_DISPATCH": "false",
+    "ALLOW_PRODUCTION_DEPLOY": "false",
+    "ALLOW_PUBLIC_WRITE": "false",
+    "ALLOW_SOLD_PRICE_PUBLISH": "false",
+    "ALLOW_DESTRUCTIVE_URL_CHANGE": "false",
+    "ALLOW_INDEXNOW_SUBMIT": "false",
+    "ALLOW_WEBSITE_REVALIDATION": "false"
+  },
+  "d1_databases": [
+    {
+      "binding": "LISTING_DB",
+      "database_name": "test-listing-content-state",
+      "database_id": "0422f453-e542-47dd-905e-51f5e451e427"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "FEED_LOCKS",
+        "class_name": "ListingFeedLock"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "ListingFeedLock"
+      ]
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "LISTING_ACTIONS",
+        "queue": "test-listing-actions"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "test-listing-actions",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+        "max_retries": 3,
+        "dead_letter_queue": "test-listing-actions-dlq"
+      }
+    ]
+  }
+}

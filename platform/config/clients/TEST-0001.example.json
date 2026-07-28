@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0",
+  "environment": "test",
+  "clientId": "TEST-0001",
+  "displayName": "Arcanium synthetic test client",
+  "status": "onboarding",
+  "timezone": "Australia/Brisbane",
+  "currency": "AUD",
+  "entity": {
+    "agentName": "Synthetic Test Agent",
+    "agencyName": "Arcanium Digital",
+    "serviceAreas": ["Brisbane"],
+    "websiteOrigin": "https://arcaniumdigital.com",
+    "sameAs": []
+  },
+  "website": {
+    "githubRepository": "arcaniumdigital/arcanium-digital-site",
+    "vercelProjectId": "prj_rQZ08kFSW67BHAxJOMwOHtBQBnlj",
+    "canonicalDomain": "https://arcaniumdigital.com",
+    "previewOrigin": "https://arcanium-digital-site.vercel.app",
+    "sitemapUrl": "https://arcaniumdigital.com/sitemap.xml",
+    "robotsUrl": "https://arcaniumdigital.com/robots.txt"
+  },
+  "google": {
+    "searchConsoleProperty": "sc-domain:arcaniumdigital.com",
+    "ga4PropertyId": "523714543",
+    "businessProfileAccountId": "110699917417848284923",
+    "businessProfileLocationIds": ["14233252135907647359"]
+  },
+  "search": {
+    "targetTerms": [],
+    "targetLocations": ["Brisbane"],
+    "competitorDomains": [],
+    "pageOwnership": []
+  },
+  "listings": {
+    "sourceType": "manual"
+  },
+  "communications": {
+    "operatorEmails": [],
+    "approvalEmails": [],
+    "testEmails": [],
+    "testPhones": []
+  },
+  "automation": {
+    "enabled": {},
+    "schedules": {},
+    "actionCaps": {},
+    "providerBudgets": {}
+  },
+  "service": {},
+  "approvals": {
+    "websiteLaunchOwners": [],
+    "contentOwners": [],
+    "gbpOwners": [],
+    "outreachOwners": [],
+    "financialOwners": []
+  }
+}

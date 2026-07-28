@@ -1,0 +1,50 @@
+{
+  "max_compact_make_payload_bytes": 65536,
+  "max_make_actions_per_event": 25,
+  "max_provider_retries": 5,
+  "initial_retry_seconds": 30,
+  "max_retry_seconds": 3600,
+  "nonce_replay_window_seconds": 300,
+  "signed_action_default_expiry_hours": 72,
+  "signed_action_max_uses": 1,
+  "dataforseo": {
+    "enabled": false,
+    "max_tasks_per_client_per_run": 5,
+    "max_daily_cost_minor_per_client": 200,
+    "max_monthly_cost_minor_per_client": 1000,
+    "currency": "AUD"
+  },
+  "llm": {
+    "enabled": false,
+    "max_calls_per_job": 1,
+    "max_input_tokens": 12000,
+    "max_output_tokens": 2500,
+    "max_monthly_cost_minor_per_client": 500,
+    "currency": "AUD"
+  },
+  "clicksend": {
+    "enabled": false,
+    "max_messages_per_client_per_day": 3,
+    "max_messages_per_client_per_month": 20
+  },
+  "bigquery": {
+    "require_dry_run": true,
+    "max_bytes_billed_per_query": 10000000000
+  },
+  "a13": {
+    "max_source_urls_test": 500,
+    "max_redirect_actions_per_event": 20,
+    "allow_dns_change": false,
+    "allow_site_launch": false
+  },
+  "a14": {
+    "allow_experiment_launch": false,
+    "require_primary_metric": true,
+    "require_guardrails": true
+  },
+  "a15": {
+    "minimum_learning_cohort_size": 5,
+    "allow_pricing_change": false,
+    "require_source_reconciliation": true
+  }
+}

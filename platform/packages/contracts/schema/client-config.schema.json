@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arcaniumdigital.com/schemas/client-config-1.0.json",
+  "title": "Arcanium client configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "environment",
+    "clientId",
+    "displayName",
+    "status",
+    "timezone",
+    "currency",
+    "entity",
+    "website",
+    "google",
+    "search",
+    "listings",
+    "communications",
+    "automation",
+    "service",
+    "approvals"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "environment": { "enum": ["test", "production"] },
+    "clientId": { "type": "string", "pattern": "^(TEST|RE)-[A-Z0-9-]+$" },
+    "displayName": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["onboarding", "active", "paused", "offboarding"] },
+    "timezone": { "type": "string", "minLength": 1 },
+    "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agentName", "serviceAreas", "websiteOrigin", "sameAs"],
+      "properties": {
+        "agentName": { "type": "string", "minLength": 1 },
+        "agencyName": { "type": "string" },
+        "brokerageName": { "type": "string" },
+        "canonicalPhone": { "type": "string" },
+        "canonicalEmail": { "type": "string", "format": "email" },
+        "primaryAddress": { "type": "string" },
+        "serviceAreas": { "type": "array", "items": { "type": "string" } },
+        "websiteOrigin": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "sameAs": { "type": "array", "items": { "type": "string", "format": "uri" } }
+      }
+    },
+    "website": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonicalDomain"],
+      "properties": {
+        "githubRepository": { "type": "string" },
+        "vercelProjectId": { "type": "string" },
+        "sanityProjectId": { "type": "string" },
+        "sanityDataset": { "type": "string" },
+        "canonicalDomain": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "previewOrigin": { "type": "string", "format": "uri" },
+        "sitemapUrl": { "type": "string", "format": "uri" },
+        "robotsUrl": { "type": "string", "format": "uri" },
+        "templateVersion": { "type": "string" }
+      }
+    },
+    "google": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["businessProfileLocationIds"],
+      "properties": {
+        "searchConsoleProperty": { "type": "string" },
+        "ga4PropertyId": { "type": "string" },
+        "ga4BigQueryProject": { "type": "string" },
+        "ga4BigQueryDataset": { "type": "string" },
+        "searchConsoleBigQueryProject": { "type": "string" },
+        "searchConsoleBigQueryDataset": { "type": "string" },
+        "businessProfileAccountId": { "type": "string" },
+        "businessProfileLocationIds": { "type": "array", "items": { "type": "string" } },
+        "pubsubTopic": { "type": "string" }
+      }
+    },
+    "search": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["targetTerms", "targetLocations", "competitorDomains", "pageOwnership"],
+      "properties": {
+        "bingSiteId": { "type": "string" },
+        "indexNowKeyRef": { "type": "string" },
+        "targetTerms": { "type": "array", "items": { "type": "string" } },
+        "targetLocations": { "type": "array", "items": { "type": "string" } },
+        "competitorDomains": { "type": "array", "items": { "type": "string" } },
+        "pageOwnership": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["intent", "ownerUrl", "status"],
+            "properties": {
+              "intent": { "type": "string" },
+              "ownerUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+              "status": { "enum": ["active", "planned", "retired"] }
+            }
+          }
+        }
+      }
+    },
+    "listings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sourceType": { "enum": ["reaxml", "rea_export", "webhook", "external_crm", "manual"] },
+        "feedUrlRef": { "type": "string" },
+        "credentialRef": { "type": "string" },
+        "officeId": { "type": "string" },
+        "agentId": { "type": "string" }
+      }
+    },
+    "communications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operatorEmails", "approvalEmails", "testEmails", "testPhones"],
+      "properties": {
+        "operatorEmails": { "type": "array", "items": { "type": "string", "format": "email" } },
+        "approvalEmails": { "type": "array", "items": { "type": "string", "format": "email" } },
+        "testEmails": { "type": "array", "items": { "type": "string", "format": "email" } },
+        "testPhones": { "type": "array", "items": { "type": "string" } },
+        "resendSender": { "type": "string" },
+        "clickSendSender": { "type": "string" }
+      }
+    },
+    "automation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "schedules", "actionCaps", "providerBudgets"],
+      "properties": {
+        "enabled": { "$ref": "#/$defs/automationMapBoolean" },
+        "schedules": { "$ref": "#/$defs/automationMapString" },
+        "actionCaps": { "$ref": "#/$defs/automationMapInteger" },
+        "providerBudgets": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["currency"],
+            "properties": {
+              "dailyMinor": { "type": "integer", "minimum": 0 },
+              "monthlyMinor": { "type": "integer", "minimum": 0 },
+              "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+            }
+          }
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "packageId": { "type": "string" },
+        "packageVersion": { "type": "string" },
+        "entitlementRef": { "type": "string" },
+        "contractValueSource": { "type": "string" },
+        "renewalDate": { "type": "string", "format": "date" }
+      }
+    },
+    "externalCrm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "inboundWebhookRef": { "type": "string" },
+        "outboundWebhookRef": { "type": "string" }
+      }
+    },
+    "approvals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["websiteLaunchOwners", "contentOwners", "gbpOwners", "outreachOwners", "financialOwners"],
+      "properties": {
+        "websiteLaunchOwners": { "$ref": "#/$defs/stringArray" },
+        "contentOwners": { "$ref": "#/$defs/stringArray" },
+        "gbpOwners": { "$ref": "#/$defs/stringArray" },
+        "outreachOwners": { "$ref": "#/$defs/stringArray" },
+        "financialOwners": { "$ref": "#/$defs/stringArray" }
+      }
+    }
+  },
+  "$defs": {
+    "stringArray": { "type": "array", "items": { "type": "string" } },
+    "automationMapBoolean": {
+      "type": "object",
+      "propertyNames": { "pattern": "^A([1-9]|1[0-5])$" },
+      "additionalProperties": { "type": "boolean" }
+    },
+    "automationMapString": {
+      "type": "object",
+      "propertyNames": { "pattern": "^A([1-9]|1[0-5])$" },
+      "additionalProperties": { "type": "string" }
+    },
+    "automationMapInteger": {
+      "type": "object",
+      "propertyNames": { "pattern": "^A([1-9]|1[0-5])$" },
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    }
+  }
+}

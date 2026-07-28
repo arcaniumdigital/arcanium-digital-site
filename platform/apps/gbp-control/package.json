@@ -1,0 +1,17 @@
+{
+  "name": "@arcanium/gbp-control",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "check": "tsc --project tsconfig.json",
+    "test": "vitest run",
+    "deploy:test": "wrangler deploy --config wrangler.test.jsonc",
+    "d1:migrate:test": "wrangler d1 execute test-listing-content-state --remote --file ../../cloudflare/migrations/014_a4_gbp_control.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^4.30.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

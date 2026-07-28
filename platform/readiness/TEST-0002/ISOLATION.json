@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "client_id": "TEST-0002",
+  "environment": "test",
+  "worker_version": "4849fb52-0ce7-4971-b339-6c4de8cac2a1",
+  "scenario_id": 6665241,
+  "execution_id": "d60cd419a20f418d98b2b81658c4ac62",
+  "event_id": "event-isolation-5bc8b9eb574c4790820be9fc550b92b3",
+  "config_version": "1.0-isolation",
+  "canonical_domain": "https://test-0002.invalid",
+  "accepted": true,
+  "external_actions_enabled": false,
+  "negative_client": {
+    "client_id": "TEST-9999",
+    "event_id": "event-denied-dc87fe4a2ec244349105413c7fc7c68e",
+    "http_status": 400,
+    "event_audit_rows": 0,
+    "client_registry_rows": 0
+  }
+}

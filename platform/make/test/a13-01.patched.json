@@ -1,0 +1,21 @@
+{
+  "scenario_id": "6691548",
+  "active": false,
+  "connection_id": "9288408",
+  "worker_endpoint": "/v1/a13/projects",
+  "module_graph": [
+    "gateway:CustomWebHook",
+    "datastore:ExistRecord",
+    "datastore:AddRecord",
+    "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+    "gateway:WebhookRespond"
+  ],
+  "verification": {
+    "execution_id": "6c47fcde248f48378acc0ba0949e3fbb",
+    "status": "success",
+    "d1_record_id": "project-make-a13-f615228f84e64f1596b525d74522885a"
+  },
+  "verification_endpoint": "/v1/platform/events/verify",
+  "verification_module_id": 6,
+  "correlation_header_mapping": "{{1.correlation_id}}"
+}

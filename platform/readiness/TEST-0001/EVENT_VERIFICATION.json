@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "environment": "test",
+  "client_id": "TEST-0001",
+  "worker": "arcanium-platform-core-test",
+  "worker_version": "7d8cefff-c2b6-4d15-9e00-5f1f5756e969",
+  "route": "/v1/platform/events/verify",
+  "migration": "015_event_verification_registry.sql",
+  "migration_applied": true,
+  "local_tests": {
+    "platform_core": "55/55 passed",
+    "repository_controls": "141/141 passed",
+    "typecheck": "passed",
+    "build": "passed"
+  },
+  "live_smoke": {
+    "health_advertises_operation": true,
+    "negative_request_status": 401,
+    "negative_request_error": "TIMESTAMP_HEADER_REQUIRED"
+  },
+  "guarantees": [
+    "exact_body_hmac",
+    "timestamp_window",
+    "nonce_replay_rejection",
+    "correlation_header_match",
+    "environment_and_client_allowlist",
+    "nested_cross_client_reference_rejection",
+    "scoped_idempotency",
+    "identifier_only_persistence",
+    "payload_size_limit"
+  ],
+  "make_signer": {
+    "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+    "verification_endpoint_exposed": true,
+    "correlation_header_supported": true,
+    "configuration_schema_verified": true
+  },
+  "make_blueprints_all_wired": false,
+  "make_blueprints_wired_automation_ids": ["A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A13", "A14", "A15"],
+  "production_enabled": false,
+  "limitations": [
+    "Valid signed live smoke requires the existing encrypted Make connection and is not reproduced from local secrets",
+    "A1, A2 and A12 require separate verification adapters because their current envelopes are not compatible with the generic event contract",
+    "Wired scenarios cannot receive signed live proof while scenario activation remains prohibited"
+  ]
+}

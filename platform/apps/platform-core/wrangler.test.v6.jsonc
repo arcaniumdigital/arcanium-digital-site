@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "arcanium-platform-core-test",
+  "main": "src/index-v5.ts",
+  "compatibility_date": "2026-07-25",
+  "workers_dev": true,
+  "vars": {"ENVIRONMENT":"test","TEST_CLIENT_IDS":"TEST-0001","MAX_EVENT_BYTES":"65536","REPLAY_WINDOW_SECONDS":"300","ALLOW_SCENARIO_ACTIVATION":"false","ALLOW_PRODUCTION_DEPLOY":"false","ALLOW_SITE_LAUNCH":"false","ALLOW_EXPERIMENT_LAUNCH":"false","ALLOW_PRICING_CHANGE":"false"},
+  "d1_databases": [
+    {"binding":"PLATFORM_OPS_DB","database_name":"test-platform-ops-state","database_id":"3d76527c-ae04-4c65-a8e1-e5cfa79fede5"},
+    {"binding":"A13_DB","database_name":"test-listing-content-state","database_id":"0422f453-e542-47dd-905e-51f5e451e427"},
+    {"binding":"A14_DB","database_name":"test-search-reporting-state","database_id":"ab822b8f-9ad3-45ec-9143-4513aff0cf5b"},
+    {"binding":"A15_DB","database_name":"test-platform-ops-state","database_id":"3d76527c-ae04-4c65-a8e1-e5cfa79fede5"}
+  ],
+  "queues":{"producers":[{"binding":"PLATFORM_EVENTS","queue":"test-platform-events"}]}
+}

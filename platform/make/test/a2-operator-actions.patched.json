@@ -1,0 +1,112 @@
+{
+  "name": "TEST CLONE - A2 - Compact Operator Actions",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 3448422
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}",
+        "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"{{1.event_id}}\",\"idempotency_key\":\"{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A2\",\"event_type\":\"listing.sync_batch\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"{{1.severity}}\",\"payload\":{\"feed_id\":\"{{1.feed_id}}\",\"run_id\":\"{{1.run_id}}\",\"status\":\"{{1.summary.status}}\",\"input_count\":{{1.summary.input_count}},\"accepted_count\":{{1.summary.accepted_count}},\"operator_action_count\":{{length(1.operator_actions)}},\"resolved_action_count\":{{length(1.resolved_actions)}},\"signed_request_count\":{{length(1.make_requests)}},\"overflow_action_count\":{{1.overflow_action_count}},\"safe_test\":true,\"external_actions_enabled\":false}}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "/v1/events"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "builtin:BasicFeeder",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "array": "{{slice(1.make_requests; 0; 20)}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}-request-{{3.requestId}}",
+        "eventBody": "{{3.eventBody}}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "{{3.endpointPath}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "gateway:WebhookRespond",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "body": "{\"status\":\"accepted\",\"environment\":\"test\",\"automation_id\":\"A2\",\"run_id\":\"{{1.run_id}}\",\"request_id\":\"{{3.requestId}}\",\"signed_request_persisted\":true,\"external_actions\":false}",
+        "status": 202
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "eu1.make.com",
+    "notes": []
+  }
+}

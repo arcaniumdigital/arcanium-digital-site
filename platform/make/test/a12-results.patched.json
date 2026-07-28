@@ -1,0 +1,93 @@
+{
+  "name": "TEST CLONE - A12 - Operations Control Actions",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 3448431
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "builtin:BasicFeeder",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "array": "{{slice(1.make_requests; 0; 25)}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.event_id; executionId)}}-request-{{2.requestId}}",
+        "eventBody": "{{2.eventBody}}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "{{2.endpointPath}}",
+        "correlationId": "{{1.correlation_id}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "gateway:WebhookRespond",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "body": "{\"status\":\"accepted\",\"environment\":\"test\",\"automation_id\":\"A12\",\"incident_id\":\"{{1.incident_id}}\",\"category\":\"{{1.category}}\",\"request_id\":\"{{2.requestId}}\",\"signed_request_persisted\":true,\"external_actions\":false,\"dangerous_replay\":false}",
+        "status": 202
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "eu1.make.com",
+    "notes": []
+  }
+}

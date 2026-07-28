@@ -1,0 +1,45 @@
+name: Platform CI
+
+on:
+  pull_request:
+    paths:
+      - "platform/**"
+      - ".github/workflows/platform-ci.yml"
+      - "package.json"
+  push:
+    branches: ["main"]
+    paths:
+      - "platform/**"
+      - ".github/workflows/platform-ci.yml"
+      - "package.json"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            platform/apps/platform-core/package-lock.json
+            platform/apps/listing-control/package-lock.json
+            platform/apps/access-checks/package-lock.json
+            platform/apps/publication-control/package-lock.json
+            platform/packages/contracts/package-lock.json
+      - run: npm ci
+      - run: npm ci --prefix platform/apps/platform-core
+      - run: npm ci --prefix platform/apps/listing-control
+      - run: npm ci --prefix platform/apps/access-checks
+      - run: npm ci --prefix platform/apps/publication-control
+      - run: npm ci --prefix platform/packages/contracts
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build

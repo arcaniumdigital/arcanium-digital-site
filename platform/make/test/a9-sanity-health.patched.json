@@ -1,0 +1,144 @@
+{
+  "name": "TEST CLONE - A9 - Sanity Dataset Health + Result",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 3448427
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 6,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}-verify",
+        "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"{{1.event_id}}\",\"idempotency_key\":\"{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A9\",\"event_type\":\"content.provider_health.requested\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"info\",\"payload\":{\"mode\":\"dataset_health_read_only\",\"safe_test\":true,\"external_actions_enabled\":false,\"communications_enabled\":false,\"content_publish_enabled\":false}}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "/v1/platform/events/verify",
+        "correlationId": "{{1.correlation_id}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 150,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}",
+        "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"{{1.event_id}}\",\"idempotency_key\":\"{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A9\",\"event_type\":\"content.provider_health.requested\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"info\",\"payload\":{\"mode\":\"dataset_health_read_only\",\"safe_test\":true,\"external_actions_enabled\":false,\"communications_enabled\":false,\"content_publish_enabled\":false}}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "/v1/events",
+        "correlationId": "{{1.correlation_id}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "http:MakeRequest",
+      "version": 4,
+      "parameters": {
+        "tlsType": "",
+        "apiKeyKeychain": 207338,
+        "authenticationType": "apiKey"
+      },
+      "mapper": {
+        "url": "https://fefsnr86.api.sanity.io/v2021-10-21/data/query/production?query=count(*)",
+        "method": "get",
+        "shareCookies": false,
+        "parseResponse": true,
+        "allowRedirects": true,
+        "stopOnHttpError": true,
+        "requestCompressedContent": true
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}-result",
+        "eventBody": "{\"schema_version\":\"1.0\",\"result_id\":\"result:{{1.event_id}}\",\"run_id\":\"run:{{1.event_id}}\",\"idempotency_key\":\"result:{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A9\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"provider\":\"sanity\",\"status\":\"completed\",\"started_at\":\"{{1.occurred_at}}\",\"completed_at\":\"{{1.occurred_at}}\",\"input_count\":1,\"accepted_count\":1,\"rejected_count\":0,\"output_count\":1,\"actions\":[],\"reconciliation\":{\"expected_count\":1,\"observed_count\":1,\"balanced\":true,\"method\":\"authenticated read-only Sanity production dataset count query completed\",\"evidence_ref\":\"make://scenario/6665249/execution/{{1.event_id}}\"},\"limitations\":[\"Dataset health and document count only\",\"No document body entered Make\",\"No content draft, mutation, publish, or communication\"]}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "/v1/results"
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "gateway:WebhookRespond",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "body": "{\"status\":\"accepted\",\"environment\":\"test\",\"automation_id\":\"A9\",\"provider_health\":\"verified\",\"safe_test\":true,\"content_mutated\":false,\"content_published\":false}",
+        "status": 202
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "eu1.make.com",
+    "notes": []
+  }
+}

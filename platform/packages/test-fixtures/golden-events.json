@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "environment": "test",
+  "client_id": "TEST-0001",
+  "defaults": {
+    "method": "POST",
+    "path": "/v1/events",
+    "expected_http_status": 202,
+    "expected_persisted_environment": "test",
+    "forbidden_side_effects": [
+      "public_message",
+      "content_publish",
+      "gbp_mutation",
+      "outreach_send",
+      "dns_change",
+      "site_launch",
+      "experiment_launch",
+      "pricing_change",
+      "dangerous_replay"
+    ]
+  },
+  "fixtures": [
+    {"automation_id":"A1","event_type":"client.configuration.requested","payload":{"config_version":"fixture-1","test_only":true}},
+    {"automation_id":"A2","event_type":"listing.source.import.requested","payload":{"source_ref":"fixture://a2/source","test_only":true}},
+    {"automation_id":"A3","event_type":"content.draft.requested","payload":{"brief_ref":"fixture://a3/brief","test_only":true}},
+    {"automation_id":"A4","event_type":"gbp.review.requested","payload":{"location_ref":"fixture://a4/location","test_only":true}},
+    {"automation_id":"A5","event_type":"search.plan.requested","payload":{"terms":["fixture term"],"test_only":true}},
+    {"automation_id":"A6","event_type":"technical.audit.requested","payload":{"url":"https://arcaniumdigital.com","test_only":true}},
+    {"automation_id":"A7","event_type":"local.visibility.requested","payload":{"location":"Brisbane","test_only":true}},
+    {"automation_id":"A8","event_type":"enquiry.review.requested","payload":{"enquiry_ref":"fixture://a8/enquiry","test_only":true}},
+    {"automation_id":"A9","event_type":"geo.evidence.draft.requested","payload":{"topic":"fixture topic","test_only":true}},
+    {"automation_id":"A10","event_type":"citation.opportunity.requested","payload":{"opportunity_ref":"fixture://a10/opportunity","test_only":true}},
+    {"automation_id":"A11","event_type":"client.report.requested","payload":{"period":"2026-07","test_only":true}},
+    {"automation_id":"A12","event_type":"test.incident.critical","payload":{"message":"Synthetic readiness incident","test_only":true}},
+    {"automation_id":"A13","event_type":"site.project.requested","payload":{"source_url":"https://arcaniumdigital.com","test_only":true}},
+    {"automation_id":"A14","event_type":"cro.experiment.requested","payload":{"name":"Fixture CTA hypothesis","test_only":true}},
+    {"automation_id":"A15","event_type":"agency.cost.imported","payload":{"amount_minor":1234,"currency":"AUD","test_only":true}}
+  ]
+}

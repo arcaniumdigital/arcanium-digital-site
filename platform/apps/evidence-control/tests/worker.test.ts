@@ -1,0 +1,9 @@
+import { describe, expect, it } from "vitest";
+import { handleRequest, isDraftEligible, type Env } from "../src/index";
+const env: Env = { ENVIRONMENT: "test", TEST_CLIENT_IDS: "TEST-0001", EVIDENCE_HMAC_SECRET: "test-secret", MAX_FRESHNESS_ACTIONS: "20", EVIDENCE_DB: { prepare: () => { throw new Error("Database must not be used by boundary tests"); } } };
+const approved = { evidence_id: "evidence-1", source_url: "https://example.gov.au/data", source_type: "official" as const, geography: "Brisbane", period: "2026-Q1", release_date: "2026-01-01", retrieved_at: "2026-01-02", methodology_version: "v1", expires_at: "2027-01-01", limitations: ["Aggregate data"], approval: { factual: true, rights: true, editorial: true } };
+describe("evidence-control Worker boundary", () => {
+  it("reports a TEST-only, publication-disabled health state", async () => { const body = await (await handleRequest(new Request("https://evidence.test/health"), env)).json() as { data: { environment: string; content_publish_enabled: boolean } }; expect(body.data).toEqual(expect.objectContaining({ environment: "test", content_publish_enabled: false })); });
+  it("rejects unsigned events before touching persistence", async () => { expect((await handleRequest(new Request("https://evidence.test/v1/events", { method: "POST", headers: { "content-type": "application/json" }, body: "{}" }), env)).status).toBe(401); });
+  it("blocks drafting until factual, rights and editorial approval are present and current", () => { expect(isDraftEligible(approved, Date.parse("2026-07-27"))).toBe(true); expect(isDraftEligible({ ...approved, approval: { ...approved.approval, rights: false } }, Date.parse("2026-07-27"))).toBe(false); expect(isDraftEligible({ ...approved, expires_at: "2026-01-02" }, Date.parse("2026-07-27"))).toBe(false); });
+});

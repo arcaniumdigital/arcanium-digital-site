@@ -1,0 +1,21 @@
+{
+  "scenario_id": "6691553",
+  "active": false,
+  "connection_id": "9288408",
+  "worker_endpoint": "/v1/a15/cost-imports",
+  "module_graph": [
+    "gateway:CustomWebHook",
+    "datastore:ExistRecord",
+    "datastore:AddRecord",
+    "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+    "gateway:WebhookRespond"
+  ],
+  "verification": {
+    "execution_id": "ccaef98beedb4a33943f512583196c5a",
+    "status": "success",
+    "d1_record_id": "entry-make-a15-d2e859387bd8471c9ae1948034c3887c"
+  },
+  "verification_endpoint": "/v1/platform/events/verify",
+  "verification_module_id": 6,
+  "correlation_header_mapping": "{{1.correlation_id}}"
+}

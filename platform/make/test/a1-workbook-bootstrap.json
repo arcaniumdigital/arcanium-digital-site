@@ -1,0 +1,371 @@
+{
+  "name": "TEST — A1 Control Workbook Bootstrap",
+  "flow": [
+    {
+      "id": 1,
+      "module": "google-sheets:createSpreadsheet",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 9299159
+      },
+      "mapper": {
+        "properties": {
+          "title": "Arcanium A1 Control Workbook — TEST ACTIVE",
+          "locale": "en_AU",
+          "timeZone": "Australia/Brisbane"
+        },
+        "sheets": [
+          { "properties": { "title": "Clients" } },
+          { "properties": { "title": "Integrations" } },
+          { "properties": { "title": "Work_Queue" } },
+          { "properties": { "title": "Keyword_Page_Map" } },
+          { "properties": { "title": "Provider_Rules" } },
+          { "properties": { "title": "Alert_Thresholds" } },
+          { "properties": { "title": "Approval_Queue" } },
+          { "properties": { "title": "Integration_Status" } },
+          { "properties": { "title": "Access_Log" } },
+          { "properties": { "title": "Review_Dates" } }
+        ]
+      },
+      "metadata": {
+        "designer": { "x": 0, "y": 0 }
+      }
+    },
+    {
+      "id": 2,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 9299159
+      },
+      "mapper": {
+        "spreadsheetId": "{{1.spreadsheetId}}",
+        "sheetId": "Clients",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "client_id",
+          "1": "display_name",
+          "2": "environment",
+          "3": "status",
+          "4": "test_mode",
+          "5": "canonical_domain",
+          "6": "preferred_host",
+          "7": "timezone",
+          "8": "currency",
+          "9": "activation_approval_id",
+          "10": "created_at",
+          "11": "updated_at"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 250, "y": 0 }
+      }
+    },
+    {
+      "id": 3,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 9299159
+      },
+      "mapper": {
+        "spreadsheetId": "{{1.spreadsheetId}}",
+        "sheetId": "Integrations",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "integration_id",
+          "1": "client_id",
+          "2": "provider",
+          "3": "enabled",
+          "4": "required",
+          "5": "capability",
+          "6": "connection_logical_name",
+          "7": "review_interval_hours",
+          "8": "next_review_at",
+          "9": "status",
+          "10": "last_checked_at",
+          "11": "last_error_class"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 500, "y": 0 }
+      }
+    },
+    {
+      "id": 4,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 9299159
+      },
+      "mapper": {
+        "spreadsheetId": "{{1.spreadsheetId}}",
+        "sheetId": "Work_Queue",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "task_id",
+          "1": "client_id",
+          "2": "task_type",
+          "3": "status",
+          "4": "due_at",
+          "5": "attempt_count",
+          "6": "idempotency_key",
+          "7": "correlation_id",
+          "8": "approval_id",
+          "9": "created_at",
+          "10": "updated_at",
+          "11": "last_error_class"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 750, "y": 0 }
+      }
+    },
+    {
+      "id": 5,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 9299159
+      },
+      "mapper": {
+        "spreadsheetId": "{{1.spreadsheetId}}",
+        "sheetId": "Keyword_Page_Map",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "client_id",
+          "1": "keyword",
+          "2": "page_url",
+          "3": "enabled",
+          "4": "updated_at"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 1000, "y": 0 }
+      }
+    },
+    {
+      "id": 6,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 9299159
+      },
+      "mapper": {
+        "spreadsheetId": "{{1.spreadsheetId}}",
+        "sheetId": "Provider_Rules",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "provider",
+          "1": "capability",
+          "2": "check_mode",
+          "3": "expected_statuses",
+          "4": "timeout_ms",
+          "5": "optional",
+          "6": "updated_at"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 1250, "y": 0 }
+      }
+    },
+    {
+      "id": 7,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 9299159
+      },
+      "mapper": {
+        "spreadsheetId": "{{1.spreadsheetId}}",
+        "sheetId": "Alert_Thresholds",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "threshold_id",
+          "1": "client_id",
+          "2": "metric",
+          "3": "warning_value",
+          "4": "critical_value",
+          "5": "enabled",
+          "6": "updated_at"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 1500, "y": 0 }
+      }
+    },
+    {
+      "id": 8,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 9299159
+      },
+      "mapper": {
+        "spreadsheetId": "{{1.spreadsheetId}}",
+        "sheetId": "Approval_Queue",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "approval_id",
+          "1": "client_id",
+          "2": "approval_type",
+          "3": "status",
+          "4": "requested_change",
+          "5": "requested_by",
+          "6": "approved_by",
+          "7": "approved_at",
+          "8": "created_at",
+          "9": "updated_at"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 1750, "y": 0 }
+      }
+    },
+    {
+      "id": 9,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 9299159
+      },
+      "mapper": {
+        "spreadsheetId": "{{1.spreadsheetId}}",
+        "sheetId": "Integration_Status",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "status_id",
+          "1": "client_id",
+          "2": "integration_id",
+          "3": "provider",
+          "4": "status",
+          "5": "classification",
+          "6": "required",
+          "7": "retryable",
+          "8": "checked_at",
+          "9": "correlation_id",
+          "10": "safe_summary"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 2000, "y": 0 }
+      }
+    },
+    {
+      "id": 10,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 9299159
+      },
+      "mapper": {
+        "spreadsheetId": "{{1.spreadsheetId}}",
+        "sheetId": "Access_Log",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "record_id",
+          "1": "client_id",
+          "2": "task_id",
+          "3": "task_type",
+          "4": "result",
+          "5": "correlation_id",
+          "6": "source_run_id",
+          "7": "created_at",
+          "8": "evidence_ref"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 2250, "y": 0 }
+      }
+    },
+    {
+      "id": 11,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 9299159
+      },
+      "mapper": {
+        "spreadsheetId": "{{1.spreadsheetId}}",
+        "sheetId": "Review_Dates",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "RAW",
+        "insertUnformatted": true,
+        "mode": "map",
+        "values": {
+          "0": "review_id",
+          "1": "client_id",
+          "2": "integration_id",
+          "3": "review_type",
+          "4": "last_review_at",
+          "5": "next_review_at",
+          "6": "status",
+          "7": "updated_at"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 2500, "y": 0 }
+      }
+    },
+    {
+      "id": 12,
+      "module": "datastore:AddRecord",
+      "version": 1,
+      "parameters": {
+        "datastore": 151408
+      },
+      "mapper": {
+        "key": "a1-workbook:{{1.spreadsheetId}}",
+        "overwrite": true
+      },
+      "metadata": {
+        "designer": { "x": 2750, "y": 0 }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": true,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": true,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}

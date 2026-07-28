@@ -1,0 +1,121 @@
+{
+  "name": "TEST CLONE - A2 - Listing Control Health + Result",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 3448422
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}",
+        "eventBody": "{\"schema_version\":\"1.0\",\"event_id\":\"{{1.event_id}}\",\"idempotency_key\":\"{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A2\",\"event_type\":\"listing.control_health.requested\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"occurred_at\":\"{{1.occurred_at}}\",\"severity\":\"info\",\"payload\":{\"mode\":\"worker_health_read_only\",\"safe_test\":true,\"external_actions_enabled\":false,\"public_write_enabled\":false,\"destructive_url_change_enabled\":false}}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "/v1/events"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "http:MakeRequest",
+      "version": 4,
+      "parameters": {
+        "tlsType": "",
+        "authenticationType": "noAuth"
+      },
+      "mapper": {
+        "url": "https://arcanium-listing-control-test.enquiries-432.workers.dev/health",
+        "method": "get",
+        "shareCookies": false,
+        "parseResponse": true,
+        "allowRedirects": true,
+        "stopOnHttpError": true,
+        "requestCompressedContent": true
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+      "version": 1,
+      "parameters": {
+        "__IMTCONN__": 9288408
+      },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}-result",
+        "eventBody": "{\"schema_version\":\"1.0\",\"result_id\":\"result:{{1.event_id}}\",\"run_id\":\"run:{{1.event_id}}\",\"idempotency_key\":\"result:{{1.idempotency_key}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"automation_id\":\"A2\",\"client_id\":\"{{1.client_id}}\",\"environment\":\"test\",\"provider\":\"listing-control\",\"status\":\"completed\",\"started_at\":\"{{1.occurred_at}}\",\"completed_at\":\"{{1.occurred_at}}\",\"input_count\":1,\"accepted_count\":1,\"rejected_count\":0,\"output_count\":1,\"actions\":[],\"reconciliation\":{\"expected_count\":1,\"observed_count\":1,\"balanced\":true,\"method\":\"A2 listing-control TEST Worker health returned with all mutation flags disabled\",\"evidence_ref\":\"make://scenario/6665242/execution/{{1.event_id}}\"},\"limitations\":[\"Worker health only; no raw feed entered Make\",\"No listing iteration or XML parsing in Make\",\"No public write, sold-price publish, destructive URL change, IndexNow submit, revalidation, alert, or digest\"]}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "/v1/results"
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "gateway:WebhookRespond",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "body": "{\"status\":\"accepted\",\"environment\":\"test\",\"automation_id\":\"A2\",\"worker_health\":\"verified\",\"safe_test\":true,\"external_actions\":false}",
+        "status": 202
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "eu1.make.com",
+    "notes": []
+  }
+}

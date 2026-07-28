@@ -1,0 +1,25 @@
+{
+  "name": "cross-client payload reference",
+  "event": {
+    "schema_version": "1.0",
+    "event_id": "EVT-FIXTURE-CROSS-CLIENT",
+    "idempotency_key": "sha256:fixture-cross-client",
+    "correlation_id": "CORR-FIXTURE-CROSS-CLIENT",
+    "automation_id": "A12",
+    "event_type": "system.cross_client.fixture",
+    "client_id": "TEST-0001",
+    "environment": "test",
+    "occurred_at": "2026-07-27T00:00:00.000Z",
+    "severity": "critical",
+    "payload": {
+      "test_only": true,
+      "record": {
+        "referenced_client_id": "TEST-0002"
+      }
+    }
+  },
+  "expected_status": 403,
+  "expected_error": "CROSS_CLIENT_REFERENCE",
+  "expected_incident_category": "CROSS_CLIENT_ISOLATION_FAILURE",
+  "forbidden_side_effects": ["business_write", "queue_send", "public_send"]
+}

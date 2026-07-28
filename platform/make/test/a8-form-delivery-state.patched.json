@@ -1,0 +1,57 @@
+{
+  "name": "TEST CLONE - A8 - Form Delivery State",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": { "hook": 3455648 },
+      "mapper": {},
+      "metadata": { "designer": { "x": 0, "y": 0 } }
+    },
+    {
+      "id": 2,
+      "module": "app#a8form-y3mw76:sendSignedLeadEvent",
+      "version": 1,
+      "parameters": { "__IMTCONN__": 9330877 },
+      "mapper": {
+        "nonce": "{{ifempty(1.nonce; executionId)}}",
+        "eventBody": "{\"environment\":\"test\",\"client_id\":\"{{1.client_id}}\",\"submission_id\":\"synthetic:{{1.event_id}}\",\"correlation_id\":\"{{1.correlation_id}}\",\"payload\":{\"source\":\"a8_form_delivery_test\",\"synthetic\":true}}",
+        "timestamp": "{{1.occurred_at}}",
+        "endpointPath": "/v1/leads",
+        "correlationId": "{{1.correlation_id}}"
+      },
+      "metadata": { "designer": { "x": 300, "y": 0 } }
+    },
+    {
+      "id": 3,
+      "module": "gateway:WebhookRespond",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "body": "{\"status\":\"received\",\"environment\":\"test\",\"delivery_confirmed\":false,\"external_send_enabled\":false}",
+        "status": 202
+      },
+      "metadata": { "designer": { "x": 600, "y": 0 } }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": { "orphans": [] },
+    "zone": "eu1.make.com",
+    "notes": ["Synthetic TEST ingress only. This route records received state; it neither sends nor confirms external communications."]
+  }
+}

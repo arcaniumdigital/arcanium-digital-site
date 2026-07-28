@@ -1,0 +1,1263 @@
+import {
+  validateAutomationResultCandidate,
+  type AutomationResult,
+} from "../../../packages/contracts/src/automation-result";
+import {
+  validateActionResolutionCandidate,
+  type ActionResolutionRequest,
+} from "../../../packages/contracts/src/action-resolution";
+import {
+  opsActionId,
+  validateOpsControlCandidate,
+  type OpsControlEvent,
+} from "../../../packages/contracts/src/ops-control";
+
+export interface Env {
+  ENVIRONMENT: "test" | "production";
+  EVENT_HMAC_SECRET?: string;
+  OPS_HMAC_SECRET?: string;
+  ACCESS_CHECKS_HMAC_SECRET?: string;
+  TEST_CLIENT_IDS: string;
+  MAX_EVENT_BYTES: string;
+  REPLAY_WINDOW_SECONDS: string;
+  ALLOW_SCENARIO_ACTIVATION: "true" | "false";
+  ALLOW_PRODUCTION_DEPLOY: "true" | "false";
+  ALLOW_PUBLIC_SEND: "true" | "false";
+  ALLOW_CONTENT_PUBLISH: "true" | "false";
+  ALLOW_GBP_MUTATION: "true" | "false";
+  ALLOW_OUTREACH_SEND: "true" | "false";
+  ALLOW_DANGEROUS_REPLAY: "true" | "false";
+  ALLOW_SITE_LAUNCH: "true" | "false";
+  ALLOW_EXPERIMENT_LAUNCH: "true" | "false";
+  ALLOW_PRICING_CHANGE: "true" | "false";
+  ALLOW_MAKE_A12_DISPATCH: "true" | "false";
+  MAKE_A12_WEBHOOK_URL?: string;
+  PLATFORM_OPS_DB: D1Database;
+  A13_DB: D1Database;
+  A14_DB: D1Database;
+  A15_DB: D1Database;
+  PLATFORM_EVENTS: Queue;
+  ACCESS_CHECKS: {
+    fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+  };
+}
+
+export type AutomationId =
+  | "A1" | "A2" | "A3" | "A4" | "A5"
+  | "A6" | "A7" | "A8" | "A9" | "A10"
+  | "A11" | "A12" | "A13" | "A14" | "A15";
+
+export interface AutomationEvent {
+  schema_version: "1.0";
+  event_id: string;
+  idempotency_key: string;
+  correlation_id: string;
+  automation_id: AutomationId;
+  event_type: string;
+  client_id: string;
+  environment: "test" | "production";
+  occurred_at: string;
+  severity: "info" | "warning" | "error" | "critical";
+  payload_ref?: string | null;
+  payload: Record<string, unknown>;
+}
+
+type ValidationResult =
+  | { ok: true; event: AutomationEvent }
+  | { ok: false; code: string; status: number };
+
+export interface OpsMakeSignedRequest {
+  requestId: string;
+  endpointPath: "/v1/results" | "/v1/action-resolutions";
+  eventBody: string;
+}
+
+const MAX_IDENTIFIER_LENGTH = 160;
+const MAX_EVENT_TYPE_LENGTH = 120;
+const severityValues = new Set(["info", "warning", "error", "critical"]);
+
+const json = (body: unknown, status = 200): Response =>
+  Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
+
+const failure = (code: string, status: number): Response =>
+  json({ ok: false, error: { code } }, status);
+
+const now = () => new Date().toISOString();
+const encode = (value: string) => new TextEncoder().encode(value);
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  Boolean(value) && typeof value === "object" && !Array.isArray(value);
+
+const tenantReferenceKeys = new Set([
+  "client_id",
+  "owner_client_id",
+  "referenced_client_id",
+  "target_client_id",
+]);
+
+export function validatePayloadTenantReferences(payload: unknown, expectedClientId: string): string | null {
+  const pending: unknown[] = [payload];
+  let inspected = 0;
+  while (pending.length > 0) {
+    const current = pending.pop();
+    inspected += 1;
+    if (inspected > 1_000) return "PAYLOAD_STRUCTURE_TOO_COMPLEX";
+    if (Array.isArray(current)) {
+      pending.push(...current);
+    } else if (isRecord(current)) {
+      for (const [key, value] of Object.entries(current)) {
+        if (tenantReferenceKeys.has(key) && typeof value === "string" && value !== expectedClientId) {
+          return "CROSS_CLIENT_REFERENCE";
+        }
+        pending.push(value);
+      }
+    }
+  }
+  return null;
+}
+
+function hex(bytes: ArrayBuffer): string {
+  return [...new Uint8Array(bytes)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+async function sha256(value: string): Promise<string> {
+  return hex(await crypto.subtle.digest("SHA-256", encode(value)));
+}
+
+async function hmacSha256(secret: string, value: string): Promise<string> {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  return hex(await crypto.subtle.sign("HMAC", key, encode(value)));
+}
+
+export function constantTimeEqual(left: string, right: string): boolean {
+  if (left.length !== right.length) return false;
+  let difference = 0;
+  for (let index = 0; index < left.length; index += 1) {
+    difference |= left.charCodeAt(index) ^ right.charCodeAt(index);
+  }
+  return difference === 0;
+}
+
+export function validateEventCandidate(
+  candidate: unknown,
+  environment: Env["ENVIRONMENT"],
+  allowedClientIds: string[],
+): ValidationResult {
+  if (!isRecord(candidate)) return { ok: false, code: "INVALID_EVENT", status: 400 };
+
+  const requiredStrings = [
+    "schema_version", "event_id", "idempotency_key", "correlation_id",
+    "automation_id", "event_type", "client_id", "environment", "occurred_at", "severity",
+  ] as const;
+  if (requiredStrings.some((key) => typeof candidate[key] !== "string" || candidate[key].length === 0)) {
+    return { ok: false, code: "INVALID_EVENT", status: 400 };
+  }
+  if (candidate.schema_version !== "1.0") return { ok: false, code: "INVALID_SCHEMA_VERSION", status: 400 };
+  if (candidate.environment !== environment) return { ok: false, code: "ENVIRONMENT_MISMATCH", status: 403 };
+  if (!allowedClientIds.includes(candidate.client_id as string)) {
+    return { ok: false, code: "CLIENT_NOT_ALLOWED", status: 403 };
+  }
+  if (!/^A(?:[1-9]|1[0-5])$/.test(candidate.automation_id as string)) {
+    return { ok: false, code: "INVALID_AUTOMATION", status: 400 };
+  }
+  if (!severityValues.has(candidate.severity as string)) {
+    return { ok: false, code: "INVALID_SEVERITY", status: 400 };
+  }
+  if (!Number.isFinite(Date.parse(candidate.occurred_at as string))) {
+    return { ok: false, code: "INVALID_OCCURRED_AT", status: 400 };
+  }
+  for (const key of ["event_id", "idempotency_key", "correlation_id", "client_id"] as const) {
+    if ((candidate[key] as string).length > MAX_IDENTIFIER_LENGTH) {
+      return { ok: false, code: "IDENTIFIER_TOO_LONG", status: 400 };
+    }
+  }
+  if ((candidate.event_type as string).length > MAX_EVENT_TYPE_LENGTH) {
+    return { ok: false, code: "EVENT_TYPE_TOO_LONG", status: 400 };
+  }
+  if (!isRecord(candidate.payload)) return { ok: false, code: "INVALID_PAYLOAD", status: 400 };
+  const tenantReferenceError = validatePayloadTenantReferences(candidate.payload, candidate.client_id as string);
+  if (tenantReferenceError) {
+    return { ok: false, code: tenantReferenceError, status: 403 };
+  }
+  if (candidate.payload_ref !== undefined && candidate.payload_ref !== null && typeof candidate.payload_ref !== "string") {
+    return { ok: false, code: "INVALID_PAYLOAD_REF", status: 400 };
+  }
+  return { ok: true, event: candidate as unknown as AutomationEvent };
+}
+
+async function verifySignature(
+  request: Request,
+  rawBody: string,
+  env: Env,
+  secret = env.EVENT_HMAC_SECRET,
+): Promise<Response | null> {
+  const timestamp = request.headers.get("X-Automation-Timestamp");
+  const nonce = request.headers.get("X-Automation-Nonce");
+  const supplied = request.headers.get("X-Automation-Signature");
+  if (!secret) return failure("SERVER_HMAC_NOT_CONFIGURED", 500);
+  if (!timestamp) return failure("TIMESTAMP_HEADER_REQUIRED", 401);
+  if (!nonce) return failure("NONCE_HEADER_REQUIRED", 401);
+  if (!supplied) return failure("SIGNATURE_HEADER_REQUIRED", 401);
+  if (nonce.length > MAX_IDENTIFIER_LENGTH) return failure("INVALID_NONCE", 400);
+
+  const timestampMs = Date.parse(timestamp);
+  const replayWindowSeconds = Number(env.REPLAY_WINDOW_SECONDS);
+  if (!Number.isFinite(replayWindowSeconds) || replayWindowSeconds < 1) {
+    return failure("SERVER_CONFIGURATION_ERROR", 500);
+  }
+  if (!Number.isFinite(timestampMs) || Math.abs(Date.now() - timestampMs) > replayWindowSeconds * 1000) {
+    return failure("TIMESTAMP_OUT_OF_WINDOW", 401);
+  }
+
+  const expected = await hmacSha256(secret, `${timestamp}.${nonce}.${rawBody}`);
+  const signature = supplied.replace(/^sha256[:=]/i, "").toLowerCase();
+  if (!/^[a-f0-9]{64}$/.test(signature) || !constantTimeEqual(expected, signature)) {
+    return failure("INVALID_SIGNATURE", 401);
+  }
+
+  const expiresAt = Math.floor(Date.now() / 1000) + replayWindowSeconds;
+  const inserted = await env.PLATFORM_OPS_DB.prepare(
+    "INSERT OR IGNORE INTO a12_nonce (nonce, expires_at) VALUES (?, ?)",
+  ).bind(nonce, expiresAt).run();
+  if ((inserted.meta.changes ?? 0) !== 1) return failure("REPLAY_REJECTED", 409);
+  return null;
+}
+
+export function validateAccessProxyCandidate(
+  candidate: unknown,
+  environment: Env["ENVIRONMENT"],
+  allowedClientIds: string[],
+  expectedCheckType: "site" | "http_provider",
+): string | null {
+  if (!isRecord(candidate)) return "INVALID_ACCESS_CHECK";
+  if (candidate.environment !== environment) return "ENVIRONMENT_MISMATCH";
+  if (typeof candidate.client_id !== "string" || !allowedClientIds.includes(candidate.client_id)) {
+    return "CLIENT_NOT_ALLOWED";
+  }
+  if (candidate.check_type !== expectedCheckType) return "INVALID_CHECK_TYPE";
+  return null;
+}
+
+async function handleAccessCheckProxy(
+  request: Request,
+  env: Env,
+  upstreamPath: "/check/site" | "/check/http-provider",
+): Promise<Response> {
+  const contentLength = Number(request.headers.get("content-length") ?? "0");
+  const maxBytes = Number(env.MAX_EVENT_BYTES);
+  if (
+    !Number.isFinite(maxBytes)
+    || maxBytes < 1
+    || (Number.isFinite(contentLength) && contentLength > maxBytes)
+  ) {
+    return failure("PAYLOAD_TOO_LARGE", 413);
+  }
+
+  const raw = await request.text();
+  if (encode(raw).byteLength > maxBytes) return failure("PAYLOAD_TOO_LARGE", 413);
+  const authFailure = await verifySignature(request, raw, env);
+  if (authFailure) return authFailure;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return failure("INVALID_JSON", 400);
+  }
+  const expectedCheckType = upstreamPath === "/check/site" ? "site" : "http_provider";
+  const validationFailure = validateAccessProxyCandidate(
+    parsed,
+    env.ENVIRONMENT,
+    env.TEST_CLIENT_IDS.split(",").map((value) => value.trim()).filter(Boolean),
+    expectedCheckType,
+  );
+  if (validationFailure) return failure(validationFailure, validationFailure === "INVALID_ACCESS_CHECK" ? 400 : 403);
+  if (!env.ACCESS_CHECKS_HMAC_SECRET) return failure("ACCESS_CHECKS_HMAC_NOT_CONFIGURED", 500);
+
+  const timestamp = now();
+  const nonce = `a1-proxy-${crypto.randomUUID()}`;
+  const signature = await hmacSha256(
+    env.ACCESS_CHECKS_HMAC_SECRET,
+    `${timestamp}.${nonce}.${raw}`,
+  );
+  try {
+    const upstream = await env.ACCESS_CHECKS.fetch(
+      `https://access-checks.internal${upstreamPath}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Automation-Timestamp": timestamp,
+          "X-Automation-Nonce": nonce,
+          "X-Automation-Signature": `sha256=${signature}`,
+        },
+        body: raw,
+      },
+    );
+    return new Response(await upstream.arrayBuffer(), {
+      status: upstream.status,
+      headers: {
+        "Content-Type": upstream.headers.get("content-type") ?? "application/json; charset=utf-8",
+        "Cache-Control": "no-store",
+      },
+    });
+  } catch {
+    return failure("ACCESS_CHECKS_UNAVAILABLE", 503);
+  }
+}
+
+async function persistAutomationRequest(event: AutomationEvent, env: Env): Promise<void> {
+  const requestTables: Partial<Record<AutomationId, string>> = {
+    A13: "a13_requests",
+    A14: "a14_requests",
+    A15: "a15_requests",
+  };
+  const table = requestTables[event.automation_id];
+  if (table) {
+    await env.PLATFORM_OPS_DB.prepare(
+      `INSERT OR IGNORE INTO ${table} (id, payload_json, created_at) VALUES (?, ?, ?)`,
+    ).bind(event.event_id, JSON.stringify(event.payload), now()).run();
+  }
+
+  if (event.automation_id === "A1") {
+    const configVersion = typeof event.payload.config_version === "string"
+      ? event.payload.config_version
+      : event.schema_version;
+    const status = typeof event.payload.status === "string" ? event.payload.status : "onboarding";
+    const configJson = JSON.stringify(event.payload);
+    await env.PLATFORM_OPS_DB.prepare(
+      "INSERT OR IGNORE INTO platform_client_registry (environment, client_id, config_version, status, config_json, config_hash, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    ).bind(
+      event.environment,
+      event.client_id,
+      configVersion,
+      status,
+      configJson,
+      await sha256(configJson),
+      now(),
+      now(),
+    ).run();
+  }
+
+  if (event.automation_id === "A13") {
+    const projectId = typeof event.payload.project_id === "string" ? event.payload.project_id : event.event_id;
+    await env.A13_DB.prepare(
+      "INSERT OR IGNORE INTO a13_projects (project_id, environment, client_id, status, source_url, target_repo, target_project, created_at, updated_at) VALUES (?, ?, ?, 'requested', ?, ?, ?, ?, ?)",
+    ).bind(
+      projectId,
+      event.environment,
+      event.client_id,
+      typeof event.payload.source_url === "string" ? event.payload.source_url : null,
+      typeof event.payload.target_repo === "string" ? event.payload.target_repo : null,
+      typeof event.payload.target_project === "string" ? event.payload.target_project : null,
+      now(),
+      now(),
+    ).run();
+  }
+
+  if (event.automation_id === "A14") {
+    const experimentId = typeof event.payload.experiment_id === "string" ? event.payload.experiment_id : event.event_id;
+    await env.A14_DB.prepare(
+      "INSERT OR IGNORE INTO a14_experiments (experiment_id, environment, client_id, name, hypothesis_version, page_scope_json, primary_metric, status, assignment_version, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, 'draft', '1.0', ?, ?)",
+    ).bind(
+      experimentId,
+      event.environment,
+      event.client_id,
+      typeof event.payload.name === "string" ? event.payload.name : "Test experiment",
+      typeof event.payload.hypothesis_version === "string" ? event.payload.hypothesis_version : "1.0",
+      JSON.stringify(Array.isArray(event.payload.page_scope) ? event.payload.page_scope : []),
+      typeof event.payload.primary_metric === "string" ? event.payload.primary_metric : "confirmed_conversion",
+      now(),
+      now(),
+    ).run();
+  }
+
+  if (event.automation_id === "A15") {
+    const entryId = typeof event.payload.entry_id === "string" ? event.payload.entry_id : event.event_id;
+    await env.A15_DB.prepare(
+      "INSERT OR IGNORE INTO a15_cost_entries (entry_id, environment, client_id, provider, automation_id, service_period, source_type, external_record_id, currency, amount_minor, allocation_status, metadata_json, imported_at) VALUES (?, ?, ?, ?, 'A15', ?, 'test_fixture', ?, ?, ?, 'unallocated', ?, ?)",
+    ).bind(
+      entryId,
+      event.environment,
+      event.client_id,
+      typeof event.payload.provider === "string" ? event.payload.provider : "test",
+      typeof event.payload.service_period === "string" ? event.payload.service_period : now().slice(0, 7),
+      typeof event.payload.external_record_id === "string" ? event.payload.external_record_id : entryId,
+      typeof event.payload.currency === "string" ? event.payload.currency : "AUD",
+      typeof event.payload.amount_minor === "number" && Number.isSafeInteger(event.payload.amount_minor)
+        ? event.payload.amount_minor
+        : 0,
+      JSON.stringify(isRecord(event.payload.metadata) ? event.payload.metadata : {}),
+      now(),
+    ).run();
+  }
+
+  if (event.severity === "error" || event.severity === "critical") {
+    await env.PLATFORM_OPS_DB.prepare(
+      "INSERT OR REPLACE INTO a12_incidents (correlation_id, client_id, severity, event_type, first_seen, last_seen, safe_payload_ref) VALUES (?, ?, ?, ?, COALESCE((SELECT first_seen FROM a12_incidents WHERE correlation_id = ?), ?), ?, ?)",
+    ).bind(
+      event.correlation_id,
+      event.client_id,
+      event.severity,
+      event.event_type,
+      event.correlation_id,
+      now(),
+      now(),
+      event.payload_ref ?? null,
+    ).run();
+  }
+
+  await env.PLATFORM_OPS_DB.prepare(
+    "INSERT OR IGNORE INTO platform_event_audit (event_id, environment, client_id, automation_id, event_type, correlation_id, idempotency_key, severity, payload_ref, disposition, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'accepted', ?)",
+  ).bind(
+    event.event_id,
+    event.environment,
+    event.client_id,
+    event.automation_id,
+    event.event_type,
+    event.correlation_id,
+    event.idempotency_key,
+    event.severity,
+    event.payload_ref ?? null,
+    now(),
+  ).run();
+}
+
+async function handleEvent(request: Request, env: Env): Promise<Response> {
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return failure("CONTENT_TYPE_REQUIRED", 415);
+  }
+  const raw = await request.text();
+  const maxBytes = Number(env.MAX_EVENT_BYTES);
+  if (!Number.isFinite(maxBytes) || maxBytes < 1) return failure("SERVER_CONFIGURATION_ERROR", 500);
+  if (encode(raw).byteLength > maxBytes) return failure("PAYLOAD_TOO_LARGE", 413);
+
+  const authFailure = await verifySignature(request, raw, env);
+  if (authFailure) return authFailure;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return failure("INVALID_JSON", 400);
+  }
+  const allowedClients = env.TEST_CLIENT_IDS.split(",").map((value) => value.trim()).filter(Boolean);
+  const validated = validateEventCandidate(parsed, env.ENVIRONMENT, allowedClients);
+  if (!validated.ok) return failure(validated.code, validated.status);
+  const event = validated.event;
+
+  const previous = await env.PLATFORM_OPS_DB.prepare(
+    "SELECT response_json FROM a12_idempotency WHERE key = ? AND client_id = ?",
+  ).bind(event.idempotency_key, event.client_id).first<{ response_json: string }>();
+  if (previous) return json(JSON.parse(previous.response_json), 200);
+
+  await persistAutomationRequest(event, env);
+  await env.PLATFORM_EVENTS.send({
+    event_id: event.event_id,
+    idempotency_key: event.idempotency_key,
+    correlation_id: event.correlation_id,
+    automation_id: event.automation_id,
+    event_type: event.event_type,
+    client_id: event.client_id,
+    environment: event.environment,
+    severity: event.severity,
+    payload_ref: event.payload_ref ?? null,
+    test_force_failure: event.environment === "test" && event.event_type === "system.queue.failure.fixture",
+  });
+
+  const response = {
+    ok: true,
+    data: {
+      accepted: true,
+      event_id: event.event_id,
+      correlation_id: event.correlation_id,
+      environment: env.ENVIRONMENT,
+    },
+  };
+  await env.PLATFORM_OPS_DB.prepare(
+    "INSERT OR IGNORE INTO a12_idempotency (key, client_id, automation_id, created_at, response_json) VALUES (?, ?, ?, ?, ?)",
+  ).bind(event.idempotency_key, event.client_id, event.automation_id, now(), JSON.stringify(response)).run();
+  return json(response, 202);
+}
+
+async function handleEventVerification(request: Request, env: Env): Promise<Response> {
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return failure("CONTENT_TYPE_REQUIRED", 415);
+  }
+  const raw = await request.text();
+  const maxBytes = Number(env.MAX_EVENT_BYTES);
+  if (!Number.isFinite(maxBytes) || maxBytes < 1) return failure("SERVER_CONFIGURATION_ERROR", 500);
+  if (encode(raw).byteLength > maxBytes) return failure("PAYLOAD_TOO_LARGE", 413);
+
+  const authFailure = await verifySignature(request, raw, env);
+  if (authFailure) return authFailure;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return failure("INVALID_JSON", 400);
+  }
+
+  const allowedClients = env.TEST_CLIENT_IDS.split(",").map((value) => value.trim()).filter(Boolean);
+  const validated = validateEventCandidate(parsed, env.ENVIRONMENT, allowedClients);
+  if (!validated.ok) return failure(validated.code, validated.status);
+  const event = validated.event;
+
+  const correlationId = request.headers.get("X-Correlation-ID");
+  if (!correlationId || correlationId !== event.correlation_id) {
+    return failure("CORRELATION_ID_MISMATCH", 400);
+  }
+
+  const previous = await env.PLATFORM_OPS_DB.prepare(
+    "SELECT event_id FROM platform_event_verifications WHERE environment = ? AND client_id = ? AND idempotency_key = ?",
+  ).bind(event.environment, event.client_id, event.idempotency_key).first<{ event_id: string }>();
+
+  if (previous) {
+    return json({
+      ok: true,
+      data: {
+        verified: true,
+        event_id: previous.event_id,
+        correlation_id: event.correlation_id,
+        client_id: event.client_id,
+        environment: event.environment,
+        deduplicated: true,
+      },
+    });
+  }
+
+  await env.PLATFORM_OPS_DB.prepare(
+    "INSERT INTO platform_event_verifications (environment, client_id, idempotency_key, event_id, correlation_id, event_type, verified_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+  ).bind(
+    event.environment,
+    event.client_id,
+    event.idempotency_key,
+    event.event_id,
+    event.correlation_id,
+    event.event_type,
+    now(),
+  ).run();
+
+  return json({
+    ok: true,
+    data: {
+      verified: true,
+      event_id: event.event_id,
+      correlation_id: event.correlation_id,
+      client_id: event.client_id,
+      environment: event.environment,
+      deduplicated: false,
+    },
+  });
+}
+
+async function persistAutomationResult(result: AutomationResult, env: Env): Promise<void> {
+  const createdAt = now();
+  const error = result.error ?? null;
+  const statements = [
+    env.PLATFORM_OPS_DB.prepare(
+      "INSERT INTO platform_automation_runs (result_id, run_id, idempotency_key, environment, client_id, automation_id, provider, status, correlation_id, started_at, completed_at, input_count, accepted_count, rejected_count, output_count, error_code, error_classification, retryable, limitations_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    ).bind(
+      result.result_id,
+      result.run_id,
+      result.idempotency_key,
+      result.environment,
+      result.client_id,
+      result.automation_id,
+      result.provider,
+      result.status,
+      result.correlation_id,
+      result.started_at,
+      result.completed_at,
+      result.input_count,
+      result.accepted_count,
+      result.rejected_count,
+      result.output_count,
+      error?.code ?? null,
+      error?.classification ?? null,
+      error?.retryable ? 1 : 0,
+      JSON.stringify(result.limitations ?? []),
+      createdAt,
+    ),
+    env.PLATFORM_OPS_DB.prepare(
+      "INSERT INTO platform_reconciliation_results (result_id, environment, client_id, automation_id, expected_count, observed_count, balanced, method, evidence_ref, reconciled_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    ).bind(
+      result.result_id,
+      result.environment,
+      result.client_id,
+      result.automation_id,
+      result.reconciliation.expected_count,
+      result.reconciliation.observed_count,
+      result.reconciliation.balanced ? 1 : 0,
+      result.reconciliation.method,
+      result.reconciliation.evidence_ref ?? null,
+      createdAt,
+    ),
+  ];
+
+  for (const action of result.actions) {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT OR IGNORE INTO platform_operator_actions (environment, client_id, automation_id, result_id, action_id, dedup_key, action_type, severity, mutation_kind, approval_required, owner_group, due_at, evidence_ref, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'open', ?, ?)",
+      ).bind(
+        result.environment,
+        result.client_id,
+        result.automation_id,
+        result.result_id,
+        action.action_id,
+        action.dedup_key,
+        action.action_type,
+        action.severity,
+        action.mutation_kind,
+        action.approval_required ? 1 : 0,
+        action.owner_group ?? null,
+        action.due_at ?? null,
+        action.evidence_ref ?? null,
+        createdAt,
+        createdAt,
+      ),
+    );
+    if (action.approval_required) {
+      statements.push(
+        env.PLATFORM_OPS_DB.prepare(
+          "INSERT OR IGNORE INTO platform_approval_requests (environment, client_id, action_id, automation_id, mutation_kind, status, requested_at) VALUES (?, ?, ?, ?, ?, 'pending', ?)",
+        ).bind(
+          result.environment,
+          result.client_id,
+          action.action_id,
+          result.automation_id,
+          action.mutation_kind,
+          createdAt,
+        ),
+      );
+    }
+  }
+
+  if (result.status === "failed" || !result.reconciliation.balanced) {
+    const classification = error?.classification ?? "permanent";
+    const errorCode = error?.code ?? "RECONCILIATION_UNBALANCED";
+    const severity = classification === "security" || classification === "isolation"
+      ? "critical"
+      : result.status === "failed"
+        ? "error"
+        : "warning";
+    const dedupKey = `${result.automation_id}:${result.provider}:${classification}:${errorCode}`;
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO platform_result_incidents (environment, client_id, incident_id, dedup_key, automation_id, result_id, provider, severity, classification, error_code, retryable, status, first_seen, last_seen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'open', ?, ?) ON CONFLICT(environment, client_id, dedup_key) DO UPDATE SET result_id = excluded.result_id, severity = excluded.severity, retryable = excluded.retryable, last_seen = excluded.last_seen",
+      ).bind(
+        result.environment,
+        result.client_id,
+        `incident:${result.result_id}`,
+        dedupKey,
+        result.automation_id,
+        result.result_id,
+        result.provider,
+        severity,
+        classification,
+        errorCode,
+        error?.retryable ? 1 : 0,
+        createdAt,
+        createdAt,
+      ),
+    );
+  }
+
+  await env.PLATFORM_OPS_DB.batch(statements);
+}
+
+async function handleAutomationResult(request: Request, env: Env): Promise<Response> {
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return failure("CONTENT_TYPE_REQUIRED", 415);
+  }
+  const raw = await request.text();
+  const maxBytes = Number(env.MAX_EVENT_BYTES);
+  if (!Number.isFinite(maxBytes) || maxBytes < 1) return failure("SERVER_CONFIGURATION_ERROR", 500);
+  if (encode(raw).byteLength > maxBytes) return failure("PAYLOAD_TOO_LARGE", 413);
+
+  const authFailure = await verifySignature(request, raw, env);
+  if (authFailure) return authFailure;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return failure("INVALID_JSON", 400);
+  }
+  const allowedClients = env.TEST_CLIENT_IDS.split(",").map((value) => value.trim()).filter(Boolean);
+  const validated = validateAutomationResultCandidate(parsed, env.ENVIRONMENT, allowedClients);
+  if (!validated.ok) return failure(validated.code, validated.status);
+  const result = validated.result;
+
+  const previous = await env.PLATFORM_OPS_DB.prepare(
+    "SELECT result_id, correlation_id FROM platform_automation_runs WHERE environment = ? AND client_id = ? AND idempotency_key = ?",
+  ).bind(result.environment, result.client_id, result.idempotency_key)
+    .first<{ result_id: string; correlation_id: string }>();
+  if (previous) {
+    return json({
+      ok: true,
+      data: {
+        accepted: true,
+        duplicate: true,
+        result_id: previous.result_id,
+        correlation_id: previous.correlation_id,
+        environment: env.ENVIRONMENT,
+      },
+    });
+  }
+
+  await persistAutomationResult(result, env);
+  return json({
+    ok: true,
+    data: {
+      accepted: true,
+      duplicate: false,
+      result_id: result.result_id,
+      correlation_id: result.correlation_id,
+      actions_recorded: result.actions.length,
+      approvals_pending: result.actions.filter((action) => action.approval_required).length,
+      incident_opened: result.status === "failed" || !result.reconciliation.balanced,
+      environment: env.ENVIRONMENT,
+    },
+  }, 202);
+}
+
+async function persistActionResolution(
+  resolution: ActionResolutionRequest,
+  env: Env,
+): Promise<void> {
+  const recordedAt = now();
+  const statements = [
+    env.PLATFORM_OPS_DB.prepare(
+      "INSERT INTO platform_action_resolution_runs (resolution_id, idempotency_key, correlation_id, environment, client_id, automation_id, occurred_at, resolution_count, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    ).bind(
+      resolution.resolution_id,
+      resolution.idempotency_key,
+      resolution.correlation_id,
+      resolution.environment,
+      resolution.client_id,
+      resolution.automation_id,
+      resolution.occurred_at,
+      resolution.resolutions.length,
+      recordedAt,
+    ),
+  ];
+
+  for (const item of resolution.resolutions) {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO platform_action_resolution_items (resolution_id, environment, client_id, automation_id, action_id, dedup_key, disposition, reason, evidence_ref, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      ).bind(
+        resolution.resolution_id,
+        resolution.environment,
+        resolution.client_id,
+        resolution.automation_id,
+        item.action_id,
+        item.dedup_key,
+        item.disposition,
+        item.reason,
+        item.evidence_ref ?? null,
+        recordedAt,
+      ),
+      env.PLATFORM_OPS_DB.prepare(
+        "UPDATE platform_operator_actions SET status = ?, updated_at = ? WHERE environment = ? AND client_id = ? AND automation_id = ? AND action_id = ? AND dedup_key = ? AND status = 'open'",
+      ).bind(
+        item.disposition,
+        recordedAt,
+        resolution.environment,
+        resolution.client_id,
+        resolution.automation_id,
+        item.action_id,
+        item.dedup_key,
+      ),
+      env.PLATFORM_OPS_DB.prepare(
+        "UPDATE platform_approval_requests SET status = ?, decided_at = ?, decided_by = ?, decision_evidence_ref = ? WHERE environment = ? AND client_id = ? AND automation_id = ? AND action_id = ? AND status = 'pending'",
+      ).bind(
+        item.disposition,
+        recordedAt,
+        `automation:${resolution.automation_id}`,
+        item.evidence_ref ?? null,
+        resolution.environment,
+        resolution.client_id,
+        resolution.automation_id,
+        item.action_id,
+      ),
+    );
+  }
+  await env.PLATFORM_OPS_DB.batch(statements);
+}
+
+async function handleActionResolution(request: Request, env: Env): Promise<Response> {
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return failure("CONTENT_TYPE_REQUIRED", 415);
+  }
+  const raw = await request.text();
+  const maxBytes = Number(env.MAX_EVENT_BYTES);
+  if (!Number.isFinite(maxBytes) || maxBytes < 1) return failure("SERVER_CONFIGURATION_ERROR", 500);
+  if (encode(raw).byteLength > maxBytes) return failure("PAYLOAD_TOO_LARGE", 413);
+
+  const authFailure = await verifySignature(request, raw, env);
+  if (authFailure) return authFailure;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return failure("INVALID_JSON", 400);
+  }
+  const allowedClients = env.TEST_CLIENT_IDS.split(",").map((value) => value.trim()).filter(Boolean);
+  const validated = validateActionResolutionCandidate(parsed, env.ENVIRONMENT, allowedClients);
+  if (!validated.ok) return failure(validated.code, validated.status);
+  const resolution = validated.resolution;
+
+  const previous = await env.PLATFORM_OPS_DB.prepare(
+    "SELECT resolution_id, correlation_id FROM platform_action_resolution_runs WHERE environment = ? AND client_id = ? AND idempotency_key = ?",
+  ).bind(resolution.environment, resolution.client_id, resolution.idempotency_key)
+    .first<{ resolution_id: string; correlation_id: string }>();
+  if (previous) {
+    return json({
+      ok: true,
+      data: {
+        accepted: true,
+        duplicate: true,
+        resolution_id: previous.resolution_id,
+        correlation_id: previous.correlation_id,
+        environment: env.ENVIRONMENT,
+      },
+    });
+  }
+
+  for (const item of resolution.resolutions) {
+    const target = await env.PLATFORM_OPS_DB.prepare(
+      "SELECT status FROM platform_operator_actions WHERE environment = ? AND client_id = ? AND automation_id = ? AND action_id = ? AND dedup_key = ?",
+    ).bind(
+      resolution.environment,
+      resolution.client_id,
+      resolution.automation_id,
+      item.action_id,
+      item.dedup_key,
+    ).first<{ status: string }>();
+    if (!target) return failure("ACTION_NOT_FOUND", 404);
+    if (target.status !== "open") return failure("ACTION_ALREADY_RESOLVED", 409);
+  }
+
+  await persistActionResolution(resolution, env);
+  return json({
+    ok: true,
+    data: {
+      accepted: true,
+      duplicate: false,
+      resolution_id: resolution.resolution_id,
+      correlation_id: resolution.correlation_id,
+      actions_resolved: resolution.resolutions.length,
+      environment: env.ENVIRONMENT,
+    },
+  }, 202);
+}
+
+export function buildOpsMakeSignedRequests(
+  event: OpsControlEvent,
+  incidentId: string,
+): OpsMakeSignedRequest[] {
+  const recoveryAction = event.category === "RECOVERY_REQUIRED";
+  const actionId = recoveryAction
+    ? `action:recovery:${event.event_id}`
+    : opsActionId(incidentId);
+  const actionDedupKey = recoveryAction
+    ? `ops:recovery:${event.event_id}`
+    : `ops:${incidentId}`;
+  const evidenceRef = event.verification_evidence_ref ?? event.payload_ref ?? `ops-control://${event.event_id}`;
+  if (event.category === "RESOLVED") {
+    const resolutionId = `resolution:${event.event_id}`;
+    return [{
+      requestId: resolutionId,
+      endpointPath: "/v1/action-resolutions",
+      eventBody: JSON.stringify({
+        schema_version: "1.0",
+        resolution_id: resolutionId,
+        idempotency_key: `resolution:${event.idempotency_key}`,
+        correlation_id: event.correlation_id,
+        automation_id: "A12",
+        client_id: event.client_id,
+        environment: event.environment,
+        occurred_at: event.occurred_at,
+        resolutions: [{
+          action_id: actionId,
+          dedup_key: actionDedupKey,
+          disposition: "completed",
+          reason: event.summary,
+          evidence_ref: evidenceRef,
+        }],
+      }),
+    }];
+  }
+
+  const resultId = `result:${event.event_id}`;
+  return [{
+    requestId: resultId,
+    endpointPath: "/v1/results",
+    eventBody: JSON.stringify({
+      schema_version: "1.0",
+      result_id: resultId,
+      run_id: `run:${event.event_id}`,
+      idempotency_key: `result:${event.idempotency_key}`,
+      correlation_id: event.correlation_id,
+      automation_id: "A12",
+      client_id: event.client_id,
+      environment: event.environment,
+      provider: event.provider,
+      status: "completed",
+      started_at: event.occurred_at,
+      completed_at: event.occurred_at,
+      input_count: 1,
+      accepted_count: 1,
+      rejected_count: 0,
+      output_count: 1,
+      actions: [{
+        action_id: actionId,
+        dedup_key: actionDedupKey,
+        action_type: `ops.${event.category.toLowerCase()}`,
+        severity: event.severity,
+        mutation_kind: recoveryAction ? "replay" : "none",
+        approval_required: recoveryAction,
+        owner_group: "financialOwners",
+        evidence_ref: evidenceRef,
+      }],
+      reconciliation: {
+        expected_count: 1,
+        observed_count: 1,
+        balanced: true,
+        method: "one compact A12 incident action reconciled by incident identifier",
+        evidence_ref: `ops-control://${incidentId}`,
+      },
+      limitations: [
+        "TEST operations task only",
+        "No raw telemetry, secret, public send, publish, GBP mutation, or automatic replay",
+      ],
+    }),
+  }];
+}
+
+async function persistOpsControlEvent(
+  event: OpsControlEvent,
+  incidentId: string,
+  env: Env,
+): Promise<void> {
+  const recordedAt = now();
+  const statements = [
+    env.PLATFORM_OPS_DB.prepare(
+      "INSERT INTO a12_ops_events (event_id, idempotency_key, correlation_id, environment, client_id, automation_id, category, severity, provider, summary, incident_id, dedup_key, classification, retryable, replay_kind, payload_ref, occurred_at, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    ).bind(
+      event.event_id, event.idempotency_key, event.correlation_id, event.environment,
+      event.client_id, event.automation_id, event.category, event.severity,
+      event.provider, event.summary, incidentId, event.dedup_key,
+      event.classification, event.retryable ? 1 : 0, event.replay_kind,
+      event.payload_ref ?? null, event.occurred_at, recordedAt,
+    ),
+  ];
+
+  if (event.category === "RESOLVED") {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "UPDATE a12_ops_incidents SET status = 'resolved', last_seen = ?, resolved_at = ?, verification_evidence_ref = ? WHERE environment = ? AND client_id = ? AND incident_id = ? AND status = 'open'",
+      ).bind(
+        event.occurred_at, recordedAt, event.verification_evidence_ref,
+        event.environment, event.client_id, incidentId,
+      ),
+    );
+  } else {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO a12_ops_incidents (environment, client_id, incident_id, dedup_key, automation_id, provider, category, severity, classification, error_code, summary, affected_count, data_loss_window_minutes, retryable, replay_kind, owner_group, status, first_seen, last_seen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'financialOwners', 'open', ?, ?) ON CONFLICT(environment, client_id, dedup_key) DO UPDATE SET category = excluded.category, severity = excluded.severity, classification = excluded.classification, error_code = excluded.error_code, summary = excluded.summary, affected_count = excluded.affected_count, data_loss_window_minutes = excluded.data_loss_window_minutes, retryable = excluded.retryable, replay_kind = excluded.replay_kind, last_seen = excluded.last_seen",
+      ).bind(
+        event.environment, event.client_id, incidentId, event.dedup_key,
+        event.automation_id, event.provider, event.category, event.severity,
+        event.classification, event.error_code ?? null, event.summary,
+        event.affected_count, event.data_loss_window_minutes,
+        event.retryable ? 1 : 0, event.replay_kind,
+        event.occurred_at, event.occurred_at,
+      ),
+    );
+  }
+
+  statements.push(
+    env.PLATFORM_OPS_DB.prepare(
+      "INSERT INTO a12_ops_incident_timeline (environment, client_id, incident_id, event_id, category, severity, summary, evidence_ref, occurred_at, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    ).bind(
+      event.environment, event.client_id, incidentId, event.event_id,
+      event.category, event.severity, event.summary,
+      event.verification_evidence_ref ?? event.payload_ref ?? null,
+      event.occurred_at, recordedAt,
+    ),
+  );
+
+  if (event.category === "RECOVERY_REQUIRED") {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO a12_recovery_requests (environment, client_id, recovery_id, incident_id, event_id, replay_kind, approval_id, approval_required, approved, executed, status, requested_at) VALUES (?, ?, ?, ?, ?, ?, ?, 1, 0, 0, 'approval_required', ?)",
+      ).bind(
+        event.environment, event.client_id, `recovery:${event.event_id}`,
+        incidentId, event.event_id, event.replay_kind,
+        event.approval_id ?? null, recordedAt,
+      ),
+    );
+  }
+
+  if (event.health) {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO a12_provider_health (environment, client_id, provider, automation_id, status, freshness_age_seconds, checked_at, evidence_ref, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(environment, client_id, provider, automation_id) DO UPDATE SET status = excluded.status, freshness_age_seconds = excluded.freshness_age_seconds, checked_at = excluded.checked_at, evidence_ref = excluded.evidence_ref, updated_at = excluded.updated_at",
+      ).bind(
+        event.environment, event.client_id, event.provider, event.automation_id,
+        event.health.status, event.health.freshness_age_seconds ?? null,
+        event.health.checked_at, event.payload_ref ?? null, recordedAt,
+      ),
+    );
+  }
+
+  if (event.cost) {
+    statements.push(
+      env.PLATFORM_OPS_DB.prepare(
+        "INSERT INTO a12_cost_health (environment, client_id, provider, automation_id, service_period, currency, amount_minor, threshold_minor, threshold_exceeded, evidence_ref, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(environment, client_id, provider, automation_id, service_period) DO UPDATE SET currency = excluded.currency, amount_minor = excluded.amount_minor, threshold_minor = excluded.threshold_minor, threshold_exceeded = excluded.threshold_exceeded, evidence_ref = excluded.evidence_ref, updated_at = excluded.updated_at",
+      ).bind(
+        event.environment, event.client_id, event.provider, event.automation_id,
+        event.cost.service_period, event.cost.currency, event.cost.amount_minor,
+        event.cost.threshold_minor,
+        event.cost.amount_minor >= event.cost.threshold_minor ? 1 : 0,
+        event.payload_ref ?? null, recordedAt,
+      ),
+    );
+  }
+  await env.PLATFORM_OPS_DB.batch(statements);
+}
+
+async function handleOpsControlEvent(request: Request, env: Env): Promise<Response> {
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return failure("CONTENT_TYPE_REQUIRED", 415);
+  }
+  const raw = await request.text();
+  const maxBytes = Number(env.MAX_EVENT_BYTES);
+  if (!Number.isFinite(maxBytes) || maxBytes < 1) return failure("SERVER_CONFIGURATION_ERROR", 500);
+  if (encode(raw).byteLength > maxBytes) return failure("PAYLOAD_TOO_LARGE", 413);
+  const authFailure = await verifySignature(request, raw, env, env.OPS_HMAC_SECRET);
+  if (authFailure) return authFailure;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return failure("INVALID_JSON", 400);
+  }
+  const allowedClients = env.TEST_CLIENT_IDS.split(",").map((value) => value.trim()).filter(Boolean);
+  const validated = validateOpsControlCandidate(parsed, env.ENVIRONMENT, allowedClients);
+  if (!validated.ok) return failure(validated.code, validated.status);
+  const event = validated.event;
+
+  const duplicate = await env.PLATFORM_OPS_DB.prepare(
+    "SELECT event_id, incident_id FROM a12_ops_events WHERE environment = ? AND client_id = ? AND idempotency_key = ?",
+  ).bind(event.environment, event.client_id, event.idempotency_key)
+    .first<{ event_id: string; incident_id: string }>();
+  if (duplicate) {
+    return json({
+      ok: true,
+      data: {
+        accepted: true,
+        duplicate: true,
+        event_id: duplicate.event_id,
+        incident_id: duplicate.incident_id,
+        environment: env.ENVIRONMENT,
+      },
+    });
+  }
+
+  const requiresExistingIncident =
+    event.category === "RESOLVED" || event.category === "RECOVERY_REQUIRED";
+  const existingIncident = requiresExistingIncident
+    ? await env.PLATFORM_OPS_DB.prepare(
+      "SELECT incident_id, status FROM a12_ops_incidents WHERE environment = ? AND client_id = ? AND incident_id = ?",
+    ).bind(event.environment, event.client_id, event.incident_id).first<{ incident_id: string; status: string }>()
+    : await env.PLATFORM_OPS_DB.prepare(
+      "SELECT incident_id, status FROM a12_ops_incidents WHERE environment = ? AND client_id = ? AND dedup_key = ?",
+    ).bind(event.environment, event.client_id, event.dedup_key).first<{ incident_id: string; status: string }>();
+  if (requiresExistingIncident && !existingIncident) return failure("INCIDENT_NOT_FOUND", 404);
+  if (requiresExistingIncident && existingIncident?.status !== "open") {
+    return failure("INCIDENT_ALREADY_RESOLVED", 409);
+  }
+  const incidentId = existingIncident?.incident_id ?? event.incident_id ?? `incident:${event.event_id}`;
+  await persistOpsControlEvent(event, incidentId, env);
+  const makeRequests = buildOpsMakeSignedRequests(event, incidentId);
+  await env.PLATFORM_EVENTS.send({
+    schema_version: "1.0",
+    ops_control: true,
+    event_id: event.event_id,
+    idempotency_key: event.idempotency_key,
+    correlation_id: event.correlation_id,
+    automation_id: "A12",
+    client_id: event.client_id,
+    environment: event.environment,
+    occurred_at: event.occurred_at,
+    category: event.category,
+    severity: event.severity,
+    provider: event.provider,
+    incident_id: incidentId,
+    summary: event.summary,
+    make_requests: makeRequests,
+    safe_test: true,
+    external_actions_enabled: false,
+  });
+  return json({
+    ok: true,
+    data: {
+      accepted: true,
+      duplicate: false,
+      event_id: event.event_id,
+      incident_id: incidentId,
+      category: event.category,
+      recovery_executed: false,
+      dangerous_replay_enabled: false,
+      environment: env.ENVIRONMENT,
+    },
+  }, 202);
+}
+
+function health(env: Env): Response {
+  const safety = {
+    scenario_activation: env.ALLOW_SCENARIO_ACTIVATION,
+    production_deploy: env.ALLOW_PRODUCTION_DEPLOY,
+    public_send: env.ALLOW_PUBLIC_SEND,
+    content_publish: env.ALLOW_CONTENT_PUBLISH,
+    gbp_mutation: env.ALLOW_GBP_MUTATION,
+    outreach_send: env.ALLOW_OUTREACH_SEND,
+    dangerous_replay: env.ALLOW_DANGEROUS_REPLAY,
+    site_launch: env.ALLOW_SITE_LAUNCH,
+    experiment_launch: env.ALLOW_EXPERIMENT_LAUNCH,
+    pricing_change: env.ALLOW_PRICING_CHANGE,
+    make_a12_dispatch: env.ALLOW_MAKE_A12_DISPATCH,
+  };
+  return json({
+    ok: true,
+    data: {
+      service: "arcanium-platform-core",
+      version: "0.2.0",
+      environment: env.ENVIRONMENT,
+      ops_intake_configured: Boolean(env.OPS_HMAC_SECRET),
+      access_checks_proxy_configured: Boolean(env.ACCESS_CHECKS_HMAC_SECRET && env.ACCESS_CHECKS),
+      operations: [
+        "A1-A15_EVENT",
+        "A1-A15_RESULT",
+        "A1-A15_ACTION",
+        "A1-A15_ACTION_RESOLUTION",
+        "A1-A15_RECONCILIATION",
+        "A1_ACCESS_CHECK",
+        "A12_INCIDENT",
+        "A1-A15_EVENT_VERIFY",
+        "A12_OPS_CONTROL",
+        "A12_VERIFIED_RESOLUTION",
+        "A12_RECOVERY_APPROVAL",
+        "A13_PROJECT",
+        "A14_EXPERIMENT",
+        "A15_COST_IMPORT",
+      ],
+      production_actions_enabled: Object.values(safety).some((value) => value === "true"),
+      safety,
+    },
+  });
+}
+
+const eventRoutes = new Set([
+  "/v1/events",
+  "/v1/a1/client-configs",
+  "/v1/a13/projects",
+  "/v1/a14/experiments",
+  "/v1/a15/cost-imports",
+]);
+
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const url = new URL(request.url);
+    if (request.method === "GET" && url.pathname === "/health") return health(env);
+    if (request.method === "POST" && url.pathname === "/v1/results") {
+      return handleAutomationResult(request, env);
+    }
+    if (request.method === "POST" && url.pathname === "/v1/action-resolutions") {
+      return handleActionResolution(request, env);
+    }
+    if (request.method === "POST" && url.pathname === "/v1/ops/events") {
+      return handleOpsControlEvent(request, env);
+    }
+    if (request.method === "POST" && url.pathname === "/v1/platform/events/verify") {
+      return handleEventVerification(request, env);
+    }
+    if (request.method === "POST" && url.pathname === "/v1/a1/access-check/site") {
+      return handleAccessCheckProxy(request, env, "/check/site");
+    }
+    if (request.method === "POST" && url.pathname === "/v1/a1/access-check/http-provider") {
+      return handleAccessCheckProxy(request, env, "/check/http-provider");
+    }
+    if (request.method === "POST" && eventRoutes.has(url.pathname)) return handleEvent(request, env);
+    return failure("NOT_FOUND", 404);
+  },
+  async queue(batch: MessageBatch<unknown>, env: Env): Promise<void> {
+    const isDeadLetterQueue = batch.queue.endsWith("-dlq");
+    for (const message of batch.messages) {
+      const body = isRecord(message.body) ? message.body : {};
+      const eventId = typeof body.event_id === "string" ? body.event_id : message.id;
+      const forceFailure = body.test_force_failure === true;
+      const opsControl = body.ops_control === true;
+      let disposition = isDeadLetterQueue
+        ? "dead_letter"
+        : forceFailure
+          ? "retry_requested"
+          : "acknowledged";
+      if (opsControl && !isDeadLetterQueue) {
+        if (env.ALLOW_MAKE_A12_DISPATCH !== "true") {
+          disposition = "held_for_operator_workflow";
+        } else if (!env.MAKE_A12_WEBHOOK_URL) {
+          disposition = "delivery_blocked_missing_endpoint";
+        } else {
+          try {
+            const response = await fetch(env.MAKE_A12_WEBHOOK_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            });
+            disposition = response.ok ? "delivered" : `delivery_failed_http_${response.status}`;
+          } catch {
+            disposition = "delivery_failed_network";
+          }
+        }
+      }
+
+      await env.PLATFORM_OPS_DB.prepare(
+        "INSERT OR REPLACE INTO platform_queue_delivery (event_id, message_id, queue_name, attempt, disposition, body_json, observed_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      ).bind(
+        eventId,
+        message.id,
+        batch.queue,
+        message.attempts,
+        disposition,
+        JSON.stringify(body),
+        now(),
+      ).run();
+
+      if (
+        !isDeadLetterQueue
+        && (
+          forceFailure
+          || disposition === "delivery_blocked_missing_endpoint"
+          || disposition.startsWith("delivery_failed_")
+        )
+      ) {
+        message.retry();
+      } else {
+        message.ack();
+      }
+    }
+  },
+} satisfies ExportedHandler<Env>;

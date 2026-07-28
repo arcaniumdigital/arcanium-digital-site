@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "client_id": "TEST-0001",
+  "environment": "test",
+  "worker_version": "071faa42-313f-4782-916d-c9263b4f34f4",
+  "all_scenarios_inactive_after_test": true,
+  "external_actions_enabled": false,
+  "results": [
+    {"automation_id":"A1","scenario_id":6665241,"execution_id":"4bfc2656ebad4e089be2672601303666","event_id":"task-a1-full-20260727-001","passed":true},
+    {"automation_id":"A2","scenario_id":6665242,"execution_id":"48a167f32b0447019e820785acbe117f","event_id":"event-phase2-a2-a18529644ae74f7f8a8e456f0ba7ae21","passed":true},
+    {"automation_id":"A3","scenario_id":6665243,"execution_id":"16926beb61414053b9bf1e9c74eff7d3","event_id":"event:pub-a3-make-proof-0001","passed":true,"status":"warning_webhook_response_only"},
+    {"automation_id":"A4","scenario_id":6665244,"execution_id":"99c9661e002a493ab4798f7bd4997733","event_id":"event-phase2-a4-0d613f843c7140c2a581051aac0330a2","passed":true},
+    {"automation_id":"A5","scenario_id":6665246,"execution_id":"15ef3557132a4b1b94f2116a3576409c","event_id":"event-phase2-a5-7d4b9bbdc7054b458eb6f12172f61301","passed":true},
+    {"automation_id":"A6","scenario_id":6665247,"execution_id":"63886f1ae6de4426b16ec3f1e3d49163","event_id":"event-phase2-a6-950b5c1eacbb4a36bb1ff87fc807d52f","passed":true},
+    {"automation_id":"A7","scenario_id":6674990,"execution_id":"b47e78f705da4999ad2db991f9b35ef1","event_id":"event-phase2-a7-9e5e65aff78443dcb11ad14bdbf25eb1","passed":true},
+    {"automation_id":"A8","scenario_id":6665248,"execution_id":"477000cc227b43e1ad0a614282aae2c1","event_id":"event-phase2-a8-49b2d7040bfb4036b1fdd5dac5df75f2","passed":true},
+    {"automation_id":"A9","scenario_id":6665249,"execution_id":"c8483a475f7643bab6f3837da19551c0","event_id":"event-phase2-a9-cc14b143aa8144ab86401ace1275528a","passed":true},
+    {"automation_id":"A10","scenario_id":6665251,"execution_id":"b412b9c0ab1649baa047944016454c27","event_id":"event-phase2-a10-4f31edbbdb4644f6a74849c32de7dd86","passed":true},
+    {"automation_id":"A11","scenario_id":6665253,"execution_id":"f590e640da4145fe9744057f69af85ed","event_id":"event-phase2-a11-a013f92aea214f5e976170403a4e8bef","passed":true},
+    {"automation_id":"A12","scenario_id":6665254,"execution_id":"6529a2c2960444a2bac7c427df48f865","event_id":"ops-resolved-1785082830242","passed":true},
+    {"automation_id":"A13","scenario_id":6691548,"execution_id":"8af7db5bec9248d4a79c7413151f1cd0","event_id":"event-phase2-a13-72a1b72d7d6349e98b83a06c6caf6319","passed":true},
+    {"automation_id":"A14","scenario_id":6691550,"execution_id":"500615bd3c404b4c91fd245ec3428875","event_id":"event-phase2-a14-41ca3f061892480ea2b40af7e8f8320b","passed":true},
+    {"automation_id":"A15","scenario_id":6691553,"execution_id":"6c6abc7a04954b96aa998b57167f0453","event_id":"event-phase2-a15-57271d97a8464a988c130e179fcc480c","passed":true}
+  ],
+  "limitations": [
+    "Ingress success is not provider workflow success; A1 now has separate full workflow evidence",
+    "A2 same-run Worker, queue, Make iterator, action, and reconciliation path is verified; A3 publication preflight, token, compact Make result, Sanity read and operator-action path is verified; A12 signed incident-to-resolution control is verified; A4-A11 substantive provider branches remain incomplete",
+    "A13-A15 signed scheduled companions are tested but remain inactive",
+    "A2 listing-state tenant isolation and allowlist rejection are proven; provider-resource isolation remains unproven for the other automations",
+    "A2 source rollback and A12 dispatch rollback are verified; remaining rollback drills are unproven",
+    "Production approval remains false"
+  ]
+}

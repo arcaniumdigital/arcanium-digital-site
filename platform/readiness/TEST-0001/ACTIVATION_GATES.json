@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "client_id": "TEST-0001",
+  "environment": "test",
+  "policy": {
+    "test_requires": [
+      "scenario_configured",
+      "connections_valid",
+      "contract_tests_passed",
+      "a12_incident_path_passed"
+    ],
+    "production_additionally_requires": [
+      "provider_workflow_verified",
+      "cross_client_isolation_passed",
+      "cost_cap_configured",
+      "approval_owners_configured",
+      "rollback_tested",
+      "production_approved"
+    ]
+  },
+  "automations": [
+    {"automation_id":"A1","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":true,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A2","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":true,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":true,"production_approved":false},
+    {"automation_id":"A3","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":true,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A4","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":false,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A5","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":false,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A6","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":false,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A7","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":false,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A8","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":false,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A9","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":false,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A10","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":false,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A11","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":false,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A12","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":true,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":true,"production_approved":false},
+    {"automation_id":"A13","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":true,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A14","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":true,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false},
+    {"automation_id":"A15","scenario_configured":true,"connections_valid":true,"contract_tests_passed":true,"provider_workflow_verified":true,"cross_client_isolation_passed":true,"cost_cap_configured":true,"approval_owners_configured":true,"a12_incident_path_passed":true,"rollback_tested":false,"production_approved":false}
+  ]
+}

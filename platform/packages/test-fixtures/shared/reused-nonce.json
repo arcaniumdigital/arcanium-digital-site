@@ -1,0 +1,8 @@
+{
+  "name": "reused nonce",
+  "first_request": "valid signed fixture",
+  "second_request": "same nonce and signature",
+  "expected_second_status": 409,
+  "expected_error": "REPLAY_REJECTED",
+  "forbidden_side_effects": ["second_d1_write", "second_queue_send"]
+}

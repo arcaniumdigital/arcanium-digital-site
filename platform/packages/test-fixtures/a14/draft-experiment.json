@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/a14/experiments",
+    "body": {
+      "schema_version": "1.0",
+      "event_id": "{{unique_event_id}}",
+      "idempotency_key": "{{unique_idempotency_key}}",
+      "correlation_id": "{{unique_correlation_id}}",
+      "automation_id": "A14",
+      "event_type": "cro.experiment.requested",
+      "client_id": "TEST-0001",
+      "environment": "test",
+      "occurred_at": "{{iso_timestamp}}",
+      "severity": "info",
+      "payload": {
+        "experiment_id": "{{unique_experiment_id}}",
+        "name": "Test-only enquiry CTA hypothesis",
+        "hypothesis_version": "1.0",
+        "page_scope": ["/"],
+        "primary_metric": "confirmed_conversion"
+      }
+    }
+  },
+  "expected": {
+    "http_status": 202,
+    "d1_table": "a14_experiments",
+    "d1_match": {
+      "environment": "test",
+      "client_id": "TEST-0001",
+      "status": "draft",
+      "primary_metric": "confirmed_conversion"
+    },
+    "safety": {
+      "allow_experiment_launch": false
+    }
+  }
+}

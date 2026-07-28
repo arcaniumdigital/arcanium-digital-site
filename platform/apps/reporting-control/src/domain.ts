@@ -1,0 +1,2 @@
+export interface ReportInput{expected:number;observed:number;contains_raw_rows:boolean;approval_id?:string;}
+export function authorizeReport(i:ReportInput,publicDelivery:boolean){if(i.contains_raw_rows)return{permitted:false,code:"RAW_ANALYTICS_FORBIDDEN"};if(i.expected!==i.observed)return{permitted:false,code:"RECONCILIATION_REQUIRED"};if(!i.approval_id)return{permitted:false,code:"APPROVAL_REQUIRED"};if(!publicDelivery)return{permitted:false,code:"PUBLIC_DELIVERY_DISABLED"};return{permitted:true,code:"PERMITTED"};}

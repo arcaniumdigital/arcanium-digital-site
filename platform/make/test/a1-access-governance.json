@@ -1,0 +1,672 @@
+{
+  "name": "TEST CLONE — A1 — Client Configuration, Access and Governance",
+  "flow": [
+    {
+      "id": 1,
+      "module": "google-sheets:filterRows",
+      "version": 2,
+      "parameters": { "__IMTCONN__": 9299159 },
+      "mapper": {
+        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+        "sheetId": "Work_Queue",
+        "tableFirstRow": "A1:L1",
+        "includesHeaders": true,
+        "filter": [
+          [
+            { "a": "D", "b": "pending", "o": "text:equal" },
+            { "a": "E", "b": "{{now}}", "o": "date:lessorequal" }
+          ]
+        ],
+        "sortOrder": "asc",
+        "orderBy": "E",
+        "valueRenderOption": "FORMATTED_VALUE",
+        "dateTimeRenderOption": "FORMATTED_STRING",
+        "limit": 25
+      },
+      "metadata": {
+        "designer": { "x": 0, "y": 0, "label": "Due Work_Queue tasks only (max 25)" }
+      }
+    },
+    {
+      "id": 2,
+      "module": "datastore:ExistRecord",
+      "version": 1,
+      "parameters": { "datastore": 151407 },
+      "filter": {
+        "name": "At least one due queue row returned",
+        "conditions": [[{ "a": "{{1.__IMTLENGTH__}}", "b": "0", "o": "number:greater" }]]
+      },
+      "mapper": { "key": "{{1.`6`}}" },
+      "metadata": {
+        "designer": { "x": 250, "y": 0, "label": "TEST_A1_DEDUP check" }
+      }
+    },
+    {
+      "id": 3,
+      "module": "datastore:ExistRecord",
+      "version": 1,
+      "parameters": { "datastore": 151406 },
+      "mapper": { "key": "{{1.`1`}}" },
+      "metadata": {
+        "designer": { "x": 500, "y": 0, "label": "TEST_A1_LOCKS check" }
+      }
+    },
+    {
+      "id": 4,
+      "module": "datastore:AddRecord",
+      "version": 1,
+      "parameters": { "datastore": 151406 },
+      "filter": {
+        "name": "Not completed and lock available",
+        "conditions": [
+          [
+            { "a": "{{2.exists}}", "b": "false", "o": "boolean:equal" },
+            { "a": "{{3.exists}}", "b": "false", "o": "boolean:equal" }
+          ]
+        ]
+      },
+      "mapper": {
+        "key": "{{1.`1`}}",
+        "overwrite": false,
+        "data": {
+          "client_id": "{{1.`1`}}",
+          "lock_owner": "{{executionId}}",
+          "correlation_id": "a1:{{1.`0`}}:{{executionId}}",
+          "expires_at": "{{addMinutes(now; 30)}}"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 750, "y": 0, "label": "Acquire 30-minute client lock" }
+      }
+    },
+    {
+      "id": 5,
+      "module": "google-sheets:updateRow",
+      "version": 2,
+      "parameters": { "__IMTCONN__": 9299159 },
+      "mapper": {
+        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+        "sheetId": "Work_Queue",
+        "rowNumber": "{{1.__ROW_NUMBER__}}",
+        "valueInputOption": "USER_ENTERED",
+        "mode": "map",
+        "values": {
+          "3": "running",
+          "5": "{{parseNumber(1.`5`) + 1}}",
+          "7": "a1:{{1.`0`}}:{{executionId}}",
+          "10": "{{now}}",
+          "11": ""
+        }
+      },
+      "metadata": {
+        "designer": { "x": 1000, "y": 0, "label": "Mark task running" }
+      }
+    },
+    {
+      "id": 6,
+      "module": "google-sheets:filterRows",
+      "version": 2,
+      "parameters": { "__IMTCONN__": 9299159 },
+      "mapper": {
+        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+        "sheetId": "Clients",
+        "tableFirstRow": "A1:L1",
+        "includesHeaders": true,
+        "filter": [[{ "a": "A", "b": "{{1.`1`}}", "o": "text:equal" }]],
+        "limit": 1
+      },
+      "metadata": {
+        "designer": { "x": 1250, "y": 0, "label": "Load one tenant-scoped client" }
+      }
+    },
+    {
+      "id": 7,
+      "module": "google-sheets:filterRows",
+      "version": 2,
+      "parameters": { "__IMTCONN__": 9299159 },
+      "mapper": {
+        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+        "sheetId": "Integrations",
+        "tableFirstRow": "A1:L1",
+        "includesHeaders": true,
+        "filter": [
+          [
+            { "a": "B", "b": "{{1.`1`}}", "o": "text:equal" },
+            { "a": "D", "b": "TRUE", "o": "text:equal" }
+          ]
+        ],
+        "limit": 50
+      },
+      "metadata": {
+        "designer": { "x": 1500, "y": 0, "label": "Enabled integrations for this client" }
+      }
+    },
+    {
+      "id": 8,
+      "module": "google-sheets:filterRows",
+      "version": 2,
+      "parameters": { "__IMTCONN__": 9299159 },
+      "mapper": {
+        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+        "sheetId": "Provider_Rules",
+        "tableFirstRow": "A1:G1",
+        "includesHeaders": true,
+        "filter": [
+          [
+            { "a": "A", "b": "{{7.`2`}}", "o": "text:equal" },
+            { "a": "B", "b": "{{7.`5`}}", "o": "text:equal" }
+          ]
+        ],
+        "limit": 1
+      },
+      "metadata": {
+        "designer": { "x": 1750, "y": 0, "label": "Provider rule and timeout" }
+      }
+    },
+    {
+      "id": 9,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "parameters": {},
+      "mapper": null,
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 10,
+              "module": "builtin:BasicRouter",
+              "version": 1,
+              "parameters": {},
+              "mapper": null,
+              "filter": {
+                "name": "Validation task types",
+                "conditions": [
+                  [{ "a": "{{1.`2`}}", "b": "CLIENT_VALIDATE_FULL", "o": "text:equal" }],
+                  [{ "a": "{{1.`2`}}", "b": "CLIENT_VALIDATE_LIGHT", "o": "text:equal" }],
+                  [{ "a": "{{1.`2`}}", "b": "CLIENT_VALIDATE_COST", "o": "text:equal" }],
+                  [{ "a": "{{1.`2`}}", "b": "CLIENT_VALIDATE_PERMISSIONS", "o": "text:equal" }],
+                  [{ "a": "{{1.`2`}}", "b": "CLIENT_VALIDATE_POLICY_VENDOR", "o": "text:equal" }],
+                  [{ "a": "{{1.`2`}}", "b": "INTEGRATION_VALIDATE_SINGLE", "o": "text:equal" }]
+                ]
+              },
+              "routes": [
+                {
+                  "flow": [
+                    {
+                      "id": 11,
+                      "module": "app#arcaniumplatformcore-f8xrap:sendSignedEvent",
+                      "version": 1,
+                      "parameters": { "__IMTCONN__": 9288408 },
+                      "filter": {
+                        "name": "Signed Worker site-health branch",
+                        "conditions": [[{ "a": "{{7.`5`}}", "b": "site_health", "o": "text:equal" }]]
+                      },
+                      "mapper": {
+                        "endpointPath": "/v1/a1/access-check/site",
+                        "timestamp": "{{formatDate(now; \"YYYY-MM-DDTHH:mm:ss.SSS[Z]\"; \"UTC\")}}",
+                        "nonce": "a1:{{1.`0`}}:{{executionId}}",
+                        "eventBody": "{\"schema_version\":\"1.0\",\"request_id\":\"a1:{{1.`0`}}:{{executionId}}\",\"idempotency_key\":\"{{1.`6`}}\",\"correlation_id\":\"a1:{{1.`0`}}:{{executionId}}\",\"client_id\":\"{{1.`1`}}\",\"environment\":\"test\",\"check_type\":\"site\",\"timeout_ms\":5000,\"url\":\"https://arcaniumdigital.com\",\"preferred_host\":\"www.arcaniumdigital.com\",\"expected_canonical_origin\":\"https://www.arcaniumdigital.com\"}",
+                        "correlationId": "a1:{{1.`0`}}:{{executionId}}"
+                      },
+                      "metadata": {
+                        "designer": { "x": 2500, "y": -300, "label": "Signed access-check Worker via platform gateway" }
+                      }
+                    },
+                    {
+                      "id": 12,
+                      "module": "google-sheets:addRow",
+                      "version": 2,
+                      "parameters": { "__IMTCONN__": 9299159 },
+                      "mapper": {
+                        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                        "sheetId": "Integration_Status",
+                        "tableFirstRow": "A1:Z1",
+                        "valueInputOption": "RAW",
+                        "insertUnformatted": true,
+                        "mode": "map",
+                        "values": {
+                          "0": "status:{{1.`0`}}:{{7.`0`}}",
+                          "1": "{{1.`1`}}",
+                          "2": "{{7.`0`}}",
+                          "3": "{{7.`2`}}",
+                          "4": "healthy",
+                          "5": "none",
+                          "6": "{{7.`4`}}",
+                          "7": "FALSE",
+                          "8": "{{now}}",
+                          "9": "a1:{{1.`0`}}:{{executionId}}",
+                          "10": "Signed site, canonical, preferred-host, robots and sitemap checks passed."
+                        }
+                      },
+                      "metadata": { "designer": { "x": 2750, "y": -300 } }
+                    },
+                    {
+                      "id": 13,
+                      "module": "google-sheets:addRow",
+                      "version": 2,
+                      "parameters": { "__IMTCONN__": 9299159 },
+                      "mapper": {
+                        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                        "sheetId": "Review_Dates",
+                        "tableFirstRow": "A1:Z1",
+                        "valueInputOption": "RAW",
+                        "insertUnformatted": true,
+                        "mode": "map",
+                        "values": {
+                          "0": "review:{{1.`0`}}:{{7.`0`}}",
+                          "1": "{{1.`1`}}",
+                          "2": "{{7.`0`}}",
+                          "3": "{{1.`2`}}",
+                          "4": "{{now}}",
+                          "5": "{{addHours(now; parseNumber(7.`7`))}}",
+                          "6": "scheduled",
+                          "7": "{{now}}"
+                        }
+                      },
+                      "metadata": { "designer": { "x": 3000, "y": -300 } }
+                    },
+                    {
+                      "id": 14,
+                      "module": "google-sheets:addRow",
+                      "version": 2,
+                      "parameters": { "__IMTCONN__": 9299159 },
+                      "mapper": {
+                        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                        "sheetId": "Access_Log",
+                        "tableFirstRow": "A1:Z1",
+                        "valueInputOption": "RAW",
+                        "insertUnformatted": true,
+                        "mode": "map",
+                        "values": {
+                          "0": "audit:{{1.`0`}}:{{executionId}}",
+                          "1": "{{1.`1`}}",
+                          "2": "{{1.`0`}}",
+                          "3": "{{1.`2`}}",
+                          "4": "completed",
+                          "5": "a1:{{1.`0`}}:{{executionId}}",
+                          "6": "{{executionId}}",
+                          "7": "{{now}}",
+                          "8": "make://scenario/6665241/execution/{{executionId}}"
+                        }
+                      },
+                      "metadata": { "designer": { "x": 3250, "y": -300 } }
+                    },
+                    {
+                      "id": 15,
+                      "module": "resend:sendAnEmail",
+                      "version": 1,
+                      "parameters": { "__IMTCONN__": 9218511 },
+                      "mapper": {
+                        "to": ["olliemjreid@gmail.com"],
+                        "from": "Arcanium Digital <enquiries@arcaniumdigital.com>",
+                        "subject": "A1 TEST validation summary — {{1.`1`}}",
+                        "sendEmailAs": "text",
+                        "text": "TEST ONLY. One consolidated A1 validation summary for {{1.`1`}}. Task {{1.`0`}} ({{1.`2`}}) completed via the signed access-check Worker. Production activation, public sends and provider mutations remain disabled."
+                      },
+                      "metadata": {
+                        "designer": { "x": 3500, "y": -300, "label": "One consolidated TEST operator email" }
+                      }
+                    },
+                    {
+                      "id": 16,
+                      "module": "google-sheets:updateRow",
+                      "version": 2,
+                      "parameters": { "__IMTCONN__": 9299159 },
+                      "mapper": {
+                        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                        "sheetId": "Work_Queue",
+                        "rowNumber": "{{1.__ROW_NUMBER__}}",
+                        "valueInputOption": "USER_ENTERED",
+                        "mode": "map",
+                        "values": {
+                          "3": "completed",
+                          "7": "a1:{{1.`0`}}:{{executionId}}",
+                          "10": "{{now}}",
+                          "11": ""
+                        }
+                      },
+                      "metadata": { "designer": { "x": 3750, "y": -300, "label": "Complete due task" } }
+                    },
+                    {
+                      "id": 17,
+                      "module": "datastore:AddRecord",
+                      "version": 1,
+                      "parameters": { "datastore": 151407 },
+                      "mapper": {
+                        "key": "{{1.`6`}}",
+                        "overwrite": true,
+                        "data": {
+                          "idempotency_key": "{{1.`6`}}",
+                          "client_id": "{{1.`1`}}",
+                          "event_id": "{{1.`0`}}",
+                          "processed_at": "{{now}}"
+                        }
+                      },
+                      "metadata": { "designer": { "x": 4000, "y": -300 } }
+                    },
+                    {
+                      "id": 18,
+                      "module": "datastore:AddRecord",
+                      "version": 1,
+                      "parameters": { "datastore": 151408 },
+                      "mapper": {
+                        "key": "{{1.`1`}}",
+                        "overwrite": true,
+                        "data": {
+                          "client_id": "{{1.`1`}}",
+                          "config_version": "{{ifempty(6.`11`; \"test-v1\")}}",
+                          "config_hash": "{{sha256(6.`5`)}}",
+                          "checked_at": "{{now}}"
+                        }
+                      },
+                      "metadata": { "designer": { "x": 4250, "y": -300 } }
+                    },
+                    {
+                      "id": 19,
+                      "module": "datastore:DeleteRecord",
+                      "version": 1,
+                      "parameters": { "datastore": 151406 },
+                      "mapper": { "key": "{{1.`1`}}" },
+                      "metadata": { "designer": { "x": 4500, "y": -300, "label": "Release client lock" } }
+                    }
+                  ]
+                },
+                {
+                  "flow": [
+                    {
+                      "id": 20,
+                      "module": "builtin:BasicAggregator",
+                      "version": 1,
+                      "parameters": { "feeder": 8 },
+                      "filter": {
+                        "name": "Reserved multi-integration aggregation path",
+                        "conditions": [[{ "a": "{{7.`5`}}", "b": "__aggregate_batch__", "o": "text:equal" }]]
+                      },
+                      "mapper": {
+                        "client_id": "{{1.`1`}}",
+                        "integration_id": "{{7.`0`}}",
+                        "status": "{{7.`9`}}"
+                      },
+                      "metadata": {
+                        "designer": { "x": 2500, "y": 0, "label": "Aggregate integration results for multi-provider clients" }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "flow": [
+                    {
+                      "id": 21,
+                      "module": "google-sheets:addRow",
+                      "version": 2,
+                      "parameters": { "__IMTCONN__": 9299159 },
+                      "filter": {
+                        "name": "Optional unsupported branch only",
+                        "conditions": [[{ "a": "{{7.`4`}}", "b": "FALSE", "o": "text:equal" }]]
+                      },
+                      "mapper": {
+                        "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                        "sheetId": "Integration_Status",
+                        "tableFirstRow": "A1:Z1",
+                        "valueInputOption": "RAW",
+                        "insertUnformatted": true,
+                        "mode": "map",
+                        "values": {
+                          "0": "status:{{1.`0`}}:{{7.`0`}}",
+                          "1": "{{1.`1`}}",
+                          "2": "{{7.`0`}}",
+                          "3": "{{7.`2`}}",
+                          "4": "degraded",
+                          "5": "permanent",
+                          "6": "FALSE",
+                          "7": "FALSE",
+                          "8": "{{now}}",
+                          "9": "a1:{{1.`0`}}:{{executionId}}",
+                          "10": "Optional unsupported capability disabled without blocking the client."
+                        }
+                      },
+                      "metadata": { "designer": { "x": 2500, "y": 300 } }
+                    }
+                  ]
+                }
+              ],
+              "metadata": {
+                "designer": { "x": 2250, "y": -150, "label": "Router by integration capability" }
+              }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 30,
+              "module": "google-sheets:filterRows",
+              "version": 2,
+              "parameters": { "__IMTCONN__": 9299159 },
+              "filter": {
+                "name": "APPROVAL_APPLY only",
+                "conditions": [[{ "a": "{{1.`2`}}", "b": "APPROVAL_APPLY", "o": "text:equal" }]]
+              },
+              "mapper": {
+                "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                "sheetId": "Approval_Queue",
+                "tableFirstRow": "A1:J1",
+                "includesHeaders": true,
+                "filter": [
+                  [
+                    { "a": "A", "b": "{{1.`8`}}", "o": "text:equal" },
+                    { "a": "D", "b": "approved", "o": "text:equal" }
+                  ]
+                ],
+                "limit": 1
+              },
+              "metadata": { "designer": { "x": 2250, "y": 500, "label": "Approved safe changes only" } }
+            },
+            {
+              "id": 31,
+              "module": "google-sheets:addRow",
+              "version": 2,
+              "parameters": { "__IMTCONN__": 9299159 },
+              "mapper": {
+                "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                "sheetId": "Access_Log",
+                "tableFirstRow": "A1:Z1",
+                "valueInputOption": "RAW",
+                "insertUnformatted": true,
+                "mode": "map",
+                "values": {
+                  "0": "audit:{{1.`0`}}:{{executionId}}",
+                  "1": "{{1.`1`}}",
+                  "2": "{{1.`0`}}",
+                  "3": "APPROVAL_APPLY",
+                  "4": "approved_safe_change_queued_for_validation",
+                  "5": "a1:{{1.`0`}}:{{executionId}}",
+                  "6": "{{executionId}}",
+                  "7": "{{now}}",
+                  "8": "approval:{{30.`0`}}"
+                }
+              },
+              "metadata": { "designer": { "x": 2500, "y": 500 } }
+            },
+            {
+              "id": 32,
+              "module": "google-sheets:addRow",
+              "version": 2,
+              "parameters": { "__IMTCONN__": 9299159 },
+              "mapper": {
+                "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                "sheetId": "Work_Queue",
+                "tableFirstRow": "A1:Z1",
+                "valueInputOption": "RAW",
+                "insertUnformatted": true,
+                "mode": "map",
+                "values": {
+                  "0": "validation:{{1.`0`}}",
+                  "1": "{{1.`1`}}",
+                  "2": "CLIENT_VALIDATE_LIGHT",
+                  "3": "pending",
+                  "4": "{{now}}",
+                  "5": "0",
+                  "6": "validation:{{1.`6`}}",
+                  "7": "a1:{{1.`0`}}:{{executionId}}",
+                  "8": "{{1.`8`}}",
+                  "9": "{{now}}",
+                  "10": "{{now}}",
+                  "11": ""
+                }
+              },
+              "metadata": { "designer": { "x": 2750, "y": 500, "label": "Queue validation after approved safe change" } }
+            },
+            {
+              "id": 33,
+              "module": "google-sheets:updateRow",
+              "version": 2,
+              "parameters": { "__IMTCONN__": 9299159 },
+              "mapper": {
+                "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                "sheetId": "Work_Queue",
+                "rowNumber": "{{1.__ROW_NUMBER__}}",
+                "valueInputOption": "USER_ENTERED",
+                "mode": "map",
+                "values": { "3": "completed", "10": "{{now}}", "11": "" }
+              },
+              "metadata": { "designer": { "x": 3000, "y": 500 } }
+            },
+            {
+              "id": 34,
+              "module": "datastore:AddRecord",
+              "version": 1,
+              "parameters": { "datastore": 151407 },
+              "mapper": {
+                "key": "{{1.`6`}}",
+                "overwrite": true,
+                "data": {
+                  "idempotency_key": "{{1.`6`}}",
+                  "client_id": "{{1.`1`}}",
+                  "event_id": "{{1.`0`}}",
+                  "processed_at": "{{now}}"
+                }
+              },
+              "metadata": { "designer": { "x": 3250, "y": 500 } }
+            },
+            {
+              "id": 35,
+              "module": "datastore:DeleteRecord",
+              "version": 1,
+              "parameters": { "datastore": 151406 },
+              "mapper": { "key": "{{1.`1`}}" },
+              "metadata": { "designer": { "x": 3500, "y": 500 } }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 40,
+              "module": "google-sheets:filterRows",
+              "version": 2,
+              "parameters": { "__IMTCONN__": 9299159 },
+              "filter": {
+                "name": "CLIENT_ACTIVATE only",
+                "conditions": [[{ "a": "{{1.`2`}}", "b": "CLIENT_ACTIVATE", "o": "text:equal" }]]
+              },
+              "mapper": {
+                "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                "sheetId": "Approval_Queue",
+                "tableFirstRow": "A1:J1",
+                "includesHeaders": true,
+                "filter": [
+                  [
+                    { "a": "A", "b": "{{1.`8`}}", "o": "text:equal" },
+                    { "a": "C", "b": "client_activation", "o": "text:equal" },
+                    { "a": "D", "b": "approved", "o": "text:equal" }
+                  ]
+                ],
+                "limit": 1
+              },
+              "metadata": { "designer": { "x": 2250, "y": 800, "label": "Activation approval gate" } }
+            },
+            {
+              "id": 41,
+              "module": "google-sheets:addRow",
+              "version": 2,
+              "parameters": { "__IMTCONN__": 9299159 },
+              "mapper": {
+                "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                "sheetId": "Access_Log",
+                "tableFirstRow": "A1:Z1",
+                "valueInputOption": "RAW",
+                "insertUnformatted": true,
+                "mode": "map",
+                "values": {
+                  "0": "audit:{{1.`0`}}:{{executionId}}",
+                  "1": "{{1.`1`}}",
+                  "2": "{{1.`0`}}",
+                  "3": "CLIENT_ACTIVATE",
+                  "4": "held_test_mode_production_activation_disabled",
+                  "5": "a1:{{1.`0`}}:{{executionId}}",
+                  "6": "{{executionId}}",
+                  "7": "{{now}}",
+                  "8": "approval:{{40.`0`}}"
+                }
+              },
+              "metadata": { "designer": { "x": 2500, "y": 800, "label": "Activation remains disabled in TEST" } }
+            },
+            {
+              "id": 42,
+              "module": "google-sheets:updateRow",
+              "version": 2,
+              "parameters": { "__IMTCONN__": 9299159 },
+              "mapper": {
+                "spreadsheetId": "1N0RDW07hL4etmMCLZgJhp8N5qtyUeY2pAiWqJffXWx0",
+                "sheetId": "Work_Queue",
+                "rowNumber": "{{1.__ROW_NUMBER__}}",
+                "valueInputOption": "USER_ENTERED",
+                "mode": "map",
+                "values": {
+                  "3": "blocked",
+                  "10": "{{now}}",
+                  "11": "PRODUCTION_ACTIVATION_DISABLED"
+                }
+              },
+              "metadata": { "designer": { "x": 2750, "y": 800 } }
+            },
+            {
+              "id": 43,
+              "module": "datastore:DeleteRecord",
+              "version": 1,
+              "parameters": { "datastore": 151406 },
+              "mapper": { "key": "{{1.`1`}}" },
+              "metadata": { "designer": { "x": 3000, "y": 800 } }
+            }
+          ]
+        }
+      ],
+      "metadata": {
+        "designer": { "x": 2000, "y": 0, "label": "Router by A1 task type" }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": true,
+      "freshVariables": false
+    },
+    "designer": { "orphans": [] },
+    "zone": "eu1.make.com",
+    "notes": [
+      "TEST-only A1 control plane.",
+      "No production activation, public send, provider mutation, secret storage or LLM modules.",
+      "The multi-integration aggregator route is reserved until more than one enabled integration is seeded."
+    ]
+  }
+}
