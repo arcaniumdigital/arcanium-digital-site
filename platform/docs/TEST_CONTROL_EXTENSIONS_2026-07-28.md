@@ -22,3 +22,5 @@ A9 was independently exercised for TEST-0002 through inactive-by-default Make sc
 A7 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733460 (hook 3461725), successful execution 208914cbfca246b092569404acdabf62. The TEST D1 aggregate returned one separate capped GEO action per tenant; provider spend, LLM, and public actions remain disabled.
 
 A5 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733488 (hook 3461735), successful execution c0027a5136c64c878e572a474fe0c1ba. The TEST D1 aggregate returned one isolated run and two manual-review actions per tenant, with LLM and provider-spend flags at zero.
+
+A4 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733538 (hook 3461756), successful execution 017038015f5544769ae7d42765b39b5c. The TEST D1 aggregate returned one separate synthetic review per tenant; these standard-severity inputs created no reply/action, and GBP mutation remains disabled.
