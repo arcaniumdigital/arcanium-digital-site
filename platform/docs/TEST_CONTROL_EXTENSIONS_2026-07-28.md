@@ -26,3 +26,5 @@ A5 was independently exercised for TEST-0002 through inactive-by-default Make sc
 A4 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733538 (hook 3461756), successful execution 017038015f5544769ae7d42765b39b5c. The TEST D1 aggregate returned one separate synthetic review per tenant; these standard-severity inputs created no reply/action, and GBP mutation remains disabled.
 
 A8 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733570 (hook 3461770), successful execution 3f2f5b1fbe2a41b188b74e2d6a2e875e. The TEST D1 aggregate returned one separate received-only synthetic receipt per tenant; external delivery remains disabled.
+
+A6 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733612 (hook 3461785), successful execution a6df0eb3fd914528a8379b5f46ae3279. The TEST D1 aggregate returned one separate processed synthetic technical result per tenant; this isolation proof made no provider read and no technical mutation.
