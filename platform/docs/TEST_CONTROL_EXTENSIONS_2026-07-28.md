@@ -20,3 +20,5 @@ A10 was independently exercised for TEST-0002 through inactive-by-default Make s
 A9 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733430 (hook 3461710), successful execution 40a80eb237614f8c966172c30fedc971. The TEST D1 aggregate returned one evidence record and one approval-pending draft per tenant, with LLM calls and publication enabled both at zero.
 
 A7 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733460 (hook 3461725), successful execution 208914cbfca246b092569404acdabf62. The TEST D1 aggregate returned one separate capped GEO action per tenant; provider spend, LLM, and public actions remain disabled.
+
+A5 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733488 (hook 3461735), successful execution c0027a5136c64c878e572a474fe0c1ba. The TEST D1 aggregate returned one isolated run and two manual-review actions per tenant, with LLM and provider-spend flags at zero.
