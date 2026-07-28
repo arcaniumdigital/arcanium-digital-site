@@ -28,3 +28,5 @@ A4 was independently exercised for TEST-0002 through inactive-by-default Make sc
 A8 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733570 (hook 3461770), successful execution 3f2f5b1fbe2a41b188b74e2d6a2e875e. The TEST D1 aggregate returned one separate received-only synthetic receipt per tenant; external delivery remains disabled.
 
 A6 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733612 (hook 3461785), successful execution a6df0eb3fd914528a8379b5f46ae3279. The TEST D1 aggregate returned one separate processed synthetic technical result per tenant; this isolation proof made no provider read and no technical mutation.
+
+A1 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733668 (hook 3461812), successful execution cc5c5dbf27a14faa962d6ef75a84cae2. The platform-core TEST D1 aggregate returned separate onboarding-only client configuration records for both tenants; this clone used no workbook, email, provider, or production path.
