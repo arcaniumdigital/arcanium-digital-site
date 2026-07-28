@@ -1,0 +1,2 @@
+CREATE TABLE IF NOT EXISTS reporting_nonces(nonce TEXT PRIMARY KEY,expires_at INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS reporting_runs(environment TEXT NOT NULL,client_id TEXT NOT NULL,idempotency_key TEXT NOT NULL,expected INTEGER NOT NULL,observed INTEGER NOT NULL,contains_raw_rows INTEGER NOT NULL,status TEXT NOT NULL,created_at TEXT NOT NULL,PRIMARY KEY(environment,client_id,idempotency_key));
