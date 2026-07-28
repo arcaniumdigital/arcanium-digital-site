@@ -32,3 +32,5 @@ A6 was independently exercised for TEST-0002 through inactive-by-default Make sc
 A1 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733668 (hook 3461812), successful execution cc5c5dbf27a14faa962d6ef75a84cae2. The platform-core TEST D1 aggregate returned separate onboarding-only client configuration records for both tenants; this clone used no workbook, email, provider, or production path.
 
 A12 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733704 (hook 3461835), successful execution 038399b186c94e9e861b63aa2f711afa. The platform-core TEST D1 aggregate returned separate persisted A12 requests for both tenants; external dispatch and dangerous replay remained disabled.
+
+A13 was independently exercised for TEST-0002 through inactive-by-default Make scenario 6733755 (hook 3461858), successful execution fff8ec6155d545209645f66d0425bc26. The dedicated TEST D1 aggregate returned separate requested project records for both tenants; site launch and DNS changes remained disabled.
