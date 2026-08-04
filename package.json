@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev --hostname localhost --port 3000",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test:vendor-audit": "node --test tests/vendor-audit-intake.test.mjs",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",
