@@ -9,7 +9,7 @@
 7. Validate Brevo contact/deal/internal email, Cal booking/reschedule/cancel, ClickSend accepted/receipt/reply/STOP, Queue retry, DLQ incident, and recovery alert.
 8. Run the full automated suite and public route smoke checks.
 9. Confirm protected health and all three UptimeRobot monitors recover cleanly.
-10. Enable ClickSend/two-way/URL approval first, then `ALLOW_PRODUCTION_SMS`, then approved nurture/reminder flags one at a time.
+10. Enable ClickSend and URL approval first. Require either webhook-based two-way handling or explicitly approved manual reply handling on the sender handset, then enable `ALLOW_PRODUCTION_SMS` and approved nurture/reminder flags one at a time.
 11. Watch the first real lead end-to-end. Do not enable the weekly paid canary unless separately approved.
 
 Activation is incomplete while any P1 incident is open, a provider check is stale, the canary or heartbeat is stale, schema/deployment versions disagree, or the live consent wording is unapproved.

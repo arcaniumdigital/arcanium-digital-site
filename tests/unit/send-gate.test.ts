@@ -9,13 +9,15 @@ const lead: LeadRow = {
   replied_at: null, brevo_contact_id: null, brevo_deal_id: null, current_booking_uid: null, latest_message_type: null, latest_message_sent_at: null, created_at: "2026-08-09T00:00:00Z",
 };
 const job: MessageJobRow = { id: "msg_1", lead_id: lead.id, booking_uid: "", booking_revision: 0, message_type: "PREBOOK_10M_V3", template_version: "3", due_at: "2026-08-09T00:00:00Z", status: "CLAIMED", attempt_count: 1, provider_message_id: null, side_effect_state: "NOT_STARTED" };
-const config: SendGateConfig = { environment: "production", allowProductionSms: true, allowPrebookNurture: true, allowBookingReminders: true, clickSendEnabled: true, twoWayEnabled: true, urlMessagingApproved: true, sender: "+61700000000", businessTimezone: "Australia/Brisbane", allowedStartHour: 7, allowedEndHour: 20, maxPartsPrebook: 3, maxPartsBooked: 4 };
+const config: SendGateConfig = { environment: "production", allowProductionSms: true, allowPrebookNurture: true, allowBookingReminders: true, clickSendEnabled: true, twoWayEnabled: true, manualReplyHandlingApproved: false, urlMessagingApproved: true, sender: "+61700000000", businessTimezone: "Australia/Brisbane", allowedStartHour: 7, allowedEndHour: 20, maxPartsPrebook: 3, maxPartsBooked: 4 };
 const input = (overrides: Partial<Parameters<typeof evaluateSendGate>[0]> = {}) => ({ lead, job, body: "Book https://arcaniumdigital.com/audit", now: new Date("2026-08-09T00:00:00Z"), config, globallySuppressed: false, ...overrides });
 
 describe("authoritative send gate", () => {
   it("allows an eligible consented nurture", () => expect(evaluateSendGate(input()).allowed).toBe(true));
   it("blocks production while the kill switch is off", () => expect(evaluateSendGate(input({ config: { ...config, allowProductionSms: false } }))).toEqual({ allowed: false, reason: "PRODUCTION_SMS_DISABLED" }));
   it("blocks when ClickSend is disabled", () => expect(evaluateSendGate(input({ config: { ...config, clickSendEnabled: false } })).allowed).toBe(false));
+  it("allows operator-monitored replies when webhook two-way is unavailable", () => expect(evaluateSendGate(input({ config: { ...config, twoWayEnabled: false, manualReplyHandlingApproved: true } })).allowed).toBe(true));
+  it("blocks when neither automated nor manual reply handling is approved", () => expect(evaluateSendGate(input({ config: { ...config, twoWayEnabled: false, manualReplyHandlingApproved: false } }))).toEqual({ allowed: false, reason: "REPLY_HANDLING_DISABLED" }));
   it("blocks URL messages until approved", () => expect(evaluateSendGate(input({ config: { ...config, urlMessagingApproved: false } }))).toEqual({ allowed: false, reason: "URL_MESSAGING_NOT_APPROVED" }));
   it("blocks global suppression", () => expect(evaluateSendGate(input({ globallySuppressed: true }))).toEqual({ allowed: false, reason: "SUPPRESSED" }));
   it("blocks manual pause", () => expect(evaluateSendGate(input({ lead: { ...lead, manual_pause: 1 } }))).toEqual({ allowed: false, reason: "MANUAL_PAUSE" }));

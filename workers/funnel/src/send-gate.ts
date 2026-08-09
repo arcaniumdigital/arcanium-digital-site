@@ -9,6 +9,7 @@ export type SendGateConfig = {
   allowBookingReminders: boolean;
   clickSendEnabled: boolean;
   twoWayEnabled: boolean;
+  manualReplyHandlingApproved: boolean;
   urlMessagingApproved: boolean;
   sender: string;
   businessTimezone: string;
@@ -33,7 +34,7 @@ export function evaluateSendGate(input: {
   if (!config.clickSendEnabled) return { allowed: false, reason: "CLICKSEND_DISABLED" };
   if (!/^\+614\d{8}$/.test(lead.phone_e164)) return { allowed: false, reason: "INVALID_PHONE" };
   if (!config.sender) return { allowed: false, reason: "SENDER_MISSING" };
-  if (!config.twoWayEnabled) return { allowed: false, reason: "TWO_WAY_DISABLED" };
+  if (!config.twoWayEnabled && !config.manualReplyHandlingApproved) return { allowed: false, reason: "REPLY_HANDLING_DISABLED" };
   if (body.includes("http") && !config.urlMessagingApproved) return { allowed: false, reason: "URL_MESSAGING_NOT_APPROVED" };
   if (input.globallySuppressed || lead.suppression_state !== "NONE") return { allowed: false, reason: "SUPPRESSED" };
   if (lead.manual_pause) return { allowed: false, reason: "MANUAL_PAUSE" };

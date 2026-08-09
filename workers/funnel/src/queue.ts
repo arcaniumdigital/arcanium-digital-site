@@ -82,6 +82,7 @@ async function processMessageJob(env: Cloudflare.Env, id: string): Promise<void>
       allowBookingReminders: enabled(env.ALLOW_BOOKING_REMINDERS),
       clickSendEnabled: enabled(env.CLICKSEND_SMS_ENABLED),
       twoWayEnabled: enabled(env.CLICKSEND_TWO_WAY_ENABLED),
+      manualReplyHandlingApproved: enabled(env.CLICKSEND_MANUAL_REPLY_HANDLING_APPROVED),
       urlMessagingApproved: enabled(env.CLICKSEND_URL_MESSAGING_APPROVED),
       sender: env.CLICKSEND_FROM_NUMBER,
       businessTimezone: env.BUSINESS_TIMEZONE,
