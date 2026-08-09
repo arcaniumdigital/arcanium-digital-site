@@ -1,9 +1,15 @@
 import { expect, test, type Page } from "@playwright/test";
 
+test.beforeEach(async ({ page }) => {
+  await page.route(/https:\/\/(?:[^/]+\.)?(?:wistia\.com|wistia\.net|cal\.com)\//, async (route) => {
+    await route.fulfill({ status: 204, body: "" });
+  });
+});
+
 async function installTurnstileStub(page: Page) {
   await page.route("**/turnstile/v0/api.js*", async (route) => route.fulfill({
     contentType: "application/javascript",
-    body: `window.turnstile={render:function(_el,opts){setTimeout(function(){opts.callback('test-token')},0);return 'test-widget'},reset:function(){}};`,
+    body: `window.turnstile={render:function(_el,opts){setTimeout(function(){opts.callback('test-token');window.__turnstileTestReady=true},0);return 'test-widget'},reset:function(){}};`,
   }));
 }
 
@@ -26,22 +32,26 @@ async function mockIntake(page: Page, status: number, body: unknown) {
 test("durable acceptance navigates directly to the clean audit page", async ({ page }) => {
   await installTurnstileStub(page);
   await mockIntake(page, 202, { accepted: true, leadPublicId: "public_opaque", nextUrl: "/vendor-audit" });
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.waitForFunction(() => Boolean((window as Window & { __turnstileTestReady?: boolean }).__turnstileTestReady));
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
   await expect(page.getByText("By continuing, you agree to receive SMS about your audit.")).toBeVisible();
   const button = page.getByRole("button", { name: "See available audit times" });
   await expect(button).toHaveText("See available audit times");
-  await button.click();
-  await expect(page).toHaveURL("http://127.0.0.1:3000/vendor-audit");
+  const navigationCommitted = page.waitForEvent("framenavigated", (frame) => frame === page.mainFrame() && frame.url() === "http://127.0.0.1:3000/vendor-audit");
+  await button.click({ noWaitAfter: true });
+  await navigationCommitted;
+  expect(page.url()).toBe("http://127.0.0.1:3000/vendor-audit");
   await expect(page.locator('[data-funnel-marker="vendor-audit-booking"]')).toBeVisible();
 });
 
 test("a failed acceptance preserves fields and shows one honest error", async ({ page }) => {
   await installTurnstileStub(page);
   await mockIntake(page, 503, { accepted: false });
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.waitForFunction(() => Boolean((window as Window & { __turnstileTestReady?: boolean }).__turnstileTestReady));
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
@@ -52,7 +62,7 @@ test("a failed acceptance preserves fields and shows one honest error", async ({
 });
 
 test("the SMS route uses a clean 303 destination and a source-only cookie", async ({ page, context }) => {
-  await page.goto("/audit");
+  await page.goto("/audit", { waitUntil: "domcontentloaded" });
   await expect(page).toHaveURL(/\/vendor-audit$/);
   expect(page.url()).not.toContain("?");
   const cookies = await context.cookies();
