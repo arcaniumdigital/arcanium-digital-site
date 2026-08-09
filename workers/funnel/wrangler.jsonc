@@ -1,0 +1,237 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "arcanium-funnel-staging",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "secrets": {
+    "required": [
+      "TURNSTILE_SECRET_KEY",
+      "INTERNAL_API_HMAC_SECRET",
+      "BOOKING_CONTEXT_HMAC_SECRET",
+      "CAL_WEBHOOK_SECRET",
+      "CAL_API_KEY",
+      "CLICKSEND_USERNAME",
+      "CLICKSEND_API_KEY",
+      "CLICKSEND_FROM_NUMBER",
+      "CLICKSEND_INBOUND_WEBHOOK_TOKEN",
+      "CLICKSEND_RECEIPT_WEBHOOK_TOKEN",
+      "BREVO_API_KEY",
+      "BREVO_PIPELINE_ID",
+      "BREVO_STAGE_NEW_ENQUIRY_ID",
+      "BREVO_STAGE_BOOKED_ID",
+      "BREVO_STAGE_CANCELLED_ID",
+      "BREVO_STAGE_COMPLETED_ID",
+      "BREVO_TEMPLATE_NEW_LEAD_ID",
+      "BREVO_TEMPLATE_BOOKING_CREATED_ID",
+      "BREVO_TEMPLATE_BOOKING_CANCELLED_ID",
+      "BREVO_TEMPLATE_REPLY_ALERT_ID",
+      "BREVO_TEMPLATE_INCIDENT_ID",
+      "BREVO_TEMPLATE_DAILY_DIGEST_ID",
+      "BREVO_SENDER_EMAIL",
+      "BREVO_SENDER_NAME",
+      "BREVO_OPERATOR_EMAIL",
+      "OPERATOR_NAME",
+      "INNGEST_EVENT_KEY",
+      "FUNNEL_HEALTH_READ_TOKEN"
+    ]
+  },
+  "vars": {
+    "ENVIRONMENT": "staging",
+    "ALLOWED_ORIGINS": "http://localhost:3000,https://arcaniumdigital.com,https://www.arcaniumdigital.com",
+    "EXPECTED_TURNSTILE_HOSTNAMES": "localhost,127.0.0.1",
+    "EXPECTED_TURNSTILE_ACTION": "vendor_audit",
+    "BOOKING_CONTEXT_SESSION_TTL_SECONDS": "1800",
+    "BOOKING_CONTEXT_COOKIE_DOMAIN": "",
+    "BOOKING_LINK_BASE_URL": "https://arcaniumdigital.com/audit",
+    "CAL_API_VERSION": "2024-06-14",
+    "CAL_EVENT_TYPE_ID": "6601494",
+    "CAL_EXPECTED_EVENT_SLUG": "vendor-conversion-audit",
+    "CAL_EXPECTED_WEBHOOK_URL": "https://arcanium-funnel-staging.enquiries-432.workers.dev/webhooks/cal/bookings",
+    "BROCHURE_URL": "https://arcaniumdigital.com",
+    "BUSINESS_NAME": "Arcanium Digital",
+    "BUSINESS_TIMEZONE": "Australia/Brisbane",
+    "SMS_ALLOWED_START_HOUR": "7",
+    "SMS_ALLOWED_END_HOUR": "20",
+    "CLICKSEND_SMS_ENABLED": "false",
+    "CLICKSEND_TWO_WAY_ENABLED": "false",
+    "CLICKSEND_MANUAL_REPLY_HANDLING_APPROVED": "false",
+    "CLICKSEND_URL_MESSAGING_APPROVED": "false",
+    "ALLOW_PRODUCTION_SMS": "false",
+    "ALLOW_PREBOOK_NURTURE": "false",
+    "ALLOW_BOOKING_REMINDERS": "false",
+    "ALLOW_WEEKLY_LIVE_SMS_CANARY": "false",
+    "CLICKSEND_MINIMUM_BALANCE_AUD": "20",
+    "CLICKSEND_MAX_PARTS_PREBOOK": "3",
+    "CLICKSEND_MAX_PARTS_BOOKED": "4",
+    "LOG_LEVEL": "info",
+    "DEPLOYMENT_VERSION": "local",
+    "SCHEMA_VERSION": "1",
+    "STALE_JOB_THRESHOLD_MINUTES": "15"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "arcanium-funnel-staging",
+      "database_id": "ec5754e9-5bc2-4fba-b585-cf1b1dd73bfb",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "FUNNEL_QUEUE",
+        "queue": "arcanium-funnel-jobs-staging"
+      },
+      {
+        "binding": "FUNNEL_DLQ",
+        "queue": "arcanium-funnel-jobs-staging-dlq"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "arcanium-funnel-jobs-staging",
+        "max_batch_size": 1,
+        "max_batch_timeout": 1,
+        "max_retries": 5,
+        "dead_letter_queue": "arcanium-funnel-jobs-staging-dlq",
+        "retry_delay": 30
+      },
+      {
+        "queue": "arcanium-funnel-jobs-staging-dlq",
+        "max_batch_size": 1,
+        "max_batch_timeout": 1,
+        "max_retries": 0
+      }
+    ]
+  },
+  "triggers": {
+    "crons": ["*/5 * * * *"]
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+      "head_sampling_rate": 1,
+      "persist": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.1,
+      "persist": true
+    }
+  },
+  "env": {
+    "production": {
+      "name": "arcanium-funnel-prod",
+      "workers_dev": true,
+      "secrets": {
+        "required": [
+          "TURNSTILE_SECRET_KEY",
+          "INTERNAL_API_HMAC_SECRET",
+          "BOOKING_CONTEXT_HMAC_SECRET",
+          "CAL_WEBHOOK_SECRET",
+          "CAL_API_KEY",
+          "CLICKSEND_USERNAME",
+          "CLICKSEND_API_KEY",
+          "CLICKSEND_FROM_NUMBER",
+          "CLICKSEND_INBOUND_WEBHOOK_TOKEN",
+          "CLICKSEND_RECEIPT_WEBHOOK_TOKEN",
+          "BREVO_API_KEY",
+          "BREVO_PIPELINE_ID",
+          "BREVO_STAGE_NEW_ENQUIRY_ID",
+          "BREVO_STAGE_BOOKED_ID",
+          "BREVO_STAGE_CANCELLED_ID",
+          "BREVO_STAGE_COMPLETED_ID",
+          "BREVO_TEMPLATE_NEW_LEAD_ID",
+          "BREVO_TEMPLATE_BOOKING_CREATED_ID",
+          "BREVO_TEMPLATE_BOOKING_CANCELLED_ID",
+          "BREVO_TEMPLATE_REPLY_ALERT_ID",
+          "BREVO_TEMPLATE_INCIDENT_ID",
+          "BREVO_TEMPLATE_DAILY_DIGEST_ID",
+          "BREVO_SENDER_EMAIL",
+          "BREVO_SENDER_NAME",
+          "BREVO_OPERATOR_EMAIL",
+          "OPERATOR_NAME",
+          "INNGEST_EVENT_KEY",
+          "FUNNEL_HEALTH_READ_TOKEN"
+        ]
+      },
+      "vars": {
+        "ENVIRONMENT": "production",
+        "ALLOWED_ORIGINS": "https://arcaniumdigital.com,https://www.arcaniumdigital.com",
+        "EXPECTED_TURNSTILE_HOSTNAMES": "arcaniumdigital.com,www.arcaniumdigital.com",
+        "EXPECTED_TURNSTILE_ACTION": "vendor_audit",
+        "BOOKING_CONTEXT_SESSION_TTL_SECONDS": "1800",
+        "BOOKING_CONTEXT_COOKIE_DOMAIN": "arcaniumdigital.com",
+        "BOOKING_LINK_BASE_URL": "https://arcaniumdigital.com/audit",
+        "CAL_API_VERSION": "2024-06-14",
+        "CAL_EVENT_TYPE_ID": "6601494",
+        "CAL_EXPECTED_EVENT_SLUG": "vendor-conversion-audit",
+        "CAL_EXPECTED_WEBHOOK_URL": "https://arcanium-funnel-prod.enquiries-432.workers.dev/webhooks/cal/bookings",
+        "BROCHURE_URL": "https://arcaniumdigital.com",
+        "BUSINESS_NAME": "Arcanium Digital",
+        "BUSINESS_TIMEZONE": "Australia/Brisbane",
+        "SMS_ALLOWED_START_HOUR": "7",
+        "SMS_ALLOWED_END_HOUR": "20",
+        "CLICKSEND_SMS_ENABLED": "true",
+        "CLICKSEND_TWO_WAY_ENABLED": "false",
+        "CLICKSEND_MANUAL_REPLY_HANDLING_APPROVED": "true",
+        "CLICKSEND_URL_MESSAGING_APPROVED": "true",
+        "ALLOW_PRODUCTION_SMS": "true",
+        "ALLOW_PREBOOK_NURTURE": "true",
+        "ALLOW_BOOKING_REMINDERS": "true",
+        "ALLOW_WEEKLY_LIVE_SMS_CANARY": "false",
+        "CLICKSEND_MINIMUM_BALANCE_AUD": "20",
+        "CLICKSEND_MAX_PARTS_PREBOOK": "3",
+        "CLICKSEND_MAX_PARTS_BOOKED": "4",
+        "LOG_LEVEL": "info",
+        "DEPLOYMENT_VERSION": "set-by-ci",
+        "SCHEMA_VERSION": "1",
+        "STALE_JOB_THRESHOLD_MINUTES": "15"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "arcanium-funnel-prod",
+          "database_id": "d0cbb2e9-e5fd-42c0-b326-f3eba9df5fb5",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "queues": {
+        "producers": [
+          {
+            "binding": "FUNNEL_QUEUE",
+            "queue": "arcanium-funnel-jobs-prod"
+          },
+          {
+            "binding": "FUNNEL_DLQ",
+            "queue": "arcanium-funnel-jobs-prod-dlq"
+          }
+        ],
+        "consumers": [
+          {
+            "queue": "arcanium-funnel-jobs-prod",
+            "max_batch_size": 1,
+            "max_batch_timeout": 1,
+            "max_retries": 5,
+            "dead_letter_queue": "arcanium-funnel-jobs-prod-dlq",
+            "retry_delay": 30
+          },
+          {
+            "queue": "arcanium-funnel-jobs-prod-dlq",
+            "max_batch_size": 1,
+            "max_batch_timeout": 1,
+            "max_retries": 0
+          }
+        ]
+      },
+      "triggers": {
+        "crons": ["*/5 * * * *", "0 21 * * *", "0 22 * * *"]
+      }
+    }
+  }
+}

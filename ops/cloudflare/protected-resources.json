@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1",
+  "accountId": "432cead2590c126874503304ecfdfc69",
+  "zoneId": null,
+  "zoneManagement": "external",
+  "resourceIds": [
+    "77454fe2d30c4220b5701f6fdfb893ba"
+  ],
+  "resourceNames": [
+    "Cloudflare Managed Free Ruleset",
+    "arcanium-funnel-prod",
+    "arcanium-funnel-staging",
+    "arcanium-funnel-jobs-prod",
+    "arcanium-funnel-jobs-prod-dlq",
+    "arcanium-funnel-jobs-staging",
+    "arcanium-funnel-jobs-staging-dlq",
+    "arcanium-vendor-audit-prod",
+    "arcanium-vendor-audit-staging"
+  ],
+  "externalProtectedResources": [
+    {
+      "kind": "authoritativeDns",
+      "name": "arcaniumdigital.com",
+      "provider": "Spaceship",
+      "identifiers": ["launch1.spaceship.net", "launch2.spaceship.net"],
+      "protection": "Do not create, delete, migrate, or change nameservers or DNS records during the Cloudflare application reset."
+    },
+    {
+      "kind": "productionWebsite",
+      "name": "arcaniumdigital.com and www.arcaniumdigital.com",
+      "provider": "Vercel",
+      "identifiers": ["5625587e8338e21a.vercel-dns-017.com"],
+      "protection": "Keep the Vercel production website online throughout the reset."
+    }
+  ]
+}

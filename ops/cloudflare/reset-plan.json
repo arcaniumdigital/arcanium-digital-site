@@ -1,0 +1,628 @@
+{
+  "schemaVersion": "1",
+  "accountId": "432cead2590c126874503304ecfdfc69",
+  "zoneId": null,
+  "zoneGuard": "EXTERNAL_DNS_NOT_CLOUDFLARE",
+  "zoneManagement": "external",
+  "zoneName": "arcaniumdigital.com",
+  "inventoryDigest": "f3f9ee48ab668d276c487575a2290debe407b239154e90eb13b39c10adf96317",
+  "createdAt": "2026-08-09T03:19:41.894Z",
+  "scope": "legacy Arcanium Cloudflare funnel/platform resources only; Vercel website and unrelated DNS are protected",
+  "blockedInventorySections": [],
+  "deletions": [
+    {
+      "kind": "d1Database",
+      "id": "e2f65890-a8b0-4263-857c-a442bdd00a41",
+      "name": "production-platform-ops-state",
+      "reason": "legacy funnel/platform state"
+    },
+    {
+      "kind": "d1Database",
+      "id": "0422f453-e542-47dd-905e-51f5e451e427",
+      "name": "test-listing-content-state",
+      "reason": "legacy funnel/platform state"
+    },
+    {
+      "kind": "d1Database",
+      "id": "da78a480-8199-42f2-ba3c-a11d3c45ead2",
+      "name": "test-local-authority-state",
+      "reason": "legacy funnel/platform state"
+    },
+    {
+      "kind": "d1Database",
+      "id": "3d76527c-ae04-4c65-a8e1-e5cfa79fede5",
+      "name": "test-platform-ops-state",
+      "reason": "legacy funnel/platform state"
+    },
+    {
+      "kind": "d1Database",
+      "id": "ab822b8f-9ad3-45ec-9143-4513aff0cf5b",
+      "name": "test-search-reporting-state",
+      "reason": "legacy funnel/platform state"
+    },
+    {
+      "kind": "kvNamespace",
+      "id": "46b9312a1b6c49ee8e0cd6552bc17c02",
+      "name": "test-platform-ops-event-state",
+      "reason": "legacy funnel/platform KV"
+    },
+    {
+      "kind": "kvNamespace",
+      "id": "220a72378785400c9541499de65b229d",
+      "name": "test-platform-ops-replay",
+      "reason": "legacy funnel/platform KV"
+    },
+    {
+      "kind": "pagesProject",
+      "id": "arcanium-digital-site",
+      "name": "arcanium-digital-site",
+      "reason": "obsolete Cloudflare Pages copy; Vercel remains protected"
+    },
+    {
+      "kind": "queue",
+      "id": "ea4ccf4e73cc4f64a8643ed88cccaa09",
+      "name": "cost-imports-dlq-test",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "fe6519c70adf4f22a13d24e60dfb795d",
+      "name": "cost-imports-test",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "0aa89dd63dcb499baa2677ab41e5dc85",
+      "name": "cro-analysis-dlq-test",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "5f5e5fe02c004964b2e589923bffb04f",
+      "name": "cro-analysis-test",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "6e0b305d307b4451a0dee557cbc9abd9",
+      "name": "media-processing-dlq-test",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "263cedfdacc94f4aaf57c2714e733eb4",
+      "name": "media-processing-test",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "31fd7612e85c4e6894c0a1a5cab6f2f2",
+      "name": "migration-dlq-test",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "ce92f47fa0864035ad75d11def19d332",
+      "name": "migration-jobs-test",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "1ae67b86224a48e183ef91f5aee67a2d",
+      "name": "site-provisioning-dlq-test",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "df4ea8f13cab4bcf84003dc5e7d0a9f9",
+      "name": "site-provisioning-jobs-test",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "e4d76090ec5348619b0c6cb178053117",
+      "name": "test-authority-runs",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "ca1241b910d84cf090502cf50966ceeb",
+      "name": "test-authority-runs-dlq",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "7c1ba6d301c642bb8a179dc3cabba0cc",
+      "name": "test-content-jobs",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "83f68de39daa4246b96f9b11f606660c",
+      "name": "test-content-jobs-dlq",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "ce54e1943c324e86961509e701b8dd14",
+      "name": "test-form-delivery",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "4632c8f417444211a6d9f59d4aa9656d",
+      "name": "test-form-delivery-dlq",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "31983aad9f234935808b2581562d406b",
+      "name": "test-gbp-events",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "dce053cc51a04d789efe0a1132484f5c",
+      "name": "test-gbp-events-dlq",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "b99162e67a3947c1a67e1ce1387db159",
+      "name": "test-geo-runs",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "7d3d5b9b03c24fe285687230f1e910b2",
+      "name": "test-geo-runs-dlq",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "522f7d6654984ad1ac6675da167108a6",
+      "name": "test-listing-actions",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "584afb6c625943ef84da5dad04eabdf2",
+      "name": "test-listing-actions-dlq",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "2dca01daf7ca4103bfcbbd166e1d32d9",
+      "name": "test-platform-events",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "68aeaddbcd2449b88e8b8af1d93a9157",
+      "name": "test-platform-events-dlq",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "43b5fdcd51d040ea889d49c73f11d6e0",
+      "name": "test-platform-ops-events",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "2a58d674925844fc9861884d10d03a02",
+      "name": "test-platform-ops-events-dlq",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "95c11e9f5fd743b0829e27ba2092304f",
+      "name": "test-reporting-runs",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "678717f985254ad19d0744da621e7c5a",
+      "name": "test-reporting-runs-dlq",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "7f49b775d3c74c57955e1ad468891498",
+      "name": "test-search-growth-runs",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "1e55433fdb4a481abe68537945632105",
+      "name": "test-search-growth-runs-dlq",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "e449bb5d1a9349fd83bb0d571b563745",
+      "name": "test-technical-results",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queue",
+      "id": "3b3a08946b2046758c9a8bacc8371cb1",
+      "name": "test-technical-results-dlq",
+      "reason": "legacy funnel/platform queue"
+    },
+    {
+      "kind": "queueConsumer",
+      "id": "8c583fe5ec3141b29e349d1a2c8d5394",
+      "name": "cost-imports-test:worker",
+      "reason": "remove legacy Queue consumer before deleting queue",
+      "queueId": "fe6519c70adf4f22a13d24e60dfb795d",
+      "queueName": "cost-imports-test",
+      "scriptName": null
+    },
+    {
+      "kind": "queueConsumer",
+      "id": "1550288456c443e7bec879e187170e78",
+      "name": "cro-analysis-test:worker",
+      "reason": "remove legacy Queue consumer before deleting queue",
+      "queueId": "5f5e5fe02c004964b2e589923bffb04f",
+      "queueName": "cro-analysis-test",
+      "scriptName": null
+    },
+    {
+      "kind": "queueConsumer",
+      "id": "608fc6d01dde4b3ba404bb78a0ec93b2",
+      "name": "media-processing-dlq-test:worker",
+      "reason": "remove legacy Queue consumer before deleting queue",
+      "queueId": "6e0b305d307b4451a0dee557cbc9abd9",
+      "queueName": "media-processing-dlq-test",
+      "scriptName": null
+    },
+    {
+      "kind": "queueConsumer",
+      "id": "c8961506978b4a7db11011a9426a5eee",
+      "name": "media-processing-test:worker",
+      "reason": "remove legacy Queue consumer before deleting queue",
+      "queueId": "263cedfdacc94f4aaf57c2714e733eb4",
+      "queueName": "media-processing-test",
+      "scriptName": null
+    },
+    {
+      "kind": "queueConsumer",
+      "id": "b80e75f9766d4d79a3b0362cf08657dc",
+      "name": "migration-dlq-test:worker",
+      "reason": "remove legacy Queue consumer before deleting queue",
+      "queueId": "31fd7612e85c4e6894c0a1a5cab6f2f2",
+      "queueName": "migration-dlq-test",
+      "scriptName": null
+    },
+    {
+      "kind": "queueConsumer",
+      "id": "da42bef137164a968044b90d5daa8546",
+      "name": "migration-jobs-test:worker",
+      "reason": "remove legacy Queue consumer before deleting queue",
+      "queueId": "ce92f47fa0864035ad75d11def19d332",
+      "queueName": "migration-jobs-test",
+      "scriptName": null
+    },
+    {
+      "kind": "queueConsumer",
+      "id": "c57bc3e1633a4142905d828a3963cc27",
+      "name": "site-provisioning-jobs-test:worker",
+      "reason": "remove legacy Queue consumer before deleting queue",
+      "queueId": "df4ea8f13cab4bcf84003dc5e7d0a9f9",
+      "queueName": "site-provisioning-jobs-test",
+      "scriptName": null
+    },
+    {
+      "kind": "queueConsumer",
+      "id": "f3a5103f84194c5db398a137dd160211",
+      "name": "test-listing-actions:worker",
+      "reason": "remove legacy Queue consumer before deleting queue",
+      "queueId": "522f7d6654984ad1ac6675da167108a6",
+      "queueName": "test-listing-actions",
+      "scriptName": null
+    },
+    {
+      "kind": "queueConsumer",
+      "id": "8c0e664eab50442ca73a04efaa297979",
+      "name": "test-platform-events-dlq:worker",
+      "reason": "remove legacy Queue consumer before deleting queue",
+      "queueId": "68aeaddbcd2449b88e8b8af1d93a9157",
+      "queueName": "test-platform-events-dlq",
+      "scriptName": null
+    },
+    {
+      "kind": "queueConsumer",
+      "id": "334a5abf5725419ea4f6e986b76529d0",
+      "name": "test-platform-events:worker",
+      "reason": "remove legacy Queue consumer before deleting queue",
+      "queueId": "2dca01daf7ca4103bfcbbd166e1d32d9",
+      "queueName": "test-platform-events",
+      "scriptName": null
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-access-checks-test",
+      "name": "arcanium-access-checks-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-access-checks-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-authority-control-test",
+      "name": "arcanium-authority-control-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-authority-control-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-evidence-control-test",
+      "name": "arcanium-evidence-control-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-evidence-control-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-form-delivery-test",
+      "name": "arcanium-form-delivery-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-form-delivery-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-gbp-control-test",
+      "name": "arcanium-gbp-control-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-gbp-control-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-listing-control-test",
+      "name": "arcanium-listing-control-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-listing-control-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-local-geo-control-test",
+      "name": "arcanium-local-geo-control-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-local-geo-control-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-platform-core-production",
+      "name": "arcanium-platform-core-production",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-platform-core-production"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-platform-core-test",
+      "name": "arcanium-platform-core-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-platform-core-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-publication-control-test",
+      "name": "arcanium-publication-control-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-publication-control-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-queue-control-test",
+      "name": "arcanium-queue-control-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-queue-control-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-reporting-control-test",
+      "name": "arcanium-reporting-control-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-reporting-control-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-schedule-control-test",
+      "name": "arcanium-schedule-control-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-schedule-control-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-search-growth-test",
+      "name": "arcanium-search-growth-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-search-growth-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcanium-technical-control-test",
+      "name": "arcanium-technical-control-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcanium-technical-control-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "arcmcp-platform-test",
+      "name": "arcmcp-platform-test",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "arcmcp-platform-test"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "test-platform-ops",
+      "name": "test-platform-ops",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "test-platform-ops"
+    },
+    {
+      "kind": "workerKillSwitch",
+      "id": "test-technical-control",
+      "name": "test-technical-control",
+      "reason": "set the four mandatory global outbound kill switches before disabling triggers",
+      "scriptName": "test-technical-control"
+    },
+    {
+      "kind": "workerSchedules",
+      "id": "arcanium-listing-control-test",
+      "name": "arcanium-listing-control-test",
+      "reason": "disable legacy Worker Cron triggers before deleting code",
+      "scriptName": "arcanium-listing-control-test",
+      "schedules": [
+        "*/5 * * * *"
+      ]
+    },
+    {
+      "kind": "workerSchedules",
+      "id": "arcanium-platform-core-test",
+      "name": "arcanium-platform-core-test",
+      "reason": "disable legacy Worker Cron triggers before deleting code",
+      "scriptName": "arcanium-platform-core-test",
+      "schedules": [
+        "*/5 * * * *"
+      ]
+    },
+    {
+      "kind": "workerSchedules",
+      "id": "arcanium-schedule-control-test",
+      "name": "arcanium-schedule-control-test",
+      "reason": "disable legacy Worker Cron triggers before deleting code",
+      "scriptName": "arcanium-schedule-control-test",
+      "schedules": [
+        "0 23 * * *"
+      ]
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-access-checks-test",
+      "name": "arcanium-access-checks-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-authority-control-test",
+      "name": "arcanium-authority-control-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-evidence-control-test",
+      "name": "arcanium-evidence-control-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-form-delivery-test",
+      "name": "arcanium-form-delivery-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-gbp-control-test",
+      "name": "arcanium-gbp-control-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-listing-control-test",
+      "name": "arcanium-listing-control-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-local-geo-control-test",
+      "name": "arcanium-local-geo-control-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-platform-core-production",
+      "name": "arcanium-platform-core-production",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-platform-core-test",
+      "name": "arcanium-platform-core-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-publication-control-test",
+      "name": "arcanium-publication-control-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-queue-control-test",
+      "name": "arcanium-queue-control-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-reporting-control-test",
+      "name": "arcanium-reporting-control-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-schedule-control-test",
+      "name": "arcanium-schedule-control-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-search-growth-test",
+      "name": "arcanium-search-growth-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcanium-technical-control-test",
+      "name": "arcanium-technical-control-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "arcmcp-platform-test",
+      "name": "arcmcp-platform-test",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "test-platform-ops",
+      "name": "test-platform-ops",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workerScript",
+      "id": "test-technical-control",
+      "name": "test-technical-control",
+      "reason": "legacy funnel/platform Worker"
+    },
+    {
+      "kind": "workflow",
+      "id": "arcanium-client-nurture-v2-production",
+      "name": "arcanium-client-nurture-v2-production",
+      "reason": "legacy nurture Workflow"
+    },
+    {
+      "kind": "workflow",
+      "id": "arcanium-nurture-sequence-production",
+      "name": "arcanium-nurture-sequence-production",
+      "reason": "legacy nurture Workflow"
+    },
+    {
+      "kind": "workflow",
+      "id": "arcanium-nurture-sequence-test",
+      "name": "arcanium-nurture-sequence-test",
+      "reason": "legacy nurture Workflow"
+    }
+  ],
+  "protectedResourceDigest": "c1d5616745afba891597a220adbcac9091551bae26b83ff3f2ba8e70edf6a7eb",
+  "planDigest": "0a8d354a55ea998c8c868eef7534f2c645bc2c33184e0a449bf671ea3d3e72d3"
+}

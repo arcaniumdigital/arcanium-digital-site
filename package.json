@@ -5,26 +5,52 @@
   "scripts": {
     "dev": "next dev --hostname localhost --port 3000",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit && tsc -p workers/funnel/tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:worker": "vitest run --config vitest.worker.config.mts",
+    "test:e2e": "playwright test",
+    "test:all": "pnpm lint && pnpm typecheck && pnpm test && pnpm test:worker && pnpm build",
+    "cf:types": "wrangler types workers/funnel/worker-configuration.d.ts --config workers/funnel/wrangler.jsonc",
+    "cf:check": "wrangler deploy --dry-run --env=\"\" --config workers/funnel/wrangler.jsonc",
+    "cf:dev": "wrangler dev --config workers/funnel/wrangler.jsonc",
+    "cf:migrate:local": "wrangler d1 migrations apply arcanium-funnel-staging --local --config workers/funnel/wrangler.jsonc",
+    "cf:inventory": "node scripts/cloudflare/inventory.mjs",
+    "cf:plan-reset": "node scripts/cloudflare/build-reset-plan.mjs",
+    "cf:backup-reset": "node scripts/cloudflare/backup-reset-targets.mjs",
+    "cf:apply-reset": "node scripts/cloudflare/apply-reset.mjs",
+    "cf:verify-reset": "node scripts/cloudflare/verify-clean-state.mjs",
+    "funnel:report": "node scripts/funnel-report.mjs"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",
     "@sentry/nextjs": "^10.67.0",
     "@vercel/analytics": "1.3.1",
     "clsx": "^2.1.1",
+    "inngest": "^4.18.0",
     "lucide-react": "^0.454.0",
     "next": "16.2.0",
     "react": "^19",
     "react-dom": "^19",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.20.3",
+    "@cloudflare/workers-types": "^5.20260808.1",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4.1.9",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.0",
     "postcss": "^8.5",
     "tailwindcss": "^4.1.9",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10",
+    "wrangler": "^4.120.0"
   }
 }
