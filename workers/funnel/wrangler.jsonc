@@ -185,7 +185,7 @@
         "ALLOW_PREBOOK_NURTURE": "true",
         "ALLOW_BOOKING_REMINDERS": "true",
         "ALLOW_WEEKLY_LIVE_SMS_CANARY": "false",
-        "CLICKSEND_MINIMUM_BALANCE_AUD": "20",
+        "CLICKSEND_MINIMUM_BALANCE_AUD": "5",
         "CLICKSEND_MAX_PARTS_PREBOOK": "3",
         "CLICKSEND_MAX_PARTS_BOOKED": "4",
         "LOG_LEVEL": "info",

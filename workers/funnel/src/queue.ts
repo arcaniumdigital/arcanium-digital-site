@@ -1,6 +1,7 @@
 import { queueMessageSchema, type LeadRow, type MessageJobRow, type ProviderJobRow } from "./contracts";
 import { opaqueId, sha256Hex } from "./crypto";
 import { log } from "./logging";
+import { internalNotificationParams } from "./notifications";
 import { openP1Incident, resolveP1Incident } from "./incidents";
 import { renderMessage } from "./messages";
 import {
@@ -174,14 +175,14 @@ async function processProviderJob(env: Cloudflare.Env, id: string): Promise<void
       : notification.includes("reply") ? Number(env.BREVO_TEMPLATE_REPLY_ALERT_ID)
       : notification.includes("incident") ? Number(env.BREVO_TEMPLATE_INCIDENT_ID)
       : Number(env.BREVO_TEMPLATE_NEW_LEAD_ID);
+    const booking = job.booking_uid
+      ? await env.DB.prepare("SELECT * FROM bookings WHERE cal_booking_uid = ? OR prior_cal_booking_uid = ? ORDER BY updated_at DESC LIMIT 1")
+        .bind(job.booking_uid, job.booking_uid).first<BookingForMessage>()
+      : null;
     providerReference = await sendBrevoInternalEmail(env, {
       templateId,
       idempotencyKey: job.id,
-      params: {
-        leadPublicId: lead?.public_id ?? "system",
-        bookingUid: job.booking_uid,
-        notificationType: notification,
-      },
+      params: internalNotificationParams({ lead, booking, bookingUid: job.booking_uid, notificationType: notification }),
     });
   } else if (job.action_type === "INNGEST_EVENT") {
     const eventName = String(payload.eventName ?? "");
