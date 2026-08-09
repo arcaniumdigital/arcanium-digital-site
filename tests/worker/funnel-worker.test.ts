@@ -53,4 +53,15 @@ describe("funnel Worker and D1", () => {
     const after = Number((await env.DB.prepare("SELECT COUNT(*) count FROM canary_runs").first<{ count: number }>())?.count ?? 0);
     expect(after).toBe(before);
   });
+
+  it("increments an abuse window and returns its count in one statement", async () => {
+    const windowStart = new Date().toISOString();
+    const expiresAt = new Date(Date.now() + 30 * 60_000).toISOString();
+    const increment = () => env.DB.prepare(`INSERT INTO abuse_windows (abuse_key, window_started_at, attempt_count, expires_at)
+      VALUES ('test-abuse-key', ?, 1, ?)
+      ON CONFLICT(abuse_key, window_started_at) DO UPDATE SET attempt_count = attempt_count + 1
+      RETURNING attempt_count`).bind(windowStart, expiresAt).first<{ attempt_count: number }>();
+    expect((await increment())?.attempt_count).toBe(1);
+    expect((await increment())?.attempt_count).toBe(2);
+  });
 });
