@@ -3,7 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 async function installTurnstileStub(page: Page) {
   await page.route("**/turnstile/v0/api.js*", async (route) => route.fulfill({
     contentType: "application/javascript",
-    body: `window.turnstile={render:function(el,opts){el.textContent='Verification ready';setTimeout(function(){opts.callback('test-token')},0);return 'test-widget'},reset:function(){}};`,
+    body: `window.turnstile={render:function(_el,opts){setTimeout(function(){opts.callback('test-token')},0);return 'test-widget'},reset:function(){}};`,
   }));
 }
 
@@ -29,7 +29,8 @@ test("durable acceptance navigates directly to the clean audit page", async ({ p
   await page.goto("/");
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
-  await expect(page.getByText("Verification ready")).toBeVisible();
+  await expect(page.getByRole("checkbox")).toHaveCount(0);
+  await expect(page.getByText("By continuing, you agree to receive SMS about your audit.")).toBeVisible();
   const button = page.getByRole("button", { name: "See available audit times" });
   await expect(button).toHaveText("See available audit times");
   await button.click();
@@ -43,7 +44,7 @@ test("a failed acceptance preserves fields and shows one honest error", async ({
   await page.goto("/");
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
-  await expect(page.getByText("Verification ready")).toBeVisible();
+  await expect(page.getByRole("checkbox")).toHaveCount(0);
   await page.getByRole("button", { name: "See available audit times" }).click();
   await expect(page.getByText("We could not submit your details. Please check your connection and try again.")).toBeVisible();
   await expect(page.getByLabel("Full name")).toHaveValue("Alex Agent");

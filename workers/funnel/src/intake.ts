@@ -41,12 +41,12 @@ async function rateLimited(request: Request, env: Cloudflare.Env, clientIp: stri
   const now = new Date();
   const windowStart = new Date(Math.floor(now.getTime() / 900_000) * 900_000).toISOString();
   const expiresAt = new Date(now.getTime() + 30 * 60_000).toISOString();
-  await env.DB.prepare(
-    "INSERT INTO abuse_windows (abuse_key, window_started_at, attempt_count, expires_at) VALUES (?, ?, 1, ?) ON CONFLICT(abuse_key, window_started_at) DO UPDATE SET attempt_count = attempt_count + 1",
-  ).bind(abuseKey, windowStart, expiresAt).run();
   const row = await env.DB.prepare(
-    "SELECT attempt_count FROM abuse_windows WHERE abuse_key = ? AND window_started_at = ?",
-  ).bind(abuseKey, windowStart).first<{ attempt_count: number }>();
+    `INSERT INTO abuse_windows (abuse_key, window_started_at, attempt_count, expires_at)
+      VALUES (?, ?, 1, ?)
+      ON CONFLICT(abuse_key, window_started_at) DO UPDATE SET attempt_count = attempt_count + 1
+      RETURNING attempt_count`,
+  ).bind(abuseKey, windowStart, expiresAt).first<{ attempt_count: number }>();
   return Number(row?.attempt_count ?? 0) > 10;
 }
 
@@ -69,9 +69,8 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
   if (rawBody === null) return json({ accepted: false, error: "PAYLOAD_TOO_LARGE" }, { status: 413, headers: cors });
   const clientIp = await verifiedProxyClientIp(request, env, rawBody);
   if (!clientIp) return json({ accepted: false, error: "INVALID_PROXY_SIGNATURE" }, { status: 403, headers: cors });
-  await record("FORM_ATTEMPTED");
+  ctx.waitUntil(record("FORM_ATTEMPTED"));
   if (!request.headers.get("Content-Type")?.toLowerCase().startsWith("application/json")) return reject("INVALID_CONTENT_TYPE", 415);
-  if (await rateLimited(request, env, clientIp)) return reject("RATE_LIMITED", 429);
   let parsedJson: unknown;
   try {
     parsedJson = JSON.parse(rawBody);
@@ -84,17 +83,25 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
   if (input.companyWebsiteConfirmation) return reject("INVALID_REQUEST", 400);
   const phoneE164 = normalizeAustralianMobile(input.phone);
   if (!phoneE164) return reject("INVALID_PHONE", 400);
-  if (!(await verifyTurnstile(env, input.turnstileToken, clientIp))) return reject("TURNSTILE_FAILED", 403);
+  const [limited, turnstileVerified] = await Promise.all([
+    rateLimited(request, env, clientIp),
+    verifyTurnstile(env, input.turnstileToken, clientIp),
+  ]);
+  if (limited) return reject("RATE_LIMITED", 429);
+  if (!turnstileVerified) return reject("TURNSTILE_FAILED", 403);
 
   const now = new Date();
   const nowIso = now.toISOString();
   const ttl = Math.max(300, Math.min(3600, Number(env.BOOKING_CONTEXT_SESSION_TTL_SECONDS) || 1800));
   const sessionHandle = randomToken(24);
-  const sessionHash = await sha256Hex(sessionHandle);
+  const sessionHashPromise = sha256Hex(sessionHandle);
   const sessionId = opaqueId("ctx");
   const expiresAt = new Date(now.getTime() + ttl * 1000).toISOString();
-  const existing = await env.DB.prepare("SELECT id, public_id FROM leads WHERE submission_id = ? LIMIT 1")
-    .bind(input.submissionId).first<ExistingLead>();
+  const [sessionHash, existing] = await Promise.all([
+    sessionHashPromise,
+    env.DB.prepare("SELECT id, public_id FROM leads WHERE submission_id = ? LIMIT 1")
+      .bind(input.submissionId).first<ExistingLead>(),
+  ]);
 
   if (existing) {
     await env.DB.batch([

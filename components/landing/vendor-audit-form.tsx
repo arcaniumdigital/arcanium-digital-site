@@ -1,10 +1,9 @@
 "use client";
 
 import Script from "next/script";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useRef, useState, type FormEvent } from "react";
 
-const consentText = "I agree to receive SMS about my Vendor Conversion Audit and related Arcanium Digital services. I can opt out at any time.";
+const consentText = "By submitting this form, I agree to receive SMS about my Vendor Conversion Audit and related Arcanium Digital services. I can opt out at any time.";
 
 type TurnstileApi = {
   render: (element: HTMLElement, options: Record<string, unknown>) => string;
@@ -20,10 +19,8 @@ declare global {
 }
 
 export function VendorAuditForm() {
-  const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
-  const [consent, setConsent] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [error, setError] = useState("");
   const [locked, setLocked] = useState(false);
@@ -31,9 +28,7 @@ export function VendorAuditForm() {
   const widgetId = useRef<string | null>(null);
   const submissionId = useRef(crypto.randomUUID());
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
-  const endpoint = process.env.NEXT_PUBLIC_VENDOR_AUDIT_API_URL || "/api/vendor-audit";
-
-  useEffect(() => { router.prefetch("/vendor-audit"); }, [router]);
+  const configuredEndpoint = process.env.NEXT_PUBLIC_VENDOR_AUDIT_API_URL;
 
   const renderTurnstile = useCallback(() => {
     if (!window.turnstile || !widgetHost.current || widgetId.current || !siteKey) return;
@@ -41,7 +36,7 @@ export function VendorAuditForm() {
       sitekey: siteKey,
       action: "vendor_audit",
       theme: "light",
-      size: "flexible",
+      appearance: "interaction-only",
       callback: (token: string) => setTurnstileToken(token),
       "expired-callback": () => setTurnstileToken(""),
       "error-callback": () => setTurnstileToken(""),
@@ -52,6 +47,7 @@ export function VendorAuditForm() {
     event.preventDefault();
     if (locked) return;
     setError("");
+    const endpoint = configuredEndpoint || "/api/vendor-audit";
     if (!turnstileToken || !endpoint) {
       setError("We could not submit your details. Please check your connection and try again.");
       return;
@@ -77,7 +73,7 @@ export function VendorAuditForm() {
           utmContent: params.get("utm_content") || undefined,
           fbclid: params.get("fbclid") || undefined,
           gclid: params.get("gclid") || undefined,
-          marketingSmsConsent: consent,
+          marketingSmsConsent: true,
           consentVersion: "vendor-audit-sms-v1",
           consentText,
           privacyNoticeVersion: "privacy-v1",
@@ -90,7 +86,7 @@ export function VendorAuditForm() {
       if (!result.accepted || result.nextUrl !== "/vendor-audit") throw new Error("INVALID_ACCEPTANCE");
       window.fbq?.("track", "Lead", { content_name: "Vendor Conversion Audit" });
       window.gtag?.("event", "generate_lead", { form_name: "vendor_conversion_audit" });
-      router.replace(result.nextUrl);
+      window.location.replace(result.nextUrl);
     } catch {
       setError("We could not submit your details. Please check your connection and try again.");
       setTurnstileToken("");
@@ -115,14 +111,11 @@ export function VendorAuditForm() {
           Company website confirmation
           <input name="companyWebsiteConfirmation" tabIndex={-1} autoComplete="off" />
         </label>
-        <label className="flex items-start gap-3 text-sm leading-5 text-black/65">
-          <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} className="mt-1 size-4 accent-[#8f33ff]" />
-          <span>{consentText} <a href="/privacy" className="font-semibold text-[#6f1fd1] underline">Privacy Policy.</a></span>
-        </label>
-        <div ref={widgetHost} className="min-h-[65px]" />
+        <div ref={widgetHost} />
         <button type="submit" disabled={locked} className="h-13 rounded-full bg-[#8f33ff] px-6 text-sm font-black uppercase tracking-[0.08em] text-white transition-opacity hover:bg-[#7e25ec] disabled:cursor-default disabled:opacity-70">
-          See available audit times
+          {locked ? "Opening audit times…" : "See available audit times"}
         </button>
+        <p className="text-center text-xs leading-5 text-black/45">By continuing, you agree to receive SMS about your audit. <a href="/privacy" className="font-semibold text-[#6f1fd1] underline">Privacy Policy.</a></p>
         <p aria-live="polite" className="min-h-5 text-center text-sm font-medium text-red-700">{error}</p>
       </form>
     </>
