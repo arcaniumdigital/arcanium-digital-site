@@ -50,7 +50,7 @@ export function AuthoritySection() {
                     ))}
                   </div>
                 </div>
-                <p className="text-lg font-medium leading-relaxed text-[#111114]/74">"{testimonial.quote}"</p>
+                <p className="text-lg font-medium leading-relaxed text-[#111114]/74">&ldquo;{testimonial.quote}&rdquo;</p>
                 <div className="mt-6 flex items-center gap-4 border-t border-black/10 pt-5">
                   <img
                     src={testimonial.avatar}

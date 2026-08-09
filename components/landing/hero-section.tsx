@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Script from "next/script";
 import { ArrowRight } from "lucide-react";
 
@@ -24,12 +23,6 @@ function HeroVideo() {
 }
 
 export function HeroSection() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
   return (
     <section id="vsl" className="relative overflow-hidden bg-[#f6f4f8] px-5 pb-12 pt-24 text-[#111114] sm:px-6 md:pb-16 md:pt-28 lg:px-12">
       <Script src="https://fast.wistia.com/player.js" strategy="afterInteractive" />
@@ -58,9 +51,7 @@ export function HeroSection() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#f6f4f8]" />
 
       <div
-        className={`relative mx-auto flex max-w-[1180px] flex-col items-center text-center transition-all duration-700 ${
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-        }`}
+        className="relative mx-auto flex max-w-[1180px] flex-col items-center text-center"
       >
         <h1 className="max-w-[1050px] font-display text-[clamp(2.65rem,6.8vw,6.45rem)] font-black leading-[0.9] tracking-tight text-[#111114]">
           How local agents turn their personal brand into{" "}

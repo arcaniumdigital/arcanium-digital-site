@@ -1,8 +1,19 @@
 # Environment variables
 .env*
+!.env.example
 
 # Dependencies and build output
 node_modules
+*.tsbuildinfo
 .next/
 .vercel/
 .DS_Store
+.wrangler/
+workers/funnel/.wrangler/
+playwright-report/
+test-results/
+coverage/
+ops/cloudflare/backups/
+ops/cloudflare/reset-apply-results.json
+ops/cloudflare/current-inventory.json
+ops/cloudflare/post-reset-inventory.json
