@@ -190,18 +190,22 @@ export async function updateBrevoBooking(env: Cloudflare.Env, input: {
   stageId: string;
 }): Promise<void> {
   if (input.contactId) {
-    await brevoRequest(env, `/contacts/${encodeURIComponent(input.publicId)}?identifierType=ext_id`, {
-      method: "PUT",
-      body: JSON.stringify({
-        email: input.email ?? undefined,
-        attributes: {
-          BOOKING_STATE: input.bookingState,
-          CAL_BOOKING_UID: input.bookingUid,
-          APPOINTMENT_START: input.appointmentStart,
-          APPOINTMENT_TIMEZONE: input.appointmentTimezone ?? "",
-        },
-      }),
-    });
+    const path = `/contacts/${encodeURIComponent(input.publicId)}?identifierType=ext_id`;
+    const attributes = {
+      BOOKING_STATE: input.bookingState,
+      CAL_BOOKING_UID: input.bookingUid,
+      APPOINTMENT_START: input.appointmentStart,
+      APPOINTMENT_TIMEZONE: input.appointmentTimezone ?? "",
+    };
+    try {
+      await brevoRequest(env, path, {
+        method: "PUT",
+        body: JSON.stringify({ email: input.email ?? undefined, attributes }),
+      });
+    } catch (error) {
+      if (!(error instanceof ProviderError) || error.code !== "BREVO_HTTP_400" || !input.email) throw error;
+      await brevoRequest(env, path, { method: "PUT", body: JSON.stringify({ attributes }) });
+    }
   }
   if (input.dealId) {
     await brevoRequest(env, `/crm/deals/${encodeURIComponent(input.dealId)}`, {
