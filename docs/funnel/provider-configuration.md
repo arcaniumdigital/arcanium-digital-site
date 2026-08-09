@@ -14,7 +14,7 @@ All credentials belong in provider secret stores, Cloudflare Worker secrets, Ver
 - Use the approved connected sender `0413105755`. Replies arrive on that handset and must be monitored manually; the ClickSend inbound webhook is not treated as authoritative for this own-number sender.
 - Configure delivery receipts at `https://arcanium-funnel-prod.enquiries-432.workers.dev/webhooks/clicksend/receipts/<strong-random-token>` and inbound SMS at `https://arcanium-funnel-prod.enquiries-432.workers.dev/webhooks/clicksend/inbound/<different-strong-random-token>`.
 - Disable URL shortening. Obtain URL-message approval for the branded `/audit` link and verify sufficient balance above the configured reserve.
-- Keep pre-book nurture and the weekly paid canary disabled until automated reply/STOP handling is available. Production, ClickSend, URL, manual-reply, and booking-reminder flags may be enabled only with explicit operator approval.
+- Pre-book nurture is explicitly approved with manual reply/STOP monitoring on `0413105755`. Keep the weekly paid canary disabled. Production, ClickSend, URL, manual-reply, nurture, and booking-reminder flags may be enabled only with explicit operator approval.
 
 ## Brevo
 
