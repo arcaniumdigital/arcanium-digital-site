@@ -73,9 +73,11 @@ export function AuditBooking({
       );
     }
 
-    setPageContext({
-      bookingToken,
-      search,
+    const contextFrame = window.requestAnimationFrame(() => {
+      setPageContext({
+        bookingToken,
+        search,
+      });
     });
 
     let calApi: Awaited<ReturnType<typeof getCalApi>> | null = null;
@@ -142,6 +144,7 @@ export function AuditBooking({
 
     return () => {
       isDisposed = true;
+      window.cancelAnimationFrame(contextFrame);
       calApi?.("off", {
         action: "bookingSuccessfulV2",
         callback: handleBookingSuccessful,
