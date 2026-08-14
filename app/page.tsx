@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
-import { Navigation } from "@/components/landing/navigation";
 import { HeroSection } from "@/components/landing/hero-section";
 import { AutonomousSection } from "@/components/landing/autonomous-section";
 import { AuthoritySection } from "@/components/landing/authority-section";
 import { AnalyticsSection } from "@/components/landing/analytics-section";
 import { CtaSection } from "@/components/landing/cta-section";
 import { FinalCtaSection } from "@/components/landing/final-cta-section";
+import { SearchProblemSection } from "@/components/landing/search-problem-section";
+import { GeoSection } from "@/components/landing/geo-section";
+import { Navigation } from "@/components/landing/navigation";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Real Estate Agent Websites Built for More Vendors",
+  title: "Become the #1 Real Estate Agent Online in Your Suburb",
   description:
-    "Arcanium Digital builds personalised real estate agent websites that turn proof, reviews, local authority, and vendor intent into more listing conversations.",
+    "Build visibility across Google Search, Google Maps and AI platforms so local vendors find your name first.",
   keywords: [
     "real estate agent websites",
     "real estate landing page",
@@ -60,18 +62,22 @@ const structuredData = [
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen overflow-x-hidden">
+    <>
+      <Navigation />
+      <main className="relative min-h-screen overflow-x-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <Navigation />
       <HeroSection />
       <CtaSection />
+      <SearchProblemSection />
+      <AnalyticsSection />
+      <GeoSection />
       <AutonomousSection />
       <AuthoritySection />
-      <AnalyticsSection />
       <FinalCtaSection />
-    </main>
+      </main>
+    </>
   );
 }

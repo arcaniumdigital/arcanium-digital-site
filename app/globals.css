@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 
 :root {
-  --background: oklch(0.965 0.006 280);
-  --foreground: oklch(0.13 0.01 280);
+  --background: #08090c;
+  --foreground: #f5f5f3;
   --primary: oklch(0.61 0.24 305);
   --primary-foreground: oklch(0.99 0.004 280);
   --muted: oklch(0.92 0.006 280);
@@ -11,12 +11,12 @@
   --accent-foreground: oklch(0.18 0.02 280);
   --border: oklch(0.83 0.01 280);
   --ring: oklch(0.61 0.24 305);
-  --radius: 0.25rem;
+  --radius: 0.875rem;
 }
 
 @theme inline {
   --font-sans: var(--font-inter), Inter, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), 'JetBrains Mono', monospace;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-display: var(--font-space-grotesk), 'Space Grotesk', system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -40,10 +40,27 @@
   }
   body {
     @apply bg-background text-foreground;
+    background: #08090c;
   }
   html {
     scroll-behavior: smooth;
   }
+}
+
+::selection {
+  background: rgba(143, 51, 255, 0.34);
+  color: #fff;
+}
+
+button,
+a,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(185, 120, 255, 0.92);
+  outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -60,6 +77,26 @@
 @layer utilities {
   .font-display {
     font-family: var(--font-display);
+  }
+
+  .surface-noise {
+    background-image:
+      radial-gradient(circle at 78% 32%, rgba(143, 51, 255, 0.09), transparent 30%),
+      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+    background-size: auto, 48px 48px, 48px 48px;
+  }
+
+  .browser-frame {
+    box-shadow: 0 36px 90px rgba(18, 10, 29, 0.16), 0 2px 8px rgba(18, 10, 29, 0.08);
+  }
+
+  .hide-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
   }
   
   .text-stroke {

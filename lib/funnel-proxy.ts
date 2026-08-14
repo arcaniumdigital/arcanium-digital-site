@@ -3,14 +3,20 @@ import { createHmac } from "node:crypto";
 
 export async function proxyToFunnel(request: Request, pathname: string): Promise<Response> {
   const baseUrl = process.env.FUNNEL_INTERNAL_API_URL;
-  if (!baseUrl) return Response.json({ accepted: false, error: "SERVICE_UNAVAILABLE" }, { status: 503 });
-  const raw = await request.text();
-  if (new TextEncoder().encode(raw).byteLength > 16_384) return Response.json({ accepted: false, error: "PAYLOAD_TOO_LARGE" }, { status: 413 });
   const secret = process.env.FUNNEL_INTERNAL_HMAC_SECRET;
-  if (!secret) return Response.json({ accepted: false, error: "SERVICE_UNAVAILABLE" }, { status: 503 });
+  if (!baseUrl || !secret) {
+    return Response.json({ accepted: false, error: "SERVICE_UNAVAILABLE" }, { status: 503 });
+  }
+
+  const raw = await request.text();
+  if (new TextEncoder().encode(raw).byteLength > 16_384) {
+    return Response.json({ accepted: false, error: "PAYLOAD_TOO_LARGE" }, { status: 413 });
+  }
+
   const clientIp = (request.headers.get("x-forwarded-for")?.split(",")[0] ?? request.headers.get("x-real-ip") ?? "unknown").trim();
   const timestamp = new Date().toISOString();
   const signature = createHmac("sha256", secret).update(`${timestamp}.${clientIp}.${raw}`).digest("hex");
+
   try {
     const upstream = await fetch(new URL(pathname, baseUrl), {
       method: "POST",
@@ -26,6 +32,7 @@ export async function proxyToFunnel(request: Request, pathname: string): Promise
       cache: "no-store",
       signal: AbortSignal.timeout(12_000),
     });
+
     const headers = new Headers({
       "Content-Type": upstream.headers.get("Content-Type") ?? "application/json",
       "Cache-Control": "no-store",
