@@ -1,69 +1,31 @@
-const panels = [
-  {
-    title: "May Client Analytics",
-    image: "/images/analytics/traffic-overview.jpg",
-    alt: "Analytics dashboard showing visitors, pageviews, bounce rate, session duration, sources, and top pages",
-  },
-  {
-    title: "June Client Analytics",
-    image: "/images/analytics/traffic-trend.jpg",
-    alt: "Analytics dashboard showing a monthly visitor and pageview trend",
-  },
-  {
-    title: "May Audience Report",
-    image: "/images/analytics/audience-tracking.jpg",
-    alt: "Analytics dashboard showing geography, devices, and tracked vendor actions",
-  },
-  {
-    title: "June Audience Report",
-    image: "/images/analytics/audience-growth.jpg",
-    alt: "Analytics dashboard showing geography, devices, and tracked conversion events",
-  },
-];
+import Image from "next/image";
 
-const scrollingPanels = [...panels, ...panels];
+const panels = [
+  { title: "May Client Analytics", image: "/images/analytics/traffic-overview.jpg", width: 1403, height: 1121, alt: "Analytics dashboard showing visitors, pageviews, bounce rate, session duration, sources, and top pages" },
+  { title: "June Client Analytics", image: "/images/analytics/traffic-trend.jpg", width: 1402, height: 1122, alt: "Analytics dashboard showing a monthly visitor and pageview trend" },
+  { title: "May Audience Report", image: "/images/analytics/audience-tracking.jpg", width: 1600, height: 900, alt: "Analytics dashboard showing geography, devices, and tracked vendor actions" },
+  { title: "June Audience Report", image: "/images/analytics/audience-growth.jpg", width: 1600, height: 900, alt: "Analytics dashboard showing geography, devices, and tracked conversion events" },
+];
 
 export function AnalyticsSection() {
   return (
-    <section id="analytics" className="relative overflow-hidden bg-white px-5 py-20 sm:px-6 lg:px-12 lg:py-24">
-      <style>{`
-        @keyframes client-wins-scroll {
-          from {
-            transform: translateX(0);
-          }
-          to {
-            transform: translateX(calc(-50% - 10px));
-          }
-        }
-      `}</style>
-
-      <div className="mx-auto max-w-[1280px]">
-        <div className="mx-auto mb-10 max-w-[760px] text-center">
-          <h2 className="font-display text-[clamp(2.35rem,5vw,4.7rem)] font-black leading-[0.92] tracking-tight text-[#111114]">
-            More client wins
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base font-medium leading-relaxed text-[#111114]/58 md:text-lg">
-            Your site should show what is getting attention, where the right vendors are coming from, and what is creating listing intent.
-          </p>
+    <section id="analytics" className="relative overflow-hidden bg-[#f3f2ee] px-4 py-[88px] text-[#101114] [content-visibility:auto] [contain-intrinsic-size:auto_1800px] sm:px-6 md:px-8 lg:px-12 lg:py-40">
+      <div className="mx-auto max-w-[1440px]">
+        <div className="max-w-[760px]">
+          <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#64656b]"><span className="size-1.5 rounded-full bg-[#8f33ff]" />Clear reporting. Real signals.</p>
+          <h2 className="mt-5 max-w-[680px] font-display text-[clamp(2.125rem,9.5vw,2.5rem)] font-semibold leading-[1] tracking-[-0.04em] lg:text-[clamp(3rem,4vw,4.25rem)]">Visibility You Can Actually Measure</h2>
+          <p className="mt-5 max-w-[620px] text-base font-medium leading-[1.65] text-[#64656b] lg:text-lg">See the searches, visitors and vendor actions your online presence is creating — with clear reporting that makes progress easy to understand.</p>
         </div>
 
-        <div className="-mx-5 overflow-hidden sm:-mx-6 lg:mx-0">
-          <div className="flex w-max gap-5 px-5 pb-2 [animation:client-wins-scroll_32s_linear_infinite] hover:[animation-play-state:paused] sm:px-6 lg:px-0">
-            {scrollingPanels.map((panel, index) => (
-              <article key={`${panel.title}-${index}`} className="w-[78vw] shrink-0 overflow-hidden rounded-[18px] border border-black/10 bg-[#f6f4f8] shadow-[0_18px_50px_rgba(63,32,94,0.08)] sm:w-[430px] lg:w-[360px]">
-                <div className="bg-[#8f33ff] px-3 py-3 text-center text-xs font-black text-white">
-                  {panel.title}
-                </div>
-                <div className="bg-white p-2">
-                  <img
-                    src={panel.image}
-                    alt={panel.alt}
-                    className="aspect-[4/3] w-full rounded-[12px] object-contain"
-                  />
-                </div>
-              </article>
-            ))}
-          </div>
+        <div className="mt-12 grid gap-10 lg:mt-[72px] lg:grid-cols-12 lg:gap-7">
+          {panels.map((panel, index) => (
+            <article key={panel.title} className={`${index === 0 ? "lg:col-span-7" : index === 1 ? "lg:col-span-5" : "lg:col-span-6"}`}>
+              <p className="mb-3 text-[13px] font-semibold text-[#64656b]">{panel.title}</p>
+              <div className="overflow-hidden rounded-[12px] border border-black/12 bg-[#0b0c0f] p-1 shadow-[0_22px_60px_rgba(0,0,0,0.12)] transition duration-500 hover:-translate-y-[3px] hover:border-black/20 lg:rounded-[20px] lg:p-2 lg:shadow-[0_30px_80px_rgba(0,0,0,0.15)]">
+                <Image src={panel.image} alt={panel.alt} width={panel.width} height={panel.height} sizes={index < 2 ? "(max-width: 1024px) calc(100vw - 32px), 760px" : "(max-width: 1024px) calc(100vw - 32px), 680px"} quality={78} className="h-auto w-full rounded-[9px] bg-white object-contain lg:rounded-[14px]" />
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>

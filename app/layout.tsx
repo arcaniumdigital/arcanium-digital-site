@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
+import { Inter, Space_Grotesk } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { siteDescription, siteName, siteUrl } from '@/lib/site'
 import './globals.css'
@@ -17,13 +17,7 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({ 
-  subsets: ["latin"],
-  variable: '--font-jetbrains',
-  display: "swap",
-});
-
-const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+const metaPixelId = "1750359556313305";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -54,7 +48,7 @@ export const metadata: Metadata = {
   },
 }
 
-const metaPixelScript = metaPixelId ? `
+const metaPixelScript = `
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -65,7 +59,7 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '${metaPixelId}');
 fbq('track', 'PageView');
-` : "";
+`;
 
 export default function RootLayout({
   children,
@@ -73,12 +67,12 @@ export default function RootLayout({
   children: ReactNode
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang="en">
       <head>
-        {metaPixelId && <script id="meta-pixel" dangerouslySetInnerHTML={{ __html: metaPixelScript }} />}
+        <script id="meta-pixel" dangerouslySetInnerHTML={{ __html: metaPixelScript }} />
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
-        {metaPixelId && <noscript>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
+        <noscript>
           <img
             height="1"
             width="1"
@@ -86,7 +80,7 @@ export default function RootLayout({
             src={`https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1`}
             alt=""
           />
-        </noscript>}
+        </noscript>
         {children}
         <Analytics />
       </body>
