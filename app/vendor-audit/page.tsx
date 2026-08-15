@@ -5,8 +5,8 @@ import { bookingTokenCookieName, normalizeBookingToken } from "@/lib/booking-tra
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
-const title = "Book Your Free 15-Minute Visibility Audit";
-const description = "Identify the biggest gap in your online visibility and what needs fixing.";
+const title = "Book Your Suburb Visibility Review";
+const description = "See where you could be missing vendor searches across Google and AI.";
 const canonicalUrl = "https://www.arcaniumdigital.com/vendor-audit";
 const previewImageUrl = "https://www.arcaniumdigital.com/vendor-audit-preview.jpg";
 
@@ -40,13 +40,16 @@ export default async function VendorAuditPage() {
           <div className="min-w-0 min-[1180px]:col-span-7 min-[1180px]:pr-2">
             <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#a6a6ae] sm:text-[13px]">
               <span className="size-1.5 rounded-full bg-[#8f33ff]" aria-hidden="true" />
-              Suburb Visibility Audit
+              Suburb Visibility Review
             </p>
             <h1 className="mt-5 max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
-              See where you stand before your next vendor searches.
+              See where you could be missing vendor searches.
             </h1>
             <p className="mt-6 max-w-[570px] text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-              Watch the audit, then book a time to review the biggest opportunities across Google and AI search.
+              We assess how visible you are across the Google and AI searches that matter in your suburb, then show you where the biggest opportunities are to improve.
+            </p>
+            <p className="mt-4 max-w-[570px] text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
+              Watch the short overview to understand the need, then choose a time below to review your visibility with me.
             </p>
 
             <div className="relative mt-9 max-w-[760px] sm:mt-10">
