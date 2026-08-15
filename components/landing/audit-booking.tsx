@@ -157,15 +157,15 @@ export function AuditBooking({
   return (
     <section id="booking" className="rounded-[20px] border border-white/15 bg-[#f3f2ee] p-4 text-left text-[#101114] shadow-[0_40px_100px_rgba(0,0,0,0.35)] sm:rounded-[24px] sm:p-7 min-[1180px]:rounded-[28px] min-[1180px]:p-8">
       <h2 className="font-display text-[clamp(2rem,8vw,2.35rem)] font-semibold leading-[1.02] tracking-[-0.04em] min-[1180px]:text-[clamp(2rem,2.6vw,2.4rem)]">
-        Book a time to talk through your audit.
+        Your next step: book your visibility review.
       </h2>
       <p className="mt-4 max-w-xl text-base font-normal leading-[1.6] text-[#64656b]">
-        Choose a time that works for you and we’ll walk through the opportunities together.
+        Choose a time that works for you. I will look at your current positioning, explain the searches vendors are making in your market, and where the opportunities lie to increase your visibility.
       </p>
 
       <div className="mt-7 overflow-hidden rounded-[16px] border border-black/10 bg-white">
         <div className="border-b border-black/8 bg-[#101116] px-4 py-3.5 text-center text-xs font-semibold uppercase tracking-[0.14em] text-white sm:text-[13px]">
-          Choose a time for your audit review
+          Choose a time for your visibility review
         </div>
         <div className="h-[620px] bg-white sm:h-[660px] min-[1180px]:h-[590px]">
           {pageContext !== null && (
