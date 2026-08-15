@@ -16,7 +16,7 @@ export function HeroSection() {
             <span className="text-[#a95cff]">Online in Your Suburb</span>
           </h1>
           <p className="mt-6 max-w-[620px] text-base font-medium leading-[1.65] text-[#aaaab2] sm:text-[1.05rem] lg:mt-7 lg:text-lg">
-            We establish visibility across Google Search, Google Maps and AI platforms like ChatGPT — so when local vendors search for an agent, your name is the first they find.
+            We establish visibility across Google Search, Google Maps and AI platforms like ChatGPT, so when local vendors search for an agent, your name is the first they find.
           </p>
           <MetaTrackedLink
             href="#audit"
