@@ -1,23 +1,10 @@
-import {
-  ArrowDown,
-  ChartNoAxesCombined,
-  FileText,
-  LayoutDashboard,
-  MapPinned,
-  Search,
-  Share2,
-} from "lucide-react";
-
-const surfaces = [
-  { label: "Google Search", icon: Search },
-  { label: "Google Business Profile", icon: MapPinned },
-  { label: "Social Platforms", icon: Share2 },
-  { label: "Suburb Content", icon: FileText },
-];
+import { ArrowRight, MapPinned, Search } from "lucide-react";
 
 const searchExamples = [
   "best real estate agent Pelican Waters",
   "who should I sell my house with in Caloundra?",
+  "best agent to sell waterfront property",
+  "top real estate agent in [suburb]",
 ];
 
 export function WhatWeDoSection() {
@@ -44,64 +31,47 @@ export function WhatWeDoSection() {
 
           <div className="lg:col-span-7">
             <div className="rounded-[20px] border border-white/10 bg-[#101114] p-5 shadow-[0_28px_80px_rgba(0,0,0,0.22)] sm:p-7 lg:rounded-[24px] lg:p-9">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#777881]">
-                Your visibility infrastructure
-              </p>
-
-              <div className="mt-7 flex flex-col items-center">
-                <div className="flex w-full max-w-[310px] items-center gap-3 rounded-[14px] border border-white/12 bg-[#17181d] px-4 py-3.5">
-                  <LayoutDashboard className="size-5 shrink-0 text-[#b875ff]" aria-hidden="true" />
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#777881]">Central system</p>
-                    <p className="mt-0.5 font-display text-base font-semibold tracking-[-0.02em] text-[#f5f5f3]">Personal Agent Portal</p>
-                  </div>
-                </div>
-
-                <div className="flex h-10 flex-col items-center justify-end text-[#8f33ff]" aria-hidden="true">
-                  <span className="h-5 w-px bg-[#8f33ff]/45" />
-                  <ArrowDown className="size-4" />
-                </div>
-
-                <div className="w-full max-w-[390px] rounded-[14px] border border-[#8f33ff]/30 bg-[#8f33ff]/9 px-4 py-4 text-center">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#c998ff]">Always working</p>
-                  <p className="mt-1 font-display text-base font-semibold tracking-[-0.02em] text-white sm:text-lg">Arcanium SEO + GEO Infrastructure</p>
-                </div>
-
-                <div className="h-9 w-px bg-white/18" aria-hidden="true" />
-
-                <div className="relative grid w-full grid-cols-2 gap-2.5 pt-5 sm:gap-3 lg:grid-cols-4">
-                  <span className="absolute left-[12.5%] right-[12.5%] top-0 hidden h-px bg-white/14 lg:block" aria-hidden="true" />
-                  {surfaces.map(({ label, icon: Icon }) => (
-                    <div key={label} className="relative flex min-h-[92px] flex-col justify-between border-t border-white/12 bg-white/[0.025] px-3 py-3.5 sm:min-h-[100px] sm:px-4">
-                      <span className="absolute left-1/2 top-[-21px] hidden h-5 w-px -translate-x-1/2 bg-white/14 lg:block" aria-hidden="true" />
-                      <Icon className="size-4.5 text-[#aaaab2]" aria-hidden="true" />
-                      <p className="mt-4 text-sm font-semibold leading-snug text-[#f5f5f3]">{label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="h-9 w-px bg-white/18" aria-hidden="true" />
-
-                <div className="flex w-full max-w-[430px] items-center gap-3 rounded-[14px] border border-white/12 bg-[#17181d] px-4 py-4">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-[11px] border border-[#8f33ff]/25 bg-[#8f33ff]/9 text-[#b875ff]">
-                    <ChartNoAxesCombined className="size-5" aria-hidden="true" />
-                  </span>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#777881]">The outcome</p>
-                    <p className="mt-0.5 font-display text-base font-semibold leading-snug tracking-[-0.02em] text-[#f5f5f3]">More visibility across vendor searches</p>
-                  </div>
+              <div className="flex items-start gap-3">
+                <span className="grid size-10 shrink-0 place-items-center rounded-[11px] border border-[#8f33ff]/25 bg-[#8f33ff]/9 text-[#b875ff]">
+                  <Search className="size-5" aria-hidden="true" />
+                </span>
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#777881]">The searches we build around</p>
+                  <p className="mt-1.5 max-w-[540px] text-sm font-medium leading-[1.55] text-[#aaaab2]">We begin with the high-intent searches local vendors use when they are deciding which agent to trust.</p>
                 </div>
               </div>
 
-              <div className="mt-7 border-t border-white/9 pt-5">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#777881]">Searches your system is built around</p>
-                <div className="mt-3 space-y-2">
-                  {searchExamples.map((query) => (
-                    <div key={query} className="flex items-start gap-2.5 border-l border-[#8f33ff]/40 pl-3 text-[13px] font-medium leading-[1.5] text-[#aaaab2] sm:text-sm">
-                      <Search className="mt-0.5 size-3.5 shrink-0 text-[#8f33ff]" aria-hidden="true" />
-                      <span>“{query}”</span>
-                    </div>
-                  ))}
+              <div className="mt-7 grid gap-2.5 sm:grid-cols-2 sm:gap-3">
+                {searchExamples.map((query) => (
+                  <div key={query} className="flex min-h-[84px] items-start gap-2.5 border-l border-[#8f33ff]/40 bg-white/[0.025] px-3 py-3.5 text-[13px] font-medium leading-[1.5] text-[#d7d7da] sm:text-sm">
+                    <Search className="mt-0.5 size-3.5 shrink-0 text-[#8f33ff]" aria-hidden="true" />
+                    <span>“{query}”</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-7 border-t border-white/9 pt-6">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#777881]">How we expand your visibility</p>
+                <div className="mt-4 grid items-center gap-3 sm:grid-cols-[1fr_auto_1fr_auto_1fr]">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8f33ff]">01</p>
+                    <p className="mt-1 font-display text-sm font-semibold leading-snug text-[#f5f5f3]">Target priority searches</p>
+                  </div>
+                  <ArrowRight className="size-4 rotate-90 text-white/25 sm:rotate-0" aria-hidden="true" />
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8f33ff]">02</p>
+                    <p className="mt-1 font-display text-sm font-semibold leading-snug text-[#f5f5f3]">Reach the #1 position</p>
+                  </div>
+                  <ArrowRight className="size-4 rotate-90 text-white/25 sm:rotate-0" aria-hidden="true" />
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8f33ff]">03</p>
+                    <p className="mt-1 font-display text-sm font-semibold leading-snug text-[#f5f5f3]">Expand into nearby suburbs</p>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex items-start gap-3 rounded-[14px] border border-white/12 bg-[#17181d] px-4 py-4">
+                  <MapPinned className="mt-0.5 size-5 shrink-0 text-[#b875ff]" aria-hidden="true" />
+                  <p className="text-sm font-semibold leading-[1.6] text-[#f5f5f3]">After we reach #1 for these priority searches, we move into lower-competition nearby suburbs to double your visibility.</p>
                 </div>
               </div>
             </div>
