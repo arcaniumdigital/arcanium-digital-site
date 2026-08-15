@@ -25,6 +25,19 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title, description, images: [previewImageUrl] },
 };
 
+function VisibilityReviewCopy({ className }: { className: string }) {
+  return (
+    <div className={className}>
+      <p className="text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
+        We assess how visible you are across the Google and AI searches that matter in your suburb, then show you where the biggest opportunities are to improve.
+      </p>
+      <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
+        Watch the short overview to understand the need, then choose a time above to review your visibility with me.
+      </p>
+    </div>
+  );
+}
+
 export default async function VendorAuditPage() {
   const cookieStore = await cookies();
   const bookingToken = normalizeBookingToken(cookieStore.get(bookingTokenCookieName)?.value);
@@ -45,12 +58,6 @@ export default async function VendorAuditPage() {
             <h1 className="mt-5 max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
               See where you could be missing vendor searches.
             </h1>
-            <p className="mt-6 max-w-[570px] text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-              We assess how visible you are across the Google and AI searches that matter in your suburb, then show you where the biggest opportunities are to improve.
-            </p>
-            <p className="mt-4 max-w-[570px] text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-              Watch the short overview to understand the need, then choose a time below to review your visibility with me.
-            </p>
 
             <div className="relative mt-9 max-w-[760px] sm:mt-10">
               <div className="pointer-events-none absolute inset-0 translate-x-3 translate-y-3 rounded-[20px] border border-[#8f33ff]/20 bg-[#15161c]/70 sm:translate-x-4 sm:translate-y-4 sm:rounded-[24px]" />
@@ -58,10 +65,13 @@ export default async function VendorAuditPage() {
                 <AuditVideo />
               </div>
             </div>
+
+            <VisibilityReviewCopy className="mt-9 hidden max-w-[570px] min-[1180px]:block" />
           </div>
 
           <div className="min-w-0 max-sm:-mx-2 min-[1180px]:col-span-5">
             <AuditBooking initialBookingToken={bookingToken} />
+            <VisibilityReviewCopy className="mt-8 max-sm:px-2 min-[1180px]:hidden" />
           </div>
         </section>
       </main>
