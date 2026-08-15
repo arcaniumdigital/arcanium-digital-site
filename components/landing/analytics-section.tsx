@@ -14,7 +14,7 @@ export function AnalyticsSection() {
         <div className="max-w-[760px]">
           <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#64656b]"><span className="size-1.5 rounded-full bg-[#8f33ff]" />Clear reporting. Real signals.</p>
           <h2 className="mt-5 max-w-[680px] font-display text-[clamp(2.125rem,9.5vw,2.5rem)] font-semibold leading-[1] tracking-[-0.04em] lg:text-[clamp(3rem,4vw,4.25rem)]">Visibility You Can Actually Measure</h2>
-          <p className="mt-5 max-w-[620px] text-base font-medium leading-[1.65] text-[#64656b] lg:text-lg">See the searches, visitors and vendor actions your online presence is creating — with clear reporting that makes progress easy to understand.</p>
+          <p className="mt-5 max-w-[620px] text-base font-medium leading-[1.65] text-[#64656b] lg:text-lg">See the searches, visitors and vendor actions your online presence is creating. Clear reporting makes progress easy to understand.</p>
         </div>
 
         <div className="mt-12 grid gap-10 lg:mt-[72px] lg:grid-cols-12 lg:gap-7">

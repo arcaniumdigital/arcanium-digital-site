@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ShieldCheck } from "lucide-react";
 import { VendorAuditForm } from "./vendor-audit-form";
 
 export function CtaSection() {
@@ -40,6 +41,21 @@ export function CtaSection() {
                 Your free Suburb Visibility Audit
               </div>
               <VendorAuditForm />
+              <div className="mx-auto -mt-2 mb-5 max-w-[600px] px-5 pb-2 sm:-mt-3 sm:mb-6 sm:px-8">
+                <div className="flex gap-3.5 rounded-[14px] border border-black/10 bg-white/70 p-4 text-left shadow-[0_8px_24px_rgba(16,17,20,0.05)] sm:p-5">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-[11px] border border-[#8f33ff]/20 bg-[#8f33ff]/8 text-[#7b25e8]">
+                    <ShieldCheck className="size-5" aria-hidden="true" />
+                  </span>
+                  <div>
+                    <h3 className="font-display text-base font-semibold tracking-[-0.025em] text-[#101114] sm:text-lg">
+                      Our 90-Day Visibility Guarantee
+                    </h3>
+                    <p className="mt-1.5 text-[13px] font-semibold leading-[1.55] text-[#55565d] sm:text-sm">
+                      If we cannot demonstrate clear improvement across your priority Google and AI searches within 90 days, we keep working at no service fee until we can.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

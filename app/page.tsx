@@ -5,9 +5,9 @@ import { AuthoritySection } from "@/components/landing/authority-section";
 import { AnalyticsSection } from "@/components/landing/analytics-section";
 import { CtaSection } from "@/components/landing/cta-section";
 import { FinalCtaSection } from "@/components/landing/final-cta-section";
-import { SearchProblemSection } from "@/components/landing/search-problem-section";
 import { GeoSection } from "@/components/landing/geo-section";
 import { Navigation } from "@/components/landing/navigation";
+import { WhatWeDoSection } from "@/components/landing/what-we-do-section";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -65,18 +65,18 @@ export default function Home() {
     <>
       <Navigation />
       <main className="relative min-h-screen overflow-x-hidden">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      <HeroSection />
-      <CtaSection />
-      <SearchProblemSection />
-      <AnalyticsSection />
-      <GeoSection />
-      <AutonomousSection />
-      <AuthoritySection />
-      <FinalCtaSection />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <HeroSection />
+        <CtaSection />
+        <WhatWeDoSection />
+        <AnalyticsSection />
+        <GeoSection />
+        <AutonomousSection />
+        <AuthoritySection />
+        <FinalCtaSection />
       </main>
     </>
   );
