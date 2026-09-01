@@ -48,6 +48,16 @@ export const metadata: Metadata = {
   },
 }
 
+const clarityProjectId = "ybgpry9s0r";
+
+const clarityScript = `
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "${clarityProjectId}");
+`;
+
 const metaPixelScript = `
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -69,6 +79,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <script id="microsoft-clarity" dangerouslySetInnerHTML={{ __html: clarityScript }} />
         <script id="meta-pixel" dangerouslySetInnerHTML={{ __html: metaPixelScript }} />
       </head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
