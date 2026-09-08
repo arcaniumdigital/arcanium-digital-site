@@ -68,7 +68,7 @@ export function AutonomousSection() {
                           className="showcase-wistia-player absolute inset-0"
                           dangerouslySetInnerHTML={{
                             __html:
-                              '<wistia-player media-id="z8jusqm7ag" aspect="1.6"></wistia-player>',
+                              '<wistia-player media-id="z8jusqm7ag" aspect="1.6" autoplay silent-autoplay="allow" volume="1"></wistia-player>',
                           }}
                         />
                       </div>
