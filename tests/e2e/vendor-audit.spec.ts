@@ -38,7 +38,6 @@ test("durable acceptance navigates directly to the clean audit page", async ({ p
   await page.waitForFunction(() => Boolean((window as Window & { __turnstileTestReady?: boolean }).__turnstileTestReady));
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
-  await page.getByLabel("Primary Suburb").fill("Pelican Waters");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
   await expect(page.getByText("By continuing, you agree to receive SMS about your audit.")).toBeVisible();
   const button = page.getByRole("button", { name: "See my opportunity" });
@@ -47,7 +46,7 @@ test("durable acceptance navigates directly to the clean audit page", async ({ p
   await button.click({ noWaitAfter: true });
   await navigationCommitted;
   expect(page.url()).toBe("http://127.0.0.1:3000/vendor-audit");
-  expect(submittedPayload?.primarySuburb).toBe("Pelican Waters");
+  expect(submittedPayload).not.toHaveProperty("primarySuburb");
   await expect(page.getByRole("heading", { name: "Your next step: book your visibility review." })).toBeVisible();
 });
 
@@ -58,12 +57,11 @@ test("a failed acceptance preserves fields and shows one honest error", async ({
   await page.waitForFunction(() => Boolean((window as Window & { __turnstileTestReady?: boolean }).__turnstileTestReady));
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
-  await page.getByLabel("Primary Suburb").fill("Pelican Waters");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
   await page.getByRole("button", { name: "See my opportunity" }).click();
   await expect(page.getByText("We could not submit your details. Please check your connection and try again.")).toBeVisible();
   await expect(page.getByLabel("Full name")).toHaveValue("Alex Agent");
-  await expect(page.getByLabel("Primary Suburb")).toHaveValue("Pelican Waters");
+  await expect(page.getByLabel("Best mobile number")).toHaveValue("0412 345 678");
   await expect(page).toHaveURL("http://127.0.0.1:3000/");
 });
 
@@ -78,7 +76,7 @@ test("search opportunity copy and controls remain composed across breakpoints", 
     await expect(opportunityLinks).toHaveCount(2);
     await expect(page.getByText("Enter your details below to see how much local search demand you could be capturing.")).toBeVisible();
     await expect(page.getByText("Your Local Search Opportunity")).toBeVisible();
-    await expect(page.getByLabel("Primary Suburb")).toHaveAttribute("required", "");
+    await expect(page.getByLabel("Primary Suburb")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "See my opportunity" })).toBeVisible();
 
     const headerButtonHeight = await opportunityLinks.first().evaluate((element) => element.getBoundingClientRect().height);
