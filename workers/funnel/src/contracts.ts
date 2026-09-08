@@ -5,6 +5,7 @@ export const vendorAuditLeadSchema = z.object({
   submissionId: z.string().uuid(),
   fullName: z.string().trim().min(2).max(120),
   phone: z.string().trim().min(8).max(30),
+  primarySuburb: z.string().trim().min(2).max(120).optional(),
   sourcePage: z.string().trim().min(1).max(500),
   referrer: z.string().trim().max(500).optional(),
   utmSource: z.string().trim().max(200).optional(),
@@ -46,6 +47,7 @@ export type ProviderAction =
   | "BREVO_SYNC_LEAD"
   | "BREVO_SYNC_BOOKING"
   | "BREVO_INTERNAL_EMAIL"
+  | "CLICKSEND_OWNER_LEAD_ALERT"
   | "INNGEST_EVENT"
   | "SYNTHETIC_CANARY"
   | "DAILY_DIGEST";
@@ -57,6 +59,7 @@ export type LeadRow = {
   full_name: string;
   first_name: string;
   phone_e164: string;
+  primary_suburb: string | null;
   email: string | null;
   source_page: string;
   referrer: string | null;

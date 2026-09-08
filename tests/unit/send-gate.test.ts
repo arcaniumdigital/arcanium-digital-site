@@ -3,7 +3,7 @@ import type { LeadRow, MessageJobRow } from "../../workers/funnel/src/contracts"
 import { evaluateSendGate, type SendGateConfig } from "../../workers/funnel/src/send-gate";
 
 const lead: LeadRow = {
-  id: "lead_1", public_id: "public_1", submission_id: "submission_1", full_name: "Alex Agent", first_name: "Alex", phone_e164: "+61412345678", email: null,
+  id: "lead_1", public_id: "public_1", submission_id: "submission_1", full_name: "Alex Agent", first_name: "Alex", phone_e164: "+61412345678", primary_suburb: "Pelican Waters", email: null,
   source_page: "https://example.com", referrer: null, utm_source: null, utm_medium: null, utm_campaign: null, utm_term: null, utm_content: null,
   marketing_sms_consent: 1, consent_version: "v1", booking_state: "NOT_BOOKED", journey_state: "ACTIVE", suppression_state: "NONE", manual_pause: 0,
   replied_at: null, brevo_contact_id: null, brevo_deal_id: null, current_booking_uid: null, latest_message_type: null, latest_message_sent_at: null, created_at: "2026-08-09T00:00:00Z",

@@ -1,5 +1,7 @@
 import { env, SELF } from "cloudflare:test";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(() => vi.unstubAllGlobals());
 
 describe("funnel Worker and D1", () => {
   it("reports its safe service identity", async () => {
@@ -32,6 +34,58 @@ describe("funnel Worker and D1", () => {
     const rows = await env.DB.prepare("SELECT name FROM sqlite_schema WHERE type='table'").all<{ name: string }>();
     const names = new Set(rows.results.map((row) => row.name));
     for (const name of ["leads", "bookings", "message_jobs", "provider_jobs", "inbound_messages", "suppressions", "webhook_events", "funnel_events", "outbox", "funnel_incidents", "component_health", "canary_runs"]) expect(names.has(name)).toBe(true);
+  });
+
+  it("stores the primary suburb on canonical lead records", async () => {
+    const columns = await env.DB.prepare("PRAGMA table_info(leads)").all<{ name: string }>();
+    expect(columns.results.map((column) => column.name)).toContain("primary_suburb");
+    const schema = await env.DB.prepare("SELECT safe_detail_json FROM component_health WHERE component = 'schema'").first<{ safe_detail_json: string }>();
+    expect(JSON.parse(schema?.safe_detail_json ?? "{}")).toEqual({ schemaVersion: "2" });
+  });
+
+  it("persists the primary suburb from an accepted lead payload", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async () => new Response(JSON.stringify({
+      success: true,
+      action: "vendor_audit",
+      hostname: "localhost",
+    }), { status: 200, headers: { "Content-Type": "application/json" } })));
+
+    const timestamp = new Date().toISOString();
+    const clientIp = "203.0.113.10";
+    const submissionId = crypto.randomUUID();
+    const body = JSON.stringify({
+      schemaVersion: "2.0",
+      submissionId,
+      fullName: "Alex Agent",
+      phone: "0412 345 678",
+      primarySuburb: "Pelican Waters",
+      sourcePage: "http://localhost:3000/",
+      marketingSmsConsent: true,
+      consentVersion: "vendor-audit-sms-v1",
+      consentText: "I agree to receive SMS about my audit and related services.",
+      privacyNoticeVersion: "privacy-v1",
+      turnstileToken: "test-token",
+    });
+    const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(env.INTERNAL_API_HMAC_SECRET), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+    const signature = Array.from(new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(`${timestamp}.${clientIp}.${body}`))))
+      .map((byte) => byte.toString(16).padStart(2, "0")).join("");
+
+    const response = await SELF.fetch("https://funnel.test/api/vendor-audit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+        "User-Agent": "worker-test",
+        "x-arcanium-proxy-timestamp": timestamp,
+        "x-arcanium-client-ip": clientIp,
+        "x-arcanium-proxy-signature": signature,
+      },
+      body,
+    });
+
+    expect(response.status).toBe(202);
+    const lead = await env.DB.prepare("SELECT primary_suburb FROM leads WHERE submission_id = ?").bind(submissionId).first<{ primary_suburb: string }>();
+    expect(lead?.primary_suburb).toBe("Pelican Waters");
   });
 
   it("enforces canonical submission idempotency", async () => {

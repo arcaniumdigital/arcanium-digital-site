@@ -43,7 +43,7 @@ export async function clickSendBalance(env: Cloudflare.Env): Promise<number> {
 export async function sendClickSendSms(input: {
   env: Cloudflare.Env;
   lead: LeadRow;
-  job: MessageJobRow;
+  job: Pick<MessageJobRow, "id">;
   body: string;
 }): Promise<{ messageId: string; status: string; parts: number; price: number | null; currency: string | null }> {
   const { env, lead, job, body } = input;
@@ -109,7 +109,7 @@ export async function checkBrevo(env: Cloudflare.Env): Promise<void> {
   await brevoRequest(env, "/account", { method: "GET" });
 }
 
-export async function checkCalWebhook(env: Cloudflare.Env): Promise<void> {
+async function checkCalWebhookOnce(env: Cloudflare.Env): Promise<void> {
   const response = await fetch(`https://api.cal.com/v2/event-types/${encodeURIComponent(env.CAL_EVENT_TYPE_ID)}/webhooks`, {
     headers: {
       Authorization: `Bearer ${env.CAL_API_KEY}`,
@@ -130,6 +130,20 @@ export async function checkCalWebhook(env: Cloudflare.Env): Promise<void> {
     return url === expected && active && ["BOOKING_CREATED", "BOOKING_RESCHEDULED", "BOOKING_CANCELLED"].every((trigger) => triggers.includes(trigger));
   });
   if (!found) throw new ProviderError("CAL_WEBHOOK_CONFIGURATION_MISSING", false);
+}
+
+export async function checkCalWebhook(env: Cloudflare.Env): Promise<{ attempts: number }> {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      await checkCalWebhookOnce(env);
+      return { attempts: attempt };
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) await new Promise((resolve) => setTimeout(resolve, attempt * 1_000));
+    }
+  }
+  throw lastError;
 }
 
 export async function syncBrevoLead(env: Cloudflare.Env, lead: LeadRow): Promise<{ contactId: string; dealId: string }> {

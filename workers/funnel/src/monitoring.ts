@@ -2,7 +2,13 @@ import { constantTimeEqual, opaqueId } from "./crypto";
 import { json } from "./http";
 import { openP1Incident, resolveP1Incident } from "./incidents";
 import { publishOutbox, queueEnvelope } from "./outbox";
-import { checkBrevo, checkCalWebhook, clickSendBalance } from "./providers";
+import { checkBrevo, checkCalWebhook, clickSendBalance, ProviderError } from "./providers";
+
+function monitoringErrorCode(error: unknown): string {
+  if (error instanceof ProviderError) return error.code;
+  if (error instanceof Error && error.message) return error.message.slice(0, 100);
+  return "UNKNOWN_MONITORING_ERROR";
+}
 
 async function setHealth(env: Cloudflare.Env, component: string, healthy: boolean, detail: Record<string, unknown> = {}): Promise<void> {
   const now = new Date().toISOString();
@@ -63,7 +69,7 @@ async function providerChecks(env: Cloudflare.Env): Promise<void> {
       if (balance < Number(env.CLICKSEND_MINIMUM_BALANCE_AUD)) throw new Error("BALANCE_BELOW_RESERVE");
       return { balanceAud: balance };
     }],
-    ["calWebhookConfig", async () => { await checkCalWebhook(env); }],
+    ["calWebhookConfig", async () => await checkCalWebhook(env)],
     ["publicLinks", async () => {
       const [booking, brochure] = await Promise.all([
         fetch(env.BOOKING_LINK_BASE_URL, { redirect: "follow", signal: AbortSignal.timeout(10_000) }),
@@ -77,9 +83,10 @@ async function providerChecks(env: Cloudflare.Env): Promise<void> {
     try {
       await setHealth(env, component, true, await check() ?? {});
       await resolveP1Incident(env, `PROVIDER_CHECK:${component}`);
-    } catch {
-      await setHealth(env, component, false);
-      await openP1Incident(env, { key: `PROVIDER_CHECK:${component}`, component, summary: `${component} configuration or authentication check failed`, notify: true });
+    } catch (error) {
+      const errorCode = monitoringErrorCode(error);
+      await setHealth(env, component, false, { errorCode, attempts: component === "calWebhookConfig" ? 3 : 1 });
+      await openP1Incident(env, { key: `PROVIDER_CHECK:${component}`, component, summary: `${component} configuration or authentication check failed`, evidence: { errorCode }, notify: true });
     }
   }
 }

@@ -14,6 +14,7 @@ import {
 } from "./providers";
 import { evaluateSendGate } from "./send-gate";
 import { formatAppointment } from "./time";
+import { normalizeAustralianMobile, sanitizeFullName } from "./phone";
 
 type BookingForMessage = {
   cal_booking_uid: string;
@@ -184,6 +185,17 @@ async function processProviderJob(env: Cloudflare.Env, id: string): Promise<void
       idempotencyKey: job.id,
       params: internalNotificationParams({ lead, booking, bookingUid: job.booking_uid, notificationType: notification }),
     });
+  } else if (job.action_type === "CLICKSEND_OWNER_LEAD_ALERT") {
+    if (!lead) throw new ProviderError("LEAD_NOT_FOUND", false);
+    const ownerPhone = normalizeAustralianMobile(env.CLICKSEND_OWNER_ALERT_NUMBER);
+    if (!ownerPhone) throw new ProviderError("OWNER_ALERT_PHONE_INVALID", false);
+    const result = await sendClickSendSms({
+      env,
+      lead: { ...lead, phone_e164: ownerPhone },
+      job,
+      body: `New Lead - ${sanitizeFullName(lead.full_name)} - ${lead.phone_e164}`,
+    });
+    providerReference = result.messageId;
   } else if (job.action_type === "INNGEST_EVENT") {
     const eventName = String(payload.eventName ?? "");
     if (!eventName) throw new ProviderError("INNGEST_EVENT_NAME_MISSING", false);

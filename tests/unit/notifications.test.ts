@@ -9,6 +9,7 @@ describe("internal lead notifications", () => {
       full_name: "Jordan Test Lead",
       first_name: "Jordan",
       phone_e164: "+61413105755",
+      primary_suburb: "Pelican Waters",
       email: null,
       source_page: "https://www.arcaniumdigital.com/",
     } as LeadRow;
@@ -22,6 +23,7 @@ describe("internal lead notifications", () => {
       fullName: "Jordan Test Lead",
       phone: "+61413105755",
       phoneE164: "+61413105755",
+      primarySuburb: "Pelican Waters",
       notificationType: "new-lead",
     });
   });

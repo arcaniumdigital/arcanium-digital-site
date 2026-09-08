@@ -120,6 +120,7 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
   const providerJobs = [
     { id: opaqueId("job"), action: "BREVO_SYNC_LEAD", key: `${leadId}:brevo-sync` },
     { id: opaqueId("job"), action: "BREVO_INTERNAL_EMAIL", key: `${leadId}:new-lead-email` },
+    { id: opaqueId("job"), action: "CLICKSEND_OWNER_LEAD_ALERT", key: `${leadId}:new-lead-owner-sms` },
     { id: opaqueId("job"), action: "INNGEST_EVENT", key: `${leadId}:lead-created-event` },
   ];
   const outboxEntries = [messageJobId, ...providerJobs.map((job) => job.id)].map((jobId) => ({ id: opaqueId("outbox"), jobId }));
@@ -127,14 +128,14 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
 
   const statements: D1PreparedStatement[] = [
     env.DB.prepare(`INSERT INTO leads (
-      id, public_id, submission_id, full_name, first_name, phone_e164, source_page, referrer,
+      id, public_id, submission_id, full_name, first_name, phone_e164, primary_suburb, source_page, referrer,
       utm_source, utm_medium, utm_campaign, utm_term, utm_content, fbclid_hash, gclid_hash,
       marketing_sms_consent, consent_version, consent_text, privacy_notice_version,
       consent_recorded_at, lifecycle_state, booking_state, journey_state, created_at, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'NEW', 'NOT_BOOKED', 'ACTIVE', ?, ?)`)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'NEW', 'NOT_BOOKED', 'ACTIVE', ?, ?)`)
       .bind(
         leadId, publicId, input.submissionId, fullName, firstNameFromFullName(fullName), phoneE164,
-        input.sourcePage, input.referrer ?? null, input.utmSource ?? null, input.utmMedium ?? null,
+        input.primarySuburb ?? null, input.sourcePage, input.referrer ?? null, input.utmSource ?? null, input.utmMedium ?? null,
         input.utmCampaign ?? null, input.utmTerm ?? null, input.utmContent ?? null,
         input.fbclid ? await sha256Hex(input.fbclid) : null,
         input.gclid ? await sha256Hex(input.gclid) : null,
