@@ -9,8 +9,8 @@ export function FinalCtaSection() {
         <div className="relative mx-auto max-w-[900px] text-center">
         <h2 className="font-display text-[clamp(2.375rem,10vw,2.75rem)] font-semibold leading-[0.98] tracking-[-0.045em] lg:text-[clamp(3.25rem,5vw,4.875rem)]">Who Owns Your Suburb Online Right Now?</h2>
         <p className="mx-auto mt-6 max-w-[650px] text-base font-medium leading-[1.65] text-[#aaaab2] lg:text-lg">See which suburb searches you currently appear for, which competitors are being shown instead, and the biggest opportunities to improve your visibility across Google and AI.</p>
-        <MetaTrackedLink href="#audit" trackingLabel="Show me where I stand - final CTA" className="group mt-8 inline-flex min-h-[58px] w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-8 text-sm font-semibold text-[#0b0c0f] transition-all duration-300 hover:-translate-y-px hover:bg-white sm:w-auto">
-          SHOW ME WHERE I STAND
+        <MetaTrackedLink href="#audit" trackingLabel="Get my free suburb audit - final CTA" className="group mt-8 inline-flex min-h-[58px] w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-8 text-sm font-semibold text-[#0b0c0f] transition-all duration-300 hover:-translate-y-px hover:bg-white sm:w-auto">
+          GET MY FREE SUBURB AUDIT
           <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
         </MetaTrackedLink>
         </div>

@@ -20,10 +20,10 @@ export function HeroSection() {
           </p>
           <MetaTrackedLink
             href="#audit"
-            trackingLabel="See my search opportunity - hero"
+            trackingLabel="Get my free suburb audit - hero"
             className="group mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:w-auto lg:mt-8"
           >
-            SEE MY SEARCH OPPORTUNITY
+            GET MY FREE SUBURB AUDIT
             <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
           </MetaTrackedLink>
         </div>
