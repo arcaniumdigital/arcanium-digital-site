@@ -72,9 +72,9 @@ export default function Home() {
         <HeroSection />
         <CtaSection />
         <WhatWeDoSection />
+        <AutonomousSection />
         <AnalyticsSection />
         <GeoSection />
-        <AutonomousSection />
         <AuthoritySection />
         <FinalCtaSection />
       </main>
