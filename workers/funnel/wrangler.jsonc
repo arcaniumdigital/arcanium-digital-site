@@ -17,6 +17,7 @@
       "CLICKSEND_FROM_NUMBER",
       "CLICKSEND_INBOUND_WEBHOOK_TOKEN",
       "CLICKSEND_RECEIPT_WEBHOOK_TOKEN",
+      "CLICKSEND_OWNER_ALERT_NUMBER",
       "BREVO_API_KEY",
       "BREVO_PIPELINE_ID",
       "BREVO_STAGE_NEW_ENQUIRY_ID",
@@ -67,7 +68,7 @@
     "CLICKSEND_MAX_PARTS_BOOKED": "4",
     "LOG_LEVEL": "info",
     "DEPLOYMENT_VERSION": "local",
-    "SCHEMA_VERSION": "1",
+    "SCHEMA_VERSION": "2",
     "STALE_JOB_THRESHOLD_MINUTES": "15"
   },
   "d1_databases": [
@@ -140,6 +141,7 @@
           "CLICKSEND_FROM_NUMBER",
           "CLICKSEND_INBOUND_WEBHOOK_TOKEN",
           "CLICKSEND_RECEIPT_WEBHOOK_TOKEN",
+          "CLICKSEND_OWNER_ALERT_NUMBER",
           "BREVO_API_KEY",
           "BREVO_PIPELINE_ID",
           "BREVO_STAGE_NEW_ENQUIRY_ID",
@@ -169,8 +171,8 @@
         "BOOKING_CONTEXT_COOKIE_DOMAIN": "arcaniumdigital.com",
         "BOOKING_LINK_BASE_URL": "https://arcaniumdigital.com/audit",
         "CAL_API_VERSION": "2024-06-14",
-        "CAL_EVENT_TYPE_ID": "6601494",
-        "CAL_EXPECTED_EVENT_SLUG": "vendor-conversion-audit",
+        "CAL_EVENT_TYPE_ID": "6136671",
+        "CAL_EXPECTED_EVENT_SLUG": "magnet",
         "CAL_EXPECTED_WEBHOOK_URL": "https://arcanium-funnel-prod.enquiries-432.workers.dev/webhooks/cal/bookings",
         "BROCHURE_URL": "https://arcaniumdigital.com",
         "BUSINESS_NAME": "Arcanium Digital",
@@ -190,7 +192,7 @@
         "CLICKSEND_MAX_PARTS_BOOKED": "4",
         "LOG_LEVEL": "info",
         "DEPLOYMENT_VERSION": "set-by-ci",
-        "SCHEMA_VERSION": "1",
+        "SCHEMA_VERSION": "2",
         "STALE_JOB_THRESHOLD_MINUTES": "15"
       },
       "d1_databases": [

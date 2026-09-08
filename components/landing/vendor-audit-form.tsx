@@ -38,6 +38,7 @@ declare global {
 export function VendorAuditForm() {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [primarySuburb, setPrimarySuburb] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
   const [error, setError] = useState("");
   const [locked, setLocked] = useState(false);
@@ -96,6 +97,7 @@ export function VendorAuditForm() {
           submissionId: submissionId.current,
           fullName: fullName.trim(),
           phone: phone.trim(),
+          primarySuburb: primarySuburb.trim(),
           // Attribution values are sent separately below. Keeping this to the
           // canonical page prevents long Meta click URLs exceeding the Worker contract.
           sourcePage: `${window.location.origin}${window.location.pathname}`.slice(0, 500),
@@ -172,9 +174,13 @@ export function VendorAuditForm() {
           <span className="text-sm font-bold text-[#111218]/70">Best mobile number</span>
           <input required minLength={8} maxLength={30} type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={(event) => setPhone(event.target.value)} className="h-[58px] rounded-[14px] border border-black/12 bg-white px-[18px] text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="04xx xxx xxx" />
         </label>
+        <label className="grid gap-2.5">
+          <span className="text-sm font-bold text-[#111218]/70">Primary Suburb</span>
+          <input required minLength={2} maxLength={120} autoComplete="address-level2" value={primarySuburb} onChange={(event) => setPrimarySuburb(event.target.value)} className="h-[58px] rounded-[14px] border border-black/12 bg-white px-[18px] text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="Your primary suburb" />
+        </label>
         <div ref={widgetHost} />
         <button type="submit" disabled={locked} className="min-h-[58px] rounded-[14px] border border-black/10 bg-[#101114] px-6 text-sm font-semibold uppercase tracking-[0.06em] text-white transition duration-300 hover:-translate-y-px hover:bg-[#18191f] disabled:cursor-default disabled:opacity-70">
-          {locked ? "Opening audit times…" : "Check my visibility"}
+          {locked ? "Opening audit times…" : "See my opportunity"}
         </button>
         <p className="text-center text-[13px] leading-5 text-black/50">
           By continuing, you agree to receive SMS about your audit.{" "}

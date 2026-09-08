@@ -20,6 +20,7 @@ export function internalNotificationParams(input: {
     firstName: lead?.first_name ?? "System",
     phone: lead?.phone_e164 ?? "Not available",
     phoneE164: lead?.phone_e164 ?? "Not available",
+    primarySuburb: lead?.primary_suburb ?? "Not provided",
     email: lead?.email ?? "Not provided",
     sourcePage: lead?.source_page ?? "Not available",
     bookingUid: booking?.cal_booking_uid ?? bookingUid,

@@ -99,6 +99,7 @@ async function createDirectLead(body: unknown, now: string): Promise<LeadRow | n
     full_name: fullName,
     first_name: firstNameFromFullName(fullName),
     phone_e164: phone,
+    primary_suburb: null,
     email: extractCalEmail(body),
     source_page: "cal_direct_booking",
     referrer: null,
