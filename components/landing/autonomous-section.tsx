@@ -3,7 +3,7 @@ import Image from "next/image";
 import { MetaTrackedLink } from "@/components/analytics/meta-tracked-link";
 
 const showcaseImages = [
-  { title: "Suburb SEO Authority", image: "/images/showcase/mary-ann.png", width: 1672, height: 941, alt: "Arcanium suburb SEO authority operations system" },
+  { title: "Suburb SEO Authority", image: "/images/showcase/suburb-search-opportunity.png", width: 1672, height: 941, alt: "Arcanium suburb SEO authority operations system" },
   { title: "Premium Local Positioning", image: "/images/showcase/mary-ann-strategy.png", width: 2880, height: 1598, alt: "Mary-Ann McLoughlin website positioning section example" },
   { title: "Built for Google & AI Search", image: "/images/showcase/built-for-google-ai-search.png", width: 1672, height: 941, alt: "Arcanium listing publishing and search visibility result example" },
 ];
