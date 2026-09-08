@@ -38,7 +38,7 @@ export function CtaSection() {
             </div>
             <div className="bg-white/55 px-1 py-2 sm:px-4 sm:py-5 lg:grid lg:content-center lg:px-8 lg:py-10">
               <div className="px-5 pt-5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#7b25e8] sm:px-8 sm:pt-6">
-                Your Local Search Opportunity
+                Your Free Suburb Audit
               </div>
               <VendorAuditForm />
               <div className="mx-auto -mt-2 mb-5 max-w-[600px] px-5 pb-2 sm:-mt-3 sm:mb-6 sm:px-8">

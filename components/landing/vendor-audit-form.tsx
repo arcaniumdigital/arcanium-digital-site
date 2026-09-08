@@ -174,7 +174,7 @@ export function VendorAuditForm() {
         </label>
         <div ref={widgetHost} />
         <button type="submit" disabled={locked} className="min-h-[58px] rounded-[14px] border border-black/10 bg-[#101114] px-6 text-sm font-semibold uppercase tracking-[0.06em] text-white transition duration-300 hover:-translate-y-px hover:bg-[#18191f] disabled:cursor-default disabled:opacity-70">
-          {locked ? "Opening audit times…" : "See my opportunity"}
+          {locked ? "Opening audit times…" : "Get my free suburb audit"}
         </button>
         <p className="text-center text-[13px] leading-5 text-black/50">
           By continuing, you agree to receive SMS about your audit.{" "}
