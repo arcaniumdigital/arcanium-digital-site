@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
+import Script from "next/script";
 import { MetaTrackedLink } from "@/components/analytics/meta-tracked-link";
 
 const showcaseImages = [
@@ -11,6 +12,20 @@ const showcaseImages = [
 export function AutonomousSection() {
   return (
     <section id="showcase" className="relative overflow-visible bg-[#f3f2ee] px-4 py-[88px] text-[#101114] [content-visibility:auto] [contain-intrinsic-size:auto_1900px] sm:px-6 md:px-8 lg:px-12 lg:py-40">
+      <Script src="https://fast.wistia.com/player.js" strategy="afterInteractive" />
+      <Script
+        src="https://fast.wistia.com/embed/z8jusqm7ag.js"
+        strategy="afterInteractive"
+        type="module"
+      />
+      <style>{`
+        .showcase-wistia-player,
+        .showcase-wistia-player wistia-player[media-id='z8jusqm7ag'] {
+          display: block;
+          height: 100%;
+          width: 100%;
+        }
+      `}</style>
       <div className="mx-auto max-w-[1280px]">
         <div className="max-w-[760px]">
           <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#64656b]"><span className="size-1.5 rounded-full bg-[#8f33ff]" />An asset you control</p>
@@ -47,7 +62,19 @@ export function AutonomousSection() {
                     <span className="size-2 rounded-full bg-white/18" />
                   </div>
                   <div className="bg-white p-1.5 lg:p-2">
-                    <Image src={item.image} alt={item.alt} width={item.width} height={item.height} sizes="(max-width: 1024px) calc(100vw - 32px), 920px" quality={76} className="h-auto w-full rounded-[12px] object-contain object-top lg:rounded-[16px]" />
+                    {index === 1 ? (
+                      <div className="relative aspect-[2880/1598] w-full overflow-hidden rounded-[12px] bg-black lg:rounded-[16px]">
+                        <div
+                          className="showcase-wistia-player absolute inset-0"
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              '<wistia-player media-id="z8jusqm7ag" aspect="1.6"></wistia-player>',
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <Image src={item.image} alt={item.alt} width={item.width} height={item.height} sizes="(max-width: 1024px) calc(100vw - 32px), 920px" quality={76} className="h-auto w-full rounded-[12px] object-contain object-top lg:rounded-[16px]" />
+                    )}
                   </div>
                 </div>
               </article>
