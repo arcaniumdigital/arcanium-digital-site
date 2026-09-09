@@ -157,7 +157,7 @@ export function AuditBooking({
   return (
     <section id="booking" className="rounded-[20px] border border-white/15 bg-[#f3f2ee] p-4 text-left text-[#101114] shadow-[0_40px_100px_rgba(0,0,0,0.35)] sm:rounded-[24px] sm:p-7 min-[1180px]:rounded-[28px] min-[1180px]:p-8">
       <h2 className="font-display text-[clamp(2rem,8vw,2.35rem)] font-semibold leading-[1.02] tracking-[-0.04em] min-[1180px]:text-[clamp(2rem,2.6vw,2.4rem)]">
-        Book your free 5 minute overview call.
+        Book your free visibility call.
       </h2>
 
       <div className="mt-7 overflow-hidden rounded-[16px] border border-black/10 bg-white">
