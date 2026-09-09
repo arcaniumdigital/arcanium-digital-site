@@ -47,9 +47,32 @@ test("durable acceptance navigates directly to the clean audit page", async ({ p
   await navigationCommitted;
   expect(page.url()).toBe("http://127.0.0.1:3000/vendor-audit");
   expect(submittedPayload).not.toHaveProperty("primarySuburb");
-  await expect(page.getByRole("heading", { name: "Book your free 5 minute overview call." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Book your free visibility call." })).toBeVisible();
   await expect(page.getByText("Suburb Visibility Review", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "See how visible you are to local vendors." })).toBeVisible();
+});
+
+test("the mobile audit page places the video below the booking calendar", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/vendor-audit", { waitUntil: "domcontentloaded" });
+
+  const booking = page.locator("#booking");
+  const video = page.getByTestId("audit-video-card");
+  const visibilityCopy = page.getByRole("heading", { name: "See how visible you are to local vendors." });
+
+  await expect(booking).toBeVisible();
+  await expect(video).toBeVisible();
+  await expect(visibilityCopy).toBeVisible();
+
+  const bookingBox = await booking.boundingBox();
+  const videoBox = await video.boundingBox();
+  const copyBox = await visibilityCopy.boundingBox();
+
+  expect(bookingBox).not.toBeNull();
+  expect(videoBox).not.toBeNull();
+  expect(copyBox).not.toBeNull();
+  expect(videoBox!.y).toBeGreaterThan(bookingBox!.y + bookingBox!.height);
+  expect(copyBox!.y).toBeGreaterThan(videoBox!.y + videoBox!.height);
 });
 
 test("a failed acceptance preserves fields and shows one honest error", async ({ page }) => {

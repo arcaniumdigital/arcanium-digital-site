@@ -57,24 +57,23 @@ export default async function VendorAuditPage() {
         <div className="pointer-events-none absolute inset-0 opacity-[0.025] [background-image:linear-gradient(rgba(255,255,255,0.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.8)_1px,transparent_1px)] [background-size:48px_48px]" />
 
         <section className="relative mx-auto grid min-h-screen max-w-[1240px] gap-12 px-5 py-14 sm:px-7 sm:py-16 lg:px-10 min-[1180px]:grid-cols-12 min-[1180px]:items-center min-[1180px]:gap-12 min-[1180px]:py-20 xl:px-0">
-          <div className="min-w-0 min-[1180px]:col-span-7 min-[1180px]:pr-2">
-            <h1 className="max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
+          <div className="contents min-[1180px]:order-none min-[1180px]:col-span-7 min-[1180px]:block min-[1180px]:min-w-0 min-[1180px]:pr-2">
+            <h1 className="order-1 max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
               See where you could be missing vendor searches.
             </h1>
 
-            <div className="relative mt-9 max-w-[760px] sm:mt-10">
+            <div data-testid="audit-video-card" className="relative order-3 max-w-[760px] min-[1180px]:mt-9 min-[1180px]:order-none sm:min-[1180px]:mt-10">
               <div className="pointer-events-none absolute inset-0 translate-x-3 translate-y-3 rounded-[20px] border border-[#8f33ff]/20 bg-[#15161c]/70 sm:translate-x-4 sm:translate-y-4 sm:rounded-[24px]" />
               <div className="relative overflow-hidden rounded-[20px] border border-white/12 bg-[#101116] p-1.5 shadow-[0_38px_100px_rgba(0,0,0,0.48)] sm:rounded-[24px] sm:p-2">
                 <AuditVideo />
               </div>
             </div>
 
-            <VisibilityReviewCopy className="mt-9 hidden max-w-[570px] min-[1180px]:block" />
+            <VisibilityReviewCopy className="order-4 max-w-[570px] min-[1180px]:mt-9 min-[1180px]:block" />
           </div>
 
-          <div className="min-w-0 max-sm:-mx-2 min-[1180px]:col-span-5">
+          <div className="order-2 min-w-0 max-sm:-mx-2 min-[1180px]:order-none min-[1180px]:col-span-5">
             <AuditBooking initialBookingToken={bookingToken} />
-            <VisibilityReviewCopy className="mt-8 max-sm:px-2 min-[1180px]:hidden" />
           </div>
         </section>
       </main>
