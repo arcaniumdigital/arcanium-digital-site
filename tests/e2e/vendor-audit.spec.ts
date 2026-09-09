@@ -54,7 +54,10 @@ test("durable acceptance navigates directly to the clean audit page", async ({ p
   await expect(page.getByText("Book your free visibility call.", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Book your free call.", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Suburb Visibility Review", { exact: true })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "Your free Suburb Visibility Audit" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "See how visible you are to local vendors." })).toBeVisible();
+  await expect(page.getByText("Book the free visibility call to discuss your current online presence and what you’d like to improve.", { exact: true })).toBeVisible();
+  await expect(page.getByText("If there’s an opportunity to help, we’ll then prepare your local visibility report and walk you through the search demand and opportunities in your market.", { exact: true })).toBeVisible();
+  await expect(page.getByText("No preparation. No obligation. Just a clear next step.", { exact: true })).toBeVisible();
 });
 
 test("the mobile audit page places the video above the booking calendar", async ({ page }) => {
@@ -63,7 +66,7 @@ test("the mobile audit page places the video above the booking calendar", async 
 
   const booking = page.locator("#booking");
   const video = page.getByTestId("audit-video-card");
-  const visibilityCopy = page.getByRole("heading", { name: "Your free Suburb Visibility Audit" });
+  const visibilityCopy = page.getByRole("heading", { name: "See how visible you are to local vendors." });
 
   await expect(booking).toBeVisible();
   await expect(video).toBeVisible();
@@ -102,10 +105,10 @@ test("search opportunity copy and controls remain composed across breakpoints", 
     await page.setViewportSize(viewport);
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
-    const opportunityLinks = page.getByRole("link", { name: "Get my free suburb audit" });
+    const opportunityLinks = page.getByRole("link", { name: "Start my free suburb audit" });
     await expect(opportunityLinks).toHaveCount(3);
     await expect(page.getByText("Enter your details to start your free Suburb Visibility Audit.")).toBeVisible();
-    await expect(page.getByText("On the next step, choose a short call so we can confirm your market before preparing your visibility report.")).toBeVisible();
+    await expect(page.getByText("On the next step, choose a short call so we can confirm your market before preparing your visibility report.")).toHaveCount(0);
     await expect(page.getByText("Your Free Suburb Visibility Audit", { exact: true })).toBeVisible();
     await expect(page.getByLabel("Primary Suburb")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Start my free suburb audit" })).toBeVisible();

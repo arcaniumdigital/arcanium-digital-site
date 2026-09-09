@@ -33,9 +33,6 @@ export function CtaSection() {
                 </h2>
                 <p className="mt-5 max-w-lg text-base font-medium leading-[1.65] text-[#64656b] lg:text-lg">
                   Enter your details to start your free Suburb Visibility Audit.
-                  <span className="mt-3 block">
-                    On the next step, choose a short call so we can confirm your market before preparing your visibility report.
-                  </span>
                 </p>
               </div>
             </div>
