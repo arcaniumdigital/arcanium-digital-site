@@ -47,7 +47,9 @@ test("durable acceptance navigates directly to the clean audit page", async ({ p
   await navigationCommitted;
   expect(page.url()).toBe("http://127.0.0.1:3000/vendor-audit");
   expect(submittedPayload).not.toHaveProperty("primarySuburb");
-  await expect(page.getByRole("heading", { name: "Your next step: book your visibility review." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Book your free 5-minute call" })).toBeVisible();
+  await expect(page.getByText("Suburb Visibility Review", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "See how visible you are to local vendors." })).toBeVisible();
 });
 
 test("a failed acceptance preserves fields and shows one honest error", async ({ page }) => {
