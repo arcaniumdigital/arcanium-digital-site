@@ -1,10 +1,11 @@
 import { AuditBooking } from "@/components/landing/audit-booking";
 import { AuditVideo } from "@/components/landing/audit-video";
-import { bookingTokenCookieName, normalizeBookingToken } from "@/lib/booking-tracking";
+import { bookingTokenCookieName } from "@/lib/booking-tracking";
+import { resolveBookingContext } from "@/lib/funnel-context";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
-const title = "Book Your Free Visibility Call";
+const title = "Book Your Free Call";
 const description = "See where you could be missing vendor searches across Google and AI.";
 const canonicalUrl = "https://www.arcaniumdigital.com/vendor-audit";
 const previewImageUrl = "https://www.arcaniumdigital.com/vendor-audit-preview.jpg";
@@ -31,7 +32,7 @@ function VisibilityReviewCopy({ className }: { className: string }) {
         See how visible you are to local vendors.
       </h2>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        Book a <strong>free visibility call</strong> to discuss your current
+        Book a <strong>free call</strong> to discuss your current
         online presence and what you’d like to improve.
       </p>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
@@ -48,7 +49,10 @@ function VisibilityReviewCopy({ className }: { className: string }) {
 
 export default async function VendorAuditPage() {
   const cookieStore = await cookies();
-  const bookingToken = normalizeBookingToken(cookieStore.get(bookingTokenCookieName)?.value);
+  const sessionHandle = cookieStore.get(bookingTokenCookieName)?.value ?? "";
+  const bookingContext = sessionHandle
+    ? await resolveBookingContext(`${bookingTokenCookieName}=${sessionHandle}`)
+    : null;
 
   return (
     <>
@@ -73,7 +77,10 @@ export default async function VendorAuditPage() {
           </div>
 
           <div className="order-2 min-w-0 max-sm:-mx-2 min-[1180px]:order-none min-[1180px]:col-span-5">
-            <AuditBooking initialBookingToken={bookingToken} />
+            <AuditBooking
+              initialFullName={bookingContext?.fullName}
+              initialLeadCorrelation={bookingContext?.signedLeadCorrelation}
+            />
           </div>
         </section>
       </main>
