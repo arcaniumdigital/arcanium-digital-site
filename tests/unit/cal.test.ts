@@ -8,6 +8,14 @@ describe("Cal webhook extraction", () => {
   it("normalizes email case", () => expect(extractCalEmail(webhook)).toBe("alex@example.com"));
   it("extracts attendee name", () => expect(extractCalName(webhook)).toBe("Alex Agent"));
   it("extracts signed correlation", () => expect(extractCalCorrelation(webhook)).toBe("signed-value"));
+  it("does not require an attendee phone when signed session correlation is present", () => {
+    expect(extractCalCorrelation({
+      payload: {
+        attendees: [{ name: "Alex Agent", email: "alex@example.com" }],
+        metadata: { leadCorrelation: "signed-value" },
+      },
+    })).toBe("signed-value");
+  });
   it("extracts booking UID", () => expect(calBookingUid(webhook)).toBe("booking_1"));
   it("normalizes trigger case", () => expect(calTrigger(webhook)).toBe("BOOKING_CREATED"));
   it("prefers provider idempotency key", () => expect(calEventKey(webhook, "hash")).toBe("evt_1"));
