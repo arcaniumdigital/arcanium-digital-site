@@ -5,7 +5,7 @@ import { bookingTokenCookieName, normalizeBookingToken } from "@/lib/booking-tra
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
-const title = "Book Your Suburb Visibility Review";
+const title = "Book Your Free 5-Minute Call";
 const description = "See where you could be missing vendor searches across Google and AI.";
 const canonicalUrl = "https://www.arcaniumdigital.com/vendor-audit";
 const previewImageUrl = "https://www.arcaniumdigital.com/vendor-audit-preview.jpg";
@@ -28,11 +28,20 @@ export const metadata: Metadata = {
 function VisibilityReviewCopy({ className }: { className: string }) {
   return (
     <div className={className}>
-      <p className="text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        We assess how visible you are across the Google and AI searches that matter in your suburb, then show you where the biggest opportunities are to improve.
+      <h2 className="font-display text-[clamp(2rem,8vw,2.35rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-[#f5f5f3] min-[1180px]:text-[clamp(2rem,2.6vw,2.4rem)]">
+        See how visible you are to local vendors.
+      </h2>
+      <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
+        Book a <strong>free 5-minute visibility call</strong> to briefly discuss
+        your current online presence and what you’re looking to improve.
       </p>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        Watch the short overview to understand the need, then choose a time above to review your visibility with me.
+        If there’s an opportunity to help, we’ll then prepare your{" "}
+        <strong>local visibility report</strong> and walk you through the search
+        demand and opportunities in your market.
+      </p>
+      <p className="mt-4 text-[16px] font-semibold leading-[1.65] text-[#f5f5f3] sm:text-lg">
+        No preparation. No obligation. Just a quick 5-minute call.
       </p>
     </div>
   );
@@ -51,11 +60,7 @@ export default async function VendorAuditPage() {
 
         <section className="relative mx-auto grid min-h-screen max-w-[1240px] gap-12 px-5 pb-20 pt-[112px] sm:px-7 sm:pb-24 sm:pt-[126px] lg:px-10 min-[1180px]:grid-cols-12 min-[1180px]:items-center min-[1180px]:gap-12 min-[1180px]:pb-20 min-[1180px]:pt-[126px] xl:px-0">
           <div className="min-w-0 min-[1180px]:col-span-7 min-[1180px]:pr-2">
-            <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#a6a6ae] sm:text-[13px]">
-              <span className="size-1.5 rounded-full bg-[#8f33ff]" aria-hidden="true" />
-              Suburb Visibility Review
-            </p>
-            <h1 className="mt-5 max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
+            <h1 className="max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
               See where you could be missing vendor searches.
             </h1>
 
@@ -66,12 +71,11 @@ export default async function VendorAuditPage() {
               </div>
             </div>
 
-            <VisibilityReviewCopy className="mt-9 hidden max-w-[570px] min-[1180px]:block" />
           </div>
 
           <div className="min-w-0 max-sm:-mx-2 min-[1180px]:col-span-5">
             <AuditBooking initialBookingToken={bookingToken} />
-            <VisibilityReviewCopy className="mt-8 max-sm:px-2 min-[1180px]:hidden" />
+            <VisibilityReviewCopy className="mt-8 max-w-xl max-sm:px-2" />
           </div>
         </section>
       </main>
