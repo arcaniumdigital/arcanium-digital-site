@@ -1,11 +1,10 @@
 import { AuditBooking } from "@/components/landing/audit-booking";
-import { AuditHeader } from "@/components/landing/audit-header";
 import { AuditVideo } from "@/components/landing/audit-video";
 import { bookingTokenCookieName, normalizeBookingToken } from "@/lib/booking-tracking";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
-const title = "Book Your Free 5 Minute Overview Call";
+const title = "Book Your Free Visibility Call";
 const description = "See where you could be missing vendor searches across Google and AI.";
 const canonicalUrl = "https://www.arcaniumdigital.com/vendor-audit";
 const previewImageUrl = "https://www.arcaniumdigital.com/vendor-audit-preview.jpg";
@@ -32,8 +31,8 @@ function VisibilityReviewCopy({ className }: { className: string }) {
         See how visible you are to local vendors.
       </h2>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        Book a <strong>free 5-minute visibility call</strong> to briefly discuss
-        your current online presence and what you’re looking to improve.
+        Book a <strong>free visibility call</strong> to discuss your current
+        online presence and what you’d like to improve.
       </p>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
         If there’s an opportunity to help, we’ll then prepare your{" "}
@@ -41,7 +40,7 @@ function VisibilityReviewCopy({ className }: { className: string }) {
         demand and opportunities in your market.
       </p>
       <p className="mt-4 text-[16px] font-semibold leading-[1.65] text-[#f5f5f3] sm:text-lg">
-        No preparation. No obligation. Just a quick 5-minute call.
+        No preparation. No obligation. Just a clear next step.
       </p>
     </div>
   );
@@ -53,12 +52,11 @@ export default async function VendorAuditPage() {
 
   return (
     <>
-      <AuditHeader />
       <main id="audit-top" className="relative min-h-screen bg-[#08090c] text-[#f5f5f3]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_79%_26%,rgba(143,51,255,0.13),transparent_34%)]" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.025] [background-image:linear-gradient(rgba(255,255,255,0.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.8)_1px,transparent_1px)] [background-size:48px_48px]" />
 
-        <section className="relative mx-auto grid min-h-screen max-w-[1240px] gap-12 px-5 pb-20 pt-[112px] sm:px-7 sm:pb-24 sm:pt-[126px] lg:px-10 min-[1180px]:grid-cols-12 min-[1180px]:items-center min-[1180px]:gap-12 min-[1180px]:pb-20 min-[1180px]:pt-[126px] xl:px-0">
+        <section className="relative mx-auto grid min-h-screen max-w-[1240px] gap-12 px-5 py-14 sm:px-7 sm:py-16 lg:px-10 min-[1180px]:grid-cols-12 min-[1180px]:items-center min-[1180px]:gap-12 min-[1180px]:py-20 xl:px-0">
           <div className="min-w-0 min-[1180px]:col-span-7 min-[1180px]:pr-2">
             <h1 className="max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
               See where you could be missing vendor searches.
