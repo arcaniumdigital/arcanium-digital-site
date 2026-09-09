@@ -5,8 +5,8 @@ import { resolveBookingContext } from "@/lib/funnel-context";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
-const title = "Book Your Free Call";
-const description = "See where you could be missing vendor searches across Google and AI.";
+const title = "Free Suburb Visibility Audit | Confirm Your Market";
+const description = "Confirm your market so we can prepare your free Suburb Visibility Audit.";
 const canonicalUrl = "https://www.arcaniumdigital.com/vendor-audit";
 const previewImageUrl = "https://www.arcaniumdigital.com/vendor-audit-preview.jpg";
 
@@ -29,19 +29,18 @@ function VisibilityReviewCopy({ className }: { className: string }) {
   return (
     <div className={className}>
       <h2 className="font-display text-[clamp(2rem,8vw,2.35rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-[#f5f5f3] min-[1180px]:text-[clamp(2rem,2.6vw,2.4rem)]">
-        See how visible you are to local vendors.
+        Your free Suburb Visibility Audit
       </h2>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        Book a <strong>free call</strong> to discuss your current
-        online presence and what you’d like to improve.
+        The short call confirms your primary suburb and priorities so the audit
+        is prepared around the right local searches.
       </p>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        If there’s an opportunity to help, we’ll then prepare your{" "}
-        <strong>local visibility report</strong> and walk you through the search
-        demand and opportunities in your market.
+        We’ll then prepare your <strong>visibility report</strong> and map the
+        Google and AI search demand and opportunities in your market.
       </p>
       <p className="mt-4 text-[16px] font-semibold leading-[1.65] text-[#f5f5f3] sm:text-lg">
-        No preparation. No obligation. Just a clear next step.
+        One short confirmation call. Then we prepare your report.
       </p>
     </div>
   );
@@ -63,7 +62,7 @@ export default async function VendorAuditPage() {
         <section className="relative mx-auto grid min-h-screen max-w-[1240px] gap-12 px-5 py-14 sm:px-7 sm:py-16 lg:px-10 min-[1180px]:grid-cols-12 min-[1180px]:items-center min-[1180px]:gap-12 min-[1180px]:py-20 xl:px-0">
           <div className="contents min-[1180px]:order-none min-[1180px]:col-span-7 min-[1180px]:block min-[1180px]:min-w-0 min-[1180px]:pr-2">
             <h1 className="order-1 max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
-              See where you could be missing vendor searches.
+              Learn where you are missing vendor searches
             </h1>
 
             <div data-testid="audit-video-card" className="relative order-2 max-w-[760px] min-[1180px]:mt-9 min-[1180px]:order-none sm:min-[1180px]:mt-10">

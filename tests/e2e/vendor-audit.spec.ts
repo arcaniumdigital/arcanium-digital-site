@@ -40,16 +40,21 @@ test("durable acceptance navigates directly to the clean audit page", async ({ p
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
   await expect(page.getByText("By continuing, you agree to receive SMS about your audit.")).toBeVisible();
-  const button = page.getByRole("button", { name: "Get my free suburb audit" });
-  await expect(button).toHaveText("Get my free suburb audit");
+  const button = page.getByRole("button", { name: "Start my free suburb audit" });
+  await expect(button).toHaveText("Start my free suburb audit");
   const navigationCommitted = page.waitForEvent("framenavigated", (frame) => frame === page.mainFrame() && frame.url() === "http://127.0.0.1:3000/vendor-audit");
   await button.click({ noWaitAfter: true });
   await navigationCommitted;
   expect(page.url()).toBe("http://127.0.0.1:3000/vendor-audit");
   expect(submittedPayload).not.toHaveProperty("primarySuburb");
-  await expect(page.getByRole("heading", { name: "Book your free call." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Learn where you are missing vendor searches" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Your details are in." })).toBeVisible();
+  await expect(page.getByText("Choose a time for a short call so we can confirm your primary suburb and what you’d like to improve before preparing your free Suburb Visibility Audit.")).toBeVisible();
+  await expect(page.getByText("Select a time below.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Book your free visibility call.", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Book your free call.", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Suburb Visibility Review", { exact: true })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "See how visible you are to local vendors." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Your free Suburb Visibility Audit" })).toBeVisible();
 });
 
 test("the mobile audit page places the video above the booking calendar", async ({ page }) => {
@@ -58,7 +63,7 @@ test("the mobile audit page places the video above the booking calendar", async 
 
   const booking = page.locator("#booking");
   const video = page.getByTestId("audit-video-card");
-  const visibilityCopy = page.getByRole("heading", { name: "See how visible you are to local vendors." });
+  const visibilityCopy = page.getByRole("heading", { name: "Your free Suburb Visibility Audit" });
 
   await expect(booking).toBeVisible();
   await expect(video).toBeVisible();
@@ -83,7 +88,7 @@ test("a failed acceptance preserves fields and shows one honest error", async ({
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
-  await page.getByRole("button", { name: "Get my free suburb audit" }).click();
+  await page.getByRole("button", { name: "Start my free suburb audit" }).click();
   await expect(page.getByText("We could not submit your details. Please check your connection and try again.")).toBeVisible();
   await expect(page.getByLabel("Full name")).toHaveValue("Alex Agent");
   await expect(page.getByLabel("Best mobile number")).toHaveValue("0412 345 678");
@@ -99,10 +104,11 @@ test("search opportunity copy and controls remain composed across breakpoints", 
 
     const opportunityLinks = page.getByRole("link", { name: "Get my free suburb audit" });
     await expect(opportunityLinks).toHaveCount(3);
-    await expect(page.getByText("Enter your details below to see how much local search demand you could be capturing.")).toBeVisible();
-    await expect(page.getByText("Your Free Suburb Audit")).toBeVisible();
+    await expect(page.getByText("Enter your details to start your free Suburb Visibility Audit.")).toBeVisible();
+    await expect(page.getByText("On the next step, choose a short call so we can confirm your market before preparing your visibility report.")).toBeVisible();
+    await expect(page.getByText("Your Free Suburb Visibility Audit", { exact: true })).toBeVisible();
     await expect(page.getByLabel("Primary Suburb")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Get my free suburb audit" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Start my free suburb audit" })).toBeVisible();
 
     const headerButtonHeight = await opportunityLinks.first().evaluate((element) => element.getBoundingClientRect().height);
     const heroButtonHeight = await opportunityLinks.nth(1).evaluate((element) => element.getBoundingClientRect().height);
