@@ -29,18 +29,19 @@ function VisibilityReviewCopy({ className }: { className: string }) {
   return (
     <div className={className}>
       <h2 className="font-display text-[clamp(2rem,8vw,2.35rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-[#f5f5f3] min-[1180px]:text-[clamp(2rem,2.6vw,2.4rem)]">
-        Your free Suburb Visibility Audit
+        See how visible you are to local vendors.
       </h2>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        The short call confirms your primary suburb and priorities so the audit
-        is prepared around the right local searches.
+        Book the <strong>free visibility call</strong> to discuss your current
+        online presence and what you’d like to improve.
       </p>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        We’ll then prepare your <strong>visibility report</strong> and map the
-        Google and AI search demand and opportunities in your market.
+        If there’s an opportunity to help, we’ll then prepare your{" "}
+        <strong>local visibility report</strong> and walk you through the search
+        demand and opportunities in your market.
       </p>
       <p className="mt-4 text-[16px] font-semibold leading-[1.65] text-[#f5f5f3] sm:text-lg">
-        One short confirmation call. Then we prepare your report.
+        No preparation. No obligation. Just a clear next step.
       </p>
     </div>
   );
