@@ -5,7 +5,7 @@ import { bookingTokenCookieName, normalizeBookingToken } from "@/lib/booking-tra
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
-const title = "Book Your Free 5-Minute Call";
+const title = "Book Your Free 5 Minute Overview Call";
 const description = "See where you could be missing vendor searches across Google and AI.";
 const canonicalUrl = "https://www.arcaniumdigital.com/vendor-audit";
 const previewImageUrl = "https://www.arcaniumdigital.com/vendor-audit-preview.jpg";
@@ -71,11 +71,12 @@ export default async function VendorAuditPage() {
               </div>
             </div>
 
+            <VisibilityReviewCopy className="mt-9 hidden max-w-[570px] min-[1180px]:block" />
           </div>
 
           <div className="min-w-0 max-sm:-mx-2 min-[1180px]:col-span-5">
             <AuditBooking initialBookingToken={bookingToken} />
-            <VisibilityReviewCopy className="mt-8 max-w-xl max-sm:px-2" />
+            <VisibilityReviewCopy className="mt-8 max-sm:px-2 min-[1180px]:hidden" />
           </div>
         </section>
       </main>
