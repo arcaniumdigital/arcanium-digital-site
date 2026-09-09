@@ -1,17 +1,17 @@
 import type { MessageType } from "./contracts";
 
 const templates: Record<MessageType, string> = {
-  PREBOOK_INSTANT_V3: "Hi {{first_name}}, thanks for getting in touch. Book your 15-minute Vendor Conversion Audit here: {{booking_link}}. Questions? Reply here. {{operator_name}}, {{business_name}}. STOP to opt out.",
-  PREBOOK_10M_V3: "Still choosing a time? Book the closest suitable slot and reschedule later if needed: {{booking_link}}. {{operator_name}}, {{business_name}}. STOP to opt out.",
-  PREBOOK_24H_V3: "Hi {{first_name}}, vendors often Google an agent before deciding who to call. I'll show you the biggest online trust gap I can find in a 15-minute audit: {{booking_link}}. {{operator_name}}, {{business_name}}. STOP to opt out.",
-  PREBOOK_7D_V3: "Hi {{first_name}}, I'll close this out for now. If you still want your 15-minute Vendor Conversion Audit, book here: {{booking_link}}. {{operator_name}}, {{business_name}}. STOP to opt out.",
+  PREBOOK_INSTANT_V3: "Hi {{first_name}}, thanks for getting in touch. Book your 15-minute Vendor Conversion Audit here: {{booking_link}}. Questions? Reply here. {{operator_name}}, {{business_name}}.",
+  PREBOOK_10M_V3: "Still choosing a time? Book the closest suitable slot and reschedule later if needed. If you have any questions please ask. {{operator_name}}, {{business_name}}.",
+  PREBOOK_24H_V3: "Hi {{first_name}}, vendors often Google an agent before deciding who to call. I'll show you the biggest online trust gap I can find in a 15-minute audit: {{booking_link}}. {{operator_name}}, {{business_name}}.",
+  PREBOOK_7D_V3: "Hi {{first_name}}, I'll close this out for now. If you still want your 15-minute Vendor Conversion Audit, book here: {{booking_link}}. {{operator_name}}, {{business_name}}.",
   BOOKING_CONFIRMED_V3: "Hi {{first_name}}, thanks for booking your 15-minute Vendor Conversion Audit with {{business_name}} for {{appointment_date}} at {{appointment_time}} {{timezone}}. Before we speak, see our brochure: {{brochure_link}}. Looking forward to helping. {{operator_name}}",
   BOOKING_REMINDER_24H_V3: "Hi {{first_name}}, reminder: I'll call you tomorrow at {{appointment_time}} {{timezone}}. I'll review your current online presence, identify the main opportunity and explain the next practical steps. Need to reschedule? {{reschedule_link}}. {{operator_name}}, {{business_name}}.",
   BOOKING_REMINDER_3H_V3: "Reminder: your 15-minute Vendor Conversion Audit starts in 3 hours at {{appointment_time}} {{timezone}}. {{operator_name}}, {{business_name}}.",
   BOOKING_REMINDER_EARLY_V3: "Reminder: your 15-minute Vendor Conversion Audit is tomorrow at {{appointment_time}} {{timezone}}. {{operator_name}}, {{business_name}}.",
 };
 
-export const TEMPLATE_VERSION = "3.0.0";
+export const TEMPLATE_VERSION = "3.1.0";
 
 export function renderMessage(type: MessageType, values: Record<string, string>): string {
   return templates[type].replace(/\{\{([a-z_]+)\}\}/g, (_match, key: string) => values[key] ?? "");

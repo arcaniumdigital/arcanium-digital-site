@@ -51,11 +51,7 @@ export default async function VendorAuditPage() {
 
         <section className="relative mx-auto grid min-h-screen max-w-[1240px] gap-12 px-5 pb-20 pt-[112px] sm:px-7 sm:pb-24 sm:pt-[126px] lg:px-10 min-[1180px]:grid-cols-12 min-[1180px]:items-center min-[1180px]:gap-12 min-[1180px]:pb-20 min-[1180px]:pt-[126px] xl:px-0">
           <div className="min-w-0 min-[1180px]:col-span-7 min-[1180px]:pr-2">
-            <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#a6a6ae] sm:text-[13px]">
-              <span className="size-1.5 rounded-full bg-[#8f33ff]" aria-hidden="true" />
-              Suburb Visibility Review
-            </p>
-            <h1 className="mt-5 max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
+            <h1 className="max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
               See where you could be missing vendor searches.
             </h1>
 

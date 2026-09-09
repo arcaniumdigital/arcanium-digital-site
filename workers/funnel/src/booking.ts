@@ -15,6 +15,7 @@ import {
 import { constantTimeEqual, hmacHex, opaqueId, sha256Hex, verifyLeadCorrelation } from "./crypto";
 import { allowedOrigins, corsHeaders, json, readBoundedBody } from "./http";
 import { openP1Incident, resolveP1Incident } from "./incidents";
+import { TEMPLATE_VERSION } from "./messages";
 import { firstNameFromFullName, sanitizeFullName } from "./phone";
 import { publishOutbox, queueEnvelope } from "./outbox";
 import { verifiedProxyClientIp } from "./proxy-auth";
@@ -177,8 +178,8 @@ async function handleBookingCreated(body: unknown, env: Cloudflare.Env, webhookS
       .bind(now, now, lead.phone_e164),
     env.DB.prepare("UPDATE lead_journeys SET status = 'STOPPED', stopped_at = ?, stop_reason = 'BOOKED', updated_at = ? WHERE lead_id IN (SELECT id FROM leads WHERE phone_e164 = ?) AND journey_type = 'PREBOOKING' AND status = 'ACTIVE'")
       .bind(now, now, lead.phone_e164),
-    env.DB.prepare("INSERT INTO message_jobs (id, lead_id, booking_uid, booking_revision, message_type, template_version, due_at, status, created_at, updated_at) VALUES (?, ?, ?, 1, 'BOOKING_CONFIRMED_V3', '3.0.0', ?, 'QUEUED', ?, ?)")
-      .bind(messageJobId, lead.id, uid, now, now, now),
+    env.DB.prepare("INSERT INTO message_jobs (id, lead_id, booking_uid, booking_revision, message_type, template_version, due_at, status, created_at, updated_at) VALUES (?, ?, ?, 1, 'BOOKING_CONFIRMED_V3', ?, ?, 'QUEUED', ?, ?)")
+      .bind(messageJobId, lead.id, uid, TEMPLATE_VERSION, now, now, now),
     env.DB.prepare("INSERT INTO lead_journeys (id, lead_id, journey_type, booking_uid, booking_revision, status, started_at, updated_at) VALUES (?, ?, 'BOOKING_REMINDERS', ?, 1, 'ACTIVE', ?, ?)")
       .bind(opaqueId("journey"), lead.id, uid, now, now),
     env.DB.prepare("INSERT INTO funnel_events (id, lead_id, booking_uid, event_type, event_at, source, correlation_id, metadata_json) VALUES (?, ?, ?, 'BOOKING_CREATED', ?, 'cal_webhook', ?, ?)")

@@ -4,6 +4,7 @@ import { corsHeaders, json, readBoundedBody, allowedOrigins } from "./http";
 import { firstNameFromFullName, normalizeAustralianMobile, sanitizeFullName } from "./phone";
 import { publishOutbox, queueEnvelope } from "./outbox";
 import { verifyInternalRequest } from "./internal-auth";
+import { TEMPLATE_VERSION } from "./messages";
 import { verifiedProxyClientIp } from "./proxy-auth";
 
 type ExistingLead = { id: string; public_id: string };
@@ -144,8 +145,8 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
       ),
     env.DB.prepare("INSERT INTO booking_context_sessions (id, lead_id, session_hash, expires_at, created_at) VALUES (?, ?, ?, ?, ?)")
       .bind(sessionId, leadId, sessionHash, expiresAt, nowIso),
-    env.DB.prepare("INSERT INTO message_jobs (id, lead_id, message_type, template_version, due_at, status, created_at, updated_at) VALUES (?, ?, 'PREBOOK_INSTANT_V3', '3.0.0', ?, 'QUEUED', ?, ?)")
-      .bind(messageJobId, leadId, nowIso, nowIso, nowIso),
+    env.DB.prepare("INSERT INTO message_jobs (id, lead_id, message_type, template_version, due_at, status, created_at, updated_at) VALUES (?, ?, 'PREBOOK_INSTANT_V3', ?, ?, 'QUEUED', ?, ?)")
+      .bind(messageJobId, leadId, TEMPLATE_VERSION, nowIso, nowIso, nowIso),
     env.DB.prepare("INSERT INTO lead_journeys (id, lead_id, journey_type, status, next_due_at, started_at, updated_at) VALUES (?, ?, 'PREBOOKING', 'ACTIVE', ?, ?, ?)")
       .bind(opaqueId("journey"), leadId, new Date(now.getTime() + 10 * 60_000).toISOString(), nowIso, nowIso),
     env.DB.prepare("INSERT INTO funnel_events (id, lead_id, event_type, event_at, source, correlation_id, metadata_json) VALUES (?, ?, 'LEAD_ACCEPTED', ?, 'worker', ?, ?)")

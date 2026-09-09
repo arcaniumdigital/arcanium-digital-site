@@ -3,6 +3,7 @@ import type { LeadRow, MessageJobRow, MessageType } from "./contracts";
 import { opaqueId } from "./crypto";
 import { json, readBoundedBody } from "./http";
 import { verifyInternalRequest } from "./internal-auth";
+import { TEMPLATE_VERSION } from "./messages";
 import { publishOutbox, queueEnvelope } from "./outbox";
 import { withinSendWindow } from "./time";
 
@@ -68,8 +69,8 @@ export async function handleDueMessage(request: Request, env: Cloudflare.Env, ct
   const correlationId = opaqueId("corr");
   const statements: D1PreparedStatement[] = [
     env.DB.prepare(`INSERT INTO message_jobs (id, lead_id, booking_uid, booking_revision, message_type, template_version, due_at, status, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, '3.0.0', ?, 'QUEUED', ?, ?) ON CONFLICT(lead_id, message_type, booking_uid, booking_revision) DO NOTHING`)
-      .bind(jobId, lead.id, input.bookingUid ?? "", input.bookingRevision ?? 0, input.messageType, now, now, now),
+      VALUES (?, ?, ?, ?, ?, ?, ?, 'QUEUED', ?, ?) ON CONFLICT(lead_id, message_type, booking_uid, booking_revision) DO NOTHING`)
+      .bind(jobId, lead.id, input.bookingUid ?? "", input.bookingRevision ?? 0, input.messageType, TEMPLATE_VERSION, now, now, now),
     env.DB.prepare("INSERT INTO outbox (id, aggregate_type, aggregate_id, event_type, payload_json, created_at) SELECT ?, 'message', ?, 'QUEUE_JOB', ?, ? WHERE changes() > 0")
       .bind(outboxId, jobId, queueEnvelope(jobId, correlationId), now),
   ];
