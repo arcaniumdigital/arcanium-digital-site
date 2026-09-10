@@ -48,8 +48,8 @@ test("durable acceptance navigates directly to the clean audit page", async ({ p
   expect(page.url()).toBe("http://127.0.0.1:3000/vendor-audit");
   expect(submittedPayload).not.toHaveProperty("primarySuburb");
   await expect(page.getByRole("heading", { name: "Learn where you are missing vendor searches" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Your details are in." })).toBeVisible();
-  await expect(page.getByText("Choose a time for a short call so we can confirm your primary suburb and what you’d like to improve before preparing your free Suburb Visibility Audit.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Book your audit call" })).toBeVisible();
+  await expect(page.getByText("Your details are in, next Choose a time for a short call so we can confirm your primary suburb and what you’d like to improve before preparing your free Suburb Visibility Audit.")).toBeVisible();
   await expect(page.getByText("Select a time below.", { exact: true })).toBeVisible();
   await expect(page.getByText("Book your free visibility call.", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Book your free call.", { exact: true })).toHaveCount(0);
