@@ -66,7 +66,7 @@ export default async function VendorAuditPage() {
               Learn where you are missing vendor searches
             </h1>
 
-            <div data-testid="audit-video-card" className="relative order-2 max-w-[760px] min-[1180px]:mt-9 min-[1180px]:order-none sm:min-[1180px]:mt-10">
+            <div data-testid="audit-video-card" className="relative order-3 max-w-[760px] min-[1180px]:mt-9 min-[1180px]:order-none sm:min-[1180px]:mt-10">
               <div className="pointer-events-none absolute inset-0 translate-x-3 translate-y-3 rounded-[20px] border border-[#8f33ff]/20 bg-[#15161c]/70 sm:translate-x-4 sm:translate-y-4 sm:rounded-[24px]" />
               <div className="relative overflow-hidden rounded-[20px] border border-white/12 bg-[#101116] p-1.5 shadow-[0_38px_100px_rgba(0,0,0,0.48)] sm:rounded-[24px] sm:p-2">
                 <AuditVideo />
@@ -76,7 +76,7 @@ export default async function VendorAuditPage() {
             <VisibilityReviewCopy className="order-4 max-w-[570px] min-[1180px]:mt-9 min-[1180px]:block" />
           </div>
 
-          <div className="order-3 min-w-0 max-sm:-mx-2 min-[1180px]:order-none min-[1180px]:col-span-5">
+          <div className="order-2 min-w-0 max-sm:-mx-2 min-[1180px]:order-none min-[1180px]:col-span-5">
             <AuditBooking
               initialFullName={bookingContext?.fullName}
               initialLeadCorrelation={bookingContext?.signedLeadCorrelation}

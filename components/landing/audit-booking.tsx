@@ -118,7 +118,7 @@ export function AuditBooking({
         <div className="border-b border-black/8 bg-[#101116] px-4 py-3.5 text-center text-xs font-semibold uppercase tracking-[0.14em] text-white sm:text-[13px]">
           Select a time below.
         </div>
-        <div data-testid="audit-calendar-frame" className="h-[455px] bg-white sm:h-[540px] min-[1180px]:h-[560px]">
+        <div data-testid="audit-calendar-frame" className="h-[390px] bg-white sm:h-[540px] min-[1180px]:h-[560px]">
           {pageContext !== null && (
             <Cal
               namespace="magnet"
