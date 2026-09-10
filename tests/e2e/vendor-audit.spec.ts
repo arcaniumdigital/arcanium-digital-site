@@ -60,16 +60,18 @@ test("durable acceptance navigates directly to the clean audit page", async ({ p
   await expect(page.getByText("No preparation. No obligation. Just a clear next step.", { exact: true })).toBeVisible();
 });
 
-test("the mobile audit page places the video above the booking calendar", async ({ page }) => {
+test("the mobile audit page places the video below the booking calendar", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/vendor-audit", { waitUntil: "domcontentloaded" });
 
   const booking = page.locator("#booking");
   const video = page.getByTestId("audit-video-card");
+  const calendarFrame = page.getByTestId("audit-calendar-frame");
   const visibilityCopy = page.getByRole("heading", { name: "See how visible you are to local vendors." });
 
   await expect(booking).toBeVisible();
   await expect(video).toBeVisible();
+  await expect(calendarFrame).toHaveCSS("height", "390px");
   await expect(visibilityCopy).toBeVisible();
 
   const bookingBox = await booking.boundingBox();
@@ -79,8 +81,8 @@ test("the mobile audit page places the video above the booking calendar", async 
   expect(bookingBox).not.toBeNull();
   expect(videoBox).not.toBeNull();
   expect(copyBox).not.toBeNull();
-  expect(bookingBox!.y).toBeGreaterThan(videoBox!.y + videoBox!.height);
-  expect(copyBox!.y).toBeGreaterThan(bookingBox!.y + bookingBox!.height);
+  expect(videoBox!.y).toBeGreaterThan(bookingBox!.y + bookingBox!.height);
+  expect(copyBox!.y).toBeGreaterThan(videoBox!.y + videoBox!.height);
 });
 
 test("a failed acceptance preserves fields and shows one honest error", async ({ page }) => {
