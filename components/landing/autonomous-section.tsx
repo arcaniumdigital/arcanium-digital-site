@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Script from "next/script";
 import { MetaTrackedLink } from "@/components/analytics/meta-tracked-link";
+import { ViewportWistiaPlayer } from "@/components/landing/viewport-wistia-player";
 
 const showcaseImages = [
   { title: "Suburb SEO Authority", image: "/images/showcase/suburb-search-opportunity-light.png", width: 1672, height: 941, alt: "Arcanium suburb SEO authority operations system" },
@@ -64,13 +65,7 @@ export function AutonomousSection() {
                   <div className="bg-white p-1.5 lg:p-2">
                     {index === 1 ? (
                       <div className="relative aspect-[2880/1598] w-full overflow-hidden rounded-[12px] bg-black lg:rounded-[16px]">
-                        <div
-                          className="showcase-wistia-player absolute inset-0"
-                          dangerouslySetInnerHTML={{
-                            __html:
-                              '<wistia-player media-id="z8jusqm7ag" aspect="1.6" autoplay silent-autoplay="allow" volume="1"></wistia-player>',
-                          }}
-                        />
+                        <ViewportWistiaPlayer />
                       </div>
                     ) : (
                       <Image src={item.image} alt={item.alt} width={item.width} height={item.height} sizes="(max-width: 1024px) calc(100vw - 32px), 920px" quality={76} className="h-auto w-full rounded-[12px] object-contain object-top lg:rounded-[16px]" />
