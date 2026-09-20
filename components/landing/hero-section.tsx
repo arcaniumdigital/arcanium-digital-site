@@ -15,9 +15,14 @@ export function HeroSection() {
             Become the #1 Real Estate Agent{" "}
             <span className="text-[#a95cff]">Online in Your Suburb</span>
           </h1>
-          <p className="mt-6 max-w-[620px] text-base font-medium leading-[1.65] text-[#aaaab2] sm:text-[1.05rem] lg:mt-7 lg:text-lg">
-            We establish visibility across Google Search, Google Maps and AI platforms like ChatGPT, so when local vendors search for an agent, your name is the first they find.
-          </p>
+          <div className="mt-6 max-w-[620px] lg:mt-7">
+            <h2 className="font-display text-xl font-semibold tracking-[-0.025em] text-[#f5f5f3] sm:text-2xl">
+              Our 60-Day Vendor Guarantee
+            </h2>
+            <p className="mt-2 text-base font-bold leading-[1.65] text-[#aaaab2] sm:text-[1.05rem] lg:text-lg">
+              1+ qualified vendor within 60 days, or your money back.
+            </p>
+          </div>
           <MetaTrackedLink
             href="#audit"
             trackingLabel="Get my free suburb audit - hero"
