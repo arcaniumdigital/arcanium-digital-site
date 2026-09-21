@@ -28,16 +28,16 @@ export function CtaSection() {
               <div className="pointer-events-none absolute -left-24 -top-24 size-64 rounded-full bg-[#8f33ff]/10 blur-3xl" />
               <div className="relative">
                 <h2 className="max-w-[620px] font-display text-[clamp(2rem,8.8vw,2.25rem)] font-semibold leading-[1] tracking-[-0.04em] text-[#101114] lg:text-[clamp(2.625rem,4vw,3.25rem)]">
-                  Become the Agent Everyone Finds First
+                  See Where Your Next Vendor Leads Could Come From
                 </h2>
                 <p className="mt-5 max-w-lg text-base font-medium leading-[1.65] text-[#64656b] lg:text-lg">
-                  Enter your details to start your free Suburb Visibility Audit.
+                  Enter your details to unlock your Vendor Lead Opportunity Snapshot. We’ll show you the searches worth targeting and where your online presence may be losing enquiries.
                 </p>
               </div>
             </div>
             <div className="bg-white/55 px-1 py-2 sm:px-4 sm:py-5 lg:grid lg:content-center lg:px-8 lg:py-10">
               <div className="px-5 pt-5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#7b25e8] sm:px-8 sm:pt-6">
-                Your Free Suburb Visibility Audit
+                Your Free Vendor Lead Opportunity Snapshot
               </div>
               <VendorAuditForm />
             </div>

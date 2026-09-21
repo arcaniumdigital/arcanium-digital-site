@@ -53,7 +53,7 @@ async function rateLimited(request: Request, env: Cloudflare.Env, clientIp: stri
 
 function contextCookie(env: Cloudflare.Env, handle: string, maxAge: number): string {
   const domain = env.BOOKING_CONTEXT_COOKIE_DOMAIN ? `; Domain=${env.BOOKING_CONTEXT_COOKIE_DOMAIN}` : "";
-  return `arc_vendor_audit_ctx=${handle}; HttpOnly; Secure; SameSite=Lax; Path=/vendor-audit; Max-Age=${maxAge}${domain}`;
+  return `arc_vendor_audit_ctx=${handle}; HttpOnly; Secure; SameSite=Lax; Path=/vendor-lead-opportunity; Max-Age=${maxAge}${domain}`;
 }
 
 export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: ExecutionContext): Promise<Response> {
@@ -111,7 +111,7 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
         .bind(sessionId, existing.id, sessionHash, expiresAt, nowIso),
     ]);
     cors.append("Set-Cookie", contextCookie(env, sessionHandle, ttl));
-    return json({ accepted: true, leadPublicId: existing.public_id, nextUrl: "/vendor-audit", duplicate: true }, { status: 202, headers: cors });
+    return json({ accepted: true, leadPublicId: existing.public_id, nextUrl: "/vendor-lead-opportunity", duplicate: true }, { status: 202, headers: cors });
   }
 
   const leadId = opaqueId("lead");
@@ -136,7 +136,7 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'NEW', 'NOT_BOOKED', 'ACTIVE', ?, ?)`)
       .bind(
         leadId, publicId, input.submissionId, fullName, firstNameFromFullName(fullName), phoneE164,
-        input.primarySuburb ?? null, input.sourcePage, input.referrer ?? null, input.utmSource ?? null, input.utmMedium ?? null,
+        null, input.sourcePage, input.referrer ?? null, input.utmSource ?? null, input.utmMedium ?? null,
         input.utmCampaign ?? null, input.utmTerm ?? null, input.utmContent ?? null,
         input.fbclid ? await sha256Hex(input.fbclid) : null,
         input.gclid ? await sha256Hex(input.gclid) : null,
@@ -171,7 +171,7 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
   }
   ctx.waitUntil(publishOutbox(env));
   cors.append("Set-Cookie", contextCookie(env, sessionHandle, ttl));
-  return json({ accepted: true, leadPublicId: publicId, nextUrl: "/vendor-audit" }, { status: 202, headers: cors });
+  return json({ accepted: true, leadPublicId: publicId, nextUrl: "/vendor-lead-opportunity" }, { status: 202, headers: cors });
 }
 
 export async function handleContext(request: Request, env: Cloudflare.Env): Promise<Response> {

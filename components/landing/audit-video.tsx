@@ -19,7 +19,7 @@ export function AuditVideo() {
     >
       <iframe
         src={`https://fast.wistia.net/embed/iframe/${mediaId}?seo=true&videoFoam=true&playerColor=8f33ff`}
-        title="Arcanium Suburb Visibility Audit"
+        title="Arcanium Vendor Lead Opportunity Snapshot"
         allow="autoplay; fullscreen"
         allowFullScreen
         loading="eager"

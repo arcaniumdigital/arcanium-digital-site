@@ -5,7 +5,6 @@ export const vendorAuditLeadSchema = z.object({
   submissionId: z.string().uuid(),
   fullName: z.string().trim().min(2).max(120),
   phone: z.string().trim().min(8).max(30),
-  primarySuburb: z.string().trim().min(2).max(120).optional(),
   sourcePage: z.string().trim().min(1).max(500),
   referrer: z.string().trim().max(500).optional(),
   utmSource: z.string().trim().max(200).optional(),

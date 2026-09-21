@@ -19,13 +19,13 @@ export function WhatWeDoSection() {
               What we do
             </p>
             <h2 className="mt-5 max-w-[680px] font-display text-[clamp(2.125rem,9.5vw,2.5rem)] font-semibold leading-[1] tracking-[-0.04em] lg:text-[clamp(3rem,4vw,4.25rem)]">
-              We build the infrastructure that makes you easier to find.
+              Done-for-you campaigns built to reach local vendors.
             </h2>
             <p className="mt-6 max-w-[650px] text-base font-medium leading-[1.7] text-[#aaaab2] lg:text-lg">
-              We create your personal Agent Portal and connect it to our SEO and GEO infrastructure. From one system, we continuously strengthen your presence across your website, Google Business Profile and relevant social platforms with suburb-focused content built around the searches vendors actually make.
+              We plan and manage Google Ads around searches that show selling intent, then strengthen the pages and proof vendors see after they click. We handle the campaign setup, landing experience, tracking and ongoing improvements.
             </p>
             <p className="mt-5 max-w-[650px] text-base font-semibold leading-[1.7] text-[#f5f5f3] lg:text-lg">
-              The goal is simple: when someone searches for the best agent, who to sell with, or which agent they should choose in your suburb, we position your name to keep appearing.
+              You stay focused on listing conversations while we work on the path from local search to enquiry.
             </p>
           </div>
 
@@ -60,18 +60,18 @@ export function WhatWeDoSection() {
                   <ArrowRight className="size-4 rotate-90 text-white/25 sm:rotate-0" aria-hidden="true" />
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8f33ff]">02</p>
-                    <p className="mt-1 font-display text-sm font-semibold leading-snug text-[#f5f5f3]">Reach the #1 position</p>
+                    <p className="mt-1 font-display text-sm font-semibold leading-snug text-[#f5f5f3]">Launch relevant Google Ads</p>
                   </div>
                   <ArrowRight className="size-4 rotate-90 text-white/25 sm:rotate-0" aria-hidden="true" />
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8f33ff]">03</p>
-                    <p className="mt-1 font-display text-sm font-semibold leading-snug text-[#f5f5f3]">Expand into nearby suburbs</p>
+                    <p className="mt-1 font-display text-sm font-semibold leading-snug text-[#f5f5f3]">Improve enquiries and reporting</p>
                   </div>
                 </div>
 
                 <div className="mt-6 flex items-start gap-3 rounded-[14px] border border-white/12 bg-[#17181d] px-4 py-4">
                   <MapPinned className="mt-0.5 size-5 shrink-0 text-[#b875ff]" aria-hidden="true" />
-                  <p className="text-sm font-semibold leading-[1.6] text-[#f5f5f3]">After we reach #1 for these priority searches, we move into lower-competition nearby suburbs to double your visibility.</p>
+                  <p className="text-sm font-semibold leading-[1.6] text-[#f5f5f3]">We review search terms, enquiries and the landing experience to identify what is working and where to improve.</p>
                 </div>
               </div>
             </div>

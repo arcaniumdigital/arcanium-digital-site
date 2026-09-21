@@ -3,13 +3,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    qualities: [70, 75, 76],
+    qualities: [70, 74, 75, 76, 78],
   },
   async redirects() {
     return [
       {
-        source: "/audit",
-        destination: "/vendor-audit",
+        source: "/vendor-audit",
+        destination: "/vendor-lead-opportunity",
         permanent: false,
       },
       {

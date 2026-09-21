@@ -5,7 +5,7 @@ import Script from "next/script";
 import { useCallback, useRef, useState, type FormEvent } from "react";
 
 const consentText =
-  "By submitting this form, I agree to receive SMS about my Vendor Conversion Audit and related Arcanium Digital services. I can opt out at any time.";
+  "By submitting this form, I agree to receive SMS about my Vendor Lead Opportunity Snapshot and related Arcanium Digital services. I can opt out at any time.";
 
 function optionalField(value: string | null | undefined, maxLength: number) {
   const normalized = value?.trim().slice(0, maxLength);
@@ -123,12 +123,12 @@ export function VendorAuditForm() {
       if (!response.ok) {
         throw new SubmissionFailure(response.status, result?.error || "UNKNOWN_RESPONSE");
       }
-      if (!result?.accepted || result.nextUrl !== "/vendor-audit") {
+      if (!result?.accepted || result.nextUrl !== "/vendor-lead-opportunity") {
         throw new Error("INVALID_ACCEPTANCE");
       }
 
-      window.fbq?.("track", "Lead", { content_name: "Suburb Visibility Audit" });
-      window.gtag?.("event", "generate_lead", { form_name: "suburb_visibility_audit" });
+      window.fbq?.("track", "Lead", { content_name: "Vendor Lead Opportunity Snapshot" });
+      window.gtag?.("event", "generate_lead", { form_name: "vendor_lead_opportunity_snapshot" });
       window.location.replace(result.nextUrl);
     } catch (caughtError) {
       Sentry.captureException(
@@ -174,10 +174,10 @@ export function VendorAuditForm() {
         </label>
         <div ref={widgetHost} />
         <button type="submit" disabled={locked} className="min-h-[58px] rounded-[14px] border border-black/10 bg-[#101114] px-6 text-sm font-semibold uppercase tracking-[0.06em] text-white transition duration-300 hover:-translate-y-px hover:bg-[#18191f] disabled:cursor-default disabled:opacity-70">
-          {locked ? "Opening audit times…" : "Start my free suburb audit"}
+          {locked ? "Opening booking times…" : "Get my free snapshot"}
         </button>
         <p className="text-center text-[13px] leading-5 text-black/50">
-          By continuing, you agree to receive SMS about your audit.{" "}
+          By continuing, you agree to receive SMS about your snapshot.{" "}
           <a href="/privacy" className="font-semibold text-[#6f1fd1] underline decoration-[#6f1fd1]/35 underline-offset-2">Privacy Policy.</a>
         </p>
         <p aria-live="polite" className="min-h-5 text-center text-sm font-medium text-red-700">{error}</p>

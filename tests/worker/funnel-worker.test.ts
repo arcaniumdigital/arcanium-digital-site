@@ -43,7 +43,7 @@ describe("funnel Worker and D1", () => {
     expect(JSON.parse(schema?.safe_detail_json ?? "{}")).toEqual({ schemaVersion: "2" });
   });
 
-  it("persists the primary suburb from an accepted lead payload", async () => {
+  it("accepts a lead without a suburb and directs it to the new opportunity page", async () => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(async () => new Response(JSON.stringify({
       success: true,
       action: "vendor_audit",
@@ -58,7 +58,6 @@ describe("funnel Worker and D1", () => {
       submissionId,
       fullName: "Alex Agent",
       phone: "0412 345 678",
-      primarySuburb: "Pelican Waters",
       sourcePage: "http://localhost:3000/",
       marketingSmsConsent: true,
       consentVersion: "vendor-audit-sms-v1",
@@ -84,8 +83,11 @@ describe("funnel Worker and D1", () => {
     });
 
     expect(response.status).toBe(202);
-    const lead = await env.DB.prepare("SELECT primary_suburb FROM leads WHERE submission_id = ?").bind(submissionId).first<{ primary_suburb: string }>();
-    expect(lead?.primary_suburb).toBe("Pelican Waters");
+    const accepted = await response.json() as { nextUrl: string };
+    expect(accepted.nextUrl).toBe("/vendor-lead-opportunity");
+    expect(response.headers.get("Set-Cookie")).toContain("Path=/vendor-lead-opportunity");
+    const lead = await env.DB.prepare("SELECT primary_suburb FROM leads WHERE submission_id = ?").bind(submissionId).first<{ primary_suburb: string | null }>();
+    expect(lead?.primary_suburb).toBeNull();
   });
 
   it("enforces canonical submission idempotency", async () => {

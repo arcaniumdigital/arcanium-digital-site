@@ -1,4 +1,4 @@
-# Lead nurture message scripts
+# Lead nurture message scripts, version 3.2.0
 
 This is the operator map for changing nurture copy and timing. Do not edit D1 rows or provider job payloads to change a message; those are delivery records, not templates.
 
@@ -14,16 +14,16 @@ The active template keys and current copy are:
 
 | Key | Current script |
 | --- | --- |
-| `PREBOOK_INSTANT_V3` | Hi `{{first_name}}`, thanks for getting in touch. Book your 15-minute Vendor Conversion Audit here: `{{booking_link}}`. Questions? Reply here. `{{operator_name}}`, `{{business_name}}`. |
-| `PREBOOK_10M_V3` | Still choosing a time? Book the closest suitable slot and reschedule later if needed. If you have any questions please ask. `{{operator_name}}`, `{{business_name}}`. |
-| `PREBOOK_24H_V3` | Hi `{{first_name}}`, vendors often Google an agent before deciding who to call. I'll show you the biggest online trust gap I can find in a 15-minute audit: `{{booking_link}}`. `{{operator_name}}`, `{{business_name}}`. |
-| `PREBOOK_7D_V3` | Hi `{{first_name}}`, I'll close this out for now. If you still want your 15-minute Vendor Conversion Audit, book here: `{{booking_link}}`. `{{operator_name}}`, `{{business_name}}`. |
-| `BOOKING_CONFIRMED_V3` | Hi `{{first_name}}`, thanks for booking your 15-minute Vendor Conversion Audit with `{{business_name}}` for `{{appointment_date}}` at `{{appointment_time}}` `{{timezone}}`. Before we speak, see our brochure: `{{brochure_link}}`. Looking forward to helping. `{{operator_name}}` |
-| `BOOKING_REMINDER_24H_V3` | Hi `{{first_name}}`, reminder: I'll call you tomorrow at `{{appointment_time}}` `{{timezone}}`. I'll review your current online presence, identify the main opportunity and explain the next practical steps. Need to reschedule? `{{reschedule_link}}`. `{{operator_name}}`, `{{business_name}}`. |
-| `BOOKING_REMINDER_3H_V3` | Reminder: your 15-minute Vendor Conversion Audit starts in 3 hours at `{{appointment_time}}` `{{timezone}}`. `{{operator_name}}`, `{{business_name}}`. |
-| `BOOKING_REMINDER_EARLY_V3` | Reminder: your 15-minute Vendor Conversion Audit is tomorrow at `{{appointment_time}}` `{{timezone}}`. `{{operator_name}}`, `{{business_name}}`. |
+| `PREBOOK_INSTANT_V3` | Hi `{{first_name}}`, thanks for requesting your Vendor Lead Opportunity Snapshot. Choose a time to review it: `{{booking_link}}`. Questions? Reply here. `{{operator_name}}`, `{{business_name}}`. |
+| `PREBOOK_10M_V3` | Hi `{{first_name}}`, still choosing a time? Pick a slot that suits you. We can discuss the local vendor searches worth targeting. Questions? Reply here. `{{operator_name}}`, `{{business_name}}`. |
+| `PREBOOK_24H_V3` | Hi `{{first_name}}`, local vendors are searching for agents ready to help them sell. Your Snapshot can show where Google Ads and your online presence may create more opportunities. Book a time: `{{booking_link}}`. `{{operator_name}}`, `{{business_name}}`. |
+| `PREBOOK_7D_V3` | Hi `{{first_name}}`, I'll close this out for now. If you still want your Vendor Lead Opportunity Snapshot, book a time here: `{{booking_link}}`. `{{operator_name}}`, `{{business_name}}`. |
+| `BOOKING_CONFIRMED_V3` | Hi `{{first_name}}`, thanks for booking your Vendor Lead Opportunity Snapshot call with `{{business_name}}` for `{{appointment_date}}` at `{{appointment_time}}` `{{timezone}}`. Before we speak, see our brochure: `{{brochure_link}}`. `{{operator_name}}` |
+| `BOOKING_REMINDER_24H_V3` | Hi `{{first_name}}`, reminder: I'll call you tomorrow at `{{appointment_time}}` `{{timezone}}`. We'll discuss local vendor searches and the next practical steps. Need to reschedule? `{{reschedule_link}}`. `{{operator_name}}`, `{{business_name}}`. |
+| `BOOKING_REMINDER_3H_V3` | Reminder: your Vendor Lead Opportunity Snapshot call starts in 3 hours at `{{appointment_time}}` `{{timezone}}`. `{{operator_name}}`, `{{business_name}}`. |
+| `BOOKING_REMINDER_EARLY_V3` | Reminder: your Vendor Lead Opportunity Snapshot call is tomorrow at `{{appointment_time}}` `{{timezone}}`. `{{operator_name}}`, `{{business_name}}`. |
 
-Keep the placeholder names unchanged. Inbound STOP messages still suppress the contact and cancel the remaining journey. The Worker also rejects messages over the configured SMS-part cap, suppressed contacts, replies, booked leads, missing consent, stale booking revisions, quiet-hour sends, and duplicate provider sends.
+Keep the placeholder names unchanged. The copy contains no em dash or opt-out sentence. Inbound STOP messages still suppress the contact and cancel the remaining journey. The Worker also rejects messages over the configured SMS-part cap, suppressed contacts, replies, booked leads, missing consent, stale booking revisions, quiet-hour sends, and duplicate provider sends.
 
 ## Timing and journey rules
 
@@ -50,7 +50,7 @@ Brevo contact/deal syncing does not control SMS copy.
 ## Safe release checklist
 
 1. Make the change in a non-production Worker version or duplicate Brevo template.
-2. Preserve all placeholders and the STOP wording where required.
+2. Preserve all placeholders and the existing backend STOP suppression.
 3. Run the repository tests and deployment probe.
 4. Test only with the approved operator address/number; do not use a client record.
 5. Promote the version, then verify Cloudflare component health and Inngest runs.

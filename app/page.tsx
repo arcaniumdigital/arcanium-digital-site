@@ -11,9 +11,9 @@ import { WhatWeDoSection } from "@/components/landing/what-we-do-section";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Become the #1 Real Estate Agent Online in Your Suburb",
+  title: "Appear in Front of Vendors Ready to Sell",
   description:
-    "Build visibility across Google Search, Google Maps and AI platforms so local vendors find your name first.",
+    "Done-for-you Google Ads and online visibility for real estate agents who want more opportunities to speak with local vendors.",
   keywords: [
     "real estate agent websites",
     "real estate landing page",
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
     canonical: siteUrl,
   },
   openGraph: {
-    title: "Real Estate Agent Websites Built for More Vendors",
+    title: "Appear in Front of Vendors Ready to Sell",
     description:
-      "Turn an agent's online presence into a trust-building path for local vendor and listing enquiries.",
+      "Discover where local vendor leads may be going to competitors and how Google Ads and a stronger online presence can help.",
     url: siteUrl,
     siteName,
     type: "website",
@@ -48,10 +48,10 @@ const structuredData = [
     "@context": "https://schema.org",
     "@type": "Service",
     name: siteName,
-    serviceType: "Real estate agent website design and lead generation",
+    serviceType: "Google Ads and online lead generation for real estate agents",
     url: siteUrl,
     description:
-      "Personalised websites for real estate agents that build trust, prove local authority, and convert visitors into vendor and listing conversations.",
+      "Done-for-you Google Ads, website and local visibility services for real estate agents seeking more vendor enquiries.",
     provider: {
       "@type": "Organization",
       name: siteName,
