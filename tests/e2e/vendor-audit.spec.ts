@@ -47,6 +47,7 @@ test("durable acceptance navigates directly to the clean opportunity page", asyn
   await navigationCommitted;
   expect(page.url()).toBe("http://127.0.0.1:3000/vendor-lead-opportunity");
   expect(submittedPayload).not.toHaveProperty("primarySuburb");
+  expect(submittedPayload?.funnelDestination).toBe("vendor-lead-opportunity");
   await expect(page.getByRole("heading", { name: "Your Vendor Lead Opportunity Snapshot" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Book your free call" })).toBeVisible();
   await expect(page.getByText("choose a time to discuss where local vendors are searching and which opportunities may be worth pursuing.", { exact: false })).toBeVisible();

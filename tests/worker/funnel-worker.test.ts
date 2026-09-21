@@ -43,51 +43,54 @@ describe("funnel Worker and D1", () => {
     expect(JSON.parse(schema?.safe_detail_json ?? "{}")).toEqual({ schemaVersion: "2" });
   });
 
-  it("accepts a lead without a suburb and directs it to the new opportunity page", async () => {
+  it("keeps the live form working during Worker-first release and directs new forms to the opportunity page", async () => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(async () => new Response(JSON.stringify({
       success: true,
       action: "vendor_audit",
       hostname: "localhost",
     }), { status: 200, headers: { "Content-Type": "application/json" } })));
 
-    const timestamp = new Date().toISOString();
-    const clientIp = "203.0.113.10";
-    const submissionId = crypto.randomUUID();
-    const body = JSON.stringify({
-      schemaVersion: "2.0",
-      submissionId,
-      fullName: "Alex Agent",
-      phone: "0412 345 678",
-      sourcePage: "http://localhost:3000/",
-      marketingSmsConsent: true,
-      consentVersion: "vendor-audit-sms-v1",
-      consentText: "I agree to receive SMS about my audit and related services.",
-      privacyNoticeVersion: "privacy-v1",
-      turnstileToken: "test-token",
-    });
     const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(env.INTERNAL_API_HMAC_SECRET), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-    const signature = Array.from(new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(`${timestamp}.${clientIp}.${body}`))))
-      .map((byte) => byte.toString(16).padStart(2, "0")).join("");
+    for (const [index, destination] of ["/vendor-audit", "/vendor-lead-opportunity"].entries()) {
+      const timestamp = new Date().toISOString();
+      const clientIp = `203.0.113.${index + 10}`;
+      const submissionId = crypto.randomUUID();
+      const body = JSON.stringify({
+        schemaVersion: "2.0",
+        submissionId,
+        fullName: "Alex Agent",
+        phone: "0412 345 678",
+        ...(destination === "/vendor-lead-opportunity" ? { funnelDestination: "vendor-lead-opportunity" } : {}),
+        sourcePage: "http://localhost:3000/",
+        marketingSmsConsent: true,
+        consentVersion: "vendor-audit-sms-v1",
+        consentText: "I agree to receive SMS about my audit and related services.",
+        privacyNoticeVersion: "privacy-v1",
+        turnstileToken: "test-token",
+      });
+      const signature = Array.from(new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(`${timestamp}.${clientIp}.${body}`))))
+        .map((byte) => byte.toString(16).padStart(2, "0")).join("");
 
-    const response = await SELF.fetch("https://funnel.test/api/vendor-audit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000",
-        "User-Agent": "worker-test",
-        "x-arcanium-proxy-timestamp": timestamp,
-        "x-arcanium-client-ip": clientIp,
-        "x-arcanium-proxy-signature": signature,
-      },
-      body,
-    });
+      const response = await SELF.fetch("https://funnel.test/api/vendor-audit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+          "User-Agent": "worker-test",
+          "x-arcanium-proxy-timestamp": timestamp,
+          "x-arcanium-client-ip": clientIp,
+          "x-arcanium-proxy-signature": signature,
+        },
+        body,
+      });
 
-    expect(response.status).toBe(202);
-    const accepted = await response.json() as { nextUrl: string };
-    expect(accepted.nextUrl).toBe("/vendor-lead-opportunity");
-    expect(response.headers.get("Set-Cookie")).toContain("Path=/vendor-lead-opportunity");
-    const lead = await env.DB.prepare("SELECT primary_suburb FROM leads WHERE submission_id = ?").bind(submissionId).first<{ primary_suburb: string | null }>();
-    expect(lead?.primary_suburb).toBeNull();
+      expect(response.status).toBe(202);
+      const accepted = await response.json() as { nextUrl: string };
+      expect(accepted.nextUrl).toBe(destination);
+      expect(response.headers.get("Set-Cookie")).toContain(`Path=${destination}`);
+      const lead = await env.DB.prepare("SELECT primary_suburb FROM leads WHERE submission_id = ?").bind(submissionId).first<{ primary_suburb: string | null }>();
+      expect(lead?.primary_suburb).toBeNull();
+    }
   });
 
   it("enforces canonical submission idempotency", async () => {

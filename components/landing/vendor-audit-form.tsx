@@ -96,6 +96,7 @@ export function VendorAuditForm() {
           submissionId: submissionId.current,
           fullName: fullName.trim(),
           phone: phone.trim(),
+          funnelDestination: "vendor-lead-opportunity",
           // Attribution values are sent separately below. Keeping this to the
           // canonical page prevents long Meta click URLs exceeding the Worker contract.
           sourcePage: `${window.location.origin}${window.location.pathname}`.slice(0, 500),
