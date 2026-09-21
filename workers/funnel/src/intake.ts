@@ -51,9 +51,9 @@ async function rateLimited(request: Request, env: Cloudflare.Env, clientIp: stri
   return Number(row?.attempt_count ?? 0) > 10;
 }
 
-function contextCookie(env: Cloudflare.Env, handle: string, maxAge: number): string {
+function contextCookie(env: Cloudflare.Env, handle: string, maxAge: number, destination: string): string {
   const domain = env.BOOKING_CONTEXT_COOKIE_DOMAIN ? `; Domain=${env.BOOKING_CONTEXT_COOKIE_DOMAIN}` : "";
-  return `arc_vendor_audit_ctx=${handle}; HttpOnly; Secure; SameSite=Lax; Path=/vendor-audit; Max-Age=${maxAge}${domain}`;
+  return `arc_vendor_audit_ctx=${handle}; HttpOnly; Secure; SameSite=Lax; Path=${destination}; Max-Age=${maxAge}${domain}`;
 }
 
 export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: ExecutionContext): Promise<Response> {
@@ -81,6 +81,7 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
   const parsed = vendorAuditLeadSchema.safeParse(parsedJson);
   if (!parsed.success) return reject("INVALID_REQUEST", 400);
   const input = parsed.data;
+  const destination = input.funnelDestination === "vendor-lead-opportunity" ? "/vendor-lead-opportunity" : "/vendor-audit";
   if (input.companyWebsiteConfirmation) return reject("INVALID_REQUEST", 400);
   const phoneE164 = normalizeAustralianMobile(input.phone);
   if (!phoneE164) return reject("INVALID_PHONE", 400);
@@ -110,8 +111,8 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
       env.DB.prepare("INSERT INTO booking_context_sessions (id, lead_id, session_hash, expires_at, created_at) VALUES (?, ?, ?, ?, ?)")
         .bind(sessionId, existing.id, sessionHash, expiresAt, nowIso),
     ]);
-    cors.append("Set-Cookie", contextCookie(env, sessionHandle, ttl));
-    return json({ accepted: true, leadPublicId: existing.public_id, nextUrl: "/vendor-audit", duplicate: true }, { status: 202, headers: cors });
+    cors.append("Set-Cookie", contextCookie(env, sessionHandle, ttl, destination));
+    return json({ accepted: true, leadPublicId: existing.public_id, nextUrl: destination, duplicate: true }, { status: 202, headers: cors });
   }
 
   const leadId = opaqueId("lead");
@@ -136,7 +137,7 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'NEW', 'NOT_BOOKED', 'ACTIVE', ?, ?)`)
       .bind(
         leadId, publicId, input.submissionId, fullName, firstNameFromFullName(fullName), phoneE164,
-        input.primarySuburb ?? null, input.sourcePage, input.referrer ?? null, input.utmSource ?? null, input.utmMedium ?? null,
+        null, input.sourcePage, input.referrer ?? null, input.utmSource ?? null, input.utmMedium ?? null,
         input.utmCampaign ?? null, input.utmTerm ?? null, input.utmContent ?? null,
         input.fbclid ? await sha256Hex(input.fbclid) : null,
         input.gclid ? await sha256Hex(input.gclid) : null,
@@ -170,8 +171,8 @@ export async function handleIntake(request: Request, env: Cloudflare.Env, ctx: E
     return reject("PERSISTENCE_FAILED", 503);
   }
   ctx.waitUntil(publishOutbox(env));
-  cors.append("Set-Cookie", contextCookie(env, sessionHandle, ttl));
-  return json({ accepted: true, leadPublicId: publicId, nextUrl: "/vendor-audit" }, { status: 202, headers: cors });
+  cors.append("Set-Cookie", contextCookie(env, sessionHandle, ttl, destination));
+  return json({ accepted: true, leadPublicId: publicId, nextUrl: destination }, { status: 202, headers: cors });
 }
 
 export async function handleContext(request: Request, env: Cloudflare.Env): Promise<Response> {

@@ -156,7 +156,7 @@ export async function syncBrevoLead(env: Cloudflare.Env, lead: LeadRow): Promise
         FNAME: lead.first_name,
         SMS: lead.phone_e164,
         D1_LEAD_ID: lead.public_id,
-        LEAD_SOURCE: "Vendor Conversion Audit",
+        LEAD_SOURCE: "Vendor Lead Opportunity Snapshot",
         SOURCE_PAGE: lead.source_page,
         UTM_SOURCE: lead.utm_source ?? undefined,
         UTM_MEDIUM: lead.utm_medium ?? undefined,
@@ -178,7 +178,7 @@ export async function syncBrevoLead(env: Cloudflare.Env, lead: LeadRow): Promise
   const dealResponse = record(await brevoRequest(env, "/crm/deals", {
     method: "POST",
     body: JSON.stringify({
-      name: `Vendor Audit - ${lead.public_id}`,
+      name: `Vendor Lead Opportunity - ${lead.public_id}`,
       attributes: {
         pipeline: env.BREVO_PIPELINE_ID,
         deal_stage: env.BREVO_STAGE_NEW_ENQUIRY_ID,

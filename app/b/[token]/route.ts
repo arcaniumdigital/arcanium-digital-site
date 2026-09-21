@@ -11,7 +11,7 @@ interface BookingRedirectContext {
 export async function GET(request: Request, context: BookingRedirectContext) {
   const { token: rawToken } = await context.params;
   const token = normalizeBookingToken(rawToken);
-  const destination = new URL("/vendor-audit", request.url);
+  const destination = new URL("/vendor-lead-opportunity", request.url);
 
   if (!token) {
     return NextResponse.redirect(destination, 302);

@@ -5,9 +5,9 @@ import { resolveBookingContext } from "@/lib/funnel-context";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
-const title = "Free Suburb Visibility Audit | Confirm Your Market";
-const description = "Confirm your market so we can prepare your free Suburb Visibility Audit.";
-const canonicalUrl = "https://www.arcaniumdigital.com/vendor-audit";
+const title = "Vendor Lead Opportunity Snapshot";
+const description = "Review the local searches and online opportunities that could help you reach more vendors ready to sell.";
+const canonicalUrl = "https://www.arcaniumdigital.com/vendor-lead-opportunity";
 const previewImageUrl = "https://www.arcaniumdigital.com/vendor-audit-preview.jpg";
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title,
     description,
     url: canonicalUrl,
-    images: [{ url: previewImageUrl, width: 1200, height: 630, alt: "Arcanium Visibility Audit preview" }],
+    images: [{ url: previewImageUrl, width: 1200, height: 630, alt: "Arcanium vendor lead opportunity preview" }],
   },
   twitter: { card: "summary_large_image", title, description, images: [previewImageUrl] },
 };
@@ -29,16 +29,13 @@ function VisibilityReviewCopy({ className }: { className: string }) {
   return (
     <div className={className}>
       <h2 className="font-display text-[clamp(2rem,8vw,2.35rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-[#f5f5f3] min-[1180px]:text-[clamp(2rem,2.6vw,2.4rem)]">
-        See how visible you are to local vendors.
+        See where your next vendor leads could come from.
       </h2>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        Book the <strong>free visibility call</strong> to discuss your current
-        online presence and what you’d like to improve.
+        Book a <strong>free call</strong> to discuss the local searches, Google Ads opportunities and online gaps worth reviewing for your business.
       </p>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        If there’s an opportunity to help, we’ll then prepare your{" "}
-        <strong>local visibility report</strong> and walk you through the search
-        demand and opportunities in your market.
+        We’ll use your Vendor Lead Opportunity Snapshot to make the next steps practical, whether that means improving your website, refining your offer or reaching high-intent vendors through Google Ads.
       </p>
       <p className="mt-4 text-[16px] font-semibold leading-[1.65] text-[#f5f5f3] sm:text-lg">
         No preparation. No obligation. Just a clear next step.
@@ -63,10 +60,10 @@ export default async function VendorAuditPage() {
         <section className="relative mx-auto grid min-h-screen max-w-[1240px] gap-12 px-5 py-14 sm:px-7 sm:py-16 lg:px-10 min-[1180px]:grid-cols-12 min-[1180px]:items-center min-[1180px]:gap-12 min-[1180px]:py-20 xl:px-0">
           <div className="contents min-[1180px]:order-none min-[1180px]:col-span-7 min-[1180px]:block min-[1180px]:min-w-0 min-[1180px]:pr-2">
             <h1 className="order-1 max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
-              Learn where you are missing vendor searches
+              Your Vendor Lead Opportunity Snapshot
             </h1>
 
-            <div data-testid="audit-video-card" className="relative order-3 max-w-[760px] min-[1180px]:mt-9 min-[1180px]:order-none sm:min-[1180px]:mt-10">
+            <div data-testid="audit-video-card" className="relative order-2 max-w-[760px] min-[1180px]:mt-9 min-[1180px]:order-none sm:min-[1180px]:mt-10">
               <div className="pointer-events-none absolute inset-0 translate-x-3 translate-y-3 rounded-[20px] border border-[#8f33ff]/20 bg-[#15161c]/70 sm:translate-x-4 sm:translate-y-4 sm:rounded-[24px]" />
               <div className="relative overflow-hidden rounded-[20px] border border-white/12 bg-[#101116] p-1.5 shadow-[0_38px_100px_rgba(0,0,0,0.48)] sm:rounded-[24px] sm:p-2">
                 <AuditVideo />
@@ -76,7 +73,7 @@ export default async function VendorAuditPage() {
             <VisibilityReviewCopy className="order-4 max-w-[570px] min-[1180px]:mt-9 min-[1180px]:block" />
           </div>
 
-          <div className="order-2 min-w-0 max-sm:-mx-2 min-[1180px]:order-none min-[1180px]:col-span-5">
+          <div className="order-3 min-w-0 max-sm:-mx-2 min-[1180px]:order-none min-[1180px]:col-span-5">
             <AuditBooking
               initialFullName={bookingContext?.fullName}
               initialLeadCorrelation={bookingContext?.signedLeadCorrelation}

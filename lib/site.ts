@@ -7,4 +7,4 @@ export const siteUrl =
 export const siteName = "Arcanium Digital";
 
 export const siteDescription =
-  "Arcanium Digital builds personalised websites for real estate agents who want more vendor and listing opportunities from the people already checking them out.";
+  "Arcanium Digital helps real estate agents reach local vendors through done-for-you Google Ads, stronger online visibility and a clearer path from search to enquiry.";
