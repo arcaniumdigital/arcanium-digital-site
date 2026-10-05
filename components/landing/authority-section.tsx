@@ -4,14 +4,14 @@ import Image from "next/image";
 const testimonials = [
   {
     avatar: "/images/testimonials/mary-ann-mcloughlin.jpg",
-    quote: "The site feels premium without feeling complicated. Potential vendors can quickly understand who I help, what I have sold, and how to start the right conversation with me.",
+    quote: "What I value about Arcanium is the focus on the whole appraisal process, from the first seller enquiry through to follow-up and booking. It is a done-for-you service built around helping agents focus on their clients.",
     name: "Mary-Ann McLoughlin",
     role: "Real estate agent",
     market: "Sunshine Coast",
   },
   {
     avatar: "/images/testimonials/shana.jpg",
-    quote: "I was hesitant because I was not ready for more social exposure. Once I decided to move forward, the process felt considered and professional, and I have not regretted it.",
+    quote: "The process has felt considered and professional from the start. Jordan takes the time to listen and understand what matters to my business. That personal approach is what I value about working with Arcanium.",
     name: "Shana",
     role: "Real estate agent",
     market: "Brisbane",
