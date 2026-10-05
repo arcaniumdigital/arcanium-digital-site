@@ -18,7 +18,7 @@ export function AuditVideo() {
       }}
     >
       <iframe
-        src={`https://fast.wistia.net/embed/iframe/${mediaId}?seo=true&videoFoam=true&playerColor=8f33ff`}
+        src={`https://fast.wistia.net/embed/iframe/${mediaId}?seo=true&videoFoam=true&playerColor=8f33ff&autoPlay=true&silentAutoPlay=allow&muted=false&volume=1&playsinline=true`}
         title="Arcanium Seller Pipeline Audit"
         allow="autoplay; fullscreen"
         allowFullScreen

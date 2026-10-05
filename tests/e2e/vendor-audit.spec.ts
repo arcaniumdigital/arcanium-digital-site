@@ -150,5 +150,10 @@ test("the original funnel media remain in place", async ({ page }) => {
     await expect.poll(() => asset.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   }
   await page.goto("/vendor-lead-opportunity", { waitUntil: "domcontentloaded" });
-  await expect(page.locator('iframe[src*="l33mw4dw0k"]')).toHaveCount(1);
+  const auditPlayer = page.locator('iframe[src*="l33mw4dw0k"]');
+  await expect(auditPlayer).toHaveCount(1);
+  await expect(auditPlayer).toHaveAttribute("src", /autoPlay=true/);
+  await expect(auditPlayer).toHaveAttribute("src", /silentAutoPlay=allow/);
+  await expect(auditPlayer).toHaveAttribute("src", /muted=false/);
+  await expect(auditPlayer).toHaveAttribute("src", /volume=1/);
 });
