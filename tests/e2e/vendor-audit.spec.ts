@@ -39,21 +39,21 @@ test("durable acceptance navigates directly to the clean opportunity page", asyn
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
-  await expect(page.getByText("By continuing, you agree to receive SMS about your snapshot.")).toBeVisible();
-  const button = page.getByRole("button", { name: "Get my free snapshot" });
-  await expect(button).toHaveText("Get my free snapshot");
+  await expect(page.getByText("By continuing, you agree to receive SMS about your Seller Pipeline Audit and related Arcanium Digital services. You can opt out at any time.")).toBeVisible();
+  const button = page.getByRole("button", { name: "Get My Free Seller Pipeline Audit" });
+  await expect(button).toHaveText("Get My Free Seller Pipeline Audit");
   const navigationCommitted = page.waitForEvent("framenavigated", (frame) => frame === page.mainFrame() && frame.url() === "http://127.0.0.1:3000/vendor-lead-opportunity");
   await button.click({ noWaitAfter: true });
   await navigationCommitted;
   expect(page.url()).toBe("http://127.0.0.1:3000/vendor-lead-opportunity");
   expect(submittedPayload).not.toHaveProperty("primarySuburb");
   expect(submittedPayload?.funnelDestination).toBe("vendor-lead-opportunity");
-  await expect(page.getByRole("heading", { name: "Your Vendor Lead Opportunity Snapshot" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Book your free call" })).toBeVisible();
-  await expect(page.getByText("choose a time to discuss where local vendors are searching and which opportunities may be worth pursuing.", { exact: false })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Your Seller Pipeline Audit" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Book your free audit" })).toBeVisible();
+  await expect(page.getByText("choose a time for your 10–15 minute Seller Pipeline Audit.", { exact: false })).toBeVisible();
   await expect(page.getByText("Select a time below.", { exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "See where your next vendor leads could come from." })).toBeVisible();
-  await expect(page.getByText("Book a free call to discuss the local searches, Google Ads opportunities and online gaps worth reviewing for your business.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Find the gaps in your seller pipeline." })).toBeVisible();
+  await expect(page.getByText("Book a free 10–15 minute phone audit to review how seller enquiries move from first response to booked appraisal.", { exact: true })).toBeVisible();
   await expect(page.getByText("No preparation. No obligation. Just a clear next step.", { exact: true })).toBeVisible();
 });
 
@@ -64,7 +64,7 @@ test("the mobile opportunity page places the original video above the booking ca
   const booking = page.locator("#booking");
   const video = page.getByTestId("audit-video-card");
   const calendarFrame = page.getByTestId("audit-calendar-frame");
-  const visibilityCopy = page.getByRole("heading", { name: "See where your next vendor leads could come from." });
+  const visibilityCopy = page.getByRole("heading", { name: "Find the gaps in your seller pipeline." });
 
   await expect(booking).toBeVisible();
   await expect(video).toBeVisible();
@@ -90,27 +90,27 @@ test("a failed acceptance preserves fields and shows one honest error", async ({
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
-  await page.getByRole("button", { name: "Get my free snapshot" }).click();
+  await page.getByRole("button", { name: "Get My Free Seller Pipeline Audit" }).click();
   await expect(page.getByText("We could not submit your details. Please check your connection and try again.")).toBeVisible();
   await expect(page.getByLabel("Full name")).toHaveValue("Alex Agent");
   await expect(page.getByLabel("Best mobile number")).toHaveValue("0412 345 678");
   await expect(page).toHaveURL("http://127.0.0.1:3000/");
 });
 
-test("search opportunity copy and controls remain composed across breakpoints", async ({ page }) => {
+test("seller pipeline copy and controls remain composed across breakpoints", async ({ page }) => {
   await installTurnstileStub(page);
 
   for (const viewport of [{ width: 320, height: 800 }, { width: 1440, height: 1000 }]) {
     await page.setViewportSize(viewport);
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
-    const opportunityLinks = page.getByRole("link", { name: "Get my free snapshot" });
-    await expect(opportunityLinks).toHaveCount(3);
-    await expect(page.getByText(/Enter your details to unlock your Vendor Lead Opportunity Snapshot/)).toBeVisible();
+    const opportunityLinks = page.getByRole("link", { name: "Get My Free Seller Pipeline Audit" });
+    await expect(opportunityLinks).toHaveCount(4);
+    await expect(page.getByText(/In a free 10–15 minute phone audit/)).toBeVisible();
     await expect(page.getByText("On the next step, choose a short call so we can confirm your market before preparing your visibility report.")).toHaveCount(0);
-    await expect(page.getByText("Your Free Vendor Lead Opportunity Snapshot", { exact: true })).toBeVisible();
+    await expect(page.getByText("Your Free Seller Pipeline Audit", { exact: true })).toBeVisible();
     await expect(page.getByLabel("Primary Suburb")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Get my free snapshot" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Get My Free Seller Pipeline Audit" })).toBeVisible();
 
     const headerButtonHeight = await opportunityLinks.first().evaluate((element) => element.getBoundingClientRect().height);
     const heroButtonHeight = await opportunityLinks.nth(1).evaluate((element) => element.getBoundingClientRect().height);
@@ -138,9 +138,9 @@ test("the former audit URL redirects to the new destination", async ({ page }) =
 
 test("the original funnel media remain in place", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Appear in Front of Vendors Ready to Sell");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Done for YOU booked APPRAISALS");
   await expect(page.locator('img[src*="vendor-audit-poster"]')).toHaveCount(1);
-  for (const image of ["traffic-overview", "traffic-trend", "audience-tracking", "audience-growth", "kael-sharp"]) {
+  for (const image of ["service-overview", "ai-conversation", "future-seller", "meta-dashboard", "client-result", "kael-sharp"]) {
     const asset = page.locator(`img[src*="${image}"]`);
     await expect(asset).toHaveCount(1);
     await asset.scrollIntoViewIfNeeded();

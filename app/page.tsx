@@ -1,83 +1,26 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/landing/hero-section";
-import { AutonomousSection } from "@/components/landing/autonomous-section";
 import { AuthoritySection } from "@/components/landing/authority-section";
-import { AnalyticsSection } from "@/components/landing/analytics-section";
 import { CtaSection } from "@/components/landing/cta-section";
 import { FinalCtaSection } from "@/components/landing/final-cta-section";
-import { GeoSection } from "@/components/landing/geo-section";
 import { Navigation } from "@/components/landing/navigation";
-import { WhatWeDoSection } from "@/components/landing/what-we-do-section";
+import { FaqSection } from "@/components/landing/faq-section";
+import { LeadComparisonSection, SellerSystemSection, SellerPathsSection, SellerProofSection, PipelineAuditSection } from "@/components/landing/seller-pipeline-sections";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Appear in Front of Vendors Ready to Sell",
-  description:
-    "Done-for-you Google Ads and online visibility for real estate agents who want more opportunities to speak with local vendors.",
-  keywords: [
-    "real estate agent websites",
-    "real estate landing page",
-    "agent personal website",
-    "real estate vendor leads",
-    "real estate listing website",
-    "real estate SEO",
-    "real estate agent branding",
-  ],
-  alternates: {
-    canonical: siteUrl,
-  },
-  openGraph: {
-    title: "Appear in Front of Vendors Ready to Sell",
-    description:
-      "Discover where local vendor leads may be going to competitors and how Google Ads and a stronger online presence can help.",
-    url: siteUrl,
-    siteName,
-    type: "website",
-  },
+  title: "Done for YOU booked APPRAISALS",
+  description: siteDescription,
+  keywords: ["real estate seller leads", "booked appraisals", "AI appointment setting for real estate agents", "seller pipeline audit"],
+  alternates: { canonical: siteUrl },
+  openGraph: { title: "Done for YOU booked APPRAISALS", description: siteDescription, url: siteUrl, siteName, type: "website" },
 };
 
 const structuredData = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: siteName,
-    url: siteUrl,
-    description: siteDescription,
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: siteName,
-    serviceType: "Google Ads and online lead generation for real estate agents",
-    url: siteUrl,
-    description:
-      "Done-for-you Google Ads, website and local visibility services for real estate agents seeking more vendor enquiries.",
-    provider: {
-      "@type": "Organization",
-      name: siteName,
-      url: siteUrl,
-    },
-  },
+  { "@context": "https://schema.org", "@type": "Organization", name: siteName, url: siteUrl, description: siteDescription },
+  { "@context": "https://schema.org", "@type": "Service", name: "Arcanium Seller Pipeline", serviceType: "Homeowner lead generation, AI qualification, appointment setting and seller nurture", url: siteUrl, description: siteDescription, provider: { "@type": "Organization", name: siteName, url: siteUrl } },
 ];
 
 export default function Home() {
-  return (
-    <>
-      <Navigation />
-      <main className="relative min-h-screen overflow-x-hidden">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-        <HeroSection />
-        <CtaSection />
-        <WhatWeDoSection />
-        <AutonomousSection />
-        <AnalyticsSection />
-        <GeoSection />
-        <AuthoritySection />
-        <FinalCtaSection />
-      </main>
-    </>
-  );
+  return <><Navigation /><main className="relative min-h-screen overflow-x-hidden"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} /><HeroSection /><CtaSection /><LeadComparisonSection /><SellerSystemSection /><SellerPathsSection /><SellerProofSection /><AuthoritySection /><PipelineAuditSection /><FaqSection /><FinalCtaSection /></main><footer className="pipeline-footer"><a href="#" aria-label="Arcanium Digital home">ARCANIUM DIGITAL</a><p>Seller enquiries. Real conversations. Clear next steps.</p><a href="/privacy">Privacy Policy</a></footer></>;
 }

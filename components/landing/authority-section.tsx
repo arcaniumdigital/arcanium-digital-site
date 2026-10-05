@@ -31,7 +31,7 @@ export function AuthoritySection() {
       <div className="pointer-events-none absolute -right-56 top-0 size-[600px] rounded-full bg-[#8f33ff]/6 blur-[160px]" />
       <div className="relative mx-auto max-w-[1280px]">
         <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#aaaab2]"><span className="size-1.5 rounded-full bg-[#8f33ff]" />Trusted by local agents</p>
-        <h2 className="mb-12 mt-5 font-display text-[clamp(2.125rem,9.5vw,2.5rem)] font-semibold leading-[1] tracking-[-0.04em] lg:mb-16 lg:text-[clamp(3rem,4vw,3.75rem)]">Client testimonials</h2>
+        <h2 className="mb-12 mt-5 font-display text-[clamp(2.125rem,9.5vw,2.5rem)] font-semibold leading-[1] tracking-[-0.04em] lg:mb-16 lg:text-[clamp(3rem,4vw,3.75rem)]">Built Around How Agents Actually Sell.</h2>
 
         <div className="grid gap-4 lg:grid-cols-12 lg:gap-6">
           {testimonials.map((testimonial, index) => (

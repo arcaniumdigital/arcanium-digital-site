@@ -19,7 +19,7 @@ export function AuditVideo() {
     >
       <iframe
         src={`https://fast.wistia.net/embed/iframe/${mediaId}?seo=true&videoFoam=true&playerColor=8f33ff`}
-        title="Arcanium Vendor Lead Opportunity Snapshot"
+        title="Arcanium Seller Pipeline Audit"
         allow="autoplay; fullscreen"
         allowFullScreen
         loading="eager"

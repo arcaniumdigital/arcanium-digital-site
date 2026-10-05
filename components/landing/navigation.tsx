@@ -39,10 +39,10 @@ export function Navigation() {
 
         <MetaTrackedLink
           href="#audit"
-          trackingLabel="Get my vendor lead opportunity snapshot - header"
+          trackingLabel="Seller Pipeline Audit - header"
           className="group inline-flex min-h-11 items-center justify-center rounded-[12px] border border-white/15 bg-[#f4f4f2] px-3 text-[0.68rem] font-bold tracking-[-0.01em] text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:px-4 sm:text-xs lg:h-[46px] lg:px-5 lg:text-sm"
         >
-          GET MY FREE SNAPSHOT
+          Get My Free Seller Pipeline Audit
           <ArrowRight className="ml-1.5 size-3.5 transition-transform duration-300 group-hover:translate-x-0.5 lg:size-4" aria-hidden="true" />
         </MetaTrackedLink>
       </nav>
