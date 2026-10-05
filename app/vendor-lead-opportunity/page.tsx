@@ -5,8 +5,8 @@ import { resolveBookingContext } from "@/lib/funnel-context";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
-const title = "Vendor Lead Opportunity Snapshot";
-const description = "Review the local searches and online opportunities that could help you reach more vendors ready to sell.";
+const title = "Seller Pipeline Audit";
+const description = "Book your free 10–15 minute Seller Pipeline Audit and find the gaps between enquiry and appraisal.";
 const canonicalUrl = "https://www.arcaniumdigital.com/vendor-lead-opportunity";
 const previewImageUrl = "https://www.arcaniumdigital.com/vendor-audit-preview.jpg";
 
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title,
     description,
     url: canonicalUrl,
-    images: [{ url: previewImageUrl, width: 1200, height: 630, alt: "Arcanium vendor lead opportunity preview" }],
+    images: [{ url: previewImageUrl, width: 1200, height: 630, alt: "Arcanium Seller Pipeline Audit" }],
   },
   twitter: { card: "summary_large_image", title, description, images: [previewImageUrl] },
 };
@@ -29,13 +29,13 @@ function VisibilityReviewCopy({ className }: { className: string }) {
   return (
     <div className={className}>
       <h2 className="font-display text-[clamp(2rem,8vw,2.35rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-[#f5f5f3] min-[1180px]:text-[clamp(2rem,2.6vw,2.4rem)]">
-        See where your next vendor leads could come from.
+        Find the gaps in your seller pipeline.
       </h2>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        Book a <strong>free call</strong> to discuss the local searches, Google Ads opportunities and online gaps worth reviewing for your business.
+        Book a <strong>free 10–15 minute phone audit</strong> to review how seller enquiries move from first response to booked appraisal.
       </p>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        We’ll use your Vendor Lead Opportunity Snapshot to make the next steps practical, whether that means improving your website, refining your offer or reaching high-intent vendors through Google Ads.
+        We’ll look at your lead sources, response speed, follow-up, future seller nurture and appointment booking, including opportunities in your existing database.
       </p>
       <p className="mt-4 text-[16px] font-semibold leading-[1.65] text-[#f5f5f3] sm:text-lg">
         No preparation. No obligation. Just a clear next step.
@@ -60,7 +60,7 @@ export default async function VendorAuditPage() {
         <section className="relative mx-auto grid min-h-screen max-w-[1240px] gap-12 px-5 py-14 sm:px-7 sm:py-16 lg:px-10 min-[1180px]:grid-cols-12 min-[1180px]:items-center min-[1180px]:gap-12 min-[1180px]:py-20 xl:px-0">
           <div className="contents min-[1180px]:order-none min-[1180px]:col-span-7 min-[1180px]:block min-[1180px]:min-w-0 min-[1180px]:pr-2">
             <h1 className="order-1 max-w-[820px] font-display text-[clamp(2.625rem,11vw,3rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f5f3] sm:text-[clamp(3rem,8vw,4.25rem)] min-[1180px]:text-[clamp(3.5rem,5.5vw,5.125rem)]">
-              Your Vendor Lead Opportunity Snapshot
+              Your Seller Pipeline Audit
             </h1>
 
             <div data-testid="audit-video-card" className="relative order-2 max-w-[760px] min-[1180px]:mt-9 min-[1180px]:order-none sm:min-[1180px]:mt-10">

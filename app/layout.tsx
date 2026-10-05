@@ -22,7 +22,7 @@ const metaPixelId = "1750359556313305";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteName} | Google Ads and Vendor Lead Opportunities`,
+    default: `${siteName} | Seller Enquiries and Booked Appraisals`,
     template: `%s | ${siteName}`,
   },
   description: siteDescription,
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: `${siteName} | Google Ads and Vendor Lead Opportunities`,
+    title: `${siteName} | Seller Enquiries and Booked Appraisals`,
     description: siteDescription,
     url: siteUrl,
     siteName,
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteName} | Google Ads and Vendor Lead Opportunities`,
+    title: `${siteName} | Seller Enquiries and Booked Appraisals`,
     description: siteDescription,
   },
 }

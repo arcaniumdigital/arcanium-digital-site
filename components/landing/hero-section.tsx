@@ -11,24 +11,25 @@ export function HeroSection() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#08090c]" />
       <div className="relative mx-auto grid w-full max-w-[1280px] gap-10 lg:grid-cols-12 lg:items-center lg:gap-8">
         <div className="lg:col-span-7">
+          <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#bca7d8]">For real estate agents ready to grow</p>
           <h1 className="max-w-[850px] font-display text-[clamp(2.625rem,11vw,3.125rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-[#f5f5f3] lg:text-[clamp(4rem,6.4vw,6rem)] lg:leading-[0.96]">
-            Appear in Front of Vendors{" "}
-            <span className="text-[#a95cff]">Ready to Sell</span>
+            Done for YOU{" "}
+            <span className="text-[#a95cff]">booked APPRAISALS</span>
           </h1>
           <div className="mt-6 max-w-[620px] lg:mt-7">
             <h2 className="font-display text-xl font-semibold tracking-[-0.025em] text-[#f5f5f3] sm:text-2xl">
-              Be present when local vendors are looking for an agent
+              We generate. We qualify. We book. You show up.
             </h2>
             <p className="mt-2 text-base font-bold leading-[1.65] text-[#aaaab2] sm:text-[1.05rem] lg:text-lg">
-              We combine targeted Google Ads with a stronger online presence so more of the right people can find you and take the next step.
+              We generate local homeowner enquiries, qualify seller intent and help book appraisals into your calendar. Homeowners who are not ready yet stay in nurture until their timing changes.
             </p>
           </div>
           <MetaTrackedLink
             href="#audit"
-            trackingLabel="Get my vendor lead opportunity snapshot - hero"
+            trackingLabel="Seller Pipeline Audit - hero"
             className="group mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:w-auto lg:mt-8"
           >
-            GET MY FREE SNAPSHOT
+            Get My Free Seller Pipeline Audit
             <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
           </MetaTrackedLink>
         </div>
