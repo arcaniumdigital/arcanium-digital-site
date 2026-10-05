@@ -3,6 +3,20 @@ import Image from "next/image";
 
 const testimonials = [
   {
+    avatar: "/images/testimonials/mary-ann-mcloughlin.jpg",
+    quote: "The site feels premium without feeling complicated. Potential vendors can quickly understand who I help, what I have sold, and how to start the right conversation with me.",
+    name: "Mary-Ann McLoughlin",
+    role: "Real estate agent",
+    market: "Sunshine Coast",
+  },
+  {
+    avatar: "/images/testimonials/shana.jpg",
+    quote: "I was hesitant because I was not ready for more social exposure. Once I decided to move forward, the process felt considered and professional, and I have not regretted it.",
+    name: "Shana",
+    role: "Real estate agent",
+    market: "Brisbane",
+  },
+  {
     avatar: "/images/testimonials/kael-sharp.jpg",
     quote: "Jordan is a driven young professional who genuinely looks for ways to create value. He listens carefully, brings practical ideas, and stays focused on outcomes.",
     name: "Kael Sharp",
@@ -17,9 +31,7 @@ export function AuthoritySection() {
       <div className="pointer-events-none absolute -right-56 top-0 size-[600px] rounded-full bg-[#8f33ff]/6 blur-[160px]" />
       <div className="relative mx-auto max-w-[1280px]">
         <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#aaaab2]"><span className="size-1.5 rounded-full bg-[#8f33ff]" />Trusted by local agents</p>
-        <h2 className="mb-12 mt-5 font-display text-[clamp(2.125rem,9.5vw,2.5rem)] font-semibold leading-[1] tracking-[-0.04em] lg:mb-6 lg:text-[clamp(3rem,4vw,3.75rem)]">Your Success Is Personal.</h2>
-
-        <p className="mb-12 max-w-2xl text-lg leading-relaxed text-[#aaaab2]">A done-for-you appraisal service backed by a personal commitment to helping your business grow.</p>
+        <h2 className="mb-12 mt-5 font-display text-[clamp(2.125rem,9.5vw,2.5rem)] font-semibold leading-[1] tracking-[-0.04em] lg:mb-16 lg:text-[clamp(3rem,4vw,3.75rem)]">Your Success Is Personal.</h2>
 
         <div className="grid gap-4 lg:grid-cols-12 lg:gap-6">
           {testimonials.map((testimonial, index) => (
@@ -40,16 +52,6 @@ export function AuthoritySection() {
                 </div>
             </article>
           ))}
-          <article className="rounded-[20px] border border-white/9 bg-[#121318] p-6 lg:col-span-5 lg:rounded-[24px] lg:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#aaaab2]">Our commitment to you</p>
-            <h3 className="mt-5 font-display text-2xl font-semibold text-[#f5f5f3]">We do the work behind the appraisal.</h3>
-            <p className="mt-4 leading-relaxed text-[#aaaab2]">From generating seller enquiries to qualification, follow-up and booking, we manage the process so you can focus on the appraisal and the client relationship.</p>
-          </article>
-          <article className="rounded-[20px] border border-white/9 bg-[#121318] p-6 lg:col-span-5 lg:rounded-[24px] lg:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#aaaab2]">Our commitment to you</p>
-            <h3 className="mt-5 font-display text-2xl font-semibold text-[#f5f5f3]">Your goals guide our work.</h3>
-            <p className="mt-4 leading-relaxed text-[#aaaab2]">We care about what happens after the enquiry. We listen to your goals, stay close to the follow-up and keep looking for practical ways to help you turn seller conversations into opportunities.</p>
-          </article>
         </div>
       </div>
     </section>
