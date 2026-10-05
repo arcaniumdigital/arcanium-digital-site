@@ -12,7 +12,7 @@ const testimonials = [
   {
     avatar: "/images/testimonials/shana.jpg",
     quote: "The process has felt considered and professional from the start. Jordan takes the time to listen and understand what matters to my business. That personal approach is what I value about working with Arcanium.",
-    name: "Shana",
+    name: "Shana Feng",
     role: "Real estate agent",
     market: "Brisbane",
   },
