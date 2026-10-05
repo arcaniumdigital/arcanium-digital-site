@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowDown, ArrowRight, Check, CheckCircle2, Clock3, CalendarCheck, MessageCircle, RefreshCw, Search, Target, Zap, ChartNoAxesCombined, Users, Phone, Mail } from "lucide-react";
+import { ArrowDown, ArrowRight, Check, Clock3, CalendarCheck, MessageCircle, RefreshCw, Search, Target, Zap, ChartNoAxesCombined, Users, Phone, Mail } from "lucide-react";
 import { MetaTrackedLink } from "@/components/analytics/meta-tracked-link";
 
 const assets = "/images/seller-pipeline";
@@ -62,13 +62,12 @@ export function SellerPathsSection() {
 export function SellerProofSection() {
   return <section id="proof" className="pipeline-section pipeline-light">
     <div className="pipeline-container">
-      <div className="pipeline-heading"><SectionLabel>A closer look</SectionLabel><h2>Here’s What The System{" "}<br />Looks Like <span className="pipeline-purple">In Practice.</span></h2><p>Campaign data on one side. The conversation that follows on the other.</p></div>
+      <div className="pipeline-heading"><SectionLabel>A closer look</SectionLabel><h2>Here’s What The System{" "}<br />Looks Like <span className="pipeline-purple">In Practice.</span></h2><p>A closer look at real campaign activity and homeowner enquiries.</p></div>
       <div className="pipeline-proof-grid">
         <article className="pipeline-proof-card"><div className="pipeline-card-heading"><span className="pipeline-icon-box"><ChartNoAxesCombined size={22} aria-hidden="true" /></span><div><p>Seller acquisition</p><h3>Real Meta campaign.</h3></div></div><p className="pipeline-card-description">Kael Sharp’s campaign snapshot, 4 September to 3 October 2026.</p>
-          <a className="pipeline-proof-image" href={`${assets}/meta-dashboard.png`} target="_blank" rel="noreferrer" aria-label="Open full-size Meta campaign screenshot"><Image src={`${assets}/meta-dashboard.png`} alt="Meta Ads Manager: three campaigns, $768.22 total spend and 32 Meta leads during 4 September to 3 October 2026." width={1792} height={878} sizes="(max-width: 900px) 94vw, 750px" quality={78} /><span>View full campaign screenshot <ArrowRight size={14} aria-hidden="true" /></span></a>
+          <div className="pipeline-proof-image"><Image src={`${assets}/meta-dashboard.png`} alt="Meta Ads Manager: three campaigns, $768.22 total spend and 32 Meta leads during 4 September to 3 October 2026." width={1792} height={878} sizes="(max-width: 1280px) 94vw, 1140px" quality={78} /></div>
           <div className="pipeline-metrics"><div><strong>$768.22</strong><span>Total spend</span></div><div><strong>32</strong><span>Meta leads</span></div><div><strong>3</strong><span>Campaigns</span></div></div><p className="pipeline-evidence-note">Results shown are Meta lead enquiries, not confirmed appraisals or listings.</p>
         </article>
-        <article className="pipeline-proof-card pipeline-conversation-proof"><div className="pipeline-card-heading"><span className="pipeline-icon-box"><MessageCircle size={22} aria-hidden="true" /></span><div><p>Seller conversion</p><h3>A conversation with direction.</h3></div></div><p className="pipeline-card-description">An example of how qualification creates a useful next step.</p><div className="pipeline-chat-excerpt"><span>Homeowner</span><p>“Probably within the next few months.”</p><span>AI setter</span><p>“Would you like me to organise a quick appraisal so you know where you stand?”</p></div><ul className="pipeline-proof-checks">{["Seller intent identified", "Appraisal conversation started", "Appointment options offered"].map(item => <li key={item}><CheckCircle2 size={18} aria-hidden="true" />{item}</li>)}</ul><p className="pipeline-evidence-note">Illustrative excerpt from the conversation above.</p></article>
       </div>
       <div className="pipeline-client-result"><div><SectionLabel>From a client conversation</SectionLabel><h3>A listing worth sharing.</h3><p>Mary-Ann shares a new listing with the team.</p><p className="pipeline-evidence-note">Client update shown for context. This message alone does not attribute the listing to a particular campaign.</p></div><a href={`${assets}/client-result.png`} target="_blank" rel="noreferrer" aria-label="Open full-size client result image"><Image src={`${assets}/client-result.png`} alt="Client update graphic showing Mary-Ann McLoughlin sharing a property listing with the message New listing." width={1672} height={941} sizes="(max-width: 900px) 94vw, 740px" quality={78} /></a></div>
     </div>

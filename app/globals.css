@@ -323,7 +323,7 @@ input {
 .pipeline-intent-footer svg{flex-shrink:0}
 
 .pipeline-proof-grid{display:grid;
-  grid-template-columns:1.4fr 1fr;
+  grid-template-columns:1fr;
   gap:24px}
 .pipeline-proof-card{background:#fff;
   border:1px solid #16132014;
