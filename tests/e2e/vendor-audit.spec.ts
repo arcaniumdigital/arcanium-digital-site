@@ -139,7 +139,10 @@ test("the former audit URL redirects to the new destination", async ({ page }) =
 test("the original funnel media remain in place", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Done for YOU booked APPRAISALS");
-  await expect(page.locator('img[src*="vendor-audit-poster"]')).toHaveCount(1);
+  const heroPlayer = page.locator('wistia-player[media-id="rdnom0qfs9"]');
+  await expect(heroPlayer).toHaveAttribute("autoplay", "");
+  await expect(heroPlayer).toHaveAttribute("silent-autoplay", "allow");
+  await expect(page.locator('img[src*="vendor-audit-poster"]')).toHaveCount(0);
   for (const image of ["service-overview", "ai-conversation", "future-seller", "meta-dashboard", "client-result", "kael-sharp"]) {
     const asset = page.locator(`img[src*="${image}"]`);
     await expect(asset).toHaveCount(1);
