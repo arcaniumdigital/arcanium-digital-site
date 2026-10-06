@@ -157,3 +157,26 @@ test("the original funnel media remain in place", async ({ page }) => {
   await expect(auditPlayer).toHaveAttribute("src", /muted=false/);
   await expect(auditPlayer).toHaveAttribute("src", /volume=1/);
 });
+
+test("the booking thank-you page carries the confirmed appointment into a calendar file", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.sessionStorage.setItem(
+      "arcanium:booking-confirmation",
+      JSON.stringify({
+        uid: "booking-test-1",
+        title: "Seller Pipeline Audit",
+        startTime: "2026-10-08T00:00:00.000Z",
+        endTime: "2026-10-08T00:15:00.000Z",
+      })
+    );
+  });
+
+  await page.goto("/thank-you-for-booking");
+  await expect(page.getByRole("heading", { name: "You’re all set." })).toBeVisible();
+  await expect(page.locator('wistia-player[media-id="dorbye8aan"]')).toHaveCount(1);
+
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Add booking to calendar" }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe("arcanium-seller-pipeline-audit.ics");
+});
