@@ -1,6 +1,7 @@
 // Must match the HttpOnly context cookie issued by the Cloudflare intake Worker.
 export const bookingTokenCookieName = "arc_vendor_audit_ctx";
 export const bookingTokenStorageKey = "arcanium:booking-token";
+export const bookingConfirmationStorageKey = "arcanium:booking-confirmation";
 
 export function normalizeBookingToken(value: string | null | undefined) {
   const token = value?.trim() ?? "";

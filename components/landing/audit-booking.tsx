@@ -3,7 +3,9 @@
 import * as Sentry from "@sentry/nextjs";
 import Cal, { getCalApi, type EmbedEvent } from "@calcom/embed-react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { trackMetaEvent } from "@/lib/meta-pixel";
+import { bookingConfirmationStorageKey } from "@/lib/booking-tracking";
 const trackedBookingStoragePrefix = "arcanium:meta-schedule:";
 
 interface BookingPageContext {
@@ -20,6 +22,7 @@ export function AuditBooking({
   initialFullName = "",
   initialLeadCorrelation = "",
 }: AuditBookingProps) {
+  const router = useRouter();
   const [pageContext, setPageContext] = useState<BookingPageContext | null>(
     null
   );
@@ -43,17 +46,33 @@ export function AuditBooking({
       const trackingKey = `${trackedBookingStoragePrefix}${bookingIdentifier}`;
 
       try {
-        if (window.sessionStorage.getItem(trackingKey)) return;
-        window.sessionStorage.setItem(trackingKey, "1");
+        window.sessionStorage.setItem(
+          bookingConfirmationStorageKey,
+          JSON.stringify({
+            uid: booking.uid,
+            title: booking.title,
+            startTime: booking.startTime,
+            endTime: booking.endTime,
+          })
+        );
+
+        if (!window.sessionStorage.getItem(trackingKey)) {
+          window.sessionStorage.setItem(trackingKey, "1");
+          trackMetaEvent("Schedule", {
+            content_name: "Seller Pipeline Audit",
+            content_category: "Cal.com booking",
+            booking_id: bookingIdentifier,
+          });
+        }
       } catch {
-        // Track without browser-storage deduplication when storage is unavailable.
+        trackMetaEvent("Schedule", {
+          content_name: "Seller Pipeline Audit",
+          content_category: "Cal.com booking",
+          booking_id: bookingIdentifier,
+        });
       }
 
-      trackMetaEvent("Schedule", {
-        content_name: "Seller Pipeline Audit",
-        content_category: "Cal.com booking",
-        booking_id: bookingIdentifier,
-      });
+      router.push("/thank-you-for-booking");
     };
 
     (async function () {
@@ -102,7 +121,7 @@ export function AuditBooking({
         callback: handleBookingSuccessful,
       });
     };
-  }, [initialFullName, initialLeadCorrelation]);
+  }, [initialFullName, initialLeadCorrelation, router]);
 
   return (
     <section id="booking" className="rounded-[20px] border border-white/15 bg-[#f3f2ee] p-4 text-left text-[#101114] shadow-[0_40px_100px_rgba(0,0,0,0.35)] sm:rounded-[24px] sm:p-7 min-[1180px]:rounded-[28px] min-[1180px]:p-8">
