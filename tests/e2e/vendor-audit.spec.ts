@@ -180,3 +180,15 @@ test("the booking thank-you page carries the confirmed appointment into a calend
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe("arcanium-seller-pipeline-audit.ics");
 });
+
+test("the unlinked SMS reminder page keeps the booking path and uses its dedicated video", async ({ page }) => {
+  await page.goto("/audit-reminder");
+
+  await expect(page.getByRole("heading", { name: "The opportunities you miss rarely tell you they’re leaving." })).toBeVisible();
+  await expect(page.locator('wistia-player[media-id="nswzcixdnm"]')).toHaveAttribute("autoplay", "");
+  await expect(page.locator('wistia-player[media-id="nswzcixdnm"]')).toHaveAttribute("silent-autoplay", "allow");
+  await expect(page.locator("#booking")).toBeVisible();
+
+  const sitemap = await page.request.get("/sitemap.xml");
+  expect(await sitemap.text()).not.toContain("/audit-reminder");
+});
