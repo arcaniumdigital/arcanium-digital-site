@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ArrowDown, ArrowRight, Check, Clock3, CalendarCheck, MessageCircle, RefreshCw, Search, Target, Zap, ChartNoAxesCombined, Users, Phone, Mail } from "lucide-react";
 import { MetaTrackedLink } from "@/components/analytics/meta-tracked-link";
+import { PipelineFormCta } from "@/components/landing/pipeline-form-cta";
 
 const assets = "/images/seller-pipeline";
 
@@ -24,6 +25,13 @@ export function LeadComparisonSection() {
           <p className="pipeline-path-end">{path.end}</p>
         </article>)}
       </div>
+      <PipelineFormCta
+        eyebrow="Find the gap"
+        title="See where your current seller follow-up is breaking down."
+        body="We’ll review the path from first enquiry to booked appraisal in a free 10–15 minute audit."
+        buttonLabel="Audit My Seller Pipeline"
+        trackingLabel="Seller Pipeline Audit - lead comparison"
+      />
     </div>
   </section>;
 }
@@ -42,6 +50,14 @@ export function SellerSystemSection() {
       <figure className="pipeline-overview"><Image src={`${assets}/service-overview.png`} alt="Four-step Arcanium service overview: generate homeowner enquiries, qualify intent, book an appraisal and attend. Homeowners who are not ready enter 33-touch nurture." width={1536} height={1024} sizes="(max-width: 1280px) 94vw, 1200px" quality={78} /><figcaption>How the system works. Illustrative workflow.</figcaption></figure>
       <div className="pipeline-stages">{stages.map(({ title, body, Icon }, index) => <article key={title}><div className="pipeline-stage-top"><span>0{index + 1}</span><Icon size={22} aria-hidden="true" /></div><h3>{title}</h3><p>{body}</p></article>)}</div>
       <div className="pipeline-cycle"><RefreshCw size={19} aria-hidden="true" /><span>New enquiries. Better conversations. <strong>Cycle repeats.</strong></span></div>
+      <PipelineFormCta
+        eyebrow="Make it practical"
+        title="Map this against your current process."
+        body="See what is working, what is missing and where seller opportunities may be dropping out."
+        buttonLabel="Show Me My Pipeline Gaps"
+        trackingLabel="Seller Pipeline Audit - system overview"
+        variant="light"
+      />
     </div>
   </section>;
 }
