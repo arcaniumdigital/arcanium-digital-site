@@ -2,10 +2,10 @@ import { HeroVideo } from "@/components/landing/hero-video";
 import { MetaTrackedLink } from "@/components/analytics/meta-tracked-link";
 import { ArrowRight } from "lucide-react";
 
-function HeroSupportingCopy({ className = "" }: { className?: string }) {
+function HeroSupportingCopy({ className = "", mobileCtaFirst = false }: { className?: string; mobileCtaFirst?: boolean }) {
   return (
     <div className={className}>
-      <div className="max-w-[620px]">
+      <div className={`${mobileCtaFirst ? "order-2" : ""} max-w-[620px]`}>
         <h2 className="font-display text-xl font-semibold tracking-[-0.025em] text-[#f5f5f3] sm:text-2xl">
           We generate. We qualify. We book. You show up.
         </h2>
@@ -16,7 +16,7 @@ function HeroSupportingCopy({ className = "" }: { className?: string }) {
       <MetaTrackedLink
         href="#audit"
         trackingLabel="Seller Pipeline Audit - hero"
-        className="group mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:w-auto lg:mt-8"
+        className={`group inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:w-auto ${mobileCtaFirst ? "order-1 mb-7" : "mt-7 lg:mt-8"}`}
       >
         Get My Free Seller Pipeline Audit
         <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
@@ -44,7 +44,7 @@ export function HeroSection() {
         <div className="lg:col-span-5 lg:translate-y-7">
           <HeroVideo />
         </div>
-        <HeroSupportingCopy className="lg:hidden" />
+        <HeroSupportingCopy className="flex flex-col lg:hidden" mobileCtaFirst />
       </div>
     </section>
   );
