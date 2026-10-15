@@ -2,6 +2,29 @@ import { HeroVideo } from "@/components/landing/hero-video";
 import { MetaTrackedLink } from "@/components/analytics/meta-tracked-link";
 import { ArrowRight } from "lucide-react";
 
+function HeroSupportingCopy({ className = "" }: { className?: string }) {
+  return (
+    <div className={className}>
+      <div className="max-w-[620px]">
+        <h2 className="font-display text-xl font-semibold tracking-[-0.025em] text-[#f5f5f3] sm:text-2xl">
+          We generate. We qualify. We book. You show up.
+        </h2>
+        <p className="mt-2 text-base font-bold leading-[1.65] text-[#aaaab2] sm:text-[1.05rem] lg:text-lg">
+          We generate local homeowner enquiries, qualify seller intent and help book appraisals into your calendar. Homeowners who are not ready yet stay in nurture until their timing changes.
+        </p>
+      </div>
+      <MetaTrackedLink
+        href="#audit"
+        trackingLabel="Seller Pipeline Audit - hero"
+        className="group mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:w-auto lg:mt-8"
+      >
+        Get My Free Seller Pipeline Audit
+        <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+      </MetaTrackedLink>
+    </div>
+  );
+}
+
 export function HeroSection() {
   return (
     <section
@@ -16,26 +39,12 @@ export function HeroSection() {
             Done for YOU{" "}
             <span className="text-[#a95cff]">booked APPRAISALS</span>
           </h1>
-          <div className="mt-6 max-w-[620px] lg:mt-7">
-            <h2 className="font-display text-xl font-semibold tracking-[-0.025em] text-[#f5f5f3] sm:text-2xl">
-              We generate. We qualify. We book. You show up.
-            </h2>
-            <p className="mt-2 text-base font-bold leading-[1.65] text-[#aaaab2] sm:text-[1.05rem] lg:text-lg">
-              We generate local homeowner enquiries, qualify seller intent and help book appraisals into your calendar. Homeowners who are not ready yet stay in nurture until their timing changes.
-            </p>
-          </div>
-          <MetaTrackedLink
-            href="#audit"
-            trackingLabel="Seller Pipeline Audit - hero"
-            className="group mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:w-auto lg:mt-8"
-          >
-            Get My Free Seller Pipeline Audit
-            <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
-          </MetaTrackedLink>
+          <HeroSupportingCopy className="mt-7 hidden lg:block" />
         </div>
         <div className="lg:col-span-5 lg:translate-y-7">
           <HeroVideo />
         </div>
+        <HeroSupportingCopy className="lg:hidden" />
       </div>
     </section>
   );
