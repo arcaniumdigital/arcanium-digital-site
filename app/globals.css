@@ -206,6 +206,57 @@ input {
 .pipeline-path-active .pipeline-path-end{color:#d5b3ff;
   font-weight:600}
 
+.pipeline-inline-cta{display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:32px;
+  margin-top:48px;
+  padding:26px 28px;
+  border-radius:20px}
+.pipeline-inline-cta>div{max-width:690px}
+.pipeline-inline-cta-eyebrow{font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:#c092ff}
+.pipeline-inline-cta h3{font-family:var(--font-display);
+  margin-top:8px;
+  font-size:clamp(1.35rem,2.5vw,1.8rem);
+  font-weight:600;
+  line-height:1.18;
+  letter-spacing:-.035em}
+.pipeline-inline-cta>div>p:last-child{margin-top:8px;
+  font-size:14px;
+  line-height:1.65;
+  color:#aaaab2}
+.pipeline-inline-cta-dark{border:1px solid #ffffff18;
+  background:radial-gradient(ellipse at 90% 0%,#9b44ff15,transparent 58%),#111216}
+.pipeline-inline-cta-light{border:1px solid #16132012;
+  background:#fff;
+  box-shadow:0 18px 55px #20123808}
+.pipeline-inline-cta-light .pipeline-inline-cta-eyebrow{color:#7732cb}
+.pipeline-inline-cta-light>div>p:last-child{color:#686572}
+.pipeline-inline-cta-button{display:inline-flex;
+  min-height:54px;
+  flex-shrink:0;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  border-radius:13px;
+  border:1px solid #ffffff18;
+  background:#f4f4f2;
+  padding:14px 20px;
+  color:#0b0c0f;
+  font-size:13px;
+  font-weight:700;
+  transition:transform .2s,background .2s}
+.pipeline-inline-cta-button:hover{transform:translateY(-2px);
+  background:#fff}
+.pipeline-inline-cta-light .pipeline-inline-cta-button{border-color:#11121810;
+  background:#111218;
+  color:#fff}
+.pipeline-inline-cta-light .pipeline-inline-cta-button:hover{background:#7335b7}
+
 .pipeline-overview{padding:28px 22px 14px;
   border-radius:24px;
   border:1px solid #11121810;
@@ -575,6 +626,16 @@ input {
   padding:10px 12px}
 .pipeline-mini-badge{font-size:9px;
   padding:6px 8px}
+.pipeline-inline-cta{display:block;
+  margin-top:30px;
+  padding:22px 20px;
+  border-radius:16px}
+.pipeline-inline-cta h3{font-size:22px}
+.pipeline-inline-cta>div>p:last-child{font-size:13px}
+.pipeline-inline-cta-button{width:100%;
+  margin-top:20px;
+  padding:14px 16px;
+  font-size:12px}
 .pipeline-overview{padding:12px 5px;
   border-radius:14px}
 .pipeline-overview figcaption{font-size:9px;

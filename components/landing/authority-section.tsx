@@ -1,5 +1,6 @@
 import { Quote } from "lucide-react";
 import Image from "next/image";
+import { PipelineFormCta } from "@/components/landing/pipeline-form-cta";
 
 const testimonials = [
   {
@@ -53,6 +54,13 @@ export function AuthoritySection() {
             </article>
           ))}
         </div>
+        <PipelineFormCta
+          eyebrow="Your next step"
+          title="Get a clear view of your seller pipeline."
+          body="In 10–15 minutes, we’ll review your lead generation, follow-up, nurture, booking and tracking."
+          buttonLabel="Get My Free Seller Pipeline Audit"
+          trackingLabel="Seller Pipeline Audit - testimonials"
+        />
       </div>
     </section>
   );
