@@ -9,11 +9,11 @@ import { LeadComparisonSection, SellerSystemSection, SellerPathsSection, SellerP
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Done for YOU booked APPRAISALS",
+  title: "More Seller Enquiries & Booked Appraisals",
   description: siteDescription,
   keywords: ["real estate seller leads", "booked appraisals", "AI appointment setting for real estate agents", "seller pipeline audit"],
   alternates: { canonical: siteUrl },
-  openGraph: { title: "Done for YOU booked APPRAISALS", description: siteDescription, url: siteUrl, siteName, type: "website" },
+  openGraph: { title: "More Seller Enquiries & Booked Appraisals", description: siteDescription, url: siteUrl, siteName, type: "website" },
 };
 
 const structuredData = [

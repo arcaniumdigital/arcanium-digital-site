@@ -31,8 +31,7 @@ export function AuthoritySection() {
     <section id="testimonials" className="relative overflow-hidden bg-[#08090c] px-4 py-[88px] text-[#f5f5f3] [content-visibility:auto] [contain-intrinsic-size:auto_1100px] sm:px-6 md:px-8 lg:px-12 lg:py-40">
       <div className="pointer-events-none absolute -right-56 top-0 size-[600px] rounded-full bg-[#8f33ff]/6 blur-[160px]" />
       <div className="relative mx-auto max-w-[1280px]">
-        <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#aaaab2]"><span className="size-1.5 rounded-full bg-[#8f33ff]" />Trusted by local agents</p>
-        <h2 className="mb-12 mt-5 font-display text-[clamp(2.125rem,9.5vw,2.5rem)] font-semibold leading-[1] tracking-[-0.04em] lg:mb-16 lg:text-[clamp(3rem,4vw,3.75rem)]">Your Success Is Personal.</h2>
+        <h2 className="mb-12 font-display text-[clamp(2.125rem,9.5vw,2.5rem)] font-semibold leading-[1] tracking-[-0.04em] lg:mb-16 lg:text-[clamp(3rem,4vw,3.75rem)]">Your Success Is Personal.</h2>
 
         <div className="grid gap-4 lg:grid-cols-12 lg:gap-6">
           {testimonials.map((testimonial, index) => (
@@ -55,10 +54,8 @@ export function AuthoritySection() {
           ))}
         </div>
         <PipelineFormCta
-          eyebrow="Your next step"
-          title="Get a clear view of your seller pipeline."
-          body="In 10–15 minutes, we’ll review your lead generation, follow-up, nurture, booking and tracking."
-          buttonLabel="Get My Free Seller Pipeline Audit"
+          title="Get the five-step plan and a review tailored to your business."
+          buttonLabel="Get My Free Growth Plan & Review"
           trackingLabel="Seller Pipeline Audit - testimonials"
         />
       </div>

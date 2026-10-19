@@ -120,6 +120,7 @@ input {
   letter-spacing:-.045em;
   font-weight:600;
   margin-top:20px}
+.pipeline-heading h2:first-child{margin-top:0}
 .pipeline-heading>p:last-child{max-width:650px;
   margin-top:22px;
   font-size:17px;
@@ -264,6 +265,8 @@ input {
   box-shadow:0 20px 60px #20123808}
 .pipeline-overview img{width:100%;
   height:auto}
+.pipeline-overview-full{padding:0;
+  overflow:hidden}
 .pipeline-overview figcaption{font-size:11px;
   text-align:center;
   color:#74717b;

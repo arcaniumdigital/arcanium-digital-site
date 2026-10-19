@@ -41,11 +41,11 @@ export function BookingThankYou() {
   function addToCalendar() {
     if (!booking?.startTime || !booking.endTime) return;
 
-    const title = booking.title || "Seller Pipeline Audit with Arcanium Digital";
+    const title = booking.title || "Personalised Strategy Review with Arcanium Digital";
     const calendar = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
-      "PRODID:-//Arcanium Digital//Seller Pipeline Audit//EN",
+      "PRODID:-//Arcanium Digital//Personalised Strategy Review//EN",
       "CALSCALE:GREGORIAN",
       "METHOD:PUBLISH",
       "BEGIN:VEVENT",
@@ -54,7 +54,7 @@ export function BookingThankYou() {
       `DTSTART:${calendarTimestamp(booking.startTime)}`,
       `DTEND:${calendarTimestamp(booking.endTime)}`,
       `SUMMARY:${escapeCalendarText(title)}`,
-      `DESCRIPTION:${escapeCalendarText("Your Seller Pipeline Audit with Arcanium Digital. Your Cal.com confirmation email contains the meeting details and rescheduling link.")}`,
+      `DESCRIPTION:${escapeCalendarText("Your personalised strategy review with Arcanium Digital. Your Cal.com confirmation email contains the meeting details and rescheduling link.")}`,
       "END:VEVENT",
       "END:VCALENDAR",
     ].join("\r\n");
@@ -62,7 +62,7 @@ export function BookingThankYou() {
     const url = URL.createObjectURL(new Blob([calendar], { type: "text/calendar;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;
-    link.download = "arcanium-seller-pipeline-audit.ics";
+    link.download = "arcanium-personalised-strategy-review.ics";
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -75,12 +75,12 @@ export function BookingThankYou() {
       <div className="relative mx-auto max-w-[1050px]">
         <div className="mx-auto max-w-[760px] text-center">
           <CheckCircle2 className="mx-auto size-12 text-[#a95cff]" aria-hidden="true" />
-          <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-[#bca7d8]">Your audit is booked</p>
+          <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-[#bca7d8]">Your review is booked</p>
           <h1 className="mt-4 font-display text-[clamp(2.7rem,8vw,5rem)] font-semibold leading-[0.96] tracking-[-0.05em]">
             You’re all set.
           </h1>
           <p className="mx-auto mt-6 max-w-[650px] text-base leading-relaxed text-[#aaaab2] sm:text-lg">
-            Your Seller Pipeline Audit is confirmed. Check your inbox for the Cal.com confirmation and watch this short video before our call.
+            Your personalised strategy review is confirmed. Check your inbox for the Cal.com confirmation and watch this short video before our call.
           </p>
 
           {hasCalendarEvent && (

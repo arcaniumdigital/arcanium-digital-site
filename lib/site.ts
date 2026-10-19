@@ -7,4 +7,4 @@ export const siteUrl =
 export const siteName = "Arcanium Digital";
 
 export const siteDescription =
-  "Arcanium Digital helps real estate agents generate homeowner enquiries, qualify seller intent, book appraisals and nurture future sellers.";
+  "Get Arcanium Digital’s free Seller Appraisal Growth Plan and a personalised review for generating, nurturing and converting more seller enquiries.";

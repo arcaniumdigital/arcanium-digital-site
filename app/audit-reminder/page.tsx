@@ -6,8 +6,8 @@ import { bookingTokenCookieName } from "@/lib/booking-tracking";
 import { resolveBookingContext } from "@/lib/funnel-context";
 
 export const metadata: Metadata = {
-  title: "Your Seller Pipeline Audit Is Still Available",
-  description: "Choose a time for your free Seller Pipeline Audit with Arcanium Digital.",
+  title: "Your Personalised Strategy Review Is Still Available",
+  description: "Choose a time for your free personalised strategy review with Arcanium Digital.",
   robots: { index: false, follow: false },
 };
 
@@ -21,10 +21,10 @@ function OpportunityCostCopy({ className }: { className: string }) {
         Seller enquiries lose momentum quickly. Old leads, slow responses and inconsistent nurture can quietly turn potential appraisals into missed opportunities.
       </p>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        In a <strong>free 10–15 minute phone audit</strong>, we’ll identify where opportunities may be falling out of your pipeline and what your next step should be.
+        In a <strong>free 10–15 minute personalised review</strong>, we’ll identify where opportunities may be falling out of your pipeline and what your next step should be.
       </p>
       <p className="mt-4 text-[16px] font-semibold leading-[1.65] text-[#f5f5f3] sm:text-lg">
-        Your audit is still available. Choose a time while this is front of mind.
+        Your review is still available. Choose a time while this is front of mind.
       </p>
     </div>
   );
@@ -64,6 +64,7 @@ export default async function AuditReminderPage() {
         <div className="order-3 min-w-0 max-sm:-mx-2 min-[1180px]:order-none min-[1180px]:col-span-5">
           <AuditBooking
             initialFullName={bookingContext?.fullName}
+            initialPhone={bookingContext?.phoneE164}
             initialLeadCorrelation={bookingContext?.signedLeadCorrelation}
           />
         </div>

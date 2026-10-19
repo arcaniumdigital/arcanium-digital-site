@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { VendorAuditForm } from "./vendor-audit-form";
 
@@ -28,16 +29,28 @@ export function CtaSection() {
               <div className="pointer-events-none absolute -left-24 -top-24 size-64 rounded-full bg-[#8f33ff]/10 blur-3xl" />
               <div className="relative">
                 <h2 className="max-w-[620px] font-display text-[clamp(2rem,8.8vw,2.25rem)] font-semibold leading-[1] tracking-[-0.04em] text-[#101114] lg:text-[clamp(2.625rem,4vw,3.25rem)]">
-                  Where Are Seller Opportunities Slipping Through?
+                  Get Your Seller Appraisal Growth Plan
                 </h2>
                 <p className="mt-5 max-w-lg text-base font-medium leading-[1.65] text-[#64656b] lg:text-lg">
-                  In a free 10–15 minute phone audit, we’ll review the journey from enquiry to appraisal and identify the biggest gaps in your seller pipeline.
+                  Get the five-step blueprint, then book a free 10–15 minute review to identify the best next steps for your business.
                 </p>
+                <div className="mt-7 overflow-hidden rounded-[16px] border border-black/10 bg-white shadow-[0_18px_45px_rgba(23,18,27,0.12)]">
+                  <Image
+                    src="/images/seller-pipeline/seller-appraisal-growth-plan.png"
+                    alt="Your Seller Appraisal Growth Plan, an eight-page guide covering Meta campaigns, AI response, seller nurture, appraisal booking and pipeline management."
+                    width={1536}
+                    height={1024}
+                    sizes="(max-width: 1024px) 92vw, 470px"
+                    quality={78}
+                    className="h-auto w-full"
+                    priority
+                  />
+                </div>
               </div>
             </div>
             <div className="bg-white/55 px-1 py-2 sm:px-4 sm:py-5 lg:grid lg:content-center lg:px-8 lg:py-10">
               <div className="px-5 pt-5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#7b25e8] sm:px-8 sm:pt-6">
-                Your Free Seller Pipeline Audit
+                Free Growth Plan + Personalised Review
               </div>
               <VendorAuditForm />
             </div>

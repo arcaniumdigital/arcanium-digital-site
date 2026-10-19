@@ -19,7 +19,7 @@ export function AuditVideo() {
     >
       <iframe
         src={`https://fast.wistia.net/embed/iframe/${mediaId}?seo=true&videoFoam=true&playerColor=8f33ff&autoPlay=true&silentAutoPlay=allow&muted=false&volume=1&playsinline=true`}
-        title="Arcanium Seller Pipeline Audit"
+        title="Arcanium Seller Appraisal Growth Plan Review"
         allow="autoplay; fullscreen"
         allowFullScreen
         loading="eager"

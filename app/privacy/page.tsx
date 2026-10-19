@@ -26,8 +26,8 @@ export default function PrivacyPage() {
         <section className={sectionClassName}>
           <h2 className={headingClassName}>Website and enquiry information</h2>
           <p className={paragraphClassName}>
-            When you request a Vendor Lead Opportunity Snapshot or contact us, we use the details you provide to respond,
-            arrange the audit, operate reminders you have consented to receive, maintain our customer records,
+            When you request a Seller Appraisal Growth Plan or contact us, we use the details you provide to respond,
+            arrange your personalised strategy review, operate reminders you have consented to receive, maintain our customer records,
             prevent abuse, and measure the funnel&apos;s reliability.
           </p>
           <p className={paragraphClassName}>
