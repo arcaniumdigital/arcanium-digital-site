@@ -14,8 +14,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/brochure",
-        destination:
-          "https://drive.google.com/file/d/1QUNs7vVdi42qfHBJJcXJ9Hoty6fwGN9f/view?usp=sharing",
+        destination: "/seller-appraisal-growth-plan.pdf",
         permanent: false,
       },
     ];

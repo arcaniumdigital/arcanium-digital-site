@@ -10,14 +10,13 @@ describe("approved SMS templates", () => {
   });
   it("renders the approved immediate message", () => {
     const body = renderMessage("PREBOOK_INSTANT_V3", { first_name: "Alex", booking_link: "https://arcaniumdigital.com/vendor-lead-opportunity", operator_name: "Sam", business_name: "Arcanium Digital" });
-    expect(body).toBe("Hi Alex, thanks for requesting your Vendor Lead Opportunity Snapshot. Choose a time to review it: https://arcaniumdigital.com/vendor-lead-opportunity. Questions? Reply here. Sam, Arcanium Digital.");
+    expect(body).toBe("Hi Alex, your Seller Appraisal Growth Plan is ready: https://arcaniumdigital.com/vendor-lead-opportunity. You can also choose a time for your free personalised review there. Questions? Reply here. Sam, Arcanium Digital.");
   });
-  it("renders the approved ten-minute follow-up without a booking link", () => {
+  it("renders the approved ten-minute follow-up with a booking link", () => {
     const body = renderMessage("PREBOOK_10M_V3", { first_name: "Alex", booking_link: "https://arcaniumdigital.com/vendor-lead-opportunity", operator_name: "Sam", business_name: "Arcanium Digital" });
-    expect(body).toBe("Hi Alex, still choosing a time? Pick a slot that suits you. We can discuss the local vendor searches worth targeting. Questions? Reply here. Sam, Arcanium Digital.");
-    expect(body).not.toContain("https://");
+    expect(body).toBe("Hi Alex, still choosing a time for your personalised review? Pick a slot that suits you: https://arcaniumdigital.com/vendor-lead-opportunity. Questions? Reply here. Sam, Arcanium Digital.");
   });
-  it("records the copy revision", () => expect(TEMPLATE_VERSION).toBe("3.2.0"));
+  it("records the copy revision", () => expect(TEMPLATE_VERSION).toBe("3.3.0"));
   it("keeps nurture copy free of em dashes and opt-out sentences", () => {
     const values = { first_name: "Alex", booking_link: "https://arcaniumdigital.com/vendor-lead-opportunity", operator_name: "Sam", business_name: "Arcanium Digital", appointment_date: "10 October", appointment_time: "10:00", timezone: "AEST", brochure_link: "https://arcaniumdigital.com/brochure", reschedule_link: "https://cal.com/reschedule" };
     for (const type of ["PREBOOK_INSTANT_V3", "PREBOOK_10M_V3", "PREBOOK_24H_V3", "PREBOOK_7D_V3", "BOOKING_CONFIRMED_V3", "BOOKING_REMINDER_24H_V3", "BOOKING_REMINDER_3H_V3", "BOOKING_REMINDER_EARLY_V3"] as const) {

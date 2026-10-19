@@ -39,22 +39,23 @@ test("durable acceptance navigates directly to the clean opportunity page", asyn
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
-  await expect(page.getByText("By continuing, you agree to receive SMS about your Seller Pipeline Audit and related Arcanium Digital services. You can opt out at any time.")).toBeVisible();
-  const button = page.getByRole("button", { name: "Get My Free Seller Pipeline Audit" });
-  await expect(button).toHaveText("Get My Free Seller Pipeline Audit");
+  await expect(page.getByText("By continuing, you agree to receive SMS about your Seller Appraisal Growth Plan, personalised review and related Arcanium Digital services. You can opt out at any time.")).toBeVisible();
+  const button = page.getByRole("button", { name: "Get My Free Growth Plan & Review" });
+  await expect(button).toHaveText("Get My Free Growth Plan & Review");
   const navigationCommitted = page.waitForEvent("framenavigated", (frame) => frame === page.mainFrame() && frame.url() === "http://127.0.0.1:3000/vendor-lead-opportunity");
   await button.click({ noWaitAfter: true });
   await navigationCommitted;
   expect(page.url()).toBe("http://127.0.0.1:3000/vendor-lead-opportunity");
   expect(submittedPayload).not.toHaveProperty("primarySuburb");
   expect(submittedPayload?.funnelDestination).toBe("vendor-lead-opportunity");
-  await expect(page.getByRole("heading", { name: "Your Seller Pipeline Audit" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Book your free audit" })).toBeVisible();
-  await expect(page.getByText("choose a time for your 10–15 minute Seller Pipeline Audit.", { exact: false })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Your Seller Appraisal Growth Plan" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Book your personalised review" })).toBeVisible();
+  await expect(page.getByText("choose a time for your free 10–15 minute review.", { exact: false })).toBeVisible();
   await expect(page.getByText("Select a time below.", { exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Find the gaps in your seller pipeline." })).toBeVisible();
-  await expect(page.getByText("Book a free 10–15 minute phone audit to review how seller enquiries move from first response to booked appraisal.", { exact: true })).toBeVisible();
-  await expect(page.getByText("No preparation. No obligation. Just a clear next step.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Your plan is ready. Now make it practical." })).toBeVisible();
+  await expect(page.getByText("Open the five-step plan, then choose a time for a free 10–15 minute personalised review.", { exact: true })).toBeVisible();
+  await expect(page.getByText("No preparation. No obligation.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "View My Growth Plan (PDF)" })).toHaveAttribute("href", "/seller-appraisal-growth-plan.pdf");
 });
 
 test("the mobile opportunity page places the original video above the booking calendar", async ({ page }) => {
@@ -64,7 +65,7 @@ test("the mobile opportunity page places the original video above the booking ca
   const booking = page.locator("#booking");
   const video = page.getByTestId("audit-video-card");
   const calendarFrame = page.getByTestId("audit-calendar-frame");
-  const visibilityCopy = page.getByRole("heading", { name: "Find the gaps in your seller pipeline." });
+  const visibilityCopy = page.getByRole("heading", { name: "Your plan is ready. Now make it practical." });
 
   await expect(booking).toBeVisible();
   await expect(video).toBeVisible();
@@ -90,7 +91,7 @@ test("a failed acceptance preserves fields and shows one honest error", async ({
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
-  await page.getByRole("button", { name: "Get My Free Seller Pipeline Audit" }).click();
+  await page.getByRole("button", { name: "Get My Free Growth Plan & Review" }).click();
   await expect(page.getByText("We could not submit your details. Please check your connection and try again.")).toBeVisible();
   await expect(page.getByLabel("Full name")).toHaveValue("Alex Agent");
   await expect(page.getByLabel("Best mobile number")).toHaveValue("0412 345 678");
@@ -104,13 +105,13 @@ test("seller pipeline copy and controls remain composed across breakpoints", asy
     await page.setViewportSize(viewport);
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
-    const opportunityLinks = page.getByRole("link", { name: "Get My Free Seller Pipeline Audit" });
-    await expect(opportunityLinks).toHaveCount(4);
-    await expect(page.getByText(/In a free 10–15 minute phone audit/)).toBeVisible();
+    const opportunityLinks = page.getByRole("link", { name: "Get My Free Growth Plan & Review" });
+    await expect(opportunityLinks).toHaveCount(7);
+    await expect(page.getByText(/free 10–15 minute review/).first()).toBeVisible();
     await expect(page.getByText("On the next step, choose a short call so we can confirm your market before preparing your visibility report.")).toHaveCount(0);
-    await expect(page.getByText("Your Free Seller Pipeline Audit", { exact: true })).toBeVisible();
+    await expect(page.getByText("Free Growth Plan + Personalised Review", { exact: true })).toBeVisible();
     await expect(page.getByLabel("Primary Suburb")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Get My Free Seller Pipeline Audit" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Get My Free Growth Plan & Review" })).toBeVisible();
 
     const headerButtonHeight = await opportunityLinks.first().evaluate((element) => element.getBoundingClientRect().height);
     const heroButtonHeight = await opportunityLinks.nth(1).evaluate((element) => element.getBoundingClientRect().height);
@@ -136,14 +137,21 @@ test("the former audit URL redirects to the new destination", async ({ page }) =
   await expect(page).toHaveURL(/\/vendor-lead-opportunity$/);
 });
 
-test("the original funnel media remain in place", async ({ page }) => {
+test("the eight-page growth plan is available from the booking funnel", async ({ page }) => {
+  const response = await page.request.get("/seller-appraisal-growth-plan.pdf");
+  expect(response.ok()).toBe(true);
+  expect(response.headers()["content-type"]).toContain("application/pdf");
+  expect((await response.body()).byteLength).toBeGreaterThan(1_000_000);
+});
+
+test("the updated funnel media remain in place", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Done for YOU booked APPRAISALS");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("More Seller Enquiries. More Booked Appraisals. Less Prospecting.");
   const heroPlayer = page.locator('wistia-player[media-id="rdnom0qfs9"]');
   await expect(heroPlayer).toHaveAttribute("autoplay", "");
   await expect(heroPlayer).toHaveAttribute("silent-autoplay", "allow");
   await expect(page.locator('img[src*="vendor-audit-poster"]')).toHaveCount(0);
-  for (const image of ["service-overview", "ai-conversation", "future-seller", "meta-dashboard", "client-result", "kael-sharp"]) {
+  for (const image of ["seller-appraisal-growth-plan", "seller-pipeline-process", "ai-conversation", "future-seller", "meta-dashboard", "kael-sharp"]) {
     const asset = page.locator(`img[src*="${image}"]`);
     await expect(asset).toHaveCount(1);
     await asset.scrollIntoViewIfNeeded();
@@ -178,7 +186,7 @@ test("the booking thank-you page carries the confirmed appointment into a calend
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "Add booking to calendar" }).click();
   const download = await downloadPromise;
-  expect(download.suggestedFilename()).toBe("arcanium-seller-pipeline-audit.ics");
+  expect(download.suggestedFilename()).toBe("arcanium-personalised-strategy-review.ics");
 });
 
 test("the unlinked SMS reminder page keeps the booking path and uses its dedicated video", async ({ page }) => {

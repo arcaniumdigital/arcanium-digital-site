@@ -7,20 +7,25 @@ function HeroSupportingCopy({ className = "", mobileCtaFirst = false }: { classN
     <div className={className}>
       <div className={`${mobileCtaFirst ? "order-2" : ""} max-w-[620px]`}>
         <h2 className="font-display text-xl font-semibold tracking-[-0.025em] text-[#f5f5f3] sm:text-2xl">
-          We generate. We qualify. We book. You show up.
+          Your free plan. Personalised to your business.
         </h2>
         <p className="mt-2 text-base font-bold leading-[1.65] text-[#aaaab2] sm:text-[1.05rem] lg:text-lg">
-          We generate local homeowner enquiries, qualify seller intent and help book appraisals into your calendar. Homeowners who are not ready yet stay in nurture until their timing changes.
+          Get the five-step plan to generate, follow up and convert more seller enquiries, then see how to apply it to your business.
         </p>
       </div>
-      <MetaTrackedLink
-        href="#audit"
-        trackingLabel="Seller Pipeline Audit - hero"
-        className={`group inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:w-auto ${mobileCtaFirst ? "order-1 mb-7" : "mt-7 lg:mt-8"}`}
-      >
-        Get My Free Seller Pipeline Audit
-        <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
-      </MetaTrackedLink>
+      <div className={`${mobileCtaFirst ? "order-1 mb-7" : "mt-7 lg:mt-8"}`}>
+        <MetaTrackedLink
+          href="#audit"
+          trackingLabel="Seller Pipeline Audit - hero"
+          className="group inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:w-auto"
+        >
+          Get My Free Growth Plan &amp; Review
+          <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+        </MetaTrackedLink>
+        <p className="mt-3 text-center text-xs leading-5 text-[#85858e] sm:text-left">
+          Free 8-page PDF + 10–15 minute personalised strategy review. No obligation.
+        </p>
+      </div>
     </div>
   );
 }
@@ -34,10 +39,8 @@ export function HeroSection() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#08090c]" />
       <div className="relative mx-auto grid w-full max-w-[1280px] gap-10 lg:grid-cols-12 lg:items-center lg:gap-8">
         <div className="lg:col-span-7">
-          <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#bca7d8]">For real estate agents ready to grow</p>
           <h1 className="max-w-[850px] font-display text-[clamp(2.625rem,11vw,3.125rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-[#f5f5f3] lg:text-[clamp(4rem,6.4vw,6rem)] lg:leading-[0.96]">
-            Done for YOU{" "}
-            <span className="text-[#a95cff]">booked APPRAISALS</span>
+            More Seller Enquiries. More Booked Appraisals. <span className="text-[#a95cff]">Less Prospecting.</span>
           </h1>
           <HeroSupportingCopy className="mt-7 hidden lg:block" />
         </div>
