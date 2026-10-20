@@ -119,6 +119,23 @@ test("seller pipeline copy and controls remain composed across breakpoints", asy
     expect(headerButtonHeight).toBeLessThanOrEqual(46);
     expect(heroButtonHeight).toBeLessThanOrEqual(58);
     expect(finalButtonHeight).toBeLessThanOrEqual(58);
+
+    const foundersImage = page.getByRole("img", { name: "Arcanium Digital founders Jordan and Ollie" });
+    if (viewport.width === 320) {
+      const formBottom = await page.locator("#audit form").evaluate((element) => element.getBoundingClientRect().bottom);
+      const guideCopyTop = await page.getByText("Get the five-step blueprint, then book a free 10–15 minute strategy call to identify the best next steps for your business.", { exact: true }).evaluate((element) => element.getBoundingClientRect().top);
+      const guideImageTop = await page.getByRole("img", { name: /Your Seller Appraisal Growth Plan/ }).evaluate((element) => element.getBoundingClientRect().top);
+      expect(guideCopyTop).toBeGreaterThan(formBottom);
+      expect(guideImageTop).toBeGreaterThan(guideCopyTop);
+      await expect(foundersImage).toBeVisible();
+      const foundersRatio = await foundersImage.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.width / rect.height;
+      });
+      expect(foundersRatio).toBeCloseTo(1206 / 661, 1);
+    } else {
+      await expect(foundersImage).toBeHidden();
+    }
   }
 });
 
