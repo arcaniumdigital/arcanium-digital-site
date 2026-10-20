@@ -571,6 +571,7 @@ input {
   inset:0;
   background:linear-gradient(0deg,#090a0ddd 0%,transparent 52%);
   pointer-events:none}
+.founders-note-mobile-image{display:none}
 .founders-note-content{position:relative;
   z-index:1;
   width:min(690px,64%);
@@ -681,10 +682,15 @@ input {
   gap:12px}
 .pipeline-audit-panel-top{padding:18px;
   font-size:10px}
-.founders-note{min-height:720px;
-  background-image:linear-gradient(0deg,#090a0dfc 0%,#090a0de8 58%,#090a0d42 100%),url('/images/seller-pipeline/founders-jordan-ollie.jpg');
-  background-position:58% center;
+.founders-note{display:block;
+  min-height:0;
+  background-image:none;
   border-radius:20px}
+.founders-note::after{display:none}
+.founders-note-mobile-image{display:block;
+  width:100%;
+  height:auto;
+  border-bottom:1px solid #ffffff17}
 .founders-note-content{width:100%;
   padding:34px 25px}
 .founders-note h2{font-size:36px}

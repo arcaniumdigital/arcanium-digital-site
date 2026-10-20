@@ -1,8 +1,19 @@
+import Image from "next/image";
+
 export function FoundersNoteSection() {
   return (
     <section id="founders" className="pipeline-section pipeline-dark">
       <div className="pipeline-container">
         <article className="founders-note">
+          <Image
+            src="/images/seller-pipeline/founders-jordan-ollie.jpg"
+            alt="Arcanium Digital founders Jordan and Ollie"
+            width={1206}
+            height={661}
+            sizes="(max-width: 640px) calc(100vw - 40px), 1px"
+            quality={78}
+            className="founders-note-mobile-image"
+          />
           <div className="founders-note-content">
             <h2>A Note From the Founders — Jordan &amp; Ollie</h2>
             <p>
