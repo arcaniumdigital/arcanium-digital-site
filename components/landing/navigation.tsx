@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { MetaTrackedLink } from "@/components/analytics/meta-tracked-link";
+import { FunnelProgress } from "./funnel-progress";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -46,6 +47,7 @@ export function Navigation() {
           <ArrowRight className="ml-1.5 size-3.5 transition-transform duration-300 group-hover:translate-x-0.5 lg:size-4" aria-hidden="true" />
         </MetaTrackedLink>
       </nav>
+      <FunnelProgress />
     </header>
   );
 }
