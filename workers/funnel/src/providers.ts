@@ -156,7 +156,7 @@ export async function syncBrevoLead(env: Cloudflare.Env, lead: LeadRow): Promise
         FNAME: lead.first_name,
         SMS: lead.phone_e164,
         D1_LEAD_ID: lead.public_id,
-        LEAD_SOURCE: "Seller Appraisal Growth Plan + Personalised Review",
+        LEAD_SOURCE: "Seller Appraisal Growth Plan + Strategy Call",
         SOURCE_PAGE: lead.source_page,
         UTM_SOURCE: lead.utm_source ?? undefined,
         UTM_MEDIUM: lead.utm_medium ?? undefined,

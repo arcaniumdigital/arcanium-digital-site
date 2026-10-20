@@ -14,14 +14,14 @@ The active template keys and current copy are:
 
 | Key | Current script |
 | --- | --- |
-| `PREBOOK_INSTANT_V3` | Hi `{{first_name}}`, your Seller Appraisal Growth Plan is ready: `{{booking_link}}`. You can also choose a time for your free personalised review there. Questions? Reply here. `{{operator_name}}`, `{{business_name}}`. |
-| `PREBOOK_10M_V3` | Hi `{{first_name}}`, still choosing a time for your personalised review? Pick a slot that suits you: `{{booking_link}}`. Questions? Reply here. `{{operator_name}}`, `{{business_name}}`. |
+| `PREBOOK_INSTANT_V3` | Hi `{{first_name}}`, your Seller Appraisal Growth Plan is ready: `{{booking_link}}`. You can also choose a time for your free strategy call there. Questions? Reply here. `{{operator_name}}`, `{{business_name}}`. |
+| `PREBOOK_10M_V3` | Hi `{{first_name}}`, still choosing a time for your strategy call? Pick a slot that suits you: `{{booking_link}}`. Questions? Reply here. `{{operator_name}}`, `{{business_name}}`. |
 | `PREBOOK_24H_V3` | Hi `{{first_name}}`, your Growth Plan covers seller enquiries, fast follow-up, nurture and booked appraisals. Choose a time to apply it to your business: `{{booking_link}}`. `{{operator_name}}`, `{{business_name}}`. |
-| `PREBOOK_7D_V3` | Hi `{{first_name}}`, I'll close this out for now. Your Seller Appraisal Growth Plan and personalised review are still available here: `{{booking_link}}`. `{{operator_name}}`, `{{business_name}}`. |
-| `BOOKING_CONFIRMED_V3` | Hi `{{first_name}}`, your personalised strategy review with `{{business_name}}` is booked for `{{appointment_date}}` at `{{appointment_time}}` `{{timezone}}`. Read your Growth Plan before we speak: `{{brochure_link}}`. `{{operator_name}}` |
-| `BOOKING_REMINDER_24H_V3` | Hi `{{first_name}}`, reminder: I'll call you tomorrow at `{{appointment_time}}` `{{timezone}}` for your personalised strategy review. Need to reschedule? `{{reschedule_link}}`. `{{operator_name}}`, `{{business_name}}`. |
-| `BOOKING_REMINDER_3H_V3` | Reminder: your personalised strategy review starts in 3 hours at `{{appointment_time}}` `{{timezone}}`. `{{operator_name}}`, `{{business_name}}`. |
-| `BOOKING_REMINDER_EARLY_V3` | Reminder: your personalised strategy review is tomorrow at `{{appointment_time}}` `{{timezone}}`. `{{operator_name}}`, `{{business_name}}`. |
+| `PREBOOK_7D_V3` | Hi `{{first_name}}`, I'll close this out for now. Your Seller Appraisal Growth Plan and strategy call are still available here: `{{booking_link}}`. `{{operator_name}}`, `{{business_name}}`. |
+| `BOOKING_CONFIRMED_V3` | Hi `{{first_name}}`, your strategy call with `{{business_name}}` is booked for `{{appointment_date}}` at `{{appointment_time}}` `{{timezone}}`. Read your Growth Plan before we speak: `{{brochure_link}}`. `{{operator_name}}` |
+| `BOOKING_REMINDER_24H_V3` | Hi `{{first_name}}`, reminder: I'll call you tomorrow at `{{appointment_time}}` `{{timezone}}` for your strategy call. Need to reschedule? `{{reschedule_link}}`. `{{operator_name}}`, `{{business_name}}`. |
+| `BOOKING_REMINDER_3H_V3` | Reminder: your strategy call starts in 3 hours at `{{appointment_time}}` `{{timezone}}`. `{{operator_name}}`, `{{business_name}}`. |
+| `BOOKING_REMINDER_EARLY_V3` | Reminder: your strategy call is tomorrow at `{{appointment_time}}` `{{timezone}}`. `{{operator_name}}`, `{{business_name}}`. |
 
 Keep the placeholder names unchanged. The copy contains no em dash or opt-out sentence. Inbound STOP messages still suppress the contact and cancel the remaining journey. The Worker also rejects messages over the configured SMS-part cap, suppressed contacts, replies, booked leads, missing consent, stale booking revisions, quiet-hour sends, and duplicate provider sends.
 

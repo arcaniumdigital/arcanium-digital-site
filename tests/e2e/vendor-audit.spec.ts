@@ -39,9 +39,9 @@ test("durable acceptance navigates directly to the clean opportunity page", asyn
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
-  await expect(page.getByText("By continuing, you agree to receive SMS about your Seller Appraisal Growth Plan, personalised review and related Arcanium Digital services. You can opt out at any time.")).toBeVisible();
-  const button = page.getByRole("button", { name: "Get My Free Growth Plan & Review" });
-  await expect(button).toHaveText("Get My Free Growth Plan & Review");
+  await expect(page.getByText("By continuing, you agree to receive SMS about your Seller Appraisal Growth Plan, strategy call and related Arcanium Digital services. You can opt out at any time.")).toBeVisible();
+  const button = page.getByRole("button", { name: "Free Growth Plan + Strategy Call" });
+  await expect(button).toHaveText("Free Growth Plan + Strategy Call");
   const navigationCommitted = page.waitForEvent("framenavigated", (frame) => frame === page.mainFrame() && frame.url() === "http://127.0.0.1:3000/vendor-lead-opportunity");
   await button.click({ noWaitAfter: true });
   await navigationCommitted;
@@ -49,11 +49,11 @@ test("durable acceptance navigates directly to the clean opportunity page", asyn
   expect(submittedPayload).not.toHaveProperty("primarySuburb");
   expect(submittedPayload?.funnelDestination).toBe("vendor-lead-opportunity");
   await expect(page.getByRole("heading", { name: "Your Seller Appraisal Growth Plan" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Book your personalised review" })).toBeVisible();
-  await expect(page.getByText("choose a time for your free 10–15 minute review.", { exact: false })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Book your strategy call" })).toBeVisible();
+  await expect(page.getByText("choose a time for your free 10–15 minute strategy call.", { exact: false })).toBeVisible();
   await expect(page.getByText("Select a time below.", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Your plan is ready. Now make it practical." })).toBeVisible();
-  await expect(page.getByText("Open the five-step plan, then choose a time for a free 10–15 minute personalised review.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Open the five-step plan, then choose a time for a free 10–15 minute strategy call.", { exact: true })).toBeVisible();
   await expect(page.getByText("No preparation. No obligation.", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "View My Growth Plan (PDF)" })).toHaveAttribute("href", "/seller-appraisal-growth-plan.pdf");
 });
@@ -91,7 +91,7 @@ test("a failed acceptance preserves fields and shows one honest error", async ({
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
-  await page.getByRole("button", { name: "Get My Free Growth Plan & Review" }).click();
+  await page.getByRole("button", { name: "Free Growth Plan + Strategy Call" }).click();
   await expect(page.getByText("We could not submit your details. Please check your connection and try again.")).toBeVisible();
   await expect(page.getByLabel("Full name")).toHaveValue("Alex Agent");
   await expect(page.getByLabel("Best mobile number")).toHaveValue("0412 345 678");
@@ -105,13 +105,13 @@ test("seller pipeline copy and controls remain composed across breakpoints", asy
     await page.setViewportSize(viewport);
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
-    const opportunityLinks = page.getByRole("link", { name: "Get My Free Growth Plan & Review" });
+    const opportunityLinks = page.getByRole("link", { name: "Free Growth Plan + Strategy Call" });
     await expect(opportunityLinks).toHaveCount(7);
-    await expect(page.getByText(/free 10–15 minute review/).first()).toBeVisible();
+    await expect(page.getByText(/free 10–15 minute strategy call/).first()).toBeVisible();
     await expect(page.getByText("On the next step, choose a short call so we can confirm your market before preparing your visibility report.")).toHaveCount(0);
-    await expect(page.getByText("Free Growth Plan + Personalised Review", { exact: true })).toBeVisible();
+    await expect(page.getByText("Free Growth Plan + Strategy Call", { exact: true }).first()).toBeVisible();
     await expect(page.getByLabel("Primary Suburb")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Get My Free Growth Plan & Review" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Free Growth Plan + Strategy Call" })).toBeVisible();
 
     const headerButtonHeight = await opportunityLinks.first().evaluate((element) => element.getBoundingClientRect().height);
     const heroButtonHeight = await opportunityLinks.nth(1).evaluate((element) => element.getBoundingClientRect().height);
@@ -146,7 +146,10 @@ test("the eight-page growth plan is available from the booking funnel", async ({
 
 test("the updated funnel media remain in place", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("More Seller Enquiries. More Booked Appraisals. Less Prospecting.");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(/Done for You\s*Lead Gen → Booked Appraisals\./);
+  await expect(page.getByRole("heading", { name: "A Note From the Founders — Jordan & Ollie" })).toBeVisible();
+  await expect(page.getByText("Our philosophy is simple: we're committed to delivering the best possible results for agents who are just as hungry to succeed as we are.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Before we talk pipeline." })).toHaveCount(0);
   const heroPlayer = page.locator('wistia-player[media-id="rdnom0qfs9"]');
   await expect(heroPlayer).toHaveAttribute("autoplay", "");
   await expect(heroPlayer).toHaveAttribute("silent-autoplay", "allow");
@@ -186,7 +189,7 @@ test("the booking thank-you page carries the confirmed appointment into a calend
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "Add booking to calendar" }).click();
   const download = await downloadPromise;
-  expect(download.suggestedFilename()).toBe("arcanium-personalised-strategy-review.ics");
+  expect(download.suggestedFilename()).toBe("arcanium-strategy-call.ics");
 });
 
 test("the unlinked SMS reminder page keeps the booking path and uses its dedicated video", async ({ page }) => {
