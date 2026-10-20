@@ -8,9 +8,9 @@ export function FinalCtaSection() {
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-[440px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#8f33ff]/10 blur-[150px]" />
         <div className="relative mx-auto max-w-[900px] text-center">
         <h2 className="font-display text-[clamp(2.375rem,10vw,2.75rem)] font-semibold leading-[0.98] tracking-[-0.045em] lg:text-[clamp(3.25rem,5vw,4.875rem)]">Generate the enquiry. Start the conversation. Book the appraisal.</h2>
-        <p className="mx-auto mt-6 max-w-[650px] text-base font-medium leading-[1.65] text-[#aaaab2] lg:text-lg">Get the five-step plan, then book a personalised review to apply it to your business.</p>
+        <p className="mx-auto mt-6 max-w-[650px] text-base font-medium leading-[1.65] text-[#aaaab2] lg:text-lg">Get the five-step plan, then book a strategy call to apply it to your business.</p>
         <MetaTrackedLink href="#audit" trackingLabel="Seller Pipeline Audit - final CTA" className="group mt-8 inline-flex min-h-[58px] w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-8 text-sm font-semibold text-[#0b0c0f] transition-all duration-300 hover:-translate-y-px hover:bg-white sm:w-auto">
-          Get My Free Growth Plan &amp; Review
+          Free Growth Plan + Strategy Call
           <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
         </MetaTrackedLink>
         </div>

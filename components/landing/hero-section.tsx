@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 function HeroSupportingCopy({ className = "", mobileCtaFirst = false }: { className?: string; mobileCtaFirst?: boolean }) {
   return (
     <div className={className}>
-      <div className={`${mobileCtaFirst ? "order-2" : ""} max-w-[620px]`}>
+      <div className={`${mobileCtaFirst ? "hidden" : ""} max-w-[620px]`}>
         <h2 className="font-display text-xl font-semibold tracking-[-0.025em] text-[#f5f5f3] sm:text-2xl">
           Your free plan. Personalised to your business.
         </h2>
@@ -19,11 +19,11 @@ function HeroSupportingCopy({ className = "", mobileCtaFirst = false }: { classN
           trackingLabel="Seller Pipeline Audit - hero"
           className="group inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:w-auto"
         >
-          Get My Free Growth Plan &amp; Review
+          Free Growth Plan + Strategy Call
           <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
         </MetaTrackedLink>
         <p className="mt-3 text-center text-xs leading-5 text-[#85858e] sm:text-left">
-          Free 8-page PDF + 10–15 minute personalised strategy review. No obligation.
+          Free 8-page PDF + 10–15 minute strategy call. No obligation.
         </p>
       </div>
     </div>
@@ -40,7 +40,7 @@ export function HeroSection() {
       <div className="relative mx-auto grid w-full max-w-[1280px] gap-10 lg:grid-cols-12 lg:items-center lg:gap-8">
         <div className="lg:col-span-7">
           <h1 className="max-w-[850px] font-display text-[clamp(2.625rem,11vw,3.125rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-[#f5f5f3] lg:text-[clamp(4rem,6.4vw,6rem)] lg:leading-[0.96]">
-            More Seller Enquiries. More Booked Appraisals. <span className="text-[#a95cff]">Less Prospecting.</span>
+            Done for You<br />Lead Gen <span className="text-[#a95cff]">→ Booked Appraisals.</span>
           </h1>
           <HeroSupportingCopy className="mt-7 hidden lg:block" />
         </div>

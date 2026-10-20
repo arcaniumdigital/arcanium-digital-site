@@ -27,7 +27,7 @@ export default function PrivacyPage() {
           <h2 className={headingClassName}>Website and enquiry information</h2>
           <p className={paragraphClassName}>
             When you request a Seller Appraisal Growth Plan or contact us, we use the details you provide to respond,
-            arrange your personalised strategy review, operate reminders you have consented to receive, maintain our customer records,
+            arrange your strategy call, operate reminders you have consented to receive, maintain our customer records,
             prevent abuse, and measure the funnel&apos;s reliability.
           </p>
           <p className={paragraphClassName}>

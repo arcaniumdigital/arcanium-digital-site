@@ -23,7 +23,7 @@ export function LeadComparisonSection() {
       </div>
       <PipelineFormCta
         title="Get the five-step plan and see how it applies to your business."
-        buttonLabel="Get My Free Growth Plan & Review"
+        buttonLabel="Free Growth Plan + Strategy Call"
         trackingLabel="Seller Pipeline Audit - lead comparison"
       />
     </div>
@@ -36,7 +36,7 @@ export function SellerSystemSection() {
       <figure className="pipeline-overview pipeline-overview-full"><Image src={`${assets}/seller-pipeline-process.png`} alt="The Arcanium seller pipeline: Meta lead generation, AI qualification, appraisal booking, agent attendance and ongoing nurture for homeowners who are not ready yet." width={1536} height={1024} sizes="(max-width: 1280px) 94vw, 1200px" quality={78} /></figure>
       <PipelineFormCta
         title="See how this system could fit your agency."
-        buttonLabel="Get My Free Growth Plan & Review"
+        buttonLabel="Free Growth Plan + Strategy Call"
         trackingLabel="Seller Pipeline Audit - system overview"
         variant="light"
       />
@@ -83,8 +83,8 @@ const auditAreas = [
 export function PipelineAuditSection() {
   return <section id="free-audit" className="pipeline-section pipeline-light">
     <div className="pipeline-container pipeline-audit-layout">
-      <div className="pipeline-heading"><h2>Turn More Seller Enquiries Into <span className="pipeline-purple">Appraisals.</span></h2><p>See the five-step blueprint, then map it against your lead generation, follow-up, nurture and booking process in a free 10–15 minute review.</p><ul className="pipeline-audit-points">{["Get the actionable five-step plan", "Find the biggest gap in your pipeline", "Leave with a practical next step"].map(item => <li key={item}><Check size={18} aria-hidden="true" />{item}</li>)}</ul><MetaTrackedLink href="#audit" trackingLabel="Seller Pipeline Audit - offer" className="pipeline-cta">Get My Free Growth Plan &amp; Review <ArrowRight size={17} aria-hidden="true" /></MetaTrackedLink></div>
-      <div className="pipeline-audit-panel"><div className="pipeline-audit-panel-top"><span><Clock3 size={16} aria-hidden="true" /> 10–15 minute strategy review</span><span>6 areas</span></div><div>{auditAreas.map(({ title, description, Icon }, index) => <article key={title}><span className="pipeline-icon-box"><Icon size={21} aria-hidden="true" /></span><div><h3>{title}</h3><p>{description}</p></div><span className="pipeline-audit-number">0{index + 1}</span></article>)}</div><p className="pipeline-audit-panel-bottom">Your plan. Your pipeline. A practical next step.</p></div>
+      <div className="pipeline-heading"><h2>Turn More Seller Enquiries Into <span className="pipeline-purple">Appraisals.</span></h2><p>See the five-step blueprint, then map it against your lead generation, follow-up, nurture and booking process in a free 10–15 minute strategy call.</p><ul className="pipeline-audit-points">{["Get the actionable five-step plan", "Find the biggest gap in your pipeline", "Leave with a practical next step"].map(item => <li key={item}><Check size={18} aria-hidden="true" />{item}</li>)}</ul><MetaTrackedLink href="#audit" trackingLabel="Seller Pipeline Audit - offer" className="pipeline-cta">Free Growth Plan + Strategy Call <ArrowRight size={17} aria-hidden="true" /></MetaTrackedLink></div>
+      <div className="pipeline-audit-panel"><div className="pipeline-audit-panel-top"><span><Clock3 size={16} aria-hidden="true" /> 10–15 minute strategy call</span><span>6 areas</span></div><div>{auditAreas.map(({ title, description, Icon }, index) => <article key={title}><span className="pipeline-icon-box"><Icon size={21} aria-hidden="true" /></span><div><h3>{title}</h3><p>{description}</p></div><span className="pipeline-audit-number">0{index + 1}</span></article>)}</div><p className="pipeline-audit-panel-bottom">Your plan. Your pipeline. A practical next step.</p></div>
     </div>
   </section>;
 }

@@ -555,31 +555,42 @@ input {
   background:#faf7fd;
   font-size:11px;
   color:#825b9d}
-.pipeline-faq-layout{display:grid;
-  grid-template-columns:.8fr 1.2fr;
-  gap:70px}
-.pipeline-faq-list{border-top:1px solid #ffffff20}
-.pipeline-faq-list details{border-bottom:1px solid #ffffff20;
-  padding:24px 0}
-.pipeline-faq-list summary{display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:20px;
-  cursor:pointer;
-  font-size:17px;
-  font-weight:500;
-  list-style:none;
-  line-height:1.5}
-.pipeline-faq-list summary::-webkit-details-marker{display:none}
-.pipeline-faq-list summary>span{color:#b783ff;
-  font-size:24px;
-  transition:transform .2s}
-.pipeline-faq-list details[open] summary>span{transform:rotate(45deg)}
-.pipeline-faq-list details>p{font-size:14px;
-  line-height:1.85;
-  color:#aaaab2;
-  margin-top:18px;
-  padding-right:28px}
+.founders-note{position:relative;
+  min-height:620px;
+  display:flex;
+  align-items:flex-end;
+  overflow:hidden;
+  border:1px solid #ffffff17;
+  border-radius:26px;
+  background-image:linear-gradient(90deg,#090a0df5 0%,#090a0de8 38%,#090a0d9c 66%,#090a0d35 100%),url('/images/seller-pipeline/founders-jordan-ollie.jpg');
+  background-position:center;
+  background-size:cover;
+  box-shadow:0 30px 90px #0008}
+.founders-note::after{content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(0deg,#090a0ddd 0%,transparent 52%);
+  pointer-events:none}
+.founders-note-content{position:relative;
+  z-index:1;
+  width:min(690px,64%);
+  padding:58px}
+.founders-note h2{max-width:620px;
+  font-family:var(--font-display);
+  font-size:clamp(2.4rem,4.4vw,4.6rem);
+  font-weight:600;
+  line-height:1.02;
+  letter-spacing:-.045em;
+  color:#f5f5f3}
+.founders-note p{max-width:640px;
+  margin-top:24px;
+  color:#c4c1c8;
+  font-size:16px;
+  line-height:1.78}
+.founders-note-philosophy{padding-left:20px;
+  border-left:2px solid #a95cff;
+  color:#fff!important;
+  font-weight:600}
 .pipeline-footer{display:flex;
   justify-content:space-between;
   align-items:center;
@@ -599,14 +610,13 @@ input {
   padding-bottom:125px}
 }
 
-@media(max-width:900px){.pipeline-proof-grid,.pipeline-audit-layout,.pipeline-faq-layout{grid-template-columns:1fr;
+@media(max-width:900px){.pipeline-proof-grid,.pipeline-audit-layout{grid-template-columns:1fr;
   gap:32px}
 .pipeline-stages{grid-template-columns:1fr 1fr}
 .pipeline-client-result{grid-template-columns:1fr;
   gap:24px}
 .pipeline-proof-card{padding:24px}
 .pipeline-audit-layout .pipeline-heading h2 br{display:none}
-.pipeline-faq-layout .pipeline-heading{margin-bottom:8px}
 .pipeline-heading h2{font-size:clamp(2.2rem,6.5vw,3.6rem)}
 }
 
@@ -671,8 +681,17 @@ input {
   gap:12px}
 .pipeline-audit-panel-top{padding:18px;
   font-size:10px}
-.pipeline-faq-list summary{font-size:15px}
-.pipeline-faq-list details>p{font-size:13px}
+.founders-note{min-height:720px;
+  background-image:linear-gradient(0deg,#090a0dfc 0%,#090a0de8 58%,#090a0d42 100%),url('/images/seller-pipeline/founders-jordan-ollie.jpg');
+  background-position:58% center;
+  border-radius:20px}
+.founders-note-content{width:100%;
+  padding:34px 25px}
+.founders-note h2{font-size:36px}
+.founders-note p{font-size:14px;
+  line-height:1.72;
+  margin-top:19px}
+.founders-note-philosophy{padding-left:16px}
 .pipeline-footer{flex-wrap:wrap;
   justify-content:center;
   text-align:center;

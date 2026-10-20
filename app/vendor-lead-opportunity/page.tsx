@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
 const title = "Your Seller Appraisal Growth Plan";
-const description = "Open your free Seller Appraisal Growth Plan and book a personalised 10–15 minute strategy review.";
+const description = "Open your free Seller Appraisal Growth Plan and book a free 10–15 minute strategy call.";
 const canonicalUrl = "https://www.arcaniumdigital.com/vendor-lead-opportunity";
 const previewImageUrl = "https://www.arcaniumdigital.com/images/seller-pipeline/seller-appraisal-growth-plan.png";
 
@@ -32,7 +32,7 @@ function VisibilityReviewCopy({ className }: { className: string }) {
         Your plan is ready. Now make it practical.
       </h2>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
-        Open the five-step plan, then choose a time for a <strong>free 10–15 minute personalised review.</strong>
+        Open the five-step plan, then choose a time for a <strong>free 10–15 minute strategy call.</strong>
       </p>
       <p className="mt-4 text-[16px] font-normal leading-[1.65] text-[#a6a6ae] sm:text-lg">
         We’ll map it to your business and identify the clearest next steps for generating and converting more seller enquiries.

@@ -7,4 +7,4 @@ export const siteUrl =
 export const siteName = "Arcanium Digital";
 
 export const siteDescription =
-  "Get Arcanium Digital’s free Seller Appraisal Growth Plan and a personalised review for generating, nurturing and converting more seller enquiries.";
+  "Get Arcanium Digital’s free Seller Appraisal Growth Plan and strategy call for generating, nurturing and converting more seller enquiries.";

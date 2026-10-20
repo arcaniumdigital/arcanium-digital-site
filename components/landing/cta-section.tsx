@@ -32,7 +32,7 @@ export function CtaSection() {
                   Get Your Seller Appraisal Growth Plan
                 </h2>
                 <p className="mt-5 max-w-lg text-base font-medium leading-[1.65] text-[#64656b] lg:text-lg">
-                  Get the five-step blueprint, then book a free 10–15 minute review to identify the best next steps for your business.
+                  Get the five-step blueprint, then book a free 10–15 minute strategy call to identify the best next steps for your business.
                 </p>
                 <div className="mt-7 overflow-hidden rounded-[16px] border border-black/10 bg-white shadow-[0_18px_45px_rgba(23,18,27,0.12)]">
                   <Image
@@ -50,7 +50,7 @@ export function CtaSection() {
             </div>
             <div className="bg-white/55 px-1 py-2 sm:px-4 sm:py-5 lg:grid lg:content-center lg:px-8 lg:py-10">
               <div className="px-5 pt-5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#7b25e8] sm:px-8 sm:pt-6">
-                Free Growth Plan + Personalised Review
+                Free Growth Plan + Strategy Call
               </div>
               <VendorAuditForm />
             </div>
