@@ -40,7 +40,7 @@ export function CtaSection() {
                 <p className="max-w-lg text-sm font-medium leading-[1.65] text-[#64656b] lg:mt-5 lg:text-lg">
                   Get the five-step blueprint, then book a free 10–15 minute strategy call to identify the best next steps for your business.
                 </p>
-                <div className="mt-5 overflow-hidden rounded-[14px] border border-black/10 bg-white shadow-[0_14px_35px_rgba(23,18,27,0.1)] lg:mt-7 lg:rounded-[16px] lg:shadow-[0_18px_45px_rgba(23,18,27,0.12)]">
+                <div data-motion="guide" className="motion-guide mt-5 overflow-hidden rounded-[14px] border border-black/10 bg-white shadow-[0_14px_35px_rgba(23,18,27,0.1)] lg:mt-7 lg:rounded-[16px] lg:shadow-[0_18px_45px_rgba(23,18,27,0.12)]">
                   <Image
                     src="/images/seller-pipeline/seller-appraisal-growth-plan.png"
                     alt="Your Seller Appraisal Growth Plan, an eight-page guide covering Meta campaigns, AI response, seller nurture, appraisal booking and pipeline management."

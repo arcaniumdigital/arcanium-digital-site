@@ -592,6 +592,122 @@ input {
   border-left:2px solid #a95cff;
   color:#fff!important;
   font-weight:600}
+.process-eyebrow{font-size:11px!important; text-transform:uppercase; letter-spacing:.16em; font-weight:700; color:#7934c8!important; margin:0 0 18px!important}
+.process-graphic{overflow:hidden; border:1px solid #19112316; border-radius:26px; background:#fff; box-shadow:0 24px 70px #24133b08}
+.process-graphic-top{display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 30px; border-bottom:1px solid #1911230d; color:#797080; font-size:11px}
+.process-graphic-top>span:first-child{display:flex; align-items:center; gap:9px; color:#34283f; font-weight:600}
+.process-live-dot{width:6px; height:6px; border-radius:50%; background:#9750df; box-shadow:0 0 0 4px #9750df0e}
+.process-steps{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); padding:40px 30px 34px; list-style:none; gap:25px}
+.process-step{position:relative; min-width:0}
+.process-step-top{display:flex; align-items:center; justify-content:space-between; padding-right:12px}
+.process-node{position:relative; z-index:1; display:grid; place-items:center; width:62px; height:62px; border:1px solid #8d40cf25; border-radius:18px; color:#833ac6; background:#f8f3fc}
+.process-number{color:#aaa0b1; font-size:11px; font-family:var(--font-mono)}
+.process-connector{height:2px; margin:25px -25px 25px 0; position:relative; overflow:hidden; background:#eee7f4}
+.process-connector>span{position:absolute; inset:0; background:linear-gradient(90deg,#b67de9,#7b2bc6); transform:scaleX(0); transform-origin:left}
+.process-step:last-child .process-connector{margin-right:0}
+.process-step h3{font-family:var(--font-display); font-size:25px; line-height:1.1; font-weight:600; letter-spacing:-.035em; color:#211628}
+.process-step>p{font-size:13px; line-height:1.75; color:#776f7e; margin:13px 0 20px; min-height:69px}
+.process-outcome{display:inline-flex; align-items:center; gap:6px; color:#74409d; background:#f5effb; border:1px solid #8c47c310; border-radius:7px; padding:7px 9px; font-size:10px; font-weight:600}
+.process-nurture{display:flex; align-items:center; gap:16px; background:#f8f5fc; border-top:1px solid #8d40cf12; padding:24px 30px}
+.process-nurture-icon{display:grid; flex-shrink:0; place-items:center; width:43px; height:43px; background:#fff; color:#8b4cbb; border:1px solid #8d40cf1a; border-radius:50%}
+.process-nurture h3{color:#3f2a50; font-weight:600; font-size:13px}
+.process-nurture p{color:#82738c; font-size:11px; line-height:1.7; margin-top:4px}
+.process-nurture-path{position:relative; flex:1; min-width:24px; height:1px; border-top:1px dashed #b691d0; margin:0 10px; overflow:visible}
+.process-nurture-path>span{position:absolute; left:0; top:-3px; width:5px; height:5px; border-radius:50%; background:#9352c5; opacity:0}
+.process-nurture-label{display:flex; align-items:center; gap:8px; color:#875ca4; font-size:10px}
+.motion-lead,.motion-arrow{display:inline-block; position:relative}
+.motion-lead::after,.motion-keyword::after{content:""; position:absolute; left:0; right:0; bottom:-.06em; height:.055em; min-height:2px; border-radius:99px; background:linear-gradient(90deg,#a95cff,#d5b0ff); transform:scaleX(0); transform-origin:left}
+.motion-keyword{position:relative; display:inline-block}
+.motion-booked{position:relative}
+
+/* Animations only start on entry; text, forms and evidence remain visible at rest. */
+@media(prefers-reduced-motion:no-preference){
+  [data-motion="hero"].motion-played .motion-lead{animation:lead-emphasis 1.4s cubic-bezier(.2,.7,.2,1) .2s both}
+  [data-motion="hero"].motion-played .motion-lead::after{animation:line-emphasis 1.7s ease .35s both}
+  [data-motion="hero"].motion-played .motion-arrow{animation:arrow-pass .85s cubic-bezier(.2,.7,.2,1) .65s both}
+  [data-motion="hero"].motion-played .motion-booked{animation:booked-light 1.4s ease .95s both}
+  [data-motion="keyword"].motion-played .motion-keyword::after{animation:line-emphasis 1.65s ease .15s both}
+  [data-motion="keyword"].motion-played .motion-keyword{animation:keyword-light 1.65s ease .15s both}
+  .motion-video.motion-played{animation:video-light 1.8s ease .3s both}
+  .motion-guide.motion-played img{animation:graphic-arrive 1s cubic-bezier(.2,.7,.2,1) both}
+  [data-motion="comparison"] li:nth-child(1){--step-delay:.1s}
+  [data-motion="comparison"] li:nth-child(2){--step-delay:.38s}
+  [data-motion="comparison"] li:nth-child(3){--step-delay:.66s}
+  [data-motion="comparison"] li:nth-child(4){--step-delay:.94s}
+  [data-motion="comparison"] li:nth-child(5){--step-delay:1.22s}
+  [data-motion="comparison"].motion-played .pipeline-flow-row{animation:row-arrive .6s cubic-bezier(.2,.7,.2,1) var(--step-delay) both}
+  .pipeline-path-active.motion-played .pipeline-flow-icon{animation:icon-signal .85s ease var(--step-delay) both}
+  .pipeline-path-active.motion-played .pipeline-flow-arrow{animation:arrow-down .6s ease var(--step-delay) both}
+  .process-step{--process-delay:0s}
+  .process-step:nth-child(2){--process-delay:.25s}
+  .process-step:nth-child(3){--process-delay:.5s}
+  .process-step:nth-child(4){--process-delay:.75s}
+  [data-motion="process"].motion-played .process-node{animation:node-signal 1.25s ease calc(var(--process-delay) + .15s) both}
+  [data-motion="process"].motion-played .process-connector>span{animation:connect-line 1.1s cubic-bezier(.2,.7,.2,1) calc(var(--process-delay) + .3s) both}
+  [data-motion="process"].motion-played .process-outcome{animation:row-arrive .65s ease calc(var(--process-delay) + .65s) both}
+  [data-motion="nurture"].motion-played .process-nurture-icon svg{animation:nurture-turn 1.2s cubic-bezier(.2,.7,.2,1) .2s both}
+  [data-motion="nurture"].motion-played .process-nurture-path>span{animation:nurture-travel 1.5s ease .3s both}
+  [data-motion="branch"].motion-played>span{animation:node-signal 1.15s ease both}
+  [data-motion="branch"].motion-played>div{animation:branch-draw .85s ease .2s both}
+  .pipeline-status.motion-played>span{animation:status-ping 1.2s ease .15s both}
+  .pipeline-intent-card figure.motion-played img{animation:graphic-arrive .9s cubic-bezier(.2,.7,.2,1) both}
+  [data-motion="proof"].motion-played .pipeline-proof-image{animation:evidence-focus 1s ease both}
+  [data-motion="proof"].motion-played .pipeline-metrics>div{animation:row-arrive .65s ease .3s both}
+  [data-motion="proof"].motion-played .pipeline-metrics>div:nth-child(2){animation-delay:.45s}
+  [data-motion="proof"].motion-played .pipeline-metrics>div:nth-child(3){animation-delay:.6s}
+  [data-motion="audit-row"].motion-played .pipeline-icon-box{animation:node-signal 1s ease both}
+  .motion-final-cta.motion-played>a{animation:cta-light 1.5s ease .2s both}
+}
+@keyframes lead-emphasis{0%,100%{transform:scale(1);text-shadow:0 0 0 transparent}35%{transform:scale(1.025);text-shadow:0 0 28px #b380ff65}}
+@keyframes line-emphasis{0%{transform:scaleX(0);opacity:0}25%,65%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+@keyframes arrow-pass{0%{transform:translateX(-7px);opacity:.5}60%{transform:translateX(5px);opacity:1}100%{transform:translateX(0);opacity:1}}
+@keyframes booked-light{0%,100%{text-shadow:0 0 0 transparent}45%{text-shadow:0 0 30px #a95cff88;color:#cf9bff}}
+@keyframes keyword-light{0%,100%{text-shadow:0 0 0 transparent}45%{text-shadow:0 0 24px #a95cff45}}
+@keyframes video-light{0%,100%{filter:drop-shadow(0 0 0 transparent)}45%{filter:drop-shadow(0 0 25px #a95cff35)}}
+@keyframes row-arrive{0%{transform:translateY(7px);opacity:.55}100%{transform:translateY(0);opacity:1}}
+@keyframes icon-signal{0%,100%{color:#bc87ff;filter:drop-shadow(0 0 0 transparent)}45%{color:#eddcff;filter:drop-shadow(0 0 7px #a95cff)}}
+@keyframes arrow-down{0%{transform:translateY(-4px);opacity:.3}100%{transform:translateY(0);opacity:1}}
+@keyframes node-signal{0%,100%{box-shadow:0 0 0 0 #a95cff00}40%{box-shadow:0 0 0 7px #a95cff15,0 0 25px #a95cff20}}
+@keyframes connect-line{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes nurture-turn{from{transform:rotate(-100deg)}to{transform:rotate(0)}}
+@keyframes nurture-travel{0%{left:0;opacity:0}15%,85%{opacity:1}100%{left:100%;opacity:0}}
+@keyframes branch-draw{from{clip-path:inset(0 48% 0 48%);opacity:.3}to{clip-path:inset(-30px -2px -2px -2px);opacity:1}}
+@keyframes status-ping{0%,100%{box-shadow:0 0 0 0 currentColor}55%{box-shadow:0 0 0 5px transparent}}
+@keyframes graphic-arrive{from{transform:translateY(10px) scale(.985);opacity:.75}to{transform:translateY(0) scale(1);opacity:1}}
+@keyframes evidence-focus{from{filter:blur(2px);opacity:.7;transform:translateY(8px)}to{filter:blur(0);opacity:1;transform:translateY(0)}}
+@keyframes cta-light{0%,100%{box-shadow:0 0 0 0 #a95cff00}45%{box-shadow:0 0 0 6px #a95cff20,0 0 40px #a95cff35}}
+@media(max-width:900px){
+  .process-steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+  .process-step:nth-child(2) .process-connector{margin-right:0}
+  .process-nurture{flex-wrap:wrap}
+  .process-nurture-path{display:none}
+  .process-nurture-label{width:100%;padding-left:59px}
+}
+@media(max-width:640px){
+  .process-graphic{border-radius:18px}
+  .process-graphic-top{padding:18px;font-size:10px;gap:8px}
+  .process-steps{grid-template-columns:1fr;gap:0;padding:6px 22px}
+  .process-step{padding:25px 0 25px 67px;border-bottom:1px solid #1911230d;--process-delay:0s!important}
+  .process-step:last-child{border:0}
+  .process-step-top{position:absolute;top:25px;left:0;padding:0}
+  .process-node{width:48px;height:48px;border-radius:14px}
+  .process-node svg{width:23px;height:23px}
+  .process-number{display:none}
+  .process-connector{position:absolute;left:23px;top:75px;bottom:0;width:2px;height:auto;margin:0!important}
+  .process-step:last-child .process-connector{display:none}
+  .process-connector>span{transform-origin:top}
+  .process-step.motion-played .process-connector>span{animation-name:connect-line-mobile}
+  .process-step h3{font-size:24px}
+  .process-step>p{min-height:0;font-size:12px;line-height:1.65;margin:10px 0 13px}
+  .process-outcome{font-size:9px}
+  .process-nurture{padding:22px;gap:12px;align-items:flex-start;flex-wrap:nowrap}
+  .process-nurture h3{font-size:12px;line-height:1.5}
+  .process-nurture p{font-size:11px}
+  .process-nurture-label{display:none}
+}
+@keyframes connect-line-mobile{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){.process-connector>span{transform:none}}
+
 .pipeline-footer{display:flex;
   justify-content:space-between;
   align-items:center;

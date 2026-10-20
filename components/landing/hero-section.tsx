@@ -1,6 +1,7 @@
 import { HeroVideo } from "@/components/landing/hero-video";
 import { MetaTrackedLink } from "@/components/analytics/meta-tracked-link";
 import { ArrowRight } from "lucide-react";
+import { FunnelMotion } from "./funnel-motion";
 
 function HeroSupportingCopy({ className = "", mobileCtaFirst = false }: { className?: string; mobileCtaFirst?: boolean }) {
   return (
@@ -36,15 +37,16 @@ export function HeroSection() {
       id="vsl"
       className="surface-noise relative overflow-hidden bg-[#08090c] px-5 pb-20 pt-28 text-[#f5f5f3] sm:px-6 md:px-8 lg:flex lg:min-h-[900px] lg:items-center lg:px-12 lg:pb-48 lg:pt-40"
     >
+      <FunnelMotion />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#08090c]" />
       <div className="relative mx-auto grid w-full max-w-[1280px] gap-10 lg:grid-cols-12 lg:items-center lg:gap-8">
         <div className="lg:col-span-7">
-          <h1 className="max-w-[850px] font-display text-[clamp(2.625rem,11vw,3.125rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-[#f5f5f3] lg:text-[clamp(4rem,6.4vw,6rem)] lg:leading-[0.96]">
-            Done for You<br />Lead Gen <span className="text-[#a95cff]">→ Booked Appraisals.</span>
+          <h1 data-motion="hero" className="max-w-[850px] font-display text-[clamp(2.625rem,11vw,3.125rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-[#f5f5f3] lg:text-[clamp(4rem,6.4vw,6rem)] lg:leading-[0.96]">
+            Done for You<br /><span className="motion-lead">Lead Gen</span> <span className="text-[#a95cff]"><span className="motion-arrow">→</span>{" "}<span className="motion-booked">Booked Appraisals.</span></span>
           </h1>
           <HeroSupportingCopy className="mt-7 hidden lg:block" />
         </div>
-        <div className="lg:col-span-5 lg:translate-y-7">
+        <div data-motion="video" className="motion-video lg:col-span-5 lg:translate-y-7">
           <HeroVideo />
         </div>
         <HeroSupportingCopy className="flex flex-col lg:hidden" mobileCtaFirst />
