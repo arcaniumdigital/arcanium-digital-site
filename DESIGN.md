@@ -54,7 +54,7 @@ components:
 
 ## Overview
 
-Preserve Arcanium Digital's existing identity and source components. The user authorised an isolated seller conversation demo, not a site redesign. This document records observed code and the reviewed desktop/mobile interface; it introduces no replacement brand strategy.
+Preserve Arcanium Digital's existing identity and source components. The user authorised an isolated seller conversation demo with an owner-only form-to-SMS setup preview. This document records observed code and the reviewed PREVIEW desktop/mobile interface; it introduces no replacement brand strategy. The review's ship disposition applies only to that preview interface, not production SMS or the full GHL system.
 
 **Key Characteristics:**
 
@@ -62,7 +62,7 @@ Preserve Arcanium Digital's existing identity and source components. The user au
 - Inter body text, Space Grotesk display text and the existing Arcanium logo.
 - Scoped demo controls with visible labels, numbered steps and explicit feedback.
 
-Sources: `PRODUCT.md`, `app/layout.tsx`, `app/globals.css`, `app/seller-demo/page.tsx`, `app/seller-demo/seller-demo.module.css`, `components/seller-demo/seller-demo.tsx`, and `.impeccable/review/{desktop,mobile}.jpg`. Tokens prefixed `seller-demo-` describe only `/seller-demo`.
+Sources: `PRODUCT.md`, `app/layout.tsx`, `app/globals.css`, `app/seller-demo/page.tsx`, `app/seller-demo/seller-demo.module.css`, `components/seller-demo/seller-demo.tsx`, and `.impeccable/review/{sms-desktop,sms-mobile}.jpg`. Tokens prefixed `seller-demo-` describe only `/seller-demo`.
 
 ## Colors
 
@@ -80,7 +80,7 @@ The root layout loads Inter and Space Grotesk through Next.js font variables. Di
 
 ## Layout
 
-`/seller-demo` uses a centred container with maximum width (1240px), desktop horizontal padding (32px), and two numbered steps in adjacent columns (0.9fr / 1.1fr). At (800px) and below the panels stack in reading order; at (430px) and below the name/suburb fields and copy feedback also stack. Panel padding follows the scoped spacing tokens. These composition rules belong to the demo only; incumbent landing-page layouts remain authoritative elsewhere.
+`/seller-demo` uses a centred container with maximum width (1240px), desktop horizontal padding (32px), and two numbered steps in adjacent columns (0.9fr / 1.1fr). At (800px) and below the panels stack in reading order; at (430px) and below the four enquiry fields and copy feedback also stack. Panel padding follows the scoped spacing tokens. These composition rules belong to the demo only; incumbent landing-page layouts remain authoritative elsewhere.
 
 ## Elevation & Depth
 
@@ -94,13 +94,15 @@ The global base radius is retained. Demo containers, fields and actions use thei
 
 The demo's primary action is full-width with minimum height (48px), a pale lilac fill, dark text and a lighter hover fill. Its secondary copy action is outlined, transparent, and at least (40px) high. Inputs have dark fills, minimum height (46px), translucent borders and visible labels. The route's focus indicator is a (2px) lilac outline offset by (4px).
 
-The header links the existing logo/name and “Back to website” to the homepage. The form prepares a practice message for copying into the native GHL widget. Updating the practice enquiry or returning to the form does not claim to reset chat history. The embedded widget's internal visual system is provider-owned. Documentation and interface review do not certify provider routing, external effects or production lifecycle readiness.
+The header links the existing logo/name and “Back to website” to the homepage. The PREVIEW-only form-to-SMS setup has four fields: Name, Mobile number, Suburb and Property address; exactly two intents: “Just curious” and “Thinking of selling”; and explicit test-SMS consent. Its primary action reads “Start SMS demo”, with checking and status feedback. SMS remains BLOCKED: Arcanium GHL has no sender; no provider request or live SMS exists.
+
+The separate optional website conversation prepares a practice message for copying into the native GHL widget, excluding phone and address. Updating the practice enquiry or returning to the form does not claim to reset chat history. The embedded widget's internal visual system is provider-owned. Documentation and the preview interface's ship disposition do not certify provider routing, production SMS, the full GHL system or deployment readiness.
 
 ## Do's and Don'ts
 
 - Do preserve the existing logo, fonts, palette and source components.
 - Do keep demo-specific measurements and two-step composition scoped to `/seller-demo`.
-- Do retain the visible demo boundary, labelled controls, focus feedback and truthful chat-history wording.
+- Do retain the visible preview boundary, labelled controls, focus feedback, explicit SMS consent, blocked SMS status and truthful chat-history wording.
 - Don't introduce a redesign or change incumbent site and live lead behaviour through this reference.
 - Don't promote the native GHL widget's appearance into the Arcanium design system.
 - Don't treat interface review as evidence of production lead delivery or provider lifecycle readiness.
