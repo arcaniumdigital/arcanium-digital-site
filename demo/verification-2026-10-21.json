@@ -1,0 +1,62 @@
+{
+  "scope": "Isolated Arcanium seller-demo website conversation, not production seller lifecycle certification",
+  "sourceBaseline": "715ee9c66b66cfc2d2ab5cad7741279f8cd3e165",
+  "locationId": "sAZLKsXRU0jvrBUziSr3",
+  "agentId": "F01qLlrhC13HKHoPmOlp",
+  "widgetId": "6ad816ee811edfc81fe0607b",
+  "routing": {
+    "mode": "Auto-Pilot",
+    "assignedChannel": "Live chat: ARC | Website Demo — Chat Only",
+    "configuredActions": [],
+    "knowledgeBases": [],
+    "conversationSummaryEnabled": false,
+    "otherChannelAssignments": [],
+    "previousCatchAllLiveChatRemovedWithOwnerApproval": true,
+    "arcaniumWorkflowAudit": "Nine existing workflows were draft with zero active enrollments; legacy folder empty. No workflow was enabled or modified for the demo."
+  },
+  "observedReceipt": {
+    "conversationId": "7e8a94ef-b095-49a3-8846-9aa40b293e2e",
+    "nativeAgentLogsVerified": true,
+    "nativeNameExtractionObserved": true,
+    "nativeNameExtractionDetail": "GHL extracted fictional Sam into contact.name. Chat is processed and stored by GHL; absence of configured business actions is not absence of platform storage.",
+    "firstFourReplyLatencyMs": [1490, 729, 526, 643],
+    "actualProviderCost": null
+  },
+  "realWidgetChecks": [
+    "Localhost and Vercel preview both received actual GHL replies",
+    "Curious homeowner received a relevant appraisal benefit without a qualification interview",
+    "Unknown signing terms were not represented as verified",
+    "Demonstration time options were labelled illustrative",
+    "Ambiguous acceptance prompted an option clarification",
+    "Selected Thursday 2 pm explicitly confirmed no real appointment was booked",
+    "New practice enquiry switched fictional scenario without claiming history deletion",
+    "Firm refusal stopped appraisal persuasion",
+    "Asked automation identity was answered truthfully"
+  ],
+  "privateTesterChecks": [
+    "Human callback request explained that no real call or contact could be arranged",
+    "STOP acknowledged without another sales question"
+  ],
+  "localValidation": {
+    "unitTestsPassed": 84,
+    "workerTestsPassed": 11,
+    "websiteTypecheck": "passed",
+    "workerTypecheck": "passed",
+    "productionBuild": "passed",
+    "eslintErrors": 0,
+    "preExistingEslintWarnings": 3,
+    "serverRenderedFormDisabledUntilHydration": true,
+    "independentDesktopMobileInterfaceReview": "ship, no material findings"
+  },
+  "limits": [
+    "Form prepares an enquiry; visitor must paste it into native chat and send",
+    "No SMS, email, live booking, human transfer, or client notification is configured on this dedicated agent",
+    "No real contact details were used in website chat tests",
+    "Existing root site analytics remain; the embedded demo wrapper has no site analytics scripts",
+    "Demo prompt changes are controlled copies, not automatic synchronization with Kael",
+    "Private tests and illustrative time choices do not prove production SMS, Meta intake, calendars, reminders, DND persistence, conversion rates, or a reusable snapshot",
+    "Production deployment and final public-domain check must be recorded separately after publication"
+  ],
+  "fullSystemReady": false,
+  "snapshotReady": false
+}

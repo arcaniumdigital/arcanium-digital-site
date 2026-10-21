@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-21T02:19:02Z",
+  "title": "Design System: Arcanium Digital",
+  "extensions": {
+    "colorMeta": {
+      "background": { "role": "neutral", "displayName": "Incumbent near-black background" },
+      "foreground": { "role": "neutral", "displayName": "Incumbent off-white foreground" },
+      "primary": { "role": "primary", "displayName": "Incumbent purple primary" },
+      "accent": { "role": "primary", "displayName": "Incumbent pale purple accent" },
+      "seller-demo-action": { "role": "primary", "displayName": "Seller demo lilac action" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Incumbent display", "purpose": "Space Grotesk display text from the root font configuration." },
+      "body": { "displayName": "Incumbent body", "purpose": "Inter body text and controls from the root font configuration." },
+      "seller-demo-headline": { "displayName": "Seller demo headline", "purpose": "Scoped /seller-demo introduction; not a global heading scale." }
+    },
+    "shadows": [
+      { "name": "incumbent-browser-frame", "value": "0 36px 90px rgba(18, 10, 29, 0.16), 0 2px 8px rgba(18, 10, 29, 0.08)", "purpose": "Existing global browser-frame utility; not applied to the seller-demo panels." }
+    ],
+    "motion": [
+      { "name": "seller-demo-action-transition", "value": "background .2s ease-out,color .2s ease-out", "purpose": "Existing demo button transitions; disabled under prefers-reduced-motion: reduce." }
+    ],
+    "breakpoints": [
+      { "name": "seller-demo-stack-panels", "value": "800px" },
+      { "name": "seller-demo-stack-fields", "value": "430px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Seller demo primary action",
+      "kind": "button",
+      "refersTo": "seller-demo-primary",
+      "description": "Observed /seller-demo form action, scoped to this route.",
+      "html": "<button class=\"ds-demo-primary\" type=\"button\">Start the demo</button>",
+      "css": ".ds-demo-primary{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:48px;padding:12px 20px;border:0;border-radius:9px;background:#e3d3fc;color:#1a1126;font-family:var(--font-inter,Inter),system-ui,sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s ease-out,color .2s ease-out}.ds-demo-primary:hover{background:#f0e6ff}.ds-demo-primary:focus-visible{outline:2px solid #d4b8ff;outline-offset:4px}.ds-demo-primary:disabled{opacity:.5;cursor:wait}@media(prefers-reduced-motion:reduce){.ds-demo-primary{transition:none}}"
+    },
+    {
+      "name": "Seller demo secondary action",
+      "kind": "button",
+      "description": "Observed outlined copy action; clipboard behaviour belongs to the application.",
+      "html": "<button class=\"ds-demo-secondary\" type=\"button\">Copy enquiry</button>",
+      "css": ".ds-demo-secondary{display:flex;align-items:center;justify-content:center;gap:9px;min-height:40px;padding:9px 11px;border:1px solid #ffffff35;border-radius:7px;background:transparent;color:#e8ddfb;font-family:var(--font-inter,Inter),system-ui,sans-serif;font-size:12px;cursor:pointer;transition:background .2s ease-out,color .2s ease-out}.ds-demo-secondary:hover{background:#ffffff12}.ds-demo-secondary:focus-visible{outline:2px solid #d4b8ff;outline-offset:4px}@media(prefers-reduced-motion:reduce){.ds-demo-secondary{transition:none}}"
+    },
+    {
+      "name": "Seller demo name field",
+      "kind": "input",
+      "refersTo": "seller-demo-input",
+      "description": "Observed fictional first-name field with visible label.",
+      "html": "<label class=\"ds-demo-label\">Practice first name<input class=\"ds-demo-input\" value=\"Sam\" maxlength=\"30\" autocomplete=\"off\" /></label>",
+      "css": ".ds-demo-label{display:flex;flex-direction:column;gap:9px;color:#dedbe5;font-family:var(--font-inter,Inter),system-ui,sans-serif;font-size:12px;font-weight:500}.ds-demo-input{min-width:0;min-height:46px;padding:10px 12px;border:1px solid #ffffff30;border-radius:8px;background:var(--background,#08090c);color:#fff;font:inherit;font-size:14px;color-scheme:dark;caret-color:#cdb0ff}.ds-demo-input:focus-visible{outline:2px solid #d4b8ff;outline-offset:4px}"
+    },
+    {
+      "name": "Seller demo return navigation",
+      "kind": "nav",
+      "description": "Observed homepage return link; logo imagery is not replicated in the sidecar.",
+      "html": "<nav><a class=\"ds-demo-back\" href=\"/\">Back to website <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10M7 17 17 7\"/></svg></a></nav>",
+      "css": ".ds-demo-back{display:flex;align-items:center;gap:7px;color:#c9c7cf;font-family:var(--font-inter,Inter),system-ui,sans-serif;font-size:13px;text-decoration:none}.ds-demo-back:hover{color:white}.ds-demo-back:focus-visible{outline:2px solid #d4b8ff;outline-offset:4px}"
+    },
+    {
+      "name": "Seller demo step marker",
+      "kind": "custom",
+      "description": "Observed circular number used beside each of the demo's two section headings.",
+      "html": "<span class=\"ds-demo-step\">1</span>",
+      "css": ".ds-demo-step{display:flex;width:26px;height:26px;align-items:center;justify-content:center;border-radius:50%;background:#c5aff11a;color:#d3b9ff;font-family:var(--font-inter,Inter),system-ui,sans-serif;font-size:12px;flex-shrink:0}"
+    }
+  ],
+  "narrative": {
+    "overview": "Preserve Arcanium Digital's existing identity and source components. The user authorised an isolated seller conversation demo, not a site redesign. This document records observed code and the reviewed desktop/mobile interface; it introduces no replacement brand strategy.",
+    "keyCharacteristics": [
+      "Near-black surfaces with lilac and purple accents.",
+      "Inter body text, Space Grotesk display text and the existing Arcanium logo.",
+      "Scoped demo controls with visible labels, numbered steps and explicit feedback."
+    ],
+    "rules": [],
+    "dos": [
+      "Do preserve the existing logo, fonts, palette and source components.",
+      "Do keep demo-specific measurements and two-step composition scoped to `/seller-demo`.",
+      "Do retain the visible demo boundary, labelled controls, focus feedback and truthful chat-history wording."
+    ],
+    "donts": [
+      "Don't introduce a redesign or change incumbent site and live lead behaviour through this reference.",
+      "Don't promote the native GHL widget's appearance into the Arcanium design system.",
+      "Don't treat interface review as evidence of production lead delivery or provider lifecycle readiness."
+    ]
+  }
+}
