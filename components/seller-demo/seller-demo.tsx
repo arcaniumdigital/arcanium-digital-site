@@ -3,6 +3,7 @@
 import { useRef, useState, useSyncExternalStore, type FormEvent } from "react";
 import { ArrowRight, Check, Copy, MessageSquare, RotateCcw } from "lucide-react";
 import { buildPracticeEnquiry, demoScenarios, demoSuburbs, type DemoScenario } from "@/lib/seller-demo";
+import { validateDemoSmsLead } from "@/lib/seller-demo-sms";
 import styles from "@/app/seller-demo/seller-demo.module.css";
 
 const subscribeToHydration = () => () => {};
@@ -12,6 +13,11 @@ const serverReady = () => false;
 export function SellerDemo() {
   const interactive = useSyncExternalStore(subscribeToHydration, clientReady, serverReady);
   const [name, setName] = useState("Sam");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [smsConsent, setSmsConsent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [smsStatus, setSmsStatus] = useState("");
   const [suburb, setSuburb] = useState<string>(demoSuburbs[0]);
   const [scenario, setScenario] = useState<DemoScenario>("curious");
   const [enquiry, setEnquiry] = useState("");
@@ -31,10 +37,10 @@ export function SellerDemo() {
     }
   }
 
-  function startDemo(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function startChat() {
     try {
-      const draft = buildPracticeEnquiry(name, suburb, scenario);
+      // Contact details stay out of the optional website-chat enquiry.
+      const draft = buildPracticeEnquiry(name.trim().split(/\s+/)[0], suburb, scenario);
       setError("");
       setEnquiry(draft);
       setCopyStatus("");
@@ -47,18 +53,41 @@ export function SellerDemo() {
     }
   }
 
+  async function startSms(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(""); setSmsStatus("");
+    let lead;
+    try { lead = validateDemoSmsLead({ name, phone, suburb, address, scenario, smsConsent }); }
+    catch (cause) { setError(cause instanceof Error ? cause.message : "Check your demo details."); return; }
+    setSending(true);
+    try {
+      const response = await fetch("/api/seller-demo", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(lead), signal: AbortSignal.timeout(10_000),
+      });
+      const result: unknown = await response.json();
+      // No success state exists until a real, isolated provider path is proven.
+      const message = result && typeof result === "object" && "message" in result && typeof result.message === "string" ? result.message : "SMS could not be started. No SMS was sent.";
+      setSmsStatus(message);
+    } catch {
+      setSmsStatus("The SMS demo could not be reached. No SMS was sent by this demo. Try again later.");
+    } finally { setSending(false); }
+  }
+
   return (
     <div className={styles.experience} data-clarity-mask="true">
       <section className={styles.leadPanel} aria-labelledby="practice-heading">
-        <div className={styles.sectionTitle}><span className={styles.step}>1</span><h2 id="practice-heading">Your practice enquiry</h2></div>
-        <p className={styles.panelCopy}>No real contact details needed. This form prepares your chat message; it does not submit a live lead.</p>
-        <form onSubmit={startDemo} aria-busy={!interactive}>
-          <fieldset className={styles.formControls} disabled={!interactive}>
+        <div className={styles.sectionTitle}><span className={styles.step}>1</span><h2 id="practice-heading">Your demo enquiry</h2></div>
+        <p className={styles.panelCopy}>SMS testing is owner-only. Use your approved test mobile and fictional property details. No clients will be enrolled.</p>
+        <form onSubmit={startSms} aria-busy={!interactive || sending}>
+          <fieldset className={styles.formControls} disabled={!interactive || sending}>
           <div className={styles.fieldRow}>
-            <label>Practice first name<input value={name} onChange={event => setName(event.target.value)} maxLength={30} required autoComplete="off" aria-describedby="name-help" /></label>
-            <label>Example suburb<select value={suburb} onChange={event => setSuburb(event.target.value)}>{demoSuburbs.map(value => <option key={value}>{value}</option>)}</select></label>
+            <label>Name<input value={name} onChange={event => setName(event.target.value)} maxLength={80} required autoComplete="name" /></label>
+            <label>Mobile number<input type="tel" inputMode="tel" value={phone} onChange={event => setPhone(event.target.value)} maxLength={25} required autoComplete="tel" placeholder="04xx xxx xxx" aria-describedby="phone-help" /></label>
+            <label>Suburb<select value={suburb} onChange={event => setSuburb(event.target.value)}>{demoSuburbs.map(value => <option key={value}>{value}</option>)}</select></label>
+            <label>Property address<input value={address} onChange={event => setAddress(event.target.value)} maxLength={200} required autoComplete="off" placeholder="Use a fictional street address" /></label>
           </div>
-          <p id="name-help" className={styles.fieldHint}>Use a fictional first name, not a phone number or email.</p>
+          <p id="phone-help" className={styles.fieldHint}>Only the owner’s approved test number is eligible. Other numbers are rejected on the server.</p>
           <fieldset className={styles.scenarios}>
             <legend>What would you like to try?</legend>
             {demoScenarios.map(item => (
@@ -68,10 +97,12 @@ export function SellerDemo() {
               </label>
             ))}
           </fieldset>
+          <label className={styles.consent}><input type="checkbox" checked={smsConsent} onChange={event => setSmsConsent(event.target.checked)} required /><span>I want a test SMS conversation on my own approved mobile. This is not consent to unrelated marketing.</span></label>
           {error ? <p role="alert" className={styles.error}>{error}</p> : null}
-          <button type="submit" className={styles.primary} disabled={!interactive}>{!interactive ? "Preparing demo…" : enquiry ? "Update practice enquiry" : "Start the demo"}<ArrowRight size={18} aria-hidden="true" /></button>
+          <button type="submit" className={styles.primary} disabled={!interactive || sending}>{!interactive ? "Preparing demo…" : sending ? "Checking SMS demo…" : "Start SMS demo"}<ArrowRight size={18} aria-hidden="true" /></button>
           </fieldset>
-          <noscript><p className={styles.panelCopy}>Enable JavaScript to try the demo. This form does not submit a live lead.</p></noscript>
+          {smsStatus ? <p role="status" className={styles.smsStatus}>{smsStatus}</p> : null}
+          <noscript><p className={styles.panelCopy}>Enable JavaScript to try the demo. No SMS has been sent.</p></noscript>
         </form>
       </section>
       <section className={styles.chatPanel} aria-labelledby="chat-heading">
@@ -93,11 +124,12 @@ export function SellerDemo() {
           <div className={styles.emptyChat}>
             <MessageSquare size={36} strokeWidth={1.4} aria-hidden="true" />
             <h3>A real conversation.<br />Without a real lead.</h3>
-            <p>Choose a scenario and start the demo. The website chat will open here—no phone or inbox to check.</p>
+            <p>The SMS sender is not connected yet. You can still test the conversation here, without sending phone or address details into the chat.</p>
+            <button type="button" className={styles.secondary} disabled={!interactive} onClick={startChat}>Try website conversation<ArrowRight size={16} aria-hidden="true" /></button>
             <div className={styles.example}><span>Try saying</span><q>I’m just curious. I don’t want to sell yet.</q><p>See how the assistant responds, rather than reading a pre-written conversation.</p></div>
           </div>
         )}
-        {enquiry ? <button type="button" className={styles.edit} onClick={() => {setEnquiry(""); setCopyStatus("");}}><RotateCcw size={15} aria-hidden="true" />Return to practice form</button> : null}
+        {enquiry ? <button type="button" className={styles.edit} onClick={() => {setEnquiry(""); setCopyStatus("");}}><RotateCcw size={15} aria-hidden="true" />Update website scenario</button> : null}
       </section>
     </div>
   );

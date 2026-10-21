@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-21T02:19:02Z",
+  "generatedAt": "2026-10-21T03:02:09Z",
   "title": "Design System: Arcanium Digital",
   "extensions": {
     "colorMeta": {
@@ -31,8 +31,8 @@
       "name": "Seller demo primary action",
       "kind": "button",
       "refersTo": "seller-demo-primary",
-      "description": "Observed /seller-demo form action, scoped to this route.",
-      "html": "<button class=\"ds-demo-primary\" type=\"button\">Start the demo</button>",
+      "description": "Observed PREVIEW-only /seller-demo SMS setup action; SMS is BLOCKED because Arcanium GHL has no sender. No provider request or live SMS exists.",
+      "html": "<button class=\"ds-demo-primary\" type=\"button\">Start SMS demo</button>",
       "css": ".ds-demo-primary{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:48px;padding:12px 20px;border:0;border-radius:9px;background:#e3d3fc;color:#1a1126;font-family:var(--font-inter,Inter),system-ui,sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s ease-out,color .2s ease-out}.ds-demo-primary:hover{background:#f0e6ff}.ds-demo-primary:focus-visible{outline:2px solid #d4b8ff;outline-offset:4px}.ds-demo-primary:disabled{opacity:.5;cursor:wait}@media(prefers-reduced-motion:reduce){.ds-demo-primary{transition:none}}"
     },
     {
@@ -46,8 +46,8 @@
       "name": "Seller demo name field",
       "kind": "input",
       "refersTo": "seller-demo-input",
-      "description": "Observed fictional first-name field with visible label.",
-      "html": "<label class=\"ds-demo-label\">Practice first name<input class=\"ds-demo-input\" value=\"Sam\" maxlength=\"30\" autocomplete=\"off\" /></label>",
+      "description": "Observed Name field with visible label in the PREVIEW-only form. The four fields are Name, Mobile number, Suburb and Property address; exactly two intents are Just curious and Thinking of selling. Explicit test-SMS consent is required. The optional website chat excludes phone and address.",
+      "html": "<label class=\"ds-demo-label\">Name<input class=\"ds-demo-input\" value=\"Sam\" maxlength=\"80\" autocomplete=\"name\" required /></label>",
       "css": ".ds-demo-label{display:flex;flex-direction:column;gap:9px;color:#dedbe5;font-family:var(--font-inter,Inter),system-ui,sans-serif;font-size:12px;font-weight:500}.ds-demo-input{min-width:0;min-height:46px;padding:10px 12px;border:1px solid #ffffff30;border-radius:8px;background:var(--background,#08090c);color:#fff;font:inherit;font-size:14px;color-scheme:dark;caret-color:#cdb0ff}.ds-demo-input:focus-visible{outline:2px solid #d4b8ff;outline-offset:4px}"
     },
     {
@@ -66,7 +66,7 @@
     }
   ],
   "narrative": {
-    "overview": "Preserve Arcanium Digital's existing identity and source components. The user authorised an isolated seller conversation demo, not a site redesign. This document records observed code and the reviewed desktop/mobile interface; it introduces no replacement brand strategy.",
+    "overview": "Preserve Arcanium Digital's existing identity and source components. The user authorised an isolated seller conversation demo with an owner-only form-to-SMS setup preview. This document records observed code and the reviewed PREVIEW desktop/mobile interface; it introduces no replacement brand strategy. The review's ship disposition applies only to that preview interface, not production SMS or the full GHL system.",
     "keyCharacteristics": [
       "Near-black surfaces with lilac and purple accents.",
       "Inter body text, Space Grotesk display text and the existing Arcanium logo.",
@@ -76,7 +76,7 @@
     "dos": [
       "Do preserve the existing logo, fonts, palette and source components.",
       "Do keep demo-specific measurements and two-step composition scoped to `/seller-demo`.",
-      "Do retain the visible demo boundary, labelled controls, focus feedback and truthful chat-history wording."
+      "Do retain the visible preview boundary, labelled controls, focus feedback, explicit SMS consent, blocked SMS status and truthful chat-history wording."
     ],
     "donts": [
       "Don't introduce a redesign or change incumbent site and live lead behaviour through this reference.",

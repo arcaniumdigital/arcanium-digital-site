@@ -3,6 +3,9 @@ import {readFileSync} from "node:fs";
 import {buildPracticeEnquiry, demoScenarios, demoSuburbs} from "../../lib/seller-demo";
 
 describe("isolated seller conversation demo", () => {
+  it("offers only the two requested seller-intent options", () => {
+    expect(demoScenarios.map(item => item.label)).toEqual(["Just curious", "Thinking of selling"]);
+  });
   it.each(demoScenarios)("builds a clearly labelled $id enquiry without a live destination", scenario => {
     const message = buildPracticeEnquiry("Sam", demoSuburbs[0], scenario.id);
     expect(message).toContain("Demo enquiry only");
@@ -25,13 +28,14 @@ describe("isolated seller conversation demo", () => {
     const widget = readFileSync("public/seller-demo/chat.html", "utf8");
     expect(widget).toContain('data-widget-id="6ad816ee811edfc81fe0607b"');
     expect(widget).not.toMatch(/LU1MdM6qvfyitoP94OZe|fbq|clarity|SMS|sendgrid|clicksend/i);
-    expect(client).not.toMatch(/fetch\(|\/api\/vendor-audit|arc-seller-lead|localStorage|sessionStorage|track\(/);
+    expect(client).not.toMatch(/\/api\/vendor-audit|arc-seller-lead|localStorage|sessionStorage|track\(/);
+    expect(client).toContain('fetch("/api/seller-demo"');
     expect(client).toContain("event.preventDefault()");
     expect(client).toContain('src="/seller-demo/chat.html"');
     expect(client).toContain("Chat history is retained");
     expect(client).not.toContain("End the chat");
     expect(client).toContain("useSyncExternalStore");
-    expect(client).toContain("disabled={!interactive}");
+    expect(client).toContain("disabled={!interactive || sending}");
     expect(client).toContain("Enable JavaScript to try the demo");
   });
   it("keeps the demonstration out of indexing and conversion events", () => {
@@ -47,5 +51,19 @@ describe("isolated seller conversation demo", () => {
     expect(prompt).toContain("starts a NEW fictional scenario");
     expect(prompt).toContain("Do not claim earlier GHL chat history was erased");
     expect(prompt).toContain("No real appointment has been booked");
+  });
+  it("uses complete factual answers rather than inferring unsupported service restrictions", () => {
+    const prompt = readFileSync("demo/seller-assistant-prompt.txt", "utf8");
+    expect(prompt).toContain("FIXED FACTUAL ANSWERS");
+    expect(prompt).toContain("Do not append a closing sentence or question");
+    expect(prompt).toContain("a claim that remote estimates are impossible");
+  });
+  it("keeps phone and street address out of the website chat enquiry", () => {
+    const client = readFileSync("components/seller-demo/seller-demo.tsx", "utf8");
+    expect(client).toContain('name.trim().split(/\\s+/)[0]');
+    expect(client).not.toMatch(/buildPracticeEnquiry\([^;]*(phone|address)/);
+    expect(client).toContain('type="tel"');
+    expect(client).toContain("Property address");
+    expect(client).toContain("smsConsent");
   });
 });
