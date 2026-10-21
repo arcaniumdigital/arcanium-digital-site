@@ -10,7 +10,7 @@ describe("isolated seller conversation demo", () => {
     expect(message).toContain("don't contact anyone or create a real booking");
     expect(message).not.toMatch(/https?:|\+61|@/);
   });
-  it.each(["0480158352", "person@example.com", "<script>bad</script>", "", "A".repeat(31)])("rejects contact details or invalid practice name %s", name => {
+  it.each(["0400000000", "person@example.com", "<script>bad</script>", "", "A".repeat(31)])("rejects contact details or invalid practice name %s", name => {
     expect(() => buildPracticeEnquiry(name, "Castle Hill", "curious")).toThrow();
   });
   it("allows names with letters, spaces, apostrophes and hyphens", () => {
