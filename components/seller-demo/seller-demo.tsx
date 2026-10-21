@@ -10,7 +10,7 @@ const subscribeToHydration = () => () => {};
 const clientReady = () => true;
 const serverReady = () => false;
 
-export function SellerDemo() {
+export function SellerDemo({ publicSms = false }: { publicSms?: boolean }) {
   const interactive = useSyncExternalStore(subscribeToHydration, clientReady, serverReady);
   const [name, setName] = useState("Sam");
   const [phone, setPhone] = useState("");
@@ -63,14 +63,14 @@ export function SellerDemo() {
     try {
       const response = await fetch("/api/seller-demo", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(lead), signal: AbortSignal.timeout(10_000),
+        body: JSON.stringify(lead), signal: AbortSignal.timeout(40_000),
       });
       const result: unknown = await response.json();
-      // No success state exists until a real, isolated provider path is proven.
-      const message = result && typeof result === "object" && "message" in result && typeof result.message === "string" ? result.message : "SMS could not be started. No SMS was sent.";
+      // Enrolment acceptance is not a carrier delivery receipt.
+      const message = result && typeof result === "object" && "message" in result && typeof result.message === "string" ? result.message : "The SMS demo returned an unconfirmed result. Check your phone before trying again.";
       setSmsStatus(message);
     } catch {
-      setSmsStatus("The SMS demo could not be reached. No SMS was sent by this demo. Try again later.");
+      setSmsStatus("We could not confirm whether the demo started. Check your phone before trying again; delivery may still be in progress.");
     } finally { setSending(false); }
   }
 
@@ -78,7 +78,7 @@ export function SellerDemo() {
     <div className={styles.experience} data-clarity-mask="true">
       <section className={styles.leadPanel} aria-labelledby="practice-heading">
         <div className={styles.sectionTitle}><span className={styles.step}>1</span><h2 id="practice-heading">Your demo enquiry</h2></div>
-        <p className={styles.panelCopy}>SMS testing is owner-only. Use your approved test mobile and fictional property details. No clients will be enrolled.</p>
+        <p className={styles.panelCopy}>{publicSms ? "Use your own Australian mobile and fictional property details. Submit once, then continue the conversation by SMS. This is a demonstration, not a real agent enquiry." : "SMS testing is owner-only. Use your approved test mobile and fictional property details. No clients will be enrolled."}</p>
         <form onSubmit={startSms} aria-busy={!interactive || sending}>
           <fieldset className={styles.formControls} disabled={!interactive || sending}>
           <div className={styles.fieldRow}>
@@ -87,7 +87,7 @@ export function SellerDemo() {
             <label>Suburb<select value={suburb} onChange={event => setSuburb(event.target.value)}>{demoSuburbs.map(value => <option key={value}>{value}</option>)}</select></label>
             <label>Property address<input value={address} onChange={event => setAddress(event.target.value)} maxLength={200} required autoComplete="off" placeholder="Use a fictional street address" /></label>
           </div>
-          <p id="phone-help" className={styles.fieldHint}>Only the owner’s approved test number is eligible. Other numbers are rejected on the server.</p>
+          <p id="phone-help" className={styles.fieldHint}>{publicSms ? "Enter your own mobile—not someone else’s. Existing client contacts and protected numbers are excluded. Reply STOP at any time." : "Only the owner’s approved test number is eligible. Other numbers are rejected on the server."}</p>
           <fieldset className={styles.scenarios}>
             <legend>What would you like to try?</legend>
             {demoScenarios.map(item => (
@@ -97,7 +97,7 @@ export function SellerDemo() {
               </label>
             ))}
           </fieldset>
-          <label className={styles.consent}><input type="checkbox" checked={smsConsent} onChange={event => setSmsConsent(event.target.checked)} required /><span>I want a test SMS conversation on my own approved mobile. This is not consent to unrelated marketing.</span></label>
+          <label className={styles.consent}><input type="checkbox" checked={smsConsent} onChange={event => setSmsConsent(event.target.checked)} required /><span>I own this mobile and request an SMS demo conversation from Arcanium Digital. I can reply STOP at any time. This is not consent to unrelated marketing.</span></label>
           {error ? <p role="alert" className={styles.error}>{error}</p> : null}
           <button type="submit" className={styles.primary} disabled={!interactive || sending}>{!interactive ? "Preparing demo…" : sending ? "Checking SMS demo…" : "Start SMS demo"}<ArrowRight size={18} aria-hidden="true" /></button>
           </fieldset>
@@ -124,7 +124,7 @@ export function SellerDemo() {
           <div className={styles.emptyChat}>
             <MessageSquare size={36} strokeWidth={1.4} aria-hidden="true" />
             <h3>A real conversation.<br />Without a real lead.</h3>
-            <p>The SMS sender is not connected yet. You can still test the conversation here, without sending phone or address details into the chat.</p>
+            <p>Start the SMS demo with the form and continue on your phone. You can also try the website conversation here, without sharing phone or address details with that chat.</p>
             <button type="button" className={styles.secondary} disabled={!interactive} onClick={startChat}>Try website conversation<ArrowRight size={16} aria-hidden="true" /></button>
             <div className={styles.example}><span>Try saying</span><q>I’m just curious. I don’t want to sell yet.</q><p>See how the assistant responds, rather than reading a pre-written conversation.</p></div>
           </div>

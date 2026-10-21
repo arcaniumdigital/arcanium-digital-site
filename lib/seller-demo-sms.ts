@@ -25,7 +25,7 @@ export function validateDemoSmsLead(value: unknown): DemoSmsLead {
   if (address.length < 3 || address.length > 200 || /[<>@\u0000-\u001f\u007f]/.test(address)) throw new Error("Enter a property address of 3–200 characters. Use fictional property details for this test.");
   const selected = demoScenarios.find(item => item.id === input.scenario);
   if (!selected) throw new Error("Choose Just curious or Thinking of selling.");
-  if (input.smsConsent !== true) throw new Error("Confirm that you want a test SMS on your own approved mobile.");
+  if (input.smsConsent !== true) throw new Error("Confirm that you want a demo SMS conversation on your own mobile.");
   return { name, phone, suburb, address, scenario: selected.id, smsConsent: true };
 }
 

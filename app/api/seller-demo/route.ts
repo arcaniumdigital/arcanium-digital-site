@@ -1,7 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { isApprovedDemoRecipient, isDemoRequestOrigin, validateDemoSmsLead } from "../../../lib/seller-demo-sms";
+import { startOwnerSmsDemo } from "../../../lib/seller-demo-delivery";
+import { startPublicSmsDemo } from "../../../lib/seller-demo-public-delivery";
+import { checkBotId } from "botid/server";
 
 export const preferredRegion = "syd1";
+export const maxDuration = 40;
 
 function reply(status: number, code: string, message: string, requestId: string) {
   return Response.json({ accepted: false, state: "BLOCKED", code, message, requestId }, {
@@ -26,13 +30,32 @@ export async function POST(request: Request) {
   try { lead = validateDemoSmsLead(value); }
   catch (cause) { return reply(400, "INVALID_DEMO_DETAILS", cause instanceof Error ? cause.message : "Check your demo details.", requestId); }
 
+  if (process.env.SELLER_DEMO_MODE === "public") {
+    // No public SMS effect without the platform's browser-side and server-side
+    // bot verification. Errors fail closed, never bypass protection.
+    try {
+      if ((await checkBotId({ advancedOptions: { checkLevel: "basic" } })).isBot) return reply(403, "BROWSER_CHECK_FAILED", "The browser check failed. Open the demo page in your browser. No SMS was sent.", requestId);
+    } catch {
+      return reply(503, "BROWSER_CHECK_UNAVAILABLE", "The browser check is unavailable. Try again later. No SMS was sent.", requestId);
+    }
+    const result = await startPublicSmsDemo(lead, {
+      token: process.env.SELLER_DEMO_GHL_TOKEN,
+      isolationVerified: process.env.SELLER_DEMO_SMS_ISOLATION,
+    }, requestId);
+    console.info("seller_demo_result", { requestId, code: result.code, state: result.state });
+    const { status, ...body } = result;
+    return Response.json({ ...body, requestId }, { status, headers: { "Cache-Control": "no-store" } });
+  }
+
   if (!process.env.SELLER_DEMO_TEST_PHONE) return reply(503, "TEST_RECIPIENT_NOT_CONFIGURED", "The approved SMS test destination is not configured. No SMS was sent.", requestId);
   if (!isApprovedDemoRecipient(lead.phone, process.env.SELLER_DEMO_TEST_PHONE)) return reply(403, "RECIPIENT_NOT_ALLOWED", "SMS testing is restricted to the owner's approved mobile. No SMS was sent.", requestId);
 
-  // GHL's Arcanium Phone System was inspected on 2026-10-21: no numbers.
-  // Fail closed even if the allowlist is configured. No contact creation,
-  // workflow enrollment, provider request or retry can occur in this state.
-  // A verified two-way Arcanium sender and isolated delivery path are release gates.
-  console.info("seller_demo_blocked", { requestId, code: "SMS_SENDER_NOT_CONNECTED" });
-  return reply(503, "SMS_SENDER_NOT_CONNECTED", "Arcanium's SMS number is not connected yet. No SMS was sent. You can still try the website conversation below.", requestId);
+  const result = await startOwnerSmsDemo(lead, {
+    token: process.env.SELLER_DEMO_GHL_TOKEN,
+    approvedPhone: process.env.SELLER_DEMO_TEST_PHONE,
+    isolationVerified: process.env.SELLER_DEMO_SMS_ISOLATION,
+  });
+  console.info("seller_demo_result", { requestId, code: result.code, state: result.state });
+  const { status, ...body } = result;
+  return Response.json({ ...body, requestId }, { status, headers: { "Cache-Control": "no-store" } });
 }

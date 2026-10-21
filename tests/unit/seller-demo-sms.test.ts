@@ -1,10 +1,38 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { isApprovedDemoRecipient, isDemoRequestOrigin, validateDemoSmsLead } from "../../lib/seller-demo-sms";
 import { POST } from "../../app/api/seller-demo/route";
+import { checkBotId } from "botid/server";
+
+vi.mock("botid/server", () => ({ checkBotId: vi.fn(async () => ({ isBot: false })) }));
 
 const fixture = { name: "Taylor Example", phone: "0412 345 678", suburb: "Kellyville", address: "1 Example Street", scenario: "curious", smsConsent: true };
 const makeRequest = (body: unknown = fixture, headers: Record<string, string> = {}) => new Request("https://demo.example/api/seller-demo", {
   method: "POST", headers: { origin: "https://demo.example", "content-type": "application/json", ...headers }, body: JSON.stringify(body),
+});
+
+describe("public SMS route browser protection", () => {
+  it("does not apply the old owner allowlist to a consenting public visitor", async () => {
+    vi.stubEnv("SELLER_DEMO_MODE", "public");
+    vi.stubEnv("SELLER_DEMO_GHL_TOKEN", "");
+    vi.spyOn(console, "info").mockImplementation(() => {});
+    const response = await POST(makeRequest({ ...fixture, phone: "0400000000" }));
+    expect((await responseBody(response)).code).toBe("DEMO_CONNECTION_MISSING");
+    expect(checkBotId).toHaveBeenCalledWith({ advancedOptions: { checkLevel: "basic" } });
+  });
+  it("blocks a bot before any GHL request", async () => {
+    vi.stubEnv("SELLER_DEMO_MODE", "public");
+    vi.mocked(checkBotId).mockResolvedValueOnce({ isHuman: false, isBot: true, isVerifiedBot: false, bypassed: false });
+    const network = vi.spyOn(globalThis, "fetch");
+    expect((await responseBody(await POST(makeRequest()))).code).toBe("BROWSER_CHECK_FAILED");
+    expect(network).not.toHaveBeenCalled();
+  });
+  it("fails closed if the browser verification service is unavailable", async () => {
+    vi.stubEnv("SELLER_DEMO_MODE", "public");
+    vi.mocked(checkBotId).mockRejectedValueOnce(new Error("unavailable"));
+    const network = vi.spyOn(globalThis, "fetch");
+    expect((await responseBody(await POST(makeRequest()))).code).toBe("BROWSER_CHECK_UNAVAILABLE");
+    expect(network).not.toHaveBeenCalled();
+  });
 });
 const responseBody = async (response: Response) => await response.json() as Record<string, unknown>;
 afterEach(() => { vi.unstubAllEnvs(); vi.restoreAllMocks(); });
@@ -83,7 +111,7 @@ describe("SMS demo release gate — no provider requests or persistence", () => 
     const result = await responseBody(response);
     expect(response.status).toBe(503);
     expect(response.headers.get("cache-control")).toBe("no-store");
-    expect(result).toMatchObject({ accepted: false, state: "BLOCKED", code: "SMS_SENDER_NOT_CONNECTED" });
+    expect(result).toMatchObject({ accepted: false, state: "BLOCKED", code: "DEMO_CONNECTION_MISSING" });
     expect(result.requestId).toBeTruthy();
     expect(network).not.toHaveBeenCalled();
   });
