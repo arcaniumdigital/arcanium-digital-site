@@ -7,13 +7,12 @@ import styles from "./seller-demo.module.css";
 
 export const metadata: Metadata = {
   title: "Try the Seller Conversation Demo",
-  description: "Try Arcanium Digital's seller enquiry demonstration by SMS or isolated website chat. No real bookings.",
+  description: "Try Arcanium Digital's isolated seller enquiry demonstration by SMS. No real bookings or human handoff.",
   robots: {index: false, follow: false, noarchive: true},
   alternates: {canonical: "/seller-demo"},
 };
 
 export default function SellerDemoPage() {
-  const publicSms = process.env.SELLER_DEMO_MODE === "public";
   return (
     <div className={styles.page}>
       <header className={styles.header}>
@@ -26,13 +25,13 @@ export default function SellerDemoPage() {
       <main className={styles.main}>
         <div className={styles.intro}>
           <h1>Be the homeowner.<br /><span>Try the conversation.</span></h1>
-          <p>Try a seller enquiry as a curious homeowner or someone thinking of selling. {publicSms ? "Start below and continue the demonstration on your phone." : "The SMS demo is restricted to the owner’s approved mobile."}</p>
-          <div className={styles.safety}><ShieldCheck size={19} aria-hidden="true" /><span>{publicSms ? "SMS only to the mobile you submit with your consent. No emails, real bookings or agent notifications." : "Owner-only SMS testing. Only the approved test mobile is eligible. No emails, real bookings or client notifications."}</span></div>
+          <p>Try a seller enquiry as a curious homeowner or someone thinking of selling. Start below and continue the demonstration on your phone.</p>
+          <div className={styles.safety}><ShieldCheck size={19} aria-hidden="true" /><span>SMS only to the mobile you submit with your consent. No emails, real bookings, agent notifications, or human handoff.</span></div>
         </div>
-        <SellerDemo publicSms={publicSms} />
+        <SellerDemo />
         <footer className={styles.footer}>
-          <p>This is an isolated conversation demo, not a live enquiry to Kael or another client. Appointment examples are illustrative, not real availability.</p>
-          <p>Arcanium Digital and GoHighLevel process demo enquiries and conversations. Phone and address fields are not copied into the optional website chat. This does not test production lead delivery, reminders or listing-outcome workflows. <Link href="/privacy">Privacy</Link></p>
+          <p>This is an isolated conversation demonstration, not a live real-estate enquiry. Any appointment examples are illustrative and are not real availability.</p>
+          <p>Arcanium Digital and GoHighLevel process demo enquiries and SMS conversations. The demo does not send email, notify an agent, or transfer the conversation to a person. <Link href="/privacy">Privacy</Link></p>
         </footer>
       </main>
     </div>
