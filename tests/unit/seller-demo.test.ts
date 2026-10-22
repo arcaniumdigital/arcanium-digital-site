@@ -23,26 +23,19 @@ describe("isolated seller conversation demo", () => {
     expect(() => buildPracticeEnquiry("Sam", "1 Real Street", "curious")).toThrow();
     expect(() => buildPracticeEnquiry("Sam", "Castle Hill", "send-sms")).toThrow();
   });
-  it("uses the dedicated widget and keeps production lead APIs and tracking out of demo code", () => {
+  it("embeds the dedicated GHL enquiry form and keeps production lead APIs out of demo code", () => {
     const client = readFileSync("components/seller-demo/seller-demo.tsx", "utf8");
-    const widget = readFileSync("public/seller-demo/chat.html", "utf8");
-    expect(widget).toContain('data-widget-id="6ad816ee811edfc81fe0607b"');
-    expect(widget).not.toMatch(/LU1MdM6qvfyitoP94OZe|fbq|clarity|SMS|sendgrid|clicksend/i);
     expect(client).not.toMatch(/\/api\/vendor-audit|arc-seller-lead|localStorage|sessionStorage|track\(/);
-    expect(client).toContain('fetch("/api/seller-demo"');
-    expect(client).toContain("event.preventDefault()");
-    expect(client).toContain('src="/seller-demo/chat.html"');
-    expect(client).toContain("Chat history is retained");
-    expect(client).not.toContain("End the chat");
-    expect(client).toContain("useSyncExternalStore");
-    expect(client).toContain("disabled={!interactive || sending}");
-    expect(client).toContain("Enable JavaScript to try the demo");
+    expect(client).toContain("https://api.leadconnectorhq.com/widget/form/ERdSLQAPVw4E41yvSYBz");
+    expect(client).toContain("Jordan property demo enquiry");
+    expect(client).toContain("No email, live calendar booking, agent notification, or human handoff");
   });
   it("keeps the demonstration out of indexing and conversion events", () => {
     const page = readFileSync("app/seller-demo/page.tsx", "utf8");
     expect(page).toContain("index: false");
     expect(page).toContain("follow: false");
-    expect(page).toContain("does not test production lead delivery");
+    expect(page).toContain("not a live real-estate enquiry");
+    expect(page).not.toContain("Kael");
   });
   it("keeps demo actions disabled in the prompt and explains scenario changes honestly", () => {
     const prompt = readFileSync("demo/seller-assistant-prompt.txt", "utf8");
@@ -58,12 +51,10 @@ describe("isolated seller conversation demo", () => {
     expect(prompt).toContain("Do not append a closing sentence or question");
     expect(prompt).toContain("a claim that remote estimates are impossible");
   });
-  it("keeps phone and street address out of the website chat enquiry", () => {
+  it("delegates contact collection to the saved GHL form", () => {
     const client = readFileSync("components/seller-demo/seller-demo.tsx", "utf8");
-    expect(client).toContain('name.trim().split(/\\s+/)[0]');
-    expect(client).not.toMatch(/buildPracticeEnquiry\([^;]*(phone|address)/);
-    expect(client).toContain('type="tel"');
-    expect(client).toContain("Property address");
-    expect(client).toContain("smsConsent");
+    expect(client).not.toContain('fetch("/api/seller-demo"');
+    expect(client).toContain("Use your own Australian mobile and fictional property details");
+    expect(client).toContain("Submit once");
   });
 });
