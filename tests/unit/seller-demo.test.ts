@@ -23,18 +23,18 @@ describe("isolated seller conversation demo", () => {
     expect(() => buildPracticeEnquiry("Sam", "1 Real Street", "curious")).toThrow();
     expect(() => buildPracticeEnquiry("Sam", "Castle Hill", "send-sms")).toThrow();
   });
-  it("embeds the dedicated GHL enquiry form and keeps production lead APIs out of demo code", () => {
+  it("embeds the dedicated one-question GHL survey and keeps production lead APIs out of demo code", () => {
     const client = readFileSync("components/seller-demo/seller-demo.tsx", "utf8");
     expect(client).not.toMatch(/\/api\/vendor-audit|arc-seller-lead|localStorage|sessionStorage|track\(/);
-    expect(client).toContain("https://api.leadconnectorhq.com/widget/form/ERdSLQAPVw4E41yvSYBz");
-    expect(client).toContain("Jordan property demo enquiry");
-    expect(client).toContain("No email, live calendar booking, agent notification, or human handoff");
+    expect(client).toContain("https://api.leadconnectorhq.com/widget/survey/9jZ5y1quM7WTPOVQ94ef");
+    expect(client).toContain("Arcanium seller AI demo");
+    expect(client).not.toContain("Continue by SMS");
   });
   it("keeps the demonstration out of indexing and conversion events", () => {
     const page = readFileSync("app/seller-demo/page.tsx", "utf8");
     expect(page).toContain("index: false");
     expect(page).toContain("follow: false");
-    expect(page).toContain("not a live real-estate enquiry");
+    expect(page).toContain("isolated seller enquiry demonstration");
     expect(page).not.toContain("Kael");
   });
   it("keeps demo actions disabled in the prompt and explains scenario changes honestly", () => {
@@ -51,10 +51,12 @@ describe("isolated seller conversation demo", () => {
     expect(prompt).toContain("Do not append a closing sentence or question");
     expect(prompt).toContain("a claim that remote estimates are impossible");
   });
-  it("delegates contact collection to the saved GHL form", () => {
+  it("keeps the page copy short and delegates contact collection to GHL", () => {
     const client = readFileSync("components/seller-demo/seller-demo.tsx", "utf8");
+    const page = readFileSync("app/seller-demo/page.tsx", "utf8");
     expect(client).not.toContain('fetch("/api/seller-demo"');
-    expect(client).toContain("Use your own Australian mobile and fictional property details");
-    expect(client).toContain("Submit once");
+    expect(page).toContain("Try the AI setter");
+    expect(page).toContain("Use your own mobile and fictional property details");
+    expect(page).not.toContain("Continue by SMS");
   });
 });
