@@ -40,8 +40,8 @@ test("durable acceptance navigates directly to the clean opportunity page", asyn
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
   await expect(page.getByText("By continuing, you agree to receive SMS about your Seller Appraisal Growth Plan, strategy call and related Arcanium Digital services. You can opt out at any time.")).toBeVisible();
-  const button = page.getByRole("button", { name: "Free Growth Plan + Strategy Call" });
-  await expect(button).toHaveText("Free Growth Plan + Strategy Call");
+  const button = page.getByRole("button", { name: "Get My Free Growth Guide + Strategy Call" });
+  await expect(button).toHaveText("Get My Free Growth Guide + Strategy Call");
   const navigationCommitted = page.waitForEvent("framenavigated", (frame) => frame === page.mainFrame() && frame.url() === "http://127.0.0.1:3000/vendor-lead-opportunity");
   await button.click({ noWaitAfter: true });
   await navigationCommitted;
@@ -91,7 +91,7 @@ test("a failed acceptance preserves fields and shows one honest error", async ({
   await page.getByLabel("Full name").fill("Alex Agent");
   await page.getByLabel("Best mobile number").fill("0412 345 678");
   await expect(page.getByRole("checkbox")).toHaveCount(0);
-  await page.getByRole("button", { name: "Free Growth Plan + Strategy Call" }).click();
+  await page.getByRole("button", { name: "Get My Free Growth Guide + Strategy Call" }).click();
   await expect(page.getByText("We could not submit your details. Please check your connection and try again.")).toBeVisible();
   await expect(page.getByLabel("Full name")).toHaveValue("Alex Agent");
   await expect(page.getByLabel("Best mobile number")).toHaveValue("0412 345 678");
@@ -101,17 +101,33 @@ test("a failed acceptance preserves fields and shows one honest error", async ({
 test("seller pipeline copy and controls remain composed across breakpoints", async ({ page }) => {
   await installTurnstileStub(page);
 
-  for (const viewport of [{ width: 320, height: 800 }, { width: 1440, height: 1000 }]) {
+  for (const viewport of [{ width: 320, height: 800 }, { width: 768, height: 1024 }, { width: 1440, height: 1000 }]) {
     await page.setViewportSize(viewport);
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
-    const opportunityLinks = page.getByRole("link", { name: "Free Growth Plan + Strategy Call" });
+    const opportunityLinks = page.getByRole("link", { name: "Get My Free Growth Guide + Strategy Call" });
     await expect(opportunityLinks).toHaveCount(7);
-    await expect(page.getByText(/free 10–15 minute strategy call/).first()).toBeVisible();
+    await expect(page.getByText(/free 10–15-minute strategy call/).first()).toBeVisible();
     await expect(page.getByText("On the next step, choose a short call so we can confirm your market before preparing your visibility report.")).toHaveCount(0);
-    await expect(page.getByText("Free Growth Plan + Strategy Call", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("Get My Free Growth Guide + Strategy Call", { exact: true }).first()).toBeVisible();
     await expect(page.getByLabel("Primary Suburb")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Free Growth Plan + Strategy Call" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Get My Free Growth Guide + Strategy Call" })).toBeVisible();
+
+    const contrast = page.getByText("No thanks — I’ll keep chasing seller enquiries myself and wondering when my next appraisal will come.", { exact: true });
+    await expect(contrast).toHaveCount(1);
+    await expect(contrast).toBeVisible();
+    expect(await contrast.evaluate((element) => element.tagName)).toBe("P");
+    expect(await contrast.evaluate((element) => element.previousElementSibling?.tagName)).toBe("BUTTON");
+    expect(await contrast.evaluate((element) => parseFloat(getComputedStyle(element).fontSize))).toBeLessThanOrEqual(13);
+    await expect(page.getByText(/Personalised to your business|strategy call tailored to your business/i)).toHaveCount(0);
+    await expect(page.locator("#the-difference h2")).toHaveText("How Many Potential Listings Are Slipping Through the Cracks?");
+    await expect(page.locator("#the-difference ol li")).toHaveCount(10);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width);
+    const controlsOutsideViewport = await page.locator('a[href="#audit"], #audit button').evaluateAll((elements) => elements.filter((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.width > 0 && (rect.left < 0 || rect.right > window.innerWidth);
+    }).length);
+    expect(controlsOutsideViewport).toBe(0);
 
     const headerButtonHeight = await opportunityLinks.first().evaluate((element) => element.getBoundingClientRect().height);
     const heroButtonHeight = await opportunityLinks.nth(1).evaluate((element) => element.getBoundingClientRect().height);
@@ -123,8 +139,8 @@ test("seller pipeline copy and controls remain composed across breakpoints", asy
     const foundersImage = page.getByRole("img", { name: "Arcanium Digital founders Jordan and Ollie" });
     if (viewport.width === 320) {
       const formBottom = await page.locator("#audit form").evaluate((element) => element.getBoundingClientRect().bottom);
-      const guideCopyTop = await page.getByText("Get the five-step blueprint, then book a free 10–15 minute strategy call to identify the best next steps for your business.", { exact: true }).evaluate((element) => element.getBoundingClientRect().top);
-      const guideImageTop = await page.getByRole("img", { name: /Your Seller Appraisal Growth Plan/ }).evaluate((element) => element.getBoundingClientRect().top);
+      const guideCopyTop = await page.getByText("Get the free 8-page growth guide and a 10–15-minute strategy call to discover how Meta Ads, AI appointment setting and automated follow-up can help turn more seller enquiries into booked appraisals. No obligation.", { exact: true }).evaluate((element) => element.getBoundingClientRect().top);
+      const guideImageTop = await page.getByRole("img", { name: /Seller Appraisal Growth Guide/ }).evaluate((element) => element.getBoundingClientRect().top);
       expect(guideCopyTop).toBeGreaterThan(formBottom);
       expect(guideImageTop).toBeGreaterThan(guideCopyTop);
       await expect(foundersImage).toBeVisible();
@@ -133,7 +149,7 @@ test("seller pipeline copy and controls remain composed across breakpoints", asy
         return rect.width / rect.height;
       });
       expect(foundersRatio).toBeCloseTo(1206 / 661, 1);
-    } else {
+    } else if (viewport.width >= 1024) {
       await expect(foundersImage).toBeHidden();
     }
   }
@@ -171,7 +187,8 @@ test("the updated funnel media remain in place", async ({ page }) => {
   await expect(heroPlayer).toHaveAttribute("autoplay", "");
   await expect(heroPlayer).toHaveAttribute("silent-autoplay", "allow");
   await expect(page.locator('img[src*="vendor-audit-poster"]')).toHaveCount(0);
-  for (const image of ["seller-appraisal-growth-plan", "seller-pipeline-process", "ai-conversation", "future-seller", "meta-dashboard", "kael-sharp"]) {
+  await expect(page.locator(".process-graphic .process-step")).toHaveCount(4);
+  for (const image of ["seller-appraisal-growth-plan", "ai-conversation", "future-seller", "meta-dashboard", "kael-sharp"]) {
     const asset = page.locator(`img[src*="${image}"]`);
     await expect(asset).toHaveCount(1);
     await asset.scrollIntoViewIfNeeded();

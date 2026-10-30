@@ -54,8 +54,8 @@ export function AuthoritySection() {
           ))}
         </div>
         <PipelineFormCta
-          title="Get the five-step plan and a strategy call tailored to your business."
-          buttonLabel="Free Growth Plan + Strategy Call"
+          title="Explore our five-step system with the free 8-page growth guide and a strategy call."
+          buttonLabel="Get My Free Growth Guide + Strategy Call"
           trackingLabel="Seller Pipeline Audit - testimonials"
         />
       </div>

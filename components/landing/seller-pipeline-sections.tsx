@@ -7,13 +7,13 @@ const assets = "/images/seller-pipeline";
 
 export function LeadComparisonSection() {
   const paths = [
-    { name: "Lead delivery only", label: "The usual hand-off", steps: ["Facebook lead", "Lead notification", "Agent follows up when they can", "No answer", "Lead disappears"], end: "The follow-up is left to you.", active: false },
-    { name: "Arcanium", label: "The follow-through", steps: ["Homeowner enquiry", "Instant response", "AI qualification", "Appointment or nurture", "Seller stays in the pipeline"], end: "Every homeowner has a next step.", active: true },
+    { name: "Lead delivery only", label: "The usual hand-off", steps: ["Seller enquiry arrives", "Agent follows up when available", "Homeowner doesn’t answer", "Other work takes priority", "Potential listing opportunity goes cold"], end: "The follow-up is left to you.", active: false },
+    { name: "Arcanium", label: "The follow-through", steps: ["Local homeowner enquiry arrives", "Immediate AI response", "Seller intent is qualified", "Appointment booked or nurture begins", "Every homeowner has a next step"], end: "Every homeowner has a next step.", active: true },
   ];
   const icons = [Users, Zap, MessageCircle, CalendarCheck, RefreshCw];
   return <section id="the-difference" className="pipeline-section pipeline-dark">
     <div className="pipeline-container">
-      <div data-motion="keyword" className="pipeline-heading"><h2>Getting the <span className="motion-keyword">lead</span> is{" "}<br /><span className="pipeline-soft">only the first step.</span></h2></div>
+      <div data-motion="keyword" className="pipeline-heading"><h2>How Many Potential Listings Are <span className="motion-keyword">Slipping</span> <span className="pipeline-soft">Through the Cracks?</span></h2><p>You spend money generating seller enquiries. But what happens when those homeowners don’t answer the first call, aren’t ready to sell today, or simply get forgotten between appointments?</p></div>
       <div className="pipeline-comparison">
         {paths.map((path) => <article data-motion="comparison" key={path.name} className={`pipeline-path ${path.active ? "pipeline-path-active" : ""}`}>
           <div className="pipeline-path-title"><div><p>{path.label}</p><h3>{path.name}</h3></div>{path.active ? <span className="pipeline-mini-badge">Managed for you</span> : <Mail size={24} aria-hidden="true" />}</div>
@@ -21,9 +21,10 @@ export function LeadComparisonSection() {
           <p className="pipeline-path-end">{path.end}</p>
         </article>)}
       </div>
+      <p className="mt-8 max-w-[650px] text-base leading-[1.75] text-[#aaaab2]">The next seller who enquires might not be ready today. Will you still be in the conversation when they are?</p>
       <PipelineFormCta
-        title="Get the five-step plan and see how it applies to your business."
-        buttonLabel="Free Growth Plan + Strategy Call"
+        title="Explore the five-step system in your free 8-page growth guide."
+        buttonLabel="Get My Free Growth Guide + Strategy Call"
         trackingLabel="Seller Pipeline Audit - lead comparison"
       />
     </div>
@@ -53,7 +54,7 @@ export function SellerSystemSection() {
       </div>
       <PipelineFormCta
         title="See how this system could fit your agency."
-        buttonLabel="Free Growth Plan + Strategy Call"
+        buttonLabel="Get My Free Growth Guide + Strategy Call"
         trackingLabel="Seller Pipeline Audit - system overview"
         variant="light"
       />
@@ -100,8 +101,8 @@ const auditAreas = [
 export function PipelineAuditSection() {
   return <section id="free-audit" className="pipeline-section pipeline-light">
     <div className="pipeline-container pipeline-audit-layout">
-      <div className="pipeline-heading"><h2>Turn More Seller Enquiries Into <span className="pipeline-purple">Appraisals.</span></h2><p>See the five-step blueprint, then map it against your lead generation, follow-up, nurture and booking process in a free 10–15 minute strategy call.</p><ul className="pipeline-audit-points">{["Get the actionable five-step plan", "Find the biggest gap in your pipeline", "Leave with a practical next step"].map(item => <li key={item}><Check size={18} aria-hidden="true" />{item}</li>)}</ul><MetaTrackedLink href="#audit" trackingLabel="Seller Pipeline Audit - offer" className="pipeline-cta">Free Growth Plan + Strategy Call <ArrowRight size={17} aria-hidden="true" /></MetaTrackedLink></div>
-      <div className="pipeline-audit-panel"><div className="pipeline-audit-panel-top"><span><Clock3 size={16} aria-hidden="true" /> 10–15 minute strategy call</span><span>6 areas</span></div><div>{auditAreas.map(({ title, description, Icon }, index) => <article data-motion="audit-row" key={title}><span className="pipeline-icon-box"><Icon size={21} aria-hidden="true" /></span><div><h3>{title}</h3><p>{description}</p></div><span className="pipeline-audit-number">0{index + 1}</span></article>)}</div><p className="pipeline-audit-panel-bottom">Your plan. Your pipeline. A practical next step.</p></div>
+      <div className="pipeline-heading"><h2>Turn More Seller Enquiries Into <span className="pipeline-purple">Appraisals.</span></h2><p>Explore our five-step system in the free 8-page Seller Appraisal Growth Guide, then discuss your lead generation, follow-up, nurture and booking process in a free 10–15-minute strategy call. No obligation.</p><ul className="pipeline-audit-points">{["Get the free 8-page growth guide", "Find the biggest gap in your pipeline", "Leave with a practical next step"].map(item => <li key={item}><Check size={18} aria-hidden="true" />{item}</li>)}</ul><MetaTrackedLink href="#audit" trackingLabel="Seller Pipeline Audit - offer" className="pipeline-cta">Get My Free Growth Guide + Strategy Call <ArrowRight size={17} aria-hidden="true" /></MetaTrackedLink></div>
+      <div className="pipeline-audit-panel"><div className="pipeline-audit-panel-top"><span><Clock3 size={16} aria-hidden="true" /> 10–15 minute strategy call</span><span>6 areas</span></div><div>{auditAreas.map(({ title, description, Icon }, index) => <article data-motion="audit-row" key={title}><span className="pipeline-icon-box"><Icon size={21} aria-hidden="true" /></span><div><h3>{title}</h3><p>{description}</p></div><span className="pipeline-audit-number">0{index + 1}</span></article>)}</div><p className="pipeline-audit-panel-bottom">Our system. Your pipeline. A practical next step.</p></div>
     </div>
   </section>;
 }
