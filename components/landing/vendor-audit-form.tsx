@@ -175,8 +175,11 @@ export function VendorAuditForm() {
         </label>
         <div ref={widgetHost} />
         <button type="submit" disabled={locked} className="min-h-[58px] rounded-[14px] border border-black/10 bg-[#101114] px-6 text-sm font-semibold uppercase tracking-[0.06em] text-white transition duration-300 hover:-translate-y-px hover:bg-[#18191f] disabled:cursor-default disabled:opacity-70">
-          {locked ? "Opening booking times…" : "Free Growth Plan + Strategy Call"}
+          {locked ? "Opening booking times…" : "Get My Free Growth Guide + Strategy Call"}
         </button>
+        <p className="text-center text-xs leading-5 text-black/50 sm:text-[13px]">
+          No thanks — I’ll keep chasing seller enquiries myself and wondering when my next appraisal will come.
+        </p>
         <p className="text-center text-[13px] leading-5 text-black/50">
           By continuing, you agree to receive SMS about your Seller Appraisal Growth Plan, strategy call and related Arcanium Digital services. You can opt out at any time.{" "}
           <a href="/privacy" className="font-semibold text-[#6f1fd1] underline decoration-[#6f1fd1]/35 underline-offset-2">Privacy Policy.</a>

@@ -8,10 +8,10 @@ function HeroSupportingCopy({ className = "", mobileCtaFirst = false }: { classN
     <div className={className}>
       <div className={`${mobileCtaFirst ? "hidden" : ""} max-w-[620px]`}>
         <h2 className="font-display text-xl font-semibold tracking-[-0.025em] text-[#f5f5f3] sm:text-2xl">
-          Your free plan. Personalised to your business.
+          Your free Seller Appraisal Growth Guide.
         </h2>
         <p className="mt-2 text-base font-bold leading-[1.65] text-[#aaaab2] sm:text-[1.05rem] lg:text-lg">
-          Get the five-step plan to generate, follow up and convert more seller enquiries, then see how to apply it to your business.
+          Get the free 8-page growth guide and a 10–15-minute strategy call to discover how Meta Ads, AI appointment setting and automated follow-up can help turn more seller enquiries into booked appraisals.
         </p>
       </div>
       <div className={`${mobileCtaFirst ? "order-1 mb-7" : "mt-7 lg:mt-8"}`}>
@@ -20,11 +20,11 @@ function HeroSupportingCopy({ className = "", mobileCtaFirst = false }: { classN
           trackingLabel="Seller Pipeline Audit - hero"
           className="group inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:w-auto"
         >
-          Free Growth Plan + Strategy Call
+          Get My Free Growth Guide + Strategy Call
           <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
         </MetaTrackedLink>
         <p className="mt-3 text-center text-xs leading-5 text-[#85858e] sm:text-left">
-          Free 8-page PDF + 10–15 minute strategy call. No obligation.
+          Free 8-page guide + 10–15-minute strategy call. No obligation.
         </p>
       </div>
     </div>
