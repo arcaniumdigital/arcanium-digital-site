@@ -9,8 +9,8 @@
 .creativeSection{padding:154px 0 160px;overflow:hidden;background:var(--paper)}
 .centredHead h2{max-width:850px}.centredHead p{color:var(--muted)}
 .creativeViewport{overflow:hidden;padding:6px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
-.creativeTrack{display:flex;width:max-content;gap:14px;animation:creative-scroll 56s linear infinite;will-change:transform}
-.creativeTrack figure{position:relative;width:clamp(270px,31vw,450px);aspect-ratio:1;margin:0;overflow:hidden;border-radius:3px;background:#ddd}
+.creativeTrack{display:flex;width:max-content;gap:20px;animation:creative-scroll 56s linear infinite;will-change:transform}
+.creativeTrack figure{position:relative;width:clamp(205px,22.27vw,320px);aspect-ratio:1;margin:0;overflow:hidden;border-radius:3px;background:#ddd}
 .creativeTrack img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.22,1,.36,1)}
 .creativeTrack figure:hover img{transform:scale(1.025)}
 .creativeViewport:hover .creativeTrack{animation-play-state:paused}
@@ -24,7 +24,7 @@
 .eventChip{display:flex;align-items:center;gap:12px;min-width:278px;padding:13px 16px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:#343539}
 .eventChip i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#ececeb;color:#2a2b2f;font-size:11px;font-style:normal;font-weight:700}
 .eventChip b{display:grid;gap:4px;font-size:12px;font-weight:500}.eventChip small{color:#fff;font-size:11px;font-weight:650}
-@keyframes creative-scroll{to{transform:translateX(calc(-50% - 7px))}}
+@keyframes creative-scroll{to{transform:translateX(calc(-50% - 10px))}}
 @keyframes event-scroll{to{transform:translateX(calc(-50% - 7px))}}
 @media(max-width:800px){.systemSection{padding-top:92px}.mechanismHead,.centredHead{margin-bottom:46px}.creativeSection,.clientsSection{padding-top:96px;padding-bottom:96px}.creativeTrack{gap:12px}.ctaPanel{padding-top:76px;border-radius:24px}.eventViewport{margin-top:56px}}
 @media(max-width:520px){.ctaCopy h2{font-size:3.2rem}.eventChip{min-width:248px}}
