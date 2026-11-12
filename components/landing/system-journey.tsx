@@ -1,76 +1,10 @@
 "use client";
-
 import { CalendarCheck, Check, Home, MapPin, MessageCircle, Sparkles } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect,useRef,useState } from "react";
 import styles from "./system-journey.module.css";
-
-function useSeen() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [seen, setSeen] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) setSeen(true);
-    }, { threshold: 0.3 });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  return { ref, seen };
-}
-
-export function SystemJourney() {
-  const { ref, seen } = useSeen();
-  return (
-    <div ref={ref} className={`${styles.journey} ${seen ? styles.play : ""}`}>
-      <article className={styles.stage}>
-        <div className={styles.stageCopy}><span>01</span><div><p>Launch the campaign</p><h3>Reach homeowners in the right local market.</h3></div></div>
-        <div className={`${styles.scene} ${styles.mapScene}`} aria-label="Animated local campaign map">
-          <div className={styles.mapGrid} aria-hidden="true" />
-          <svg className={styles.territory} viewBox="0 0 520 300" aria-hidden="true">
-            <path d="M42 206 C96 162 130 176 178 125 C229 70 275 103 315 64 C372 8 424 55 482 30" />
-            <path d="M27 248 C103 223 160 260 211 203 C263 146 322 188 365 137 C405 90 453 105 502 79" />
-          </svg>
-          <div className={`${styles.pin} ${styles.pinOne}`}><MapPin /></div>
-          <div className={`${styles.pin} ${styles.pinTwo}`}><Home /></div>
-          <div className={`${styles.pin} ${styles.pinThree}`}><MapPin /></div>
-          <div className={styles.radius} aria-hidden="true"><span /><span /><span /></div>
-          <div className={styles.campaignLabel}><span /> Campaign live <strong>Castle Hill + surrounds</strong></div>
-        </div>
-        <p className={styles.stageFoot}>Campaign, audience and enquiry path managed together.</p>
-      </article>
-
-      <article className={styles.stage}>
-        <div className={styles.stageCopy}><span>02</span><div><p>Start the conversation</p><h3>Turn the enquiry into a useful next step.</h3></div></div>
-        <div className={`${styles.scene} ${styles.chatScene}`} aria-label="Animated seller SMS conversation">
-          <div className={styles.phoneTop}><span><MessageCircle /> Seller enquiry</span><i>Live</i></div>
-          <div className={`${styles.bubble} ${styles.agentBubble}`}>Hi Sarah, saw you were interested in finding out what your home could be worth. Would you prefer a rough guide or an appraisal?</div>
-          <div className={`${styles.bubble} ${styles.sellerBubble}`}>An appraisal would be helpful.</div>
-          <div className={`${styles.bubble} ${styles.agentBubble} ${styles.lastBubble}`}>Perfect. I can show you a couple of available times.</div>
-          <div className={styles.typing}><span /><span /><span /></div>
-          <div className={styles.appointment}><CalendarCheck /><div><strong>Appraisal booked</strong><span>Thursday · 4:00 pm</span></div></div>
-        </div>
-        <p className={styles.stageFoot}>Fast response, context-aware follow-up and booking.</p>
-      </article>
-
-      <article className={styles.stage}>
-        <div className={styles.stageCopy}><span>03</span><div><p>Progress the opportunity</p><h3>Keep the next action visible through to listing.</h3></div></div>
-        <div className={`${styles.scene} ${styles.pipelineScene}`} aria-label="Animated appraisal to listing progression">
-          <div className={styles.progressLine}><span /></div>
-          {[["Appraisal booked", "Thursday · 4:00 pm"], ["Listing presentation", "Follow-up complete"], ["Listing signed", "Pipeline outcome recorded"]].map(([title, detail], index) => (
-            <div className={styles.pipelineRow} key={title}>
-              <span className={styles.rowCheck}><Check /></span>
-              <div><strong>{title}</strong><span>{detail}</span></div>
-              {index === 2 && <Sparkles className={styles.sparkle} />}
-            </div>
-          ))}
-          <div className={styles.resultCard}><span>Seller pipeline</span><strong>One clear journey</strong></div>
-        </div>
-        <p className={styles.stageFoot}>A visible outcome, not another forgotten lead.</p>
-      </article>
-    </div>
-  );
-}
-
+function Step({children,n,reverse=false}:{children:React.ReactNode;n:string;reverse?:boolean}){const ref=useRef<HTMLElement>(null);const[seen,setSeen]=useState(false);useEffect(()=>{const node=ref.current;if(!node)return;const o=new IntersectionObserver(([e])=>{if(e.isIntersecting)setSeen(true)},{threshold:.28});o.observe(node);return()=>o.disconnect()},[]);return <article ref={ref} className={`${styles.step} ${reverse?styles.reverse:""} ${seen?styles.seen:""}`}><span className={styles.number}>{n}</span>{children}</article>}
+export function SystemJourney(){return <div className={styles.journey}>
+<Step n="01"><div className={styles.copy}><b>Step 1</b><h3>We launch your local seller campaign</h3><p>Campaign creative, local targeting and the enquiry path are built to work as one.</p></div><div className={`${styles.visual} ${styles.map}`}><div className={styles.grid}/><svg viewBox="0 0 650 420"><path d="M45 315C130 240 180 300 250 205S390 225 455 120 560 138 620 58"/><path d="M20 365C150 320 210 385 300 280S470 285 630 165"/></svg><i className={styles.pinA}><MapPin/></i><i className={styles.pinB}><Home/></i><i className={styles.pinC}><MapPin/></i><div className={styles.locked}><span/>Campaign live<strong>Local market selected</strong></div></div></Step>
+<Step n="02" reverse><div className={styles.copy}><b>Step 2</b><h3>The assistant turns interest into an appraisal</h3><p>Every enquiry receives a fast, useful response and a clear route toward an available appointment.</p></div><div className={`${styles.visual} ${styles.phone}`}><header><span><MessageCircle/>Seller enquiry</span><em>Live</em></header><p>Hi Sarah, would you prefer a rough price guide or a more accurate appraisal?</p><p>An appraisal would be helpful.</p><p>Perfect. Here are two available times.</p><div className={styles.booked}><CalendarCheck/><span><strong>Appraisal booked</strong>Thursday · 4:00 pm</span></div></div></Step>
+<Step n="03"><div className={styles.copy}><b>Step 3</b><h3>You walk in. The system stays in the deal.</h3><p>The opportunity, follow-up and next action remain visible while the agent focuses on the homeowner.</p></div><div className={`${styles.visual} ${styles.pipeline}`}><div className={styles.line}/>{[["Appraisal booked","Thursday · 4:00 pm"],["Appraisal completed","Follow-up ready"],["Listing opportunity","Next action visible"]].map(([a,b],i)=><div className={styles.row} key={a}><i><Check/></i><span><strong>{a}</strong>{b}</span>{i===2&&<Sparkles/>}</div>)}</div></Step>
+</div>}

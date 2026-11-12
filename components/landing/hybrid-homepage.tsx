@@ -11,166 +11,107 @@ import { SystemJourney } from "@/components/landing/system-journey";
 import { discoveryCtaLabel } from "@/lib/funnel-offer";
 import styles from "./hybrid-homepage.module.css";
 
-const clientCards = [
-  {
-    name: "Mary-Ann McLoughlin",
-    market: "Sunshine Coast",
-    image: "/images/testimonials/mary-ann-mcloughlin.jpg",
-    quote: "A focus on the whole appraisal process, from the first seller enquiry through to follow-up and booking.",
-  },
-  {
-    name: "Kael Sharp",
-    market: "Sydney",
-    image: "/images/testimonials/kael-sharp.jpg",
-    quote: "Practical ideas, careful listening and a clear focus on outcomes.",
-  },
-  {
-    name: "Shana Feng",
-    market: "Brisbane",
-    image: "/images/testimonials/shana.jpg",
-    quote: "A considered, professional process built around what matters to the agent.",
-  },
+const creativeTiles = [
+  ["/images/video/vendor-audit-poster.jpg", "Seller campaign creative"],
+  ["/images/seller-pipeline/meta-dashboard.png", "Campaign reporting"],
+  ["/images/seller-pipeline/ai-conversation.png", "Seller conversation"],
+  ["/images/seller-pipeline/seller-appraisal-growth-plan.png", "Appraisal growth plan"],
+  ["/images/seller-pipeline/future-seller.png", "Future seller nurture"],
+  ["/images/seller-pipeline/client-result.png", "Client result"],
 ];
 
-const journeyEvents = [
-  "New seller enquiry",
-  "Conversation started",
-  "Rough guide requested",
-  "Appraisal time offered",
-  "Future seller nurtured",
-  "Appraisal booked",
+const clientSlides = [
+  { name:"Mary-Ann McLoughlin", area:"Sunshine Coast, QLD", image:"/images/showcase/mary-ann-results.png", stat:"Seller pipeline", detail:"Campaign, conversation and follow-up working as one system." },
+  { name:"Kael Sharp", area:"Castle Hill, NSW", image:"/images/seller-pipeline/ai-conversation.png", stat:"Appraisal journey", detail:"Fast response and a clear route from enquiry to booking." },
+  { name:"Shana Feng", area:"Brisbane, QLD", image:"/images/showcase/suburb-search-opportunity-light.png", stat:"Local opportunity", detail:"A considered system shaped around the agent and their market." },
+];
+
+const leadEvents = [
+  ["SM","New seller enquiry","2 Kinane St, Brighton"],
+  ["JR","Appraisal booked","18 Stanhill Dr, Palm Beach"],
+  ["KP","Rough guide requested","12 High Cres, New Farm"],
+  ["TW","Conversation started","6 Fort Street, Buderim"],
+  ["AL","Future seller nurtured","13 Birrel Street, Bondi"],
+  ["DK","Appraisal time offered","9 Harbour Rd, Hamilton"],
 ];
 
 export function HybridHomepage({ structuredData }: { structuredData: unknown }) {
-  return (
-    <div className={styles.shell}>
-      <Navigation />
-      <main>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
+  return <div className={styles.shell}>
+    <Navigation />
+    <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(structuredData)}} />
+      <HeroSection />
+      <CtaSection />
+      <LogoCarousel />
 
-        <HeroSection />
-        <CtaSection />
-        <LogoCarousel />
+      <section id="system" className={styles.systemSection}>
+        <div className={styles.mechanismHead}>
+          <span>How it works</span>
+          <h2>From attention to appraisal to signed listing.</h2>
+          <p>One connected system moves a homeowner from first enquiry to the next useful action.</p>
+        </div>
+        <SystemJourney />
+      </section>
 
-        <section id="system" className={styles.systemSection}>
-          <div className={styles.container}>
-            <div className={styles.sectionIntro}>
-              <h2>Three moments that move a seller forward.</h2>
-              <p>
-                See how local attention becomes a homeowner conversation, a booked appraisal and a visible listing opportunity.
-              </p>
-            </div>
-            <SystemJourney />
+      <section className={styles.creativeSection}>
+        <header className={styles.centredHead}>
+          <span>Creative</span>
+          <h2>Creative that stops the scroll</h2>
+          <p>Campaign, conversation and conversion assets designed together for the seller journey.</p>
+        </header>
+        <div className={styles.creativeViewport}>
+          <div className={styles.creativeTrack}>
+            {[...creativeTiles,...creativeTiles].map(([src,label],i)=><figure key={src+i}>
+              <Image src={src} alt={i<creativeTiles.length?label:""} aria-hidden={i>=creativeTiles.length} width={950} height={950} />
+            </figure>)}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className={styles.creativeSection}>
-          <div className={styles.container}>
-            <div className={styles.creativeHeading}>
-              <h2>Creative that stops the scroll.</h2>
-              <p>
-                Campaign, conversation and conversion assets designed as one connected seller journey.
-              </p>
-            </div>
-            <div className={styles.creativeGallery}>
-              <figure>
-                <Image
-                  src="/images/video/vendor-audit-poster.jpg"
-                  alt="Arcanium seller appraisal campaign video creative"
-                  fill
-                  sizes="(max-width: 800px) 94vw, 38vw"
-                />
-                <figcaption>Campaign creative</figcaption>
-              </figure>
-              <figure>
-                <Image
-                  src="/images/seller-pipeline/ai-conversation.png"
-                  alt="Illustrative seller appraisal conversation"
-                  fill
-                  sizes="(max-width: 800px) 94vw, 28vw"
-                />
-                <figcaption>Seller conversation</figcaption>
-              </figure>
-              <figure>
-                <Image
-                  src="/images/seller-pipeline/meta-dashboard.png"
-                  alt="Meta campaign performance dashboard"
-                  fill
-                  sizes="(max-width: 800px) 94vw, 28vw"
-                />
-                <figcaption>Transparent reporting</figcaption>
-              </figure>
-            </div>
+      <SellerPathsSection />
+      <SellerProofSection />
+
+      <section id="clients" className={styles.clientsSection}>
+        <header className={styles.centredHead}>
+          <span>Our clients</span>
+          <h2>Agents growing with Arcanium</h2>
+          <p>Seller pipeline systems built around real agents, real markets and a clear next step.</p>
+        </header>
+        <div className={styles.clientShowcase}>
+          <div className={styles.clientPanels}>
+            {clientSlides.map((client,i)=><article key={client.name} className={i===0?styles.clientActive:""}>
+              <p><strong>{client.name}</strong><span>{client.area}</span></p>
+              <h3>{client.stat}</h3>
+              <p>{client.detail}</p>
+            </article>)}
           </div>
-        </section>
-
-        <SellerPathsSection />
-        <SellerProofSection />
-
-        <section id="clients" className={styles.clientsSection}>
-          <div className={styles.container}>
-            <div className={styles.clientsHeading}>
-              <h2>Agents building a better seller pipeline.</h2>
-              <p>Real estate professionals working with Arcanium across Australia.</p>
-            </div>
-            <div className={styles.clientCards}>
-              {clientCards.map((client) => (
-                <article key={client.name}>
-                  <Image
-                    src={client.image}
-                    alt={client.name}
-                    width={680}
-                    height={760}
-                    sizes="(max-width: 800px) 94vw, 31vw"
-                  />
-                  <div>
-                    <span>{client.market}</span>
-                    <h3>{client.name}</h3>
-                    <p>{client.quote}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
+          <div className={styles.clientFrame}>
+            {clientSlides.map((client,i)=><Image key={client.name} className={i===0?styles.frameActive:""} src={client.image} alt={client.name+" seller pipeline system"} width={1152} height={768} />)}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <AuthoritySection />
+      <AuthoritySection />
 
-        <section className={styles.leadBand}>
-          <div className={styles.container}>
-            <h2>Ready for more appraisal conversations?</h2>
-            <p>Book a free discovery call and see how the system could work in your market.</p>
-            <MetaTrackedLink
-              href="#audit"
-              trackingLabel="Seller Pipeline Audit - event band"
-              className={styles.primaryButton}
-            >
-              {discoveryCtaLabel}
-              <ArrowRight aria-hidden="true" />
+      <section className={styles.ctaOuter}>
+        <div className={styles.ctaPanel}>
+          <div className={styles.ctaCopy}>
+            <h2>Ready for more seller conversations?</h2>
+            <p>Book a free discovery call and see what a campaign could look like in your market.</p>
+            <MetaTrackedLink href="#audit" trackingLabel="Seller Pipeline Audit - LeadFleet CTA" className={styles.ctaButton}>
+              {discoveryCtaLabel}<ArrowRight aria-hidden="true" />
             </MetaTrackedLink>
           </div>
-          <p className={styles.eventLabel}>Illustrative seller journey</p>
-          <div className={styles.eventViewport}>
+          <div className={styles.eventViewport} aria-label="Illustrative seller journey events">
             <div className={styles.eventTrack}>
-              {[...journeyEvents, ...journeyEvents].map((event, index) => (
-                <span key={event + "-" + index}>
-                  <i />
-                  {event}
-                  <small>now</small>
-                </span>
-              ))}
+              {[...leadEvents,...leadEvents].map(([initials,event,address],i)=><span className={styles.eventChip} key={event+i} aria-hidden={i>=leadEvents.length}>
+                <i>{initials}</i><b><small>{event}</small>{address}</b>
+              </span>)}
             </div>
           </div>
-        </section>
-      </main>
-      <footer className="pipeline-footer">
-        <a href="#" aria-label="Arcanium Digital home">ARCANIUM DIGITAL</a>
-        <p>Seller enquiries. Real conversations. Clear next steps.</p>
-        <a href="/privacy">Privacy Policy</a>
-      </footer>
-    </div>
-  );
+        </div>
+      </section>
+    </main>
+    <footer className="pipeline-footer"><a href="#" aria-label="Arcanium Digital home">ARCANIUM DIGITAL</a><p>Seller enquiries. Real conversations. Clear next steps.</p><a href="/privacy">Privacy Policy</a></footer>
+  </div>;
 }
