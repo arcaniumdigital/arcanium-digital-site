@@ -87,7 +87,7 @@ export function SellerProofSection() {
       <div className="pipeline-heading"><h2>Here&apos;s what the system achieves within only <span className="pipeline-purple">TWO weeks</span> of starting.</h2></div>
       <div data-motion="proof" className="pipeline-proof-grid">
         <article className="pipeline-proof-card">
-          <a className="pipeline-proof-image" href={`${assets}/meta-dashboard-two-weeks.png`} target="_blank" rel="noopener noreferrer" aria-label="Enlarge Meta campaign results screenshot"><Image src={`${assets}/meta-dashboard-two-weeks.png`} alt="Meta Ads Manager, 28 October to 10 November 2026: three ad sets with 3, 3 and 10 form leads, and spend of $66.50, $43.94 and $132.61." width={2792} height={986} sizes="(max-width: 640px) 100vw, (max-width: 1280px) 94vw, 1140px" unoptimized /></a><p className="pipeline-proof-zoom">Tap image to enlarge</p>
+          <a className="pipeline-proof-image" href={`${assets}/meta-dashboard.png`} target="_blank" rel="noopener noreferrer" aria-label="Enlarge Meta campaign results screenshot"><Image src={`${assets}/meta-dashboard.png`} alt="Meta Ads Manager, 28 October to 10 November 2026: three ad sets with 3, 3 and 10 form leads, and spend of $66.50, $43.94 and $132.61." width={2792} height={986} sizes="(max-width: 640px) 100vw, (max-width: 1280px) 94vw, 1140px" unoptimized /></a><p className="pipeline-proof-zoom">Tap image to enlarge</p>
           <div className="pipeline-metrics"><div><strong>$243.05</strong><span>Total spend</span></div><div><strong>16</strong><span>Meta enquiries<br />(not booked appraisals)</span></div><div><strong>3</strong><span>Ad sets</span></div></div>
         </article>
       </div>
