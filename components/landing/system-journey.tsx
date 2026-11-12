@@ -12,7 +12,7 @@ function Step({ children, n, reverse = false }: { children: React.ReactNode; n: 
     if (!node) return;
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) setSeen(true);
-    }, { threshold: 0.3 });
+    }, { threshold: 0.18, rootMargin: "0px 0px -14% 0px" });
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
@@ -27,6 +27,7 @@ export function SystemJourney() {
       <div className={styles.copy}><b>Step 1</b><h3>We launch your local seller campaign</h3><p>Campaign creative, local targeting and the enquiry path are built to work as one.</p></div>
       <div className={`${styles.visual} ${styles.map}`}>
         <div className={styles.grid} />
+        <span className={styles.mapSweep} aria-hidden="true" />
         <svg viewBox="0 0 650 420" aria-hidden="true">
           <path className={styles.road} d="M45 315C130 240 180 300 250 205S390 225 455 120 560 138 620 58" />
           <path className={styles.roadMuted} d="M20 365C150 320 210 385 300 280S470 285 630 165" />
@@ -59,7 +60,7 @@ export function SystemJourney() {
     <Step n="03">
       <div className={styles.copy}><b>Step 3</b><h3>You walk in. The system stays in the deal.</h3><p>The opportunity, follow-up and next action remain visible while the agent focuses on the homeowner.</p></div>
       <div className={`${styles.visual} ${styles.pipeline}`}>
-        <div className={styles.line} />
+        <div className={styles.line}><span /></div>
         {[["Appraisal booked","Thursday · 4:00 pm"],["Appraisal completed","Follow-up ready"],["Listing opportunity","Next action visible"]].map(([title, meta], index) => <div className={styles.row} key={title}><i><Check /></i><span><strong>{title}</strong>{meta}</span>{index === 2 && <Sparkles />}</div>)}
         <div className={styles.resultCard}><span>Opportunity progressed</span><strong>One connected seller journey</strong></div>
       </div>
