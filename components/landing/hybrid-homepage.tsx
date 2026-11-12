@@ -15,7 +15,7 @@ const creativeTiles = [
   ["/images/video/vendor-audit-poster.jpg", "Seller campaign creative"],
   ["/images/seller-pipeline/meta-dashboard.png", "Campaign reporting"],
   ["/images/seller-pipeline/ai-conversation.png", "Seller conversation"],
-  ["/images/seller-pipeline/seller-appraisal-growth-plan.png", "Appraisal growth plan"],
+  ["/images/seller-pipeline/service-overview.png", "Appraisal growth plan"],
   ["/images/seller-pipeline/future-seller.png", "Future seller nurture"],
   ["/images/seller-pipeline/client-result.png", "Client result"],
 ];
