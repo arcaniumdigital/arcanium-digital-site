@@ -13,14 +13,21 @@ import { discoveryCtaLabel } from "@/lib/funnel-offer";
 import styles from "./hybrid-homepage.module.css";
 
 const creativeTiles = [
-  ["/images/video/vendor-audit-poster.jpg", "Seller campaign creative"],
-  ["/images/seller-pipeline/meta-dashboard.png", "Campaign reporting"],
-  ["/images/seller-pipeline/ai-conversation.png", "Seller conversation"],
-  ["/images/showcase/mary-ann-results.png", "Seller campaign results"],
-  ["/images/seller-pipeline/future-seller.png", "Future seller nurture"],
-  ["/images/seller-pipeline/client-result.png", "Client result"],
-  ["/images/seller-pipeline/service-overview.png", "Appraisal growth plan"],
-  ["/images/showcase/built-for-google-ai-search.png", "Digital presence creative"],
+  ["/images/campaign-creative/mary-pelican-2026.png", "Pelican Waters property price update campaign"],
+  ["/images/campaign-creative/kael-castle-street-2026.png", "Castle Hill street by street appraisal campaign"],
+  ["/images/campaign-creative/mary-currimundi-worth-map.png", "Currimundi home value campaign"],
+  ["/images/campaign-creative/kael-kellyville-2025-2026.png", "Kellyville annual home price campaign"],
+  ["/images/campaign-creative/mary-caloundra-2026.png", "Caloundra West property price update campaign"],
+  ["/images/campaign-creative/kael-north-kellyville-street-2026.png", "North Kellyville street by street appraisal campaign"],
+  ["/images/campaign-creative/mary-pelican-price-update.png", "Pelican Waters property value campaign"],
+  ["/images/campaign-creative/kael-castle-2025-2026.png", "Castle Hill annual home price campaign"],
+  ["/images/campaign-creative/mary-currimundi-price-update.png", "Currimundi property price update campaign"],
+  ["/images/campaign-creative/kael-kellyville-street-2026.png", "Kellyville street by street appraisal campaign"],
+  ["/images/campaign-creative/mary-caloundra-worth-map.png", "Caloundra West home value campaign"],
+  ["/images/campaign-creative/kael-north-kellyville-2025-2026.png", "North Kellyville annual home price campaign"],
+  ["/images/campaign-creative/mary-currimundi-2026.png", "Currimundi 2026 property price update campaign"],
+  ["/images/campaign-creative/mary-caloundra-price-update.png", "Caloundra West property value campaign"],
+  ["/images/campaign-creative/mary-pelican-worth-map.png", "Pelican Waters home value campaign"],
 ];
 
 const leadEvents = [
