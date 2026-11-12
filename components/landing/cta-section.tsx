@@ -1,23 +1,65 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { VendorAuditForm } from "./vendor-audit-form";
 
+const discoveryDescription = "Book your free 10-minute discovery call and receive our complimentary growth guide on running lead generation campaigns and utilising AI appointment setting and automated follow-up to turn more seller enquiries into booked appraisals.";
+
 export function CtaSection() {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
+      { threshold: 0.2 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="audit" className="relative scroll-mt-24 bg-[#0a0b0d] px-4 pb-24 pt-2 md:px-8 lg:scroll-mt-28 lg:px-12 lg:pb-28">
-      <div className="mx-auto max-w-[1200px]">
-        <div className="overflow-hidden rounded-[18px] bg-[#f1f0eb] lg:grid lg:grid-cols-2">
-          <div className="grid content-center px-6 py-12 sm:px-10 lg:order-2 lg:px-14 lg:py-16">
-            <p className="mb-3 text-sm font-semibold text-[#6b6d68]">A focused 10-minute conversation</p>
-            <h2 className="max-w-[520px] font-display text-[clamp(2.25rem,4vw,3.6rem)] font-medium leading-[.98] tracking-[-0.04em] text-[#151613]">
-              See what this could look like in your market.
-            </h2>
-            <p className="mt-5 max-w-[520px] text-base leading-[1.65] text-[#62645f]">Share your details and choose a time. We&apos;ll map the simplest path from seller enquiry to appraisal for your agency.</p>
-            <VendorAuditForm />
+    <section id="audit" ref={sectionRef} className="relative scroll-mt-24 bg-[#0d0e12] px-3 py-20 sm:px-4 md:px-8 lg:scroll-mt-[200px] lg:px-12 lg:pb-6 lg:pt-0">
+      <div className="mx-auto max-w-[1280px] lg:-translate-y-24">
+        <div className={`transition-transform duration-700 ${isVisible ? "translate-y-0" : "translate-y-2"}`}>
+          <div data-audit-card className="overflow-hidden rounded-[24px] border border-white/70 bg-[#f3f2ee] shadow-[0_42px_120px_rgba(0,0,0,0.32)] lg:grid lg:grid-cols-[0.8fr_1.2fr] lg:rounded-[32px]">
+            <div className="bg-white/55 px-1 py-2 sm:px-4 sm:py-5 lg:order-2 lg:grid lg:content-center lg:px-8 lg:py-10">
+              <h2 className="mx-5 mb-6 mt-4 font-display text-[clamp(1.875rem,4vw,3.25rem)] font-semibold leading-[1] tracking-[-0.04em] text-[#101114] sm:mx-4 lg:hidden">
+                Secure Your Next Appraisal
+              </h2>
+              <VendorAuditForm />
+            </div>
+            <div className="relative order-2 overflow-hidden border-t border-black/8 px-6 pb-7 pt-6 sm:px-8 lg:order-1 lg:border-r lg:border-t-0 lg:px-16 lg:py-16">
+              <div className="pointer-events-none absolute -left-24 -top-24 size-64 rounded-full bg-[#8f33ff]/10 blur-3xl" />
+              <div className="relative">
+                <h2 className="mb-6 hidden max-w-[620px] font-display text-[clamp(1.875rem,4vw,3.25rem)] font-semibold leading-[1] tracking-[-0.04em] text-[#101114] lg:block">
+                  Secure Your Next Appraisal
+                </h2>
+                <div data-motion="guide" className="motion-guide overflow-hidden rounded-[14px] border border-black/10 bg-white shadow-[0_14px_35px_rgba(23,18,27,0.1)] lg:rounded-[16px] lg:shadow-[0_18px_45px_rgba(23,18,27,0.12)]">
+                  <Image
+                    src="/images/seller-pipeline/service-overview.png"
+                    alt="Complimentary Seller Appraisal Growth Guide covering Meta campaigns, AI response, seller nurture, appraisal booking and pipeline management."
+                    width={1448}
+                    height={1086}
+                    sizes="(max-width: 1024px) 92vw, 470px"
+                    quality={78}
+                    className="h-auto w-full"
+                    priority
+                  />
+                </div>
+
+                <p className="mt-4 max-w-lg text-sm font-medium leading-[1.65] text-[#64656b] lg:hidden">
+                  {discoveryDescription}
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="relative min-h-[360px] overflow-hidden bg-[#deded8] lg:order-1 lg:min-h-[680px]">
-            <Image src="/images/seller-pipeline/service-overview.png" alt="Seller appraisal growth system overview" fill sizes="(max-width: 1024px) 100vw, 600px" quality={82} className="object-cover" priority />
+          <div data-audit-description className="mx-auto mt-9 hidden max-w-[940px] px-6 text-center lg:block">
+            <p className="text-lg font-medium leading-[1.65] text-[#c5c5cc]">{discoveryDescription}</p>
           </div>
         </div>
       </div>
