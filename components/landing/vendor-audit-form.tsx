@@ -167,11 +167,11 @@ export function VendorAuditForm() {
       <form onSubmit={submit} className="mx-auto grid max-w-[600px] gap-4 p-5 text-left sm:p-8">
         <label className="grid gap-2.5">
           <span className="text-sm font-bold text-[#111218]/70">Full name</span>
-          <input required minLength={2} maxLength={120} autoComplete="name" value={fullName} onChange={(event) => setFullName(event.target.value)} className="h-[58px] rounded-[14px] border border-black/12 bg-white px-[18px] text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="Your name" />
+          <input id="seller-growth-full-name" name="fullName" required minLength={2} maxLength={120} autoComplete="name" value={fullName} onChange={(event) => setFullName(event.target.value)} className="h-[58px] rounded-[14px] border border-black/12 bg-white px-[18px] text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="Your name" />
         </label>
         <label className="grid gap-2.5">
           <span className="text-sm font-bold text-[#111218]/70">Best mobile number</span>
-          <input required minLength={8} maxLength={30} type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={(event) => setPhone(event.target.value)} className="h-[58px] rounded-[14px] border border-black/12 bg-white px-[18px] text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="04xx xxx xxx" />
+          <input id="seller-growth-phone" name="phone" required minLength={8} maxLength={30} type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={(event) => setPhone(event.target.value)} className="h-[58px] rounded-[14px] border border-black/12 bg-white px-[18px] text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="04xx xxx xxx" />
         </label>
         <div ref={widgetHost} />
         <button type="submit" disabled={locked} className="min-h-[58px] rounded-[14px] border border-black/10 bg-[#101114] px-6 text-sm font-semibold uppercase tracking-[0.06em] text-white transition duration-300 hover:-translate-y-px hover:bg-[#18191f] disabled:cursor-default disabled:opacity-70">
@@ -180,7 +180,7 @@ export function VendorAuditForm() {
         <p className="text-center text-xs leading-5 text-black/50 sm:text-[13px]">
           No thanks — I’ll keep chasing seller enquiries myself and wondering when my next appraisal will come.
         </p>
-        <p className="text-center text-[13px] leading-5 text-black/50">
+        <p className="text-center text-[13px] leading-5 text-black/70">
           By continuing, you agree to receive SMS about your Seller Appraisal Growth Plan, strategy call and related Arcanium Digital services. You can opt out at any time.{" "}
           <a href="/privacy" className="font-semibold text-[#6f1fd1] underline decoration-[#6f1fd1]/35 underline-offset-2">Privacy Policy.</a>
         </p>
@@ -189,3 +189,4 @@ export function VendorAuditForm() {
     </>
   );
 }
+
