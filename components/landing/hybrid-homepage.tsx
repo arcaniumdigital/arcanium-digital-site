@@ -72,7 +72,7 @@ export function HybridHomepage({ structuredData }: { structuredData: unknown }) 
         <header className={styles.centredHead}>
           <span>Our clients</span>
           <h2>Agents growing with Arcanium</h2>
-          <p>Seller pipeline systems built around real agents, real markets and a clear next step.</p>
+          <p>A replaceable showcase for verified client performance, market context and campaign work.</p>
         </header>
         <ClientShowcase />
       </section>
