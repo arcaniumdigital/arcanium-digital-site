@@ -17,7 +17,7 @@ const structuredData = [
 ];
 
 export default function Home() {
-  const useHybridHomepage = process.env.NEXT_PUBLIC_HOMEPAGE_VARIANT !== "legacy";
+  const useHybridHomepage = process.env.NEXT_PUBLIC_HOMEPAGE_VARIANT === "hybrid";
   return useHybridHomepage
     ? <HybridHomepage structuredData={structuredData} />
     : <LegacyHomepage structuredData={structuredData} />;
