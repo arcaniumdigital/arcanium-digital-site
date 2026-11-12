@@ -10,10 +10,10 @@ function HeroCta({ className = "" }: { className?: string }) {
       <MetaTrackedLink
         href="#audit"
         trackingLabel="Seller Pipeline Audit - hero"
-        className="discovery-cta group inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:w-auto"
+        className="discovery-cta group inline-flex min-h-14 w-full items-center justify-center rounded-[14px] border border-white/15 bg-[#f4f4f2] px-7 text-sm font-semibold text-[#0b0c0f] transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] motion-reduce:transition-none motion-safe:hover:-translate-y-px motion-safe:hover:bg-white sm:w-auto"
       >
         <span className="discovery-cta-copy">{discoveryCtaLabel}</span>
-        <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+        <ArrowRight className="ml-2 size-4 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none motion-safe:group-hover:translate-x-1" aria-hidden="true" />
       </MetaTrackedLink>
     </div>
   );
