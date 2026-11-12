@@ -51,8 +51,8 @@ export function HybridHomepage({ structuredData }: { structuredData: unknown }) 
       <section id="system" className={styles.systemSection}>
         <div className={styles.mechanismHead}>
           <span>How it works</span>
-          <h2>From attention to appraisal to signed listing.</h2>
-          <p>One connected system moves a homeowner from first enquiry to the next useful action.</p>
+          <h2>How an ad becomes a listing</h2>
+          <p>Every campaign is built to move local owners from the first scroll to a signed listing.</p>
         </div>
         <SystemJourney />
       </section>

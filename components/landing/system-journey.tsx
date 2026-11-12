@@ -1,69 +1,107 @@
 "use client";
 
-import { CalendarCheck, Check, Home, LockKeyhole, MessageCircle, Sparkles } from "lucide-react";
+import { CalendarCheck, Check, Home, MapPin, Search, UserRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import styles from "./system-journey.module.css";
 
-function Step({ children, n, reverse = false }: { children: React.ReactNode; n: string; reverse?: boolean }) {
-  const ref = useRef<HTMLElement>(null);
-  const [seen, setSeen] = useState(false);
+const stages = [
+  { title: "Ad", copy: "Scroll-stopping ads reach local owners on Facebook, Instagram and Google." },
+  { title: "Lead", copy: "An owner checks what their home is worth, and the lead comes straight to you." },
+  { title: "Appraisal", copy: "Value-led nurturing keeps you top of mind until the appraisal is booked." },
+  { title: "Listing", copy: "You walk in as the agent they already know, and win the listing." },
+];
 
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) setSeen(true);
-    }, { threshold: 0.34, rootMargin: "0px 0px -8% 0px" });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+function PhoneScreen({ stage }: { stage: number }) {
+  if (stage === 0) return <div className={styles.screenContent} key="ad">
+    <span className={styles.screenEyebrow}>Local property update</span>
+    <h3>What&apos;s your home worth?</h3>
+    <p>Get an instant price estimate in seconds.</p>
+    <div className={styles.addressField}><Search /><span>Enter your address...</span></div>
+    <button type="button" tabIndex={-1}>Get estimate</button>
+  </div>;
 
-  return <article ref={ref} className={`${styles.step} ${reverse ? styles.reverse : ""} ${seen ? styles.seen : ""}`}>
-    <span className={styles.number}>{n}</span>
-    {children}
-  </article>;
+  if (stage === 1) return <div className={styles.screenContent} key="lead">
+    <span className={styles.successIcon}><Check /></span>
+    <h3>Enquiry received</h3>
+    <p>Your local property update is on its way.</p>
+    <div className={styles.propertyCard}><MapPin /><span><small>Property</small><strong>6 Fort Street, Buderim</strong></span></div>
+    <button type="button" tabIndex={-1}>View update</button>
+  </div>;
+
+  if (stage === 2) return <div className={styles.screenContent} key="appraisal">
+    <span className={styles.successIcon}><Check /></span>
+    <h3>Appraisal booked</h3>
+    <p>We&apos;ll see you at 6 Fort Street.</p>
+    <div className={styles.appointmentCard}><b>THU<em>30</em></b><span><small>Free appraisal</small><strong>10:30am · 6 Fort Street</strong></span></div>
+    <button type="button" tabIndex={-1}>Add to calendar</button>
+  </div>;
+
+  return <div className={styles.screenContent} key="listing">
+    <span className={styles.successIcon}><Home /></span>
+    <h3>Listing secured</h3>
+    <p>The homeowner already knows who to call.</p>
+    <div className={styles.propertyCard}><Check /><span><small>Signed listing</small><strong>6 Fort Street, Buderim</strong></span></div>
+    <button type="button" tabIndex={-1}>Opportunity won</button>
+  </div>;
 }
 
 export function SystemJourney() {
-  return <div className={styles.journey}>
-    <Step n="01">
-      <div className={styles.copy}><b>Step 1</b><h3>We launch your local seller campaign</h3><p>Campaign creative, local targeting and the enquiry path are built to work as one.</p></div>
-      <div className={`${styles.visual} ${styles.mapScene}`} aria-label="A local area becoming active under the agent's brand">
-        <div className={styles.mapGrid} aria-hidden="true"><i className={styles.roadOne} /><i className={styles.roadTwo} /><i className={styles.roadThree} /><i className={styles.roadFour} /></div>
-        <span className={`${styles.takenArea} ${styles.takenOne}`}><LockKeyhole /> Taken</span>
-        <span className={`${styles.takenArea} ${styles.takenTwo}`}><LockKeyhole /> Taken</span>
-        <div className={styles.localArea}><span className={styles.localPulse} /><i><Home /></i><strong>Your suburb</strong></div>
-        <div className={styles.mapResult}><span><LockKeyhole /></span><p><strong>Your area, under your brand</strong><small>Local homeowner campaigns are live.</small></p><em>Live</em></div>
-      </div>
-    </Step>
+  const root = useRef<HTMLElement>(null);
+  const [active, setActive] = useState(0);
 
-    <Step n="02" reverse>
-      <div className={styles.copy}><b>Step 2</b><h3>The assistant turns interest into an appraisal</h3><p>Every enquiry receives a fast, useful response and a clear route toward an available appointment.</p></div>
-      <div className={`${styles.visual} ${styles.chatScene}`} aria-label="A homeowner conversation becoming a booked appraisal">
-        <div className={styles.bookedBanner}><span><CalendarCheck /></span><p><strong>Appraisal booked</strong><small>Sarah M. · Thu 4:00 pm</small></p><Check /></div>
-        <div className={styles.phone}>
-          <header><span>SM</span><p><strong>Sarah M.</strong><small>Text message · SMS</small></p><em>now</em></header>
-          <div className={styles.messages}>
-            <p className={styles.outgoing}>Hi Sarah, would you prefer a rough price guide or a more accurate appraisal?</p>
-            <p className={styles.incoming}>An appraisal would be helpful.</p>
-            <p className={styles.outgoing}>Perfect. Thursday at 4pm or Friday at 10:30am?</p>
-            <p className={styles.incoming}>Thursday works</p>
-          </div>
-          <footer><MessageCircle /><span>Reply handled in seconds</span></footer>
+  useEffect(() => {
+    const section = root.current;
+    if (!section) return;
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
+      const rect = section.getBoundingClientRect();
+      const travel = Math.max(rect.height - window.innerHeight, 1);
+      const progress = Math.min(0.999, Math.max(0, -rect.top / travel));
+      setActive(Math.min(3, Math.floor(progress * 4)));
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  return <section ref={root} className={styles.journey} aria-label="How an ad becomes a listing">
+    <div className={styles.sticky}>
+      <ol className={styles.timeline}>
+        {stages.map((stage, index) => <li key={stage.title} className={index <= active ? styles.complete : ""} aria-current={index === active ? "step" : undefined}>
+          <span>{index + 1}</span>
+          <div><h3>{stage.title}</h3><p>{stage.copy}</p></div>
+        </li>)}
+      </ol>
+      <div className={styles.mobileStage} key={stages[active].title}>
+        <h3>{stages[active].title}</h3>
+        <p>{stages[active].copy}</p>
+      </div>
+
+      <div className={`${styles.stage} ${styles[`stage${active}`]}`}>
+        <div className={styles.creativeCardOne}><span>LOCAL PROPERTY UPDATE</span><strong>What&apos;s your home worth?</strong><small>Get your free estimate</small></div>
+        <div className={styles.creativeCardTwo}><span>JUST SOLD</span><strong>6 Fort Street</strong><small>Buderim</small></div>
+        <div className={styles.guideCard}><small>SELLER GUIDE</small><strong>The complete guide to selling your property</strong></div>
+
+        <div className={styles.phone}><i /><div className={styles.phoneScreen}><PhoneScreen stage={active} /></div></div>
+
+        <div className={styles.notifications} aria-live="polite">
+          <div className={styles.noticeLead}><span><UserRound /></span><p><small>New seller lead</small><strong>6 Fort Street, Buderim</strong></p></div>
+          <div className={styles.noticeAppraisal}><span>SM</span><p><small>Appraisal booked</small><strong>Thu 30 Oct · 10:30am</strong></p></div>
+          <div className={styles.noticeListing}><span><Home /></span><p><small>Listing signed</small><strong>6 Fort Street, Buderim</strong></p></div>
         </div>
       </div>
-    </Step>
-
-    <Step n="03">
-      <div className={styles.copy}><b>Step 3</b><h3>You walk in. The system stays in the deal.</h3><p>The opportunity, follow-up and next action remain visible while the agent focuses on the homeowner.</p></div>
-      <div className={`${styles.visual} ${styles.dealScene}`} aria-label="An appraisal progressing through the seller pipeline">
-        <div className={styles.dealTopline}><Sparkles /><span>Seller opportunity</span><em>Live</em></div>
-        <div className={styles.dealLine} aria-hidden="true" />
-        <div className={`${styles.dealRow} ${styles.dealRowOne}`}><span><CalendarCheck /></span><p><strong>Appraisal booked</strong><small>12 Beach Road · Thursday, 4:00 pm</small></p><em>Confirmed</em></div>
-        <div className={`${styles.dealRow} ${styles.dealRowTwo}`}><span><MessageCircle /></span><p><strong>Follow-up ready</strong><small>The right next action stays visible.</small></p><em>Prepared</em></div>
-        <div className={`${styles.dealRow} ${styles.dealRowThree}`}><span><Home /></span><p><strong>Listing opportunity active</strong><small>Context, conversation and timing in one place.</small></p><em>Active</em></div>
-        <div className={styles.dealOutcome}><Check /><p><strong>Nothing gets lost after the booking.</strong><small>The agent sees exactly what happens next.</small></p></div>
-      </div>
-    </Step>
-  </div>;
+    </div>
+  </section>;
 }
