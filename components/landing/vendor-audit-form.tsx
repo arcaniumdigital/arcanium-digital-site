@@ -165,21 +165,21 @@ export function VendorAuditForm() {
         strategy="afterInteractive"
         onLoad={renderTurnstile}
       />
-      <form onSubmit={submit} className="mx-auto grid max-w-[600px] gap-4 p-5 text-left sm:p-8">
+      <form onSubmit={submit} className="mt-8 grid max-w-[560px] gap-4 text-left">
         <label className="grid gap-2.5">
-          <span className="text-sm font-bold text-[#111218]/70">Full name</span>
-          <input required minLength={2} maxLength={120} autoComplete="name" value={fullName} onChange={(event) => setFullName(event.target.value)} className="h-[58px] rounded-[14px] border border-black/12 bg-white px-[18px] text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="Your name" />
+          <span className="text-sm font-semibold text-[#333530]">Full name</span>
+          <input required minLength={2} maxLength={120} autoComplete="name" value={fullName} onChange={(event) => setFullName(event.target.value)} className="h-14 rounded-[12px] border border-black/10 bg-white px-4 text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="Your name" />
         </label>
         <label className="grid gap-2.5">
-          <span className="text-sm font-bold text-[#111218]/70">Best mobile number</span>
-          <input required minLength={8} maxLength={30} type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={(event) => setPhone(event.target.value)} className="h-[58px] rounded-[14px] border border-black/12 bg-white px-[18px] text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="04xx xxx xxx" />
+          <span className="text-sm font-semibold text-[#333530]">Best mobile number</span>
+          <input required minLength={8} maxLength={30} type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={(event) => setPhone(event.target.value)} className="h-14 rounded-[12px] border border-black/10 bg-white px-4 text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="04xx xxx xxx" />
         </label>
         <div ref={widgetHost} />
-        <button type="submit" disabled={locked} className="discovery-submit min-h-[58px] rounded-[14px] border border-black/10 bg-[#101114] px-6 text-sm font-semibold uppercase tracking-[0.06em] text-white transition duration-300 hover:-translate-y-px hover:bg-[#18191f] disabled:cursor-default disabled:opacity-70">
+        <button type="submit" disabled={locked} className="discovery-submit min-h-14 rounded-[12px] bg-[#11120f] px-6 text-sm font-semibold text-white transition-[background-color,transform] duration-200 hover:-translate-y-px hover:bg-[#252622] disabled:cursor-default disabled:opacity-70">
           {locked ? "Opening booking times…" : discoveryCtaLabel}
         </button>
-        <p className="text-center text-xs leading-5 text-black/50 sm:text-[13px]">
-          No thanks, I&apos;ll keep wondering when my next appraisal will happen and chase every seller enquiry myself.
+        <p className="text-left text-xs leading-5 text-black/50 sm:text-[13px]">
+          10 minutes. No obligation. A clear plan for your market.
         </p>
         <p aria-live="polite" className="min-h-5 text-center text-sm font-medium text-red-700">{error}</p>
       </form>
