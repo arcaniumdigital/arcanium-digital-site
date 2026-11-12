@@ -41,7 +41,7 @@ export function CtaSection() {
                 </h2>
                 <div data-motion="guide" className="motion-guide overflow-hidden rounded-[14px] border border-black/10 bg-white shadow-[0_14px_35px_rgba(23,18,27,0.1)] lg:rounded-[16px] lg:shadow-[0_18px_45px_rgba(23,18,27,0.12)]">
                   <Image
-                    src="/images/seller-pipeline/seller-appraisal-growth-plan-discovery.png"
+                    src="/images/seller-pipeline/service-overview.png"
                     alt="Complimentary Seller Appraisal Growth Guide covering Meta campaigns, AI response, seller nurture, appraisal booking and pipeline management."
                     width={1448}
                     height={1086}
