@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { MetaTrackedLink } from "@/components/analytics/meta-tracked-link";
 import { AuthoritySection } from "@/components/landing/authority-section";
+import { ClientShowcase } from "@/components/landing/client-showcase";
 import { CtaSection } from "@/components/landing/cta-section";
 import { HeroSection } from "@/components/landing/hero-section";
 import { LogoCarousel } from "@/components/landing/logo-carousel";
@@ -15,15 +16,11 @@ const creativeTiles = [
   ["/images/video/vendor-audit-poster.jpg", "Seller campaign creative"],
   ["/images/seller-pipeline/meta-dashboard.png", "Campaign reporting"],
   ["/images/seller-pipeline/ai-conversation.png", "Seller conversation"],
-  ["/images/seller-pipeline/service-overview.png", "Appraisal growth plan"],
+  ["/images/showcase/mary-ann-results.png", "Seller campaign results"],
   ["/images/seller-pipeline/future-seller.png", "Future seller nurture"],
   ["/images/seller-pipeline/client-result.png", "Client result"],
-];
-
-const clientSlides = [
-  { name:"Mary-Ann McLoughlin", area:"Sunshine Coast, QLD", image:"/images/showcase/mary-ann-results.png", stat:"Seller pipeline", detail:"Campaign, conversation and follow-up working as one system." },
-  { name:"Kael Sharp", area:"Castle Hill, NSW", image:"/images/seller-pipeline/ai-conversation.png", stat:"Appraisal journey", detail:"Fast response and a clear route from enquiry to booking." },
-  { name:"Shana Feng", area:"Brisbane, QLD", image:"/images/showcase/suburb-search-opportunity-light.png", stat:"Local opportunity", detail:"A considered system shaped around the agent and their market." },
+  ["/images/seller-pipeline/service-overview.png", "Appraisal growth plan"],
+  ["/images/showcase/built-for-google-ai-search.png", "Digital presence creative"],
 ];
 
 const leadEvents = [
@@ -77,18 +74,7 @@ export function HybridHomepage({ structuredData }: { structuredData: unknown }) 
           <h2>Agents growing with Arcanium</h2>
           <p>Seller pipeline systems built around real agents, real markets and a clear next step.</p>
         </header>
-        <div className={styles.clientShowcase}>
-          <div className={styles.clientPanels}>
-            {clientSlides.map((client,i)=><article key={client.name} className={i===0?styles.clientActive:""}>
-              <p><strong>{client.name}</strong><span>{client.area}</span></p>
-              <h3>{client.stat}</h3>
-              <p>{client.detail}</p>
-            </article>)}
-          </div>
-          <div className={styles.clientFrame}>
-            {clientSlides.map((client,i)=><Image key={client.name} className={i===0?styles.frameActive:""} src={client.image} alt={client.name+" seller pipeline system"} width={1152} height={768} />)}
-          </div>
-        </div>
+        <ClientShowcase />
       </section>
 
       <AuthoritySection />
@@ -112,6 +98,5 @@ export function HybridHomepage({ structuredData }: { structuredData: unknown }) 
         </div>
       </section>
     </main>
-    <footer className="pipeline-footer"><a href="#" aria-label="Arcanium Digital home">ARCANIUM DIGITAL</a><p>Seller enquiries. Real conversations. Clear next steps.</p><a href="/privacy">Privacy Policy</a></footer>
   </div>;
 }
