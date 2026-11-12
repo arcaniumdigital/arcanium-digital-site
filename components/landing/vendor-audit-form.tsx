@@ -1,5 +1,6 @@
 "use client";
 
+import { discoveryCtaLabel } from "@/lib/funnel-offer";
 import * as Sentry from "@sentry/nextjs";
 import Script from "next/script";
 import { useCallback, useRef, useState, type FormEvent } from "react";
@@ -174,15 +175,11 @@ export function VendorAuditForm() {
           <input required minLength={8} maxLength={30} type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={(event) => setPhone(event.target.value)} className="h-[58px] rounded-[14px] border border-black/12 bg-white px-[18px] text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="04xx xxx xxx" />
         </label>
         <div ref={widgetHost} />
-        <button type="submit" disabled={locked} className="min-h-[58px] rounded-[14px] border border-black/10 bg-[#101114] px-6 text-sm font-semibold uppercase tracking-[0.06em] text-white transition duration-300 hover:-translate-y-px hover:bg-[#18191f] disabled:cursor-default disabled:opacity-70">
-          {locked ? "Opening booking times…" : "Get My Free Growth Guide + Strategy Call"}
+        <button type="submit" disabled={locked} className="discovery-submit min-h-[58px] rounded-[14px] border border-black/10 bg-[#101114] px-6 text-sm font-semibold uppercase tracking-[0.06em] text-white transition duration-300 hover:-translate-y-px hover:bg-[#18191f] disabled:cursor-default disabled:opacity-70">
+          {locked ? "Opening booking times…" : discoveryCtaLabel}
         </button>
         <p className="text-center text-xs leading-5 text-black/50 sm:text-[13px]">
-          No thanks — I’ll keep chasing seller enquiries myself and wondering when my next appraisal will come.
-        </p>
-        <p className="text-center text-[13px] leading-5 text-black/50">
-          By continuing, you agree to receive SMS about your Seller Appraisal Growth Plan, strategy call and related Arcanium Digital services. You can opt out at any time.{" "}
-          <a href="/privacy" className="font-semibold text-[#6f1fd1] underline decoration-[#6f1fd1]/35 underline-offset-2">Privacy Policy.</a>
+          No thanks, I&apos;ll keep wondering when my next appraisal will happen and chase every seller enquiry myself.
         </p>
         <p aria-live="polite" className="min-h-5 text-center text-sm font-medium text-red-700">{error}</p>
       </form>

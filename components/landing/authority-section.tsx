@@ -1,3 +1,4 @@
+import { discoveryCtaLabel } from "@/lib/funnel-offer";
 import { Quote } from "lucide-react";
 import Image from "next/image";
 import { PipelineFormCta } from "@/components/landing/pipeline-form-cta";
@@ -54,8 +55,8 @@ export function AuthoritySection() {
           ))}
         </div>
         <PipelineFormCta
-          title="Explore our five-step system with the free 8-page growth guide and a strategy call."
-          buttonLabel="Get My Free Growth Guide + Strategy Call"
+          title="Discover how our system could help you book more appraisals in a free 10-minute discovery call."
+          buttonLabel={discoveryCtaLabel}
           trackingLabel="Seller Pipeline Audit - testimonials"
         />
       </div>

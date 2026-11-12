@@ -7,4 +7,4 @@ export const siteUrl =
 export const siteName = "Arcanium Digital";
 
 export const siteDescription =
-  "Get Arcanium Digital’s free 8-page Seller Appraisal Growth Guide and free 10–15-minute strategy call for generating, nurturing and converting more seller enquiries.";
+  "Your first on-site appraisal booked in 7 days and 3 more within the month, or you don't pay. Book a free 10-minute discovery call and receive a complimentary Seller Appraisal Growth Guide.";

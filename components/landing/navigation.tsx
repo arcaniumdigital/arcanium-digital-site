@@ -1,5 +1,6 @@
 "use client";
 
+import { discoveryCtaLabel } from "@/lib/funnel-offer";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
@@ -41,9 +42,9 @@ export function Navigation() {
         <MetaTrackedLink
           href="#audit"
           trackingLabel="Seller Pipeline Audit - header"
-          className="group inline-flex min-h-11 items-center justify-center rounded-[12px] border border-white/15 bg-[#f4f4f2] px-3 text-[0.68rem] font-bold tracking-[-0.01em] text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:px-4 sm:text-xs lg:h-[46px] lg:px-5 lg:text-sm"
+          className="discovery-cta discovery-cta-header group inline-flex min-h-11 items-center justify-center rounded-[12px] border border-white/15 bg-[#f4f4f2] px-3 text-[0.68rem] font-bold tracking-[-0.01em] text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:px-4 sm:text-xs lg:h-[46px] lg:px-5 lg:text-sm"
         >
-          Get My Free Growth Guide + Strategy Call
+          <span className="discovery-cta-copy">{discoveryCtaLabel}</span>
           <ArrowRight className="ml-1.5 size-3.5 transition-transform duration-300 group-hover:translate-x-0.5 lg:size-4" aria-hidden="true" />
         </MetaTrackedLink>
       </nav>

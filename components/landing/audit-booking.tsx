@@ -130,13 +130,13 @@ export function AuditBooking({
   return (
     <section id="booking" className="rounded-[20px] border border-white/15 bg-[#f3f2ee] p-4 text-left text-[#101114] shadow-[0_40px_100px_rgba(0,0,0,0.35)] sm:rounded-[24px] sm:p-7 min-[1180px]:rounded-[28px] min-[1180px]:p-8">
       <h2 className="font-display text-[clamp(2rem,8vw,2.35rem)] font-semibold leading-[1.02] tracking-[-0.04em] min-[1180px]:text-[clamp(2rem,2.6vw,2.4rem)]">
-        Book your strategy call
+        Book your discovery call
       </h2>
 
       <p className="mt-4 text-[15px] font-medium leading-[1.6] text-[#55565d] sm:text-base">
-        Your details are in and your plan is ready. Next,{" "}
+        Your details are in. Next,{" "}
         <strong>
-          choose a time for your free 10–15 minute strategy call.
+          choose a time for your free 10-minute discovery call.
         </strong>
       </p>
 
@@ -146,7 +146,7 @@ export function AuditBooking({
         rel="noreferrer"
         className="mt-4 inline-flex text-sm font-bold text-[#6f1fd1] underline decoration-[#6f1fd1]/35 underline-offset-4"
       >
-        View My Growth Plan (PDF)
+        View My Complimentary Growth Guide (PDF)
       </a>
 
       <div className="mt-6 overflow-hidden rounded-[16px] border border-black/10 bg-white">
