@@ -25,7 +25,7 @@ export function CtaSection() {
   return (
     <section id="audit" ref={sectionRef} className="relative scroll-mt-24 bg-[#0d0e12] px-3 py-20 sm:px-4 md:px-8 lg:scroll-mt-[200px] lg:px-12 lg:pb-6 lg:pt-0">
       <div className="mx-auto max-w-[1280px] lg:-translate-y-24">
-        <div className={`transition-transform duration-700 ${isVisible ? "translate-y-0" : "translate-y-2"}`}>
+        <div className={`transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${isVisible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0 motion-reduce:translate-y-0 motion-reduce:opacity-100"}`}>
           <div data-audit-card className="overflow-hidden rounded-[24px] border border-white/70 bg-[#f3f2ee] shadow-[0_42px_120px_rgba(0,0,0,0.32)] lg:grid lg:grid-cols-[0.8fr_1.2fr] lg:rounded-[32px]">
             <div className="bg-white/55 px-1 py-2 sm:px-4 sm:py-5 lg:order-2 lg:grid lg:content-center lg:px-8 lg:py-10">
               <h2 className="mx-5 mb-6 mt-4 font-display text-[clamp(1.875rem,4vw,3.25rem)] font-semibold leading-[1] tracking-[-0.04em] text-[#101114] sm:mx-4 lg:hidden">
