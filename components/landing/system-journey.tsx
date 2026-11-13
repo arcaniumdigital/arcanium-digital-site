@@ -1,181 +1,76 @@
 "use client";
 
-import Image from "next/image";
-import {
-  CalendarCheck,
-  Check,
-  Home,
-  MessageCircle,
-  Search,
-  UserRound,
-} from "lucide-react";
-import { type CSSProperties, useEffect, useRef, useState } from "react";
+import { CalendarCheck, Check, Home, MapPin, MessageCircle, Sparkles } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./system-journey.module.css";
 
-const stages = [
-  { title: "Ad", copy: "Scroll-stopping ads reach local owners on Facebook, Instagram and Google." },
-  { title: "Lead", copy: "An owner checks what their home is worth, and the lead comes straight to you." },
-  { title: "Appraisal", copy: "Value-led nurturing keeps you top of mind until the appraisal is booked." },
-  { title: "Listing", copy: "You walk in as the agent they already know, and win the listing." },
-];
+function useSeen() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [seen, setSeen] = useState(false);
 
-const campaignCreative = [
-  { src: "/images/campaign-creative/mary-pelican-2026.png", alt: "Pelican Waters property price campaign" },
-  { src: "/images/campaign-creative/kael-castle-2025-2026.png", alt: "Castle Hill property price campaign" },
-  { src: "/images/campaign-creative/mary-currimundi-worth-map.png", alt: "Currimundi home value campaign" },
-];
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setSeen(true);
+    }, { threshold: 0.3 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
-function PhoneScreen({ stage }: { stage: number }) {
-  if (stage === 0) {
-    return (
-      <div className={styles.screenContent} key="ad">
-        <span className={styles.screenEyebrow}>Local property update</span>
-        <h3>What&apos;s your home worth?</h3>
-        <p>See what recent buyer activity could mean for your property.</p>
-        <div className={styles.addressField}>
-          <Search />
-          <span>Enter your address...</span>
-        </div>
-        <button type="button" tabIndex={-1}>Get my update</button>
-      </div>
-    );
-  }
+  return { ref, seen };
+}
 
-  if (stage === 1) {
-    return (
-      <div className={styles.screenContent} key="lead">
-        <span className={styles.successIcon}><Check /></span>
-        <span className={styles.screenEyebrow}>Enquiry received</span>
-        <h3>Meet your new seller lead.</h3>
-        <p>Their details are captured and the first conversation is ready to begin.</p>
-        <div className={styles.leadCard}>
-          <span className={styles.avatar}>SM</span>
-          <span><small>Sarah Mitchell</small><strong>6 Fort Street, Buderim</strong></span>
-          <i>New</i>
-        </div>
-        <button type="button" tabIndex={-1}>Open enquiry</button>
-      </div>
-    );
-  }
-
-  if (stage === 2) {
-    return (
-      <div className={`${styles.screenContent} ${styles.conversationScreen}`} key="appraisal">
-        <div className={styles.conversationHead}>
-          <span className={styles.avatar}>SM</span>
-          <span><strong>Sarah Mitchell</strong><small>Seller enquiry</small></span>
-          <i>Active</i>
-        </div>
-        <div className={`${styles.message} ${styles.messageAgent}`}>Would you prefer a rough price guide or a more accurate appraisal?</div>
-        <div className={`${styles.message} ${styles.messageOwner}`}>An appraisal would be great.</div>
-        <div className={styles.bookingCard}>
-          <CalendarCheck />
-          <span><small>Appraisal booked</small><strong>Thu 30 Oct · 10:30am</strong><em>6 Fort Street, Buderim</em></span>
-        </div>
-        <button type="button" tabIndex={-1}>View appointment</button>
-      </div>
-    );
-  }
-
+export function SystemJourney() {
+  const { ref, seen } = useSeen();
   return (
-    <div className={styles.screenContent} key="listing">
-      <span className={`${styles.successIcon} ${styles.listingIcon}`}><Home /></span>
-      <span className={styles.screenEyebrow}>Opportunity won</span>
-      <h3>Listing secured.</h3>
-      <p>The homeowner already knows who to call when they are ready to sell.</p>
-      <div className={styles.listingCard}>
-        <span><small>Signed listing</small><strong>6 Fort Street, Buderim</strong></span>
-        <Check />
-      </div>
-      <button type="button" tabIndex={-1}>View opportunity</button>
+    <div ref={ref} className={`${styles.journey} ${seen ? styles.play : ""}`}>
+      <article className={styles.stage}>
+        <div className={styles.stageCopy}><span>01</span><div><p>Launch the campaign</p><h3>Reach homeowners in the right local market.</h3></div></div>
+        <div className={`${styles.scene} ${styles.mapScene}`} aria-label="Animated local campaign map">
+          <div className={styles.mapGrid} aria-hidden="true" />
+          <svg className={styles.territory} viewBox="0 0 520 300" aria-hidden="true">
+            <path d="M42 206 C96 162 130 176 178 125 C229 70 275 103 315 64 C372 8 424 55 482 30" />
+            <path d="M27 248 C103 223 160 260 211 203 C263 146 322 188 365 137 C405 90 453 105 502 79" />
+          </svg>
+          <div className={`${styles.pin} ${styles.pinOne}`}><MapPin /></div>
+          <div className={`${styles.pin} ${styles.pinTwo}`}><Home /></div>
+          <div className={`${styles.pin} ${styles.pinThree}`}><MapPin /></div>
+          <div className={styles.radius} aria-hidden="true"><span /><span /><span /></div>
+          <div className={styles.campaignLabel}><span /> Campaign live <strong>Castle Hill + surrounds</strong></div>
+        </div>
+        <p className={styles.stageFoot}>Campaign, audience and enquiry path managed together.</p>
+      </article>
+
+      <article className={styles.stage}>
+        <div className={styles.stageCopy}><span>02</span><div><p>Start the conversation</p><h3>Turn the enquiry into a useful next step.</h3></div></div>
+        <div className={`${styles.scene} ${styles.chatScene}`} aria-label="Animated seller SMS conversation">
+          <div className={styles.phoneTop}><span><MessageCircle /> Seller enquiry</span><i>Live</i></div>
+          <div className={`${styles.bubble} ${styles.agentBubble}`}>Hi Sarah, saw you were interested in finding out what your home could be worth. Would you prefer a rough guide or an appraisal?</div>
+          <div className={`${styles.bubble} ${styles.sellerBubble}`}>An appraisal would be helpful.</div>
+          <div className={`${styles.bubble} ${styles.agentBubble} ${styles.lastBubble}`}>Perfect. I can show you a couple of available times.</div>
+          <div className={styles.typing}><span /><span /><span /></div>
+          <div className={styles.appointment}><CalendarCheck /><div><strong>Appraisal booked</strong><span>Thursday · 4:00 pm</span></div></div>
+        </div>
+        <p className={styles.stageFoot}>Fast response, context-aware follow-up and booking.</p>
+      </article>
+
+      <article className={styles.stage}>
+        <div className={styles.stageCopy}><span>03</span><div><p>Progress the opportunity</p><h3>Keep the next action visible through to listing.</h3></div></div>
+        <div className={`${styles.scene} ${styles.pipelineScene}`} aria-label="Animated appraisal to listing progression">
+          <div className={styles.progressLine}><span /></div>
+          {[["Appraisal booked", "Thursday · 4:00 pm"], ["Listing presentation", "Follow-up complete"], ["Listing signed", "Pipeline outcome recorded"]].map(([title, detail], index) => (
+            <div className={styles.pipelineRow} key={title}>
+              <span className={styles.rowCheck}><Check /></span>
+              <div><strong>{title}</strong><span>{detail}</span></div>
+              {index === 2 && <Sparkles className={styles.sparkle} />}
+            </div>
+          ))}
+          <div className={styles.resultCard}><span>Seller pipeline</span><strong>One clear journey</strong></div>
+        </div>
+        <p className={styles.stageFoot}>A visible outcome, not another forgotten lead.</p>
+      </article>
     </div>
   );
 }
 
-export function SystemJourney() {
-  const root = useRef<HTMLElement>(null);
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    const section = root.current;
-    if (!section) return;
-    let frame = 0;
-
-    const update = () => {
-      frame = 0;
-      const rect = section.getBoundingClientRect();
-      const travel = Math.max(rect.height - window.innerHeight, 1);
-      const progress = Math.min(0.999, Math.max(0, -rect.top / travel));
-      setActive(Math.min(3, Math.floor(progress * 4)));
-    };
-
-    const onScroll = () => {
-      if (!frame) frame = window.requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, []);
-
-  const progressStyle = { "--journey-progress": `${active / 3}` } as CSSProperties;
-
-  return (
-    <section ref={root} className={styles.journey} aria-label="How an ad becomes a listing">
-      <div className={styles.sticky}>
-        <ol className={styles.timeline} style={progressStyle}>
-          {stages.map((stage, index) => {
-            const state = index < active ? styles.complete : index === active ? styles.current : "";
-            return (
-              <li key={stage.title} className={state} aria-current={index === active ? "step" : undefined}>
-                <span>{index < active ? <Check /> : index + 1}</span>
-                <div><h3>{stage.title}</h3><p>{stage.copy}</p></div>
-              </li>
-            );
-          })}
-        </ol>
-
-        <div className={styles.mobileStage} key={stages[active].title}>
-          <h3>{stages[active].title}</h3>
-          <p>{stages[active].copy}</p>
-        </div>
-
-        <div className={`${styles.stage} ${styles[`stage${active}`]}`}>
-          <div className={styles.stageLabel}><span>THE SELLER JOURNEY</span><strong>0{active + 1} / 04</strong></div>
-
-          <div className={styles.creativeFan} aria-hidden="true">
-            {campaignCreative.map((creative, index) => (
-              <div className={styles.creativeCard} key={creative.src}>
-                <Image src={creative.src} alt={creative.alt} fill sizes="220px" priority={index === 0} />
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.phone}>
-            <i />
-            <div className={styles.phoneScreen} aria-live="polite"><PhoneScreen stage={active} /></div>
-          </div>
-
-          <div className={styles.notifications} aria-hidden="true">
-            <div className={styles.noticeLead}><span><UserRound /></span><p><small>New seller lead</small><strong>6 Fort Street, Buderim</strong></p></div>
-            <div className={styles.noticeConversation}><span><MessageCircle /></span><p><small>Conversation active</small><strong>Appraisal requested</strong></p></div>
-            <div className={styles.noticeAppraisal}><span>SM</span><p><small>Appraisal booked</small><strong>Thu 30 Oct · 10:30am</strong></p></div>
-            <div className={styles.noticeListing}><span><Home /></span><p><small>Listing signed</small><strong>6 Fort Street, Buderim</strong></p></div>
-          </div>
-
-          <div className={styles.systemRail} aria-hidden="true">
-            <span className={active >= 0 ? styles.railOn : ""}>Campaign</span>
-            <span className={active >= 1 ? styles.railOn : ""}>CRM</span>
-            <span className={active >= 2 ? styles.railOn : ""}>Calendar</span>
-            <span className={active >= 3 ? styles.railOn : ""}>Pipeline</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
