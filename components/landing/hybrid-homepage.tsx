@@ -8,7 +8,7 @@ import { HeroSection } from "@/components/landing/hero-section";
 import { LogoCarousel } from "@/components/landing/logo-carousel";
 import { Navigation } from "@/components/landing/navigation";
 import { SellerPathsSection, SellerProofSection } from "@/components/landing/seller-pipeline-sections";
-import { SystemJourney } from "@/components/landing/system-journey";
+import { SelectedSystemJourney } from "@/components/landing/selected-system-journey";
 import { discoveryCtaLabel } from "@/lib/funnel-offer";
 import styles from "./hybrid-homepage.module.css";
 
@@ -48,14 +48,7 @@ export function HybridHomepage({ structuredData }: { structuredData: unknown }) 
       <CtaSection />
       <LogoCarousel />
 
-      <section id="system" className={styles.systemSection}>
-        <div className={styles.mechanismHead}>
-          <span>How it works</span>
-          <h2>How an ad becomes a listing</h2>
-          <p>Every campaign is built to move local owners from the first scroll to a signed listing.</p>
-        </div>
-        <SystemJourney />
-      </section>
+      <SelectedSystemJourney />
 
       <section className={styles.creativeSection}>
         <header className={styles.centredHead}>
