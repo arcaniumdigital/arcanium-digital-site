@@ -1,3 +1,4 @@
+import { discoveryCtaLabel } from "@/lib/funnel-offer";
 import { Quote } from "lucide-react";
 import Image from "next/image";
 import { PipelineFormCta } from "@/components/landing/pipeline-form-cta";
@@ -35,7 +36,7 @@ export function AuthoritySection() {
 
         <div className="grid gap-4 lg:grid-cols-12 lg:gap-6">
           {testimonials.map((testimonial, index) => (
-            <article key={testimonial.name} className={`group relative flex flex-col overflow-hidden rounded-[20px] border border-white/9 bg-[#121318] p-6 transition duration-300 hover:-translate-y-0.5 hover:border-white/15 lg:rounded-[24px] ${index === 0 ? "lg:col-span-7 lg:row-span-2 lg:p-12" : "lg:col-span-5 lg:p-8"}`}>
+            <article key={testimonial.name} className={`group relative flex flex-col overflow-hidden rounded-[20px] border border-white/9 bg-[#121318] p-6 transition-[transform,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-white/15 lg:rounded-[24px] ${index === 0 ? "lg:col-span-7 lg:row-span-2 lg:p-12" : "lg:col-span-5 lg:p-8"}`}>
                 <Quote className="absolute right-5 top-3 size-24 text-white/[0.035] lg:size-36" aria-hidden="true" />
                 <p className="relative text-xs font-semibold uppercase tracking-[0.08em] text-[#aaaab2]">{testimonial.name} / {testimonial.market}</p>
                 <p className={`relative mt-7 font-display font-medium leading-[1.48] tracking-[-0.025em] text-[#f5f5f3] ${index === 0 ? "text-xl lg:text-[1.7rem]" : "text-lg lg:text-xl"}`}>“{testimonial.quote}”</p>
@@ -54,8 +55,8 @@ export function AuthoritySection() {
           ))}
         </div>
         <PipelineFormCta
-          title="Explore our five-step system with the free 8-page growth guide and a strategy call."
-          buttonLabel="Get My Free Growth Guide + Strategy Call"
+          title="Discover how our system could help you book more appraisals in a free 10-minute discovery call."
+          buttonLabel={discoveryCtaLabel}
           trackingLabel="Seller Pipeline Audit - testimonials"
         />
       </div>

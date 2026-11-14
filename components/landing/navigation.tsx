@@ -1,5 +1,6 @@
 "use client";
 
+import { discoveryCtaLabel } from "@/lib/funnel-offer";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
@@ -19,7 +20,7 @@ export function Navigation() {
   return (
     <header className="fixed inset-x-3 top-3 z-50 sm:inset-x-4 lg:inset-x-8 lg:top-5">
       <nav
-        className={`mx-auto flex h-[60px] max-w-[1280px] items-center justify-between rounded-[16px] border px-2.5 backdrop-blur-[16px] transition-all duration-500 sm:px-3 lg:h-[72px] lg:rounded-[18px] lg:px-4 ${
+        className={`mx-auto flex h-[60px] max-w-[1280px] items-center justify-between rounded-[16px] border px-2.5 backdrop-blur-[16px] transition-[background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none sm:px-3 lg:h-[72px] lg:rounded-[18px] lg:px-4 ${
           isScrolled
             ? "border-white/10 bg-[#08090c]/85 shadow-[0_18px_50px_rgba(0,0,0,0.24)]"
             : "border-white/8 bg-[#08090c]/45 shadow-[0_12px_40px_rgba(0,0,0,0.12)]"
@@ -41,10 +42,10 @@ export function Navigation() {
         <MetaTrackedLink
           href="#audit"
           trackingLabel="Seller Pipeline Audit - header"
-          className="group inline-flex min-h-11 items-center justify-center rounded-[12px] border border-white/15 bg-[#f4f4f2] px-3 text-[0.68rem] font-bold tracking-[-0.01em] text-[#0b0c0f] transition duration-300 hover:-translate-y-px hover:bg-white sm:px-4 sm:text-xs lg:h-[46px] lg:px-5 lg:text-sm"
+          className="discovery-cta discovery-cta-header group inline-flex min-h-11 items-center justify-center rounded-[12px] border border-white/15 bg-[#f4f4f2] px-3 text-[0.68rem] font-bold tracking-[-0.01em] text-[#0b0c0f] transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] motion-reduce:transition-none motion-safe:hover:-translate-y-px motion-safe:hover:bg-white sm:px-4 sm:text-xs lg:h-[46px] lg:px-5 lg:text-sm"
         >
-          Get My Free Growth Guide + Strategy Call
-          <ArrowRight className="ml-1.5 size-3.5 transition-transform duration-300 group-hover:translate-x-0.5 lg:size-4" aria-hidden="true" />
+          <span className="discovery-cta-copy">{discoveryCtaLabel}</span>
+          <ArrowRight className="ml-1.5 size-3.5 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none motion-safe:group-hover:translate-x-0.5 lg:size-4" aria-hidden="true" />
         </MetaTrackedLink>
       </nav>
       <FunnelProgress />

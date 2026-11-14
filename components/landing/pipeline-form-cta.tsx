@@ -19,8 +19,8 @@ export function PipelineFormCta({
       <div>
         <h3>{title}</h3>
       </div>
-      <MetaTrackedLink href="#audit" trackingLabel={trackingLabel} className="pipeline-inline-cta-button">
-        {buttonLabel}
+      <MetaTrackedLink href="#audit" trackingLabel={trackingLabel} className="pipeline-inline-cta-button discovery-cta">
+        <span className="discovery-cta-copy">{buttonLabel}</span>
         <ArrowRight size={17} aria-hidden="true" />
       </MetaTrackedLink>
     </div>
