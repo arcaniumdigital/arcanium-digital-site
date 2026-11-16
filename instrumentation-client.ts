@@ -1,7 +1,12 @@
 import * as Sentry from "@sentry/nextjs";
 import { initBotId } from "botid/client/core";
 
-initBotId({ protect: [{ path: "/api/seller-demo", method: "POST" }] });
+initBotId({
+  protect: [
+    { path: "/api/seller-demo", method: "POST" },
+    { path: "/api/testai/call", method: "POST" },
+  ],
+});
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
