@@ -36,6 +36,7 @@ export async function startOwnerSmsDemo(lead: DemoSmsLead, settings: Settings, t
     return value;
   }
   let contact: Record<string, unknown> | null;
+  let workflowId: string;
   try {
     contact = object((await request(`/contacts/${demoDeliveryTarget.contactId}`))?.contact);
     if (!contact || contact.id !== demoDeliveryTarget.contactId || contact.locationId !== demoDeliveryTarget.locationId
@@ -51,16 +52,22 @@ export async function startOwnerSmsDemo(lead: DemoSmsLead, settings: Settings, t
       return blocked("DEMO_SMS_OPTED_OUT", "SMS is restricted for this test contact. No SMS was sent and no opt-out was changed.", 409);
     }
     const workflows = (await request(`/workflows/?locationId=${demoDeliveryTarget.locationId}`))?.workflows;
-    const workflow = Array.isArray(workflows) ? workflows.map(object).find(w => w?.id === demoDeliveryTarget.workflowId) : null;
+    const workflowList = Array.isArray(workflows) ? workflows.map(object).filter(Boolean) as Record<string, unknown>[] : [];
+    const workflowById = workflowList.find(w => w.id === demoDeliveryTarget.workflowId) ?? null;
+    const workflowsByName = workflowList.filter(w => w.name === demoDeliveryTarget.workflowName);
+    const workflow = workflowById ?? (workflowsByName.length === 1 ? workflowsByName[0] : null);
     const workflowStatus = typeof workflow?.status === "string" ? workflow.status.toLowerCase() : null;
-    if (!workflow || workflow.locationId !== demoDeliveryTarget.locationId || workflowStatus !== "published") {
+    if (!workflow || typeof workflow.id !== "string" || !/^[A-Za-z0-9-]+$/.test(workflow.id)
+      || workflow.locationId !== demoDeliveryTarget.locationId || workflowStatus !== "published") {
       console.warn("seller_demo_workflow_not_ready", {
-        targetFound: Boolean(workflow),
+        targetFound: Boolean(workflowById),
+        exactNameMatches: workflowsByName.length,
         locationMatches: workflow?.locationId === demoDeliveryTarget.locationId,
         status: workflowStatus,
       });
       return blocked("DEMO_WORKFLOW_NOT_READY", "The isolated SMS workflow is not ready. No SMS was sent.");
     }
+    workflowId = workflow.id;
     // Update the fixed owner fixture only. Never create a contact, alter phone,
     // email, assignment, consent or DND, or enrol a production intake workflow.
     const updated = object((await request(`/contacts/${demoDeliveryTarget.contactId}`, "PUT", {
@@ -82,7 +89,7 @@ export async function startOwnerSmsDemo(lead: DemoSmsLead, settings: Settings, t
     // GHL rejects standard ISO UTC Z/millisecond timestamps with HTTP 422.
     // Match its documented explicit-offset format, proved by the live error.
     const eventStartTime = new Date().toISOString().replace(/\.\d{3}Z$/, "+00:00");
-    const result = await request(`/contacts/${demoDeliveryTarget.contactId}/workflow/${demoDeliveryTarget.workflowId}`, "POST", { eventStartTime });
+    const result = await request(`/contacts/${demoDeliveryTarget.contactId}/workflow/${workflowId}`, "POST", { eventStartTime });
     if (result?.succeeded === true || result?.succeded === true) {
       return { status: 202, accepted: true, state: "PENDING", code: "DEMO_ENROLMENT_ACCEPTED", message: "Your test enquiry was accepted. Check your phone; SMS delivery is not confirmed yet. An active demo will not send another opening message." };
     }

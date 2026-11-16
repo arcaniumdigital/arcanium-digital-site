@@ -37,6 +37,13 @@ describe("consenting public SMS demo isolation", () => {
     expect((await startPublicSmsDemo(lead, config, "request", fetcher)).code).toBe("DEMO_WORKFLOW_NOT_READY");
     expect(fetcher).toHaveBeenCalledTimes(1);
   });
+  it("uses one published replacement with the exact isolated workflow name when the saved ID was replaced", async () => {
+    const replacementId = "replacement-workflow-id";
+    const replacement = { workflows: [{ id: replacementId, locationId: target.locationId, name: target.workflowName, status: "published" }] };
+    const fetcher = network([replacement, { contact: null }, { contact }, note, { succeeded: true }]);
+    expect((await startPublicSmsDemo(lead, config, "request", fetcher)).accepted).toBe(true);
+    expect(String(fetcher.mock.calls[4][0])).toContain(`/workflow/${replacementId}`);
+  });
   it.each([
     { ...contact, tags: [] }, { ...contact, assignedTo: "agent" }, { ...contact, followers: ["agent"] },
     { ...contact, email: "lead@example.com" }, { ...contact, tags: [publicDemoTag, "arc-seller-lead"] },
