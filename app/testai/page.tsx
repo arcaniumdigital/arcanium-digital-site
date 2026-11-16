@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, CheckCircle2, LockKeyhole, MessageSquareText, PhoneCall } from "lucide-react";
+import { ArrowUpRight, MessageSquareText, PhoneCall } from "lucide-react";
 import { TestAiForms } from "@/components/testai/test-ai-forms";
 import styles from "./testai.module.css";
 
@@ -11,12 +11,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false, noarchive: true },
   alternates: { canonical: "/testai" },
 };
-
-const expectations = [
-  "Use your own Australian mobile number",
-  "Choose SMS or an immediate AI call",
-  "No client or real-estate agent is notified",
-];
 
 export default function TestAiPage() {
   return (
@@ -31,12 +25,8 @@ export default function TestAiPage() {
 
       <main className={styles.main}>
         <section className={styles.hero}>
-          <div className={styles.eyebrow}><span />Live agent demo</div>
           <h1>Don&apos;t watch a demo.<br /><span>Have the conversation.</span></h1>
           <p className={styles.lead}>See how Arcanium follows up with a homeowner by text or voice. Use your own number, choose a test, and experience the agent from the lead&apos;s side.</p>
-          <div className={styles.expectations}>
-            {expectations.map(item => <span key={item}><CheckCircle2 size={16} aria-hidden="true" />{item}</span>)}
-          </div>
         </section>
 
         <section className={styles.demoShell} aria-label="Choose an AI agent demo">
@@ -54,10 +44,6 @@ export default function TestAiPage() {
           <TestAiForms />
         </section>
 
-        <section className={styles.privacyNote}>
-          <LockKeyhole size={20} aria-hidden="true" />
-          <div><strong>A controlled demonstration.</strong><p>We only contact the number entered after explicit consent. Reply STOP to end SMS messages, or ask the caller to stop. Demo requests do not create an appraisal booking or notify a real estate agent.</p></div>
-        </section>
       </main>
 
       <footer className={styles.footer}>

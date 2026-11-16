@@ -2,7 +2,6 @@
 
 import { useState, type FormEvent } from "react";
 import { ArrowRight, Check, MessageSquareText, PhoneCall, ShieldCheck } from "lucide-react";
-import { demoSuburbs } from "@/lib/seller-demo";
 import styles from "./test-ai-forms.module.css";
 
 type Channel = "sms" | "call";
@@ -16,7 +15,7 @@ export function TestAiForms() {
   const [channel, setChannel] = useState<Channel>("sms");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [suburb, setSuburb] = useState<string>(demoSuburbs[0]);
+  const [suburb, setSuburb] = useState("");
   const [address, setAddress] = useState("");
   const [consent, setConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -77,7 +76,7 @@ export function TestAiForms() {
             <div className={styles.grid}>
               <label>First name<input value={name} onChange={event => setName(event.target.value)} autoComplete="given-name" maxLength={80} required placeholder="Jordan" /></label>
               <label>Australian mobile<input value={phone} onChange={event => setPhone(event.target.value)} type="tel" inputMode="tel" autoComplete="tel" maxLength={25} required placeholder="04xx xxx xxx" /></label>
-              <label>Suburb<select value={suburb} onChange={event => setSuburb(event.target.value)}>{demoSuburbs.map(value => <option key={value}>{value}</option>)}</select></label>
+              <label>Suburb<input value={suburb} onChange={event => setSuburb(event.target.value)} autoComplete="address-level2" maxLength={80} required placeholder="Your suburb" /></label>
               <label>Practice property address<input value={address} onChange={event => setAddress(event.target.value)} maxLength={200} required autoComplete="off" placeholder="12 Example Street" /></label>
             </div>
             <label className={styles.consent}>
