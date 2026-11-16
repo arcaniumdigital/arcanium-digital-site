@@ -47,7 +47,14 @@ export async function startPublicSmsDemo(input: DemoSmsLead, settings: Settings,
     // Verify the one selected native workflow before creating any CRM record.
     const workflows = (await request(`/workflows/?locationId=${demoDeliveryTarget.locationId}`))?.workflows;
     const workflow = Array.isArray(workflows) ? workflows.map(object).find(w => w?.id === demoDeliveryTarget.workflowId) : null;
-    if (!workflow || workflow.name !== demoDeliveryTarget.workflowName || workflow.locationId !== demoDeliveryTarget.locationId || workflow.status !== "published") {
+    const workflowStatus = typeof workflow?.status === "string" ? workflow.status.toLowerCase() : null;
+    if (!workflow || workflow.locationId !== demoDeliveryTarget.locationId || workflowStatus !== "published") {
+      console.warn("seller_demo_workflow_not_ready", {
+        requestId,
+        targetFound: Boolean(workflow),
+        locationMatches: workflow?.locationId === demoDeliveryTarget.locationId,
+        status: workflowStatus,
+      });
       return blocked("DEMO_WORKFLOW_NOT_READY", "The demonstration is temporarily unavailable. No SMS was sent.");
     }
     const lookup = await request(`/contacts/search/duplicate?locationId=${demoDeliveryTarget.locationId}&number=${encodeURIComponent(lead.phone)}`);

@@ -52,7 +52,13 @@ export async function startOwnerSmsDemo(lead: DemoSmsLead, settings: Settings, t
     }
     const workflows = (await request(`/workflows/?locationId=${demoDeliveryTarget.locationId}`))?.workflows;
     const workflow = Array.isArray(workflows) ? workflows.map(object).find(w => w?.id === demoDeliveryTarget.workflowId) : null;
-    if (!workflow || workflow.name !== demoDeliveryTarget.workflowName || workflow.locationId !== demoDeliveryTarget.locationId || workflow.status !== "published") {
+    const workflowStatus = typeof workflow?.status === "string" ? workflow.status.toLowerCase() : null;
+    if (!workflow || workflow.locationId !== demoDeliveryTarget.locationId || workflowStatus !== "published") {
+      console.warn("seller_demo_workflow_not_ready", {
+        targetFound: Boolean(workflow),
+        locationMatches: workflow?.locationId === demoDeliveryTarget.locationId,
+        status: workflowStatus,
+      });
       return blocked("DEMO_WORKFLOW_NOT_READY", "The isolated SMS workflow is not ready. No SMS was sent.");
     }
     // Update the fixed owner fixture only. Never create a contact, alter phone,

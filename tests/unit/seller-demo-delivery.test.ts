@@ -36,10 +36,15 @@ describe("fixed owner-only native GHL delivery", () => {
     expect((await startOwnerSmsDemo(lead, config, network)).code).toBe("DEMO_SMS_OPTED_OUT");
     expect(network).toHaveBeenCalledTimes(1);
   });
-  it.each([{ ...workflow, status: "draft" }, { ...workflow, name: "Production leads" }, { ...workflow, locationId: "another-location" }])("blocks a draft or changed workflow", async changed => {
+  it.each([{ ...workflow, status: "draft" }, { ...workflow, locationId: "another-location" }])("blocks a draft or wrong-location workflow", async changed => {
     const network = fakeTransport([{ contact }, { workflows: [changed] }]);
     expect((await startOwnerSmsDemo(lead, config, network)).code).toBe("DEMO_WORKFLOW_NOT_READY");
     expect(network).toHaveBeenCalledTimes(2);
+  });
+  it("allows the isolated workflow display name to change while its stable ID remains locked", async () => {
+    const renamed = { ...workflow, name: "Renamed isolated demo workflow" };
+    const network = fakeTransport([{ contact }, { workflows: [renamed] }, { contact }, { succeeded: true }]);
+    expect((await startOwnerSmsDemo(lead, config, network)).accepted).toBe(true);
   });
   it("updates only fictional details on the fixed contact and accepts enrolment, not SMS delivery", async () => {
     const network = fakeTransport([{ contact }, { workflows: [workflow] }, { contact }, { succeeded: true }]);
