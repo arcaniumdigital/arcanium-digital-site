@@ -40,7 +40,7 @@ export function MetaTrackedLink({
     if (!target) return;
 
     event.preventDefault();
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    target.scrollIntoView({ behavior: "instant", block: "start" });
   }
 
   return <a {...props} href={href} onClick={handleClick} />;

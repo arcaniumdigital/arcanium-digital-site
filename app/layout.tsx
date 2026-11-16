@@ -1,3 +1,4 @@
+import { QualificationFlowProvider } from "@/components/landing/qualification-flow-context";
 import type { ReactNode } from "react"
 import type { Metadata } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
@@ -79,11 +80,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script id="microsoft-clarity" dangerouslySetInnerHTML={{ __html: clarityScript }} />
-        <script id="meta-pixel" dangerouslySetInnerHTML={{ __html: metaPixelScript }} />
+        {process.env.NODE_ENV === "production" && <script id="microsoft-clarity" dangerouslySetInnerHTML={{ __html: clarityScript }} />}
+        {process.env.NODE_ENV === "production" && <script id="meta-pixel" dangerouslySetInnerHTML={{ __html: metaPixelScript }} />}
       </head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
-        <noscript>
+        {process.env.NODE_ENV === "production" && <noscript>
           <img
             height="1"
             width="1"
@@ -91,9 +92,9 @@ export default function RootLayout({
             src={`https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1`}
             alt=""
           />
-        </noscript>
-        {children}
-        <Analytics />
+        </noscript>}
+        <QualificationFlowProvider>{children}</QualificationFlowProvider>
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   )

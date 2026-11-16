@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { BookingThankYou } from "@/components/landing/booking-thank-you";
 
 export const metadata: Metadata = {
-  title: "Your Strategy Call Is Booked",
-  description: "Your strategy call with Arcanium Digital is confirmed.",
+  title: "Discovery Call Details",
+  description: "View your discovery call details.",
   robots: { index: false, follow: false },
 };
 

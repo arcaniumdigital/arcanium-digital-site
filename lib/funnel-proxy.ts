@@ -30,7 +30,7 @@ export async function proxyToFunnel(request: Request, pathname: string): Promise
       },
       body: raw,
       cache: "no-store",
-      signal: AbortSignal.timeout(12_000),
+      signal: AbortSignal.timeout(40_000),
     });
 
     const headers = new Headers({

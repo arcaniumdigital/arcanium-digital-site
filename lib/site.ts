@@ -4,7 +4,7 @@ export const siteUrl =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : "http://localhost:3000");
 
-export const siteName = "Arcanium Digital";
+export const siteName = "More Vendors";
 
 export const siteDescription =
-  "Your first on-site appraisal booked in 7 days and 3 more within the month, or you don't pay. Book a free 10-minute discovery call and receive a complimentary Seller Appraisal Growth Guide.";
+  "We generate local seller enquiries through Meta Ads, follow up with AI and book ready homeowners directly into your calendar. See if you qualify.";

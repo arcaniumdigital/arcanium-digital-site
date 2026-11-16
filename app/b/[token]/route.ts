@@ -26,7 +26,7 @@ export async function GET(request: Request, context: BookingRedirectContext) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 60 * 60 * 24 * 30,
-    path: "/",
+    path: "/vendor-lead-opportunity",
   });
 
   return response;

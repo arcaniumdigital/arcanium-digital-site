@@ -1,3 +1,2 @@
-/** Shared public CTA copy; tracking labels and conversion contracts stay independent. */
-export const discoveryCtaLabel =
-  "Book Your Free Discovery Call and Receive a Complimentary Growth Guide";
+/** Public copy is independent of conversion tracking identifiers. */
+export const discoveryCtaLabel = "See If You Qualify";

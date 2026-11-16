@@ -1,188 +1,102 @@
 "use client";
 
-import { discoveryCtaLabel } from "@/lib/funnel-offer";
-import * as Sentry from "@sentry/nextjs";
-import Script from "next/script";
-import { useCallback, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";
+import { QualificationSecurity, crmEnabled, submitQualification } from "./qualification-submit";
+import { useRouter } from "next/navigation";
+import { appraisalOptions, isCompleteQualification, isQualifyingRole, qualificationError, roleOptions, type QualificationAnswers } from "@/lib/qualification-form";
+import { useQualificationFlow } from "./qualification-flow-context";
 
-const consentText =
-  "By submitting this form, I agree to receive SMS about my Seller Appraisal Growth Plan, strategy call and related Arcanium Digital services. I can opt out at any time.";
-
-function optionalField(value: string | null | undefined, maxLength: number) {
-  const normalized = value?.trim().slice(0, maxLength);
-  return normalized || undefined;
-}
-
-class SubmissionFailure extends Error {
-  constructor(
-    readonly status: number,
-    readonly reason: string,
-  ) {
-    super(`SUBMISSION_FAILED_${status}_${reason}`);
-    this.name = "SubmissionFailure";
-  }
-}
-
-type TurnstileApi = {
-  render: (element: HTMLElement, options: Record<string, unknown>) => string;
-  reset: (widgetId?: string) => void;
-};
-
-declare global {
-  interface Window {
-    turnstile?: TurnstileApi;
-    fbq?: (...args: unknown[]) => void;
-    gtag?: (...args: unknown[]) => void;
-  }
-}
-
+const questions = ["Where would you like more seller appraisals?", "What best describes you?", "How many appraisals do you currently conduct per month?", "Your contact details"];
+const disqualificationMessage = "Thanks for your interest. Our service is currently designed exclusively for residential real estate sales professionals.";
 export function VendorAuditForm() {
-  const [fullName, setFullName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [turnstileToken, setTurnstileToken] = useState("");
+  const { flow, setFlow } = useQualificationFlow();
+  const { step, answers } = flow;
+  const [turnstileToken,setTurnstileToken]=useState("");
+  const [securityAttempt,setSecurityAttempt]=useState(0);
+  const [saving,setSaving]=useState(false);
+  const submissionId=useRef(crypto.randomUUID());
+  const locked=useRef(false);
+  const [inputError,setInputError]=useState(false);
   const [error, setError] = useState("");
-  const [locked, setLocked] = useState(false);
-  const widgetHost = useRef<HTMLDivElement>(null);
-  const widgetId = useRef<string | null>(null);
-  const submissionId = useRef(crypto.randomUUID());
-  const turnstileWarningCaptured = useRef(false);
-  const siteKey =
-    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "0x4AAAAAAEKyjTaSL4ULZqy6";
-  const configuredEndpoint = process.env.NEXT_PUBLIC_VENDOR_AUDIT_API_URL;
+  const [navigating, startTransition] = useTransition();
+  const form = useRef<HTMLFormElement>(null);
+  const hasAdvanced = useRef(step > 0);
+  const router = useRouter();
+  const disqualified = Boolean(answers.role && !isQualifyingRole(answers.role));
 
-  const renderTurnstile = useCallback(() => {
-    if (!window.turnstile || !widgetHost.current || widgetId.current || !siteKey) return;
-    widgetId.current = window.turnstile.render(widgetHost.current, {
-      sitekey: siteKey,
-      action: "vendor_audit",
-      theme: "light",
-      appearance: "interaction-only",
-      callback: (token: string) => setTurnstileToken(token),
-      "expired-callback": () => setTurnstileToken(""),
-      "error-callback": () => setTurnstileToken(""),
+  useEffect(() => {
+    if (!hasAdvanced.current) return;
+    const target = disqualified ? form.current?.querySelector<HTMLElement>("[role=status]") : form.current?.querySelector<HTMLInputElement>("input:checked, input:not([type=radio])") ?? form.current?.querySelector<HTMLInputElement>("input");
+    target?.focus({ preventScroll: true });
+    form.current?.scrollIntoView({ block: "start", behavior: "instant" });
+  }, [step, disqualified]);
+
+  function update(key: keyof QualificationAnswers, value: string) {
+    setFlow(current => ({ ...current, complete: false, answers: { ...current.answers, [key]: value } }));
+    setError("");setInputError(false);
+    if (key === "role") hasAdvanced.current = true;
+  }
+  function choose(key: "role" | "appraisals", value: string) {
+    hasAdvanced.current = true;
+    setError("");setInputError(false);
+    setFlow(current => {
+      const nextAnswers = { ...current.answers, [key]: value };
+      const nextStep = key === "role" ? (isQualifyingRole(value) ? 2 : 1) : 3;
+      return { ...current, step: nextStep, complete: false, answers: nextAnswers };
     });
-  }, [siteKey]);
-
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  }
+  function back() {
+    hasAdvanced.current = true;
+    setError("");setInputError(false);
+    setFlow(current => disqualified ? { ...current, step: 1, complete: false, answers: { ...current.answers, role: "" } } : { ...current, step: Math.max(0, step - 1), complete: false });
+  }
+  async function next(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (locked) return;
-    setError("");
-
-    const endpoint = configuredEndpoint || "/api/vendor-audit";
-    if (!turnstileToken) {
-      if (!turnstileWarningCaptured.current) {
-        turnstileWarningCaptured.current = true;
-        Sentry.captureMessage("Vendor audit blocked: Turnstile token unavailable", {
-          level: "warning",
-          tags: {
-            funnel: "vendor-audit",
-            stage: "turnstile-validation",
-          },
-        });
-      }
-      setError("We could not submit your details. Please check your connection and try again.");
+    if (disqualified || navigating || locked.current) return;
+    const validationError = step === 3
+      ? qualificationError(3, answers) || qualificationError(4, answers) || qualificationError(5, answers)
+      : qualificationError(step, answers);
+    if (validationError) {
+      setError(validationError);setInputError(true);
+      (form.current?.querySelector("input:checked, input") as HTMLInputElement | null)?.focus();
       return;
     }
-
-    setLocked(true);
-    const params = new URLSearchParams(window.location.search);
-
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          schemaVersion: "2.0",
-          submissionId: submissionId.current,
-          fullName: fullName.trim(),
-          phone: phone.trim(),
-          funnelDestination: "vendor-lead-opportunity",
-          // Attribution values are sent separately below. Keeping this to the
-          // canonical page prevents long Meta click URLs exceeding the Worker contract.
-          sourcePage: `${window.location.origin}${window.location.pathname}`.slice(0, 500),
-          referrer: optionalField(document.referrer, 500),
-          utmSource: optionalField(params.get("utm_source"), 200),
-          utmMedium: optionalField(params.get("utm_medium"), 200),
-          utmCampaign: optionalField(params.get("utm_campaign"), 200),
-          utmTerm: optionalField(params.get("utm_term"), 200),
-          utmContent: optionalField(params.get("utm_content"), 200),
-          fbclid: optionalField(params.get("fbclid"), 500),
-          gclid: optionalField(params.get("gclid"), 500),
-          marketingSmsConsent: true,
-          consentVersion: "seller-growth-plan-strategy-call-sms-v2",
-          consentText,
-          privacyNoticeVersion: "privacy-v1",
-          turnstileToken,
-        }),
-      });
-
-      const result = (await response.json().catch(() => null)) as {
-        accepted?: boolean;
-        nextUrl?: string;
-        error?: string;
-      } | null;
-      if (!response.ok) {
-        throw new SubmissionFailure(response.status, result?.error || "UNKNOWN_RESPONSE");
-      }
-      if (!result?.accepted || result.nextUrl !== "/vendor-lead-opportunity") {
-        throw new Error("INVALID_ACCEPTANCE");
-      }
-
-      window.fbq?.("track", "Lead", { content_name: "Seller Pipeline Audit" });
-      window.gtag?.("event", "generate_lead", { form_name: "seller_pipeline_audit" });
-      window.location.replace(result.nextUrl);
-    } catch (caughtError) {
-      Sentry.captureException(
-        caughtError instanceof Error
-          ? caughtError
-          : new Error("UNKNOWN_VENDOR_AUDIT_SUBMISSION_FAILURE"),
-        {
-          tags: {
-            funnel: "vendor-audit",
-            stage: "lead-submission",
-            endpoint: configuredEndpoint ? "configured" : "first-party",
-            ...(caughtError instanceof SubmissionFailure
-              ? {
-                  response_status: String(caughtError.status),
-                  rejection_reason: caughtError.reason,
-                }
-              : {}),
-          },
-        }
-      );
-      setError("We could not submit your details. Please check your connection and try again.");
-      setTurnstileToken("");
-      if (widgetId.current) window.turnstile?.reset(widgetId.current);
-      setLocked(false);
+    hasAdvanced.current = true;
+    setError("");setInputError(false);
+    if (step < 3) { setFlow(current => ({ ...current, step: step + 1, complete: false })); return; }
+    if (!isCompleteQualification(answers)) return;
+    if (crmEnabled) {
+      if (!turnstileToken) {setError("Please wait for the security check, then try again.");return;}
+      locked.current=true;setSaving(true);
+      try { await submitQualification(answers,submissionId.current,turnstileToken); }
+      catch(error){setError(error instanceof Error?error.message:"Unable to save. Please try again.");setSaving(false);locked.current=false;setSecurityAttempt(value=>value+1);return;}
+      setSaving(false);locked.current=false;
     }
+
+    setFlow(current => ({ ...current, complete: true }));
+    startTransition(() => router.push("/vendor-lead-opportunity"));
   }
 
-  return (
-    <>
-      <Script
-        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-        strategy="afterInteractive"
-        onLoad={renderTurnstile}
-      />
-      <form onSubmit={submit} className="mx-auto grid max-w-[600px] gap-4 p-5 text-left sm:p-8">
-        <label className="grid gap-2.5">
-          <span className="text-sm font-bold text-[#111218]/70">Full name</span>
-          <input required minLength={2} maxLength={120} autoComplete="name" value={fullName} onChange={(event) => setFullName(event.target.value)} className="h-[58px] rounded-[14px] border border-black/12 bg-white px-[18px] text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="Your name" />
-        </label>
-        <label className="grid gap-2.5">
-          <span className="text-sm font-bold text-[#111218]/70">Best mobile number</span>
-          <input required minLength={8} maxLength={30} type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={(event) => setPhone(event.target.value)} className="h-[58px] rounded-[14px] border border-black/12 bg-white px-[18px] text-base text-[#111218] outline-none transition duration-200 placeholder:text-black/30 hover:border-black/22 focus:border-[#8f33ff] focus:ring-[3px] focus:ring-[#8f33ff]/10" placeholder="04xx xxx xxx" />
-        </label>
-        <div ref={widgetHost} />
-        <button type="submit" disabled={locked} className="discovery-submit min-h-[58px] rounded-[14px] border border-black/10 bg-[#101114] px-6 text-sm font-semibold uppercase tracking-[0.06em] text-white transition duration-300 hover:-translate-y-px hover:bg-[#18191f] disabled:cursor-default disabled:opacity-70">
-          {locked ? "Opening booking times…" : discoveryCtaLabel}
-        </button>
-        <p className="text-center text-xs leading-5 text-black/50 sm:text-[13px]">
-          No thanks, I&apos;ll keep wondering when my next appraisal will happen and chase every seller enquiry myself.
-        </p>
-        <p aria-live="polite" className="min-h-5 text-center text-sm font-medium text-red-700">{error}</p>
-      </form>
-    </>
-  );
+  return <form ref={form} onSubmit={next} noValidate autoComplete="on" className="mv-form mv-question-form sentry-block" data-clarity-mask="true">
+    <div className="mv-form-progress"><span>Question {step + 1} of 4</span><progress max={4} value={step + 1} aria-label="Qualification progress" /></div>
+    {disqualified ? <div className="mv-question-screen mv-disqualified" key="disqualified"><p role="status" tabIndex={-1}>{disqualificationMessage}</p></div> : <div className="mv-question-screen" key={step}>
+      <h2 id="mv-qualification-question">{questions[step]}</h2>
+      {step === 0 && <label className="mv-field"><span>Suburbs or region</span><input required minLength={2} maxLength={200} autoComplete="off" placeholder="e.g. Sunshine Coast" value={answers.region} onChange={event => update("region", event.target.value)} aria-invalid={inputError && Boolean(error)} aria-describedby={error ? "mv-qualification-error" : undefined} /></label>}
+      {(step === 1 || step === 2) && <fieldset className="mv-choices" aria-labelledby="mv-qualification-question" aria-describedby={error ? "mv-qualification-error" : undefined}><legend className="sr-only">{step === 1 ? "Your role" : "Monthly appraisals"}</legend>{(step === 1 ? roleOptions : appraisalOptions).map(option => <label key={option} className="mv-choice"><input type="radio" required name={step === 1 ? "role" : "appraisals"} value={option} checked={(step === 1 ? answers.role : answers.appraisals) === option} onChange={() => choose(step === 1 ? "role" : "appraisals", option)} /><span>{option}</span></label>)}</fieldset>}
+      {step === 3 && <>
+        <p id="mv-qualification-help" className="mv-question-help">So we can send you important information</p>
+        <div className="mv-contact-fields">
+          <label className="mv-field" htmlFor="mv-full-name"><span>Full name</span><input id="mv-full-name" name="name" required autoComplete="name" maxLength={120} value={answers.fullName} onChange={event => update("fullName", event.target.value)} aria-invalid={inputError && Boolean(qualificationError(3, answers))} /></label>
+          <label className="mv-field" htmlFor="mv-email"><span>Email</span><input id="mv-email" name="email" required type="email" inputMode="email" autoComplete="email" autoCapitalize="none" spellCheck={false} maxLength={254} value={answers.email} onChange={event => update("email", event.target.value)} aria-invalid={inputError && Boolean(qualificationError(4, answers))} /></label>
+          <label className="mv-field" htmlFor="mv-phone"><span>Phone number</span><input id="mv-phone" name="tel" required type="tel" inputMode="tel" autoComplete="tel" maxLength={30} value={answers.phone} placeholder="0412 345 678" onChange={event => update("phone", event.target.value)} aria-invalid={inputError && Boolean(qualificationError(5, answers))} /></label>
+        </div>
+        {crmEnabled ? <QualificationSecurity key={securityAttempt} onToken={setTurnstileToken}/> : <p className="mv-form-notice">No application is sent at this stage.</p>}
+      </>}
+      {error && <p id="mv-qualification-error" role="alert" className="mv-form-error">{error}</p>}
+    </div>}
+    <div className="mv-form-actions">
+      {step > 0 && <button type="button" className="mv-back" onClick={back} disabled={navigating || saving}>Back</button>}
+      {!disqualified && (step === 0 || step === 3) && <button type="submit" disabled={navigating || saving} className="mv-button">{saving ? "Saving…" : navigating ? "Opening…" : step === 3 ? "Submit" : "Continue"}</button>}
+    </div>
+  </form>;
 }

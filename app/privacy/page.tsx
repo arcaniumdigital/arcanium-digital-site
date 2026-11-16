@@ -19,18 +19,21 @@ export default function PrivacyPage() {
         </Link>
         <h1 className="mt-6 font-display text-5xl font-black">Privacy Policy</h1>
         <p className={paragraphClassName}>
-          This policy explains how Arcanium Digital handles information collected through our website,
+          More Vendors is operated by Arcanium Digital. This policy explains how we handle information collected through our website,
           communications, and internal SEO operations software, including the Arcanium Real Estate SEO OS.
         </p>
 
         <section className={sectionClassName}>
           <h2 className={headingClassName}>Website and enquiry information</h2>
           <p className={paragraphClassName}>
-            When you request a Seller Appraisal Growth Plan or contact us, we use the details you provide to respond,
-            arrange your strategy call, operate reminders you have consented to receive, maintain our customer records,
+            When you apply through More Vendors, request a Seller Appraisal Growth Plan or contact us, we use the details you provide to respond,
+            arrange your discovery call, operate reminders you have consented to receive, maintain our customer records,
             prevent abuse, and measure the funnel&apos;s reliability.
           </p>
           <p className={paragraphClassName}>
+            A More Vendors application includes your name, email, phone, target market, role, monthly appraisal volume,
+            timezone, available website attribution and consent record. Communications about your enquiry and appointments
+            are separate from optional marketing follow-up. You can decline optional marketing and still request a call.
             You may opt out of marketing SMS at any time by replying STOP.
           </p>
         </section>
@@ -80,11 +83,12 @@ export default function PrivacyPage() {
         <section className={sectionClassName}>
           <h2 className={headingClassName}>Service providers and disclosure</h2>
           <p className={paragraphClassName}>
-            We use service providers including Cloudflare, Vercel, Cal.com, Brevo, ClickSend, Inngest, OpenAI, and
+            We use service providers including Cloudflare, Vercel, GoHighLevel (LeadConnector), Google Calendar and Google Meet, Cal.com, Brevo, ClickSend, Inngest, OpenAI, and
             our analytics and error-monitoring providers where needed to operate the website and services. They may
             process information only for the functions we ask them to perform and under their applicable contractual
             and security controls. We limit browser-visible data, protect provider access with server-side or local
-            credentials, and do not place your contact details in booking links.
+            credentials. Private recovery links use opaque tokens. Necessary contact details may be passed to the booking
+            provider over HTTPS to prefill your booking, so you do not need to enter them again.
           </p>
         </section>
 
@@ -104,7 +108,7 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        <p className="mt-10 text-sm text-black/45">Version: privacy-v2 · Effective 20 September 2026</p>
+        <p className="mt-10 text-sm text-black/45">Version: morevendors-privacy-2026-11-14 · Effective 14 November 2026</p>
       </article>
     </main>
   );
