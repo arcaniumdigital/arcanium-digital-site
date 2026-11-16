@@ -43,20 +43,27 @@ export async function startPublicSmsDemo(input: DemoSmsLead, settings: Settings,
       || object(object(contact.inboundDndSettings)?.all)?.status === "active";
   }
   let contactId: string;
+  let workflowId: string;
   try {
     // Verify the one selected native workflow before creating any CRM record.
     const workflows = (await request(`/workflows/?locationId=${demoDeliveryTarget.locationId}`))?.workflows;
-    const workflow = Array.isArray(workflows) ? workflows.map(object).find(w => w?.id === demoDeliveryTarget.workflowId) : null;
+    const workflowList = Array.isArray(workflows) ? workflows.map(object).filter(Boolean) as Record<string, unknown>[] : [];
+    const workflowById = workflowList.find(w => w.id === demoDeliveryTarget.workflowId) ?? null;
+    const workflowsByName = workflowList.filter(w => w.name === demoDeliveryTarget.workflowName);
+    const workflow = workflowById ?? (workflowsByName.length === 1 ? workflowsByName[0] : null);
     const workflowStatus = typeof workflow?.status === "string" ? workflow.status.toLowerCase() : null;
-    if (!workflow || workflow.locationId !== demoDeliveryTarget.locationId || workflowStatus !== "published") {
+    if (!workflow || typeof workflow.id !== "string" || !/^[A-Za-z0-9-]+$/.test(workflow.id)
+      || workflow.locationId !== demoDeliveryTarget.locationId || workflowStatus !== "published") {
       console.warn("seller_demo_workflow_not_ready", {
         requestId,
-        targetFound: Boolean(workflow),
+        targetFound: Boolean(workflowById),
+        exactNameMatches: workflowsByName.length,
         locationMatches: workflow?.locationId === demoDeliveryTarget.locationId,
         status: workflowStatus,
       });
       return blocked("DEMO_WORKFLOW_NOT_READY", "The demonstration is temporarily unavailable. No SMS was sent.");
     }
+    workflowId = workflow.id;
     const lookup = await request(`/contacts/search/duplicate?locationId=${demoDeliveryTarget.locationId}&number=${encodeURIComponent(lead.phone)}`);
     if (!lookup || !("contact" in lookup)) return blocked("DEMO_LOOKUP_UNCONFIRMED", "The mobile could not be checked safely. No SMS was sent.");
     let contact = object(lookup.contact);
@@ -92,7 +99,7 @@ export async function startPublicSmsDemo(input: DemoSmsLead, settings: Settings,
   }
   try {
     const eventStartTime = new Date().toISOString().replace(/\.\d{3}Z$/, "+00:00");
-    const receipt = await request(`/contacts/${contactId}/workflow/${demoDeliveryTarget.workflowId}`, "POST", { eventStartTime });
+    const receipt = await request(`/contacts/${contactId}/workflow/${workflowId}`, "POST", { eventStartTime });
     if (receipt?.succeeded === true || receipt?.succeded === true) return {
       status: 202, accepted: true, state: "PENDING", code: "DEMO_ENROLMENT_ACCEPTED",
       message: "Your demo request was accepted. Check your SMS messages and reply there to continue. Delivery is not confirmed yet. An active demo will not send another opening message within 24 hours.",

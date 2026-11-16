@@ -46,6 +46,13 @@ describe("fixed owner-only native GHL delivery", () => {
     const network = fakeTransport([{ contact }, { workflows: [renamed] }, { contact }, { succeeded: true }]);
     expect((await startOwnerSmsDemo(lead, config, network)).accepted).toBe(true);
   });
+  it("uses one published replacement with the exact isolated workflow name when the saved ID was replaced", async () => {
+    const replacementId = "replacement-workflow-id";
+    const replacement = { ...workflow, id: replacementId };
+    const network = fakeTransport([{ contact }, { workflows: [replacement] }, { contact }, { succeeded: true }]);
+    expect((await startOwnerSmsDemo(lead, config, network)).accepted).toBe(true);
+    expect(String(network.mock.calls[3][0])).toContain(`/workflow/${replacementId}`);
+  });
   it("updates only fictional details on the fixed contact and accepts enrolment, not SMS delivery", async () => {
     const network = fakeTransport([{ contact }, { workflows: [workflow] }, { contact }, { succeeded: true }]);
     const result = await startOwnerSmsDemo(lead, config, network);
