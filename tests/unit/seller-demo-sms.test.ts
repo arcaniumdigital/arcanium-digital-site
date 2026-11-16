@@ -54,9 +54,10 @@ describe("owner-only SMS demo validation", () => {
   it.each(["", "<script>bad</script>", "x".repeat(201)])("rejects invalid property address %s", address => {
     expect(() => validateDemoSmsLead({ ...fixture, address })).toThrow("property address");
   });
-  it("requires valid name and a known suburb", () => {
+  it("requires a valid name and accepts a free-text Australian suburb", () => {
     expect(() => validateDemoSmsLead({ ...fixture, name: "user@example.com" })).toThrow("name");
-    expect(() => validateDemoSmsLead({ ...fixture, suburb: "Forged" })).toThrow("suburb");
+    expect(validateDemoSmsLead({ ...fixture, suburb: "Caloundra West" }).suburb).toBe("Caloundra West");
+    expect(() => validateDemoSmsLead({ ...fixture, suburb: "<script>" })).toThrow("suburb");
   });
   it("fails closed without a single configured server-side destination", () => {
     expect(isApprovedDemoRecipient("+61412345678", undefined)).toBe(false);
