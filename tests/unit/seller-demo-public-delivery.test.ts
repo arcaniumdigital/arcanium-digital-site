@@ -6,7 +6,7 @@ import type { DemoSmsLead } from "../../lib/seller-demo-sms";
 const lead: DemoSmsLead = { name: "Taylor Example", phone: "+61412345678", address: "1 Example Street", suburb: "Kellyville", scenario: "selling", smsConsent: true };
 const config = { token: "synthetic", isolationVerified: publicDemoIsolation };
 const contact = { id: "demoContact", locationId: target.locationId, phone: lead.phone, tags: [publicDemoTag, "arc-test"] };
-const ready = { workflows: [{ id: target.workflowId, locationId: target.locationId, name: target.workflowName, status: "published" }] };
+const ready = { workflows: [{ id: target.workflowId, locationId: target.locationId, name: "Renamed isolated demo workflow", status: "published" }] };
 const note = { note: { id: "consentReceipt" } };
 function network(values: unknown[]) {
   return vi.fn(async () => {
