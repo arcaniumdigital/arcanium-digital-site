@@ -106,3 +106,15 @@ The separate optional website conversation prepares a practice message for copyi
 - Don't introduce a redesign or change incumbent site and live lead behaviour through this reference.
 - Don't promote the native GHL widget's appearance into the Arcanium design system.
 - Don't treat interface review as evidence of production lead delivery or provider lifecycle readiness.
+
+## Public Website Redesign Override
+
+The user later authorised replacement of the incumbent homepage presentation. The public homepage now uses warm paper (`#f4f4ef`), warm white (`#fcfcf8`), ink (`#111713`), muted green-grey (`#626861`), Arcanium purple (`#7651ff`) and outcome aqua (`#9fe5d4`). Space Grotesk remains the display face and Inter remains the body face.
+
+The layout uses a 1240px content width, oversized editorial headings, proof-led imagery and alternating light/dark sections. Controls use a 13px radius, cards use 20px and major feature panels use 26px. Purple identifies Arcanium activity; aqua identifies a positive or completed outcome.
+
+The seller-system section contains three custom explanatory animations: a local campaign territory draw, a seller SMS exchange resolving into an appointment, and an appraisal-to-listing progression. Motion begins when the section enters the viewport and reduced-motion users receive the completed state immediately. The redesign preserves working form, analytics, privacy and operational routes and does not authorise invented performance claims.
+
+### Hybrid composition correction
+
+The approved homepage retains the incumbent floating navigation, VSL player, form card, seller-path section, proof section and testimonial component. LeadFleet is used only as a structural reference for the oversized editorial hero frame, continuous client-name marquee, creative gallery, client cards and scrolling event band. The underlying typography, Arcanium palette, proof assets, consent copy and lead funnel stay owned by this site. Marquees pause for reduced-motion users, client/event labels remain factual or explicitly illustrative, and the legacy composition remains available through the documented environment rollback.

@@ -40,3 +40,15 @@ Existing Next.js repository arcaniumdigital/arcanium-digital-site; existing Arca
 - Demonstrate the conversation directly.
 - Separate demonstration data and effects from production.
 - Never imply a real appraisal, delivery or booking occurred when only simulated.
+
+## 2026 Public Website Redesign
+
+The user subsequently authorised a full public-site redesign. The homepage now presents Arcanium Digital as a specialist seller-pipeline partner for Australian real estate agents. It explains the journey from local campaign to homeowner conversation, appraisal booking and visible listing opportunity, then offers the existing free Seller Appraisal Growth Plan and strategy call.
+
+The redesign preserves the existing Next.js application, first-party lead endpoint, Turnstile protection, attribution, Meta Pixel, Clarity, Vercel Analytics, Sentry, privacy route, seller demo and deployment path. Public proof remains source-backed: Meta results are labelled as lead enquiries, not confirmed appraisals or listings. The three system illustrations are explanatory and do not claim every enquiry reaches a listing.
+
+The visual direction is light, editorial and proof-led. LeadFleet informed the level of spacing and restraint; Arcanium's content, imagery, identity and compositions remain original. AgentEA informed the three motion concepts, which are custom-built and do not reuse its source.
+
+### Hybrid homepage scope
+
+The final approved scope is a hybrid of the incumbent Arcanium funnel and selected reference patterns, not a wholesale replacement. The incumbent navigation, Wistia VSL, protected lead form, form-to-booking route, testimonials, seller-path explanation and campaign proof remain. New presentation is limited to a LeadFleet-inspired hero frame and client-name marquee, a creative gallery, an evidence-safe client showcase, a scrolling system-event CTA and three custom AgentEA-inspired explanatory animations. A `NEXT_PUBLIC_HOMEPAGE_VARIANT=legacy` rollback path keeps the previous homepage composition available without changing the funnel or operational routes.
