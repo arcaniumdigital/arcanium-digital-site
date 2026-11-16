@@ -29,10 +29,6 @@
 .grid input::placeholder{color:#858d86}
 .grid input:hover{border-color:#7651ff66}
 .grid input:focus{border-color:#7651ff;background:#fff;outline:0;box-shadow:0 0 0 4px #7651ff1a}
-.contextPreview{display:flex;align-items:flex-start;gap:11px;margin-top:20px;padding:14px 15px;border-radius:12px;background:#f0f7f3;color:#315d4f}
-.contextPreview>span{width:24px;height:24px;display:grid;place-items:center;flex:0 0 auto;border-radius:50%;background:#9fe5d4;color:#173d32}
-.contextPreview p{font-size:11px;line-height:1.55}
-.contextPreview strong{display:block;margin-bottom:2px;font-size:11px;color:#173d32}
 .consent{display:flex;align-items:flex-start;gap:11px;margin:20px 0 18px;font-size:11px;line-height:1.58;color:#59615a}
 .consent input{width:17px;height:17px;margin-top:1px;accent-color:#7651ff;flex:0 0 auto}
 .submit{width:100%;min-height:54px;padding:14px 18px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:9px;border:0;border-radius:12px;background:#7651ff;color:#fff;font-size:13px;font-weight:750;cursor:pointer;box-shadow:0 12px 28px #7651ff30;transition:transform .18s ease,background .18s ease,box-shadow .18s ease}
@@ -45,5 +41,5 @@
 .success{background:#eaf7f1;color:#225f4d}
 .error{background:#fff0ee;color:#8e382e}
 @media(max-width:860px){.experience{grid-template-columns:1fr}.channelPanel{padding:24px}.switcher{display:grid;grid-template-columns:1fr 1fr}.channelNote{margin-top:24px;padding-top:0}.formWrap{padding:26px}}
-@media(max-width:580px){.channelPanel{padding:20px}.switcher{grid-template-columns:1fr;margin-top:22px}.switcher button{min-height:76px}.grid{grid-template-columns:1fr}.formWrap{padding:20px}.formHeader{align-items:flex-start}.formHeader h3{font-size:1.45rem}.formHeader p{font-size:11px}.contextPreview{padding:13px}.submit{grid-template-columns:1fr auto}.submit span{grid-column:1;justify-self:end}.submit svg{grid-column:2;justify-self:start}}
+@media(max-width:580px){.channelPanel{padding:20px}.switcher{grid-template-columns:1fr;margin-top:22px}.switcher button{min-height:76px}.grid{grid-template-columns:1fr}.formWrap{padding:20px}.formHeader{align-items:flex-start}.formHeader h3{font-size:1.45rem}.formHeader p{font-size:11px}.submit{grid-template-columns:1fr auto}.submit span{grid-column:1;justify-self:end}.submit svg{grid-column:2;justify-self:start}}
 @media(prefers-reduced-motion:reduce){.switcher button,.submit,.grid input{transition:none}}

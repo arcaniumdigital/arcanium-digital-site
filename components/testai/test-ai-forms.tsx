@@ -49,8 +49,6 @@ export function TestAiForms() {
   }
 
   const isSms = channel === "sms";
-  const firstName = name.trim().split(/\s+/)[0] || "you";
-  const property = [address.trim(), suburb.trim()].filter(Boolean).join(", ") || "your practice property";
   return (
     <div className={styles.experience}>
       <div className={styles.channelPanel}>
@@ -90,13 +88,9 @@ export function TestAiForms() {
               <label className={styles.addressField}><span className={styles.labelText}><MapPin size={15} aria-hidden="true" />Practice property address</span><input value={address} onChange={event => setAddress(event.target.value)} maxLength={200} required autoComplete="street-address" placeholder="12 Example Street" /></label>
               <label><span className={styles.labelText}>Suburb</span><input value={suburb} onChange={event => setSuburb(event.target.value)} autoComplete="address-level2" maxLength={80} required placeholder="Pelican Waters" /></label>
             </div>
-            <div className={styles.contextPreview} aria-live="polite">
-              <span><Check size={16} aria-hidden="true" /></span>
-              <p><strong>Used in your demonstration</strong>{isSms ? `The SMS agent will message ${firstName} about ${property}.` : `Travis will speak with ${firstName} about ${property}.`}</p>
-            </div>
             <label className={styles.consent}>
               <input type="checkbox" checked={consent} onChange={event => setConsent(event.target.checked)} required />
-              <span>I own this mobile and request {isSms ? "an SMS conversation" : "an immediate AI phone call"} from Arcanium Digital for demonstration purposes. {isSms ? "I can reply STOP at any time." : "I can ask the caller to stop at any time."}</span>
+              <span>{isSms ? "Send the live SMS demo to this number." : "Call this number for the live AI demo."}</span>
             </label>
             <button className={styles.submit} type="submit">
               <span>{submitting ? "Starting your demo…" : isSms ? "Text me the demo" : "Call me now"}</span><ArrowRight size={18} aria-hidden="true" />

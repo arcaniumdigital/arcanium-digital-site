@@ -4,9 +4,9 @@ import { isApprovedDemoRecipient, type DemoSmsLead } from "./seller-demo-sms";
 // test-only workflow. Neither a request nor an environment override can select
 // another contact, client, workflow or sender. GHL owns the SMS and reply path.
 export const demoDeliveryTarget = {
-  locationId: "LU1MdM6qvfyitoP94OZe",
-  contactId: "LXBhIeoKbR3lgef6VdpM",
-  workflowId: "04145671-de22-4673-b409-f7a25d17cf1d",
+  locationId: "GPlORicqD03iZOW7xYNG",
+  contactId: "YmqPXZbsEbTI8BcUxWip",
+  workflowId: "51a807d1-387c-495c-a905-aa09a71818a5",
   workflowName: "ARC | TEST ONLY — Seller Form to AI SMS",
 } as const;
 

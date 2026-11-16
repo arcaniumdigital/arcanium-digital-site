@@ -17,3 +17,4 @@ ops/cloudflare/backups/
 ops/cloudflare/reset-apply-results.json
 ops/cloudflare/current-inventory.json
 ops/cloudflare/post-reset-inventory.json
+.vercel
