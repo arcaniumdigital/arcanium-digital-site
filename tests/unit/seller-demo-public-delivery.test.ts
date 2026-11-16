@@ -76,20 +76,23 @@ describe("consenting public SMS demo isolation", () => {
     expect((await startPublicSmsDemo(lead, config, "request", fetcher)).code).toBe("DEMO_CONTACT_NOT_ISOLATED");
     expect(fetcher).toHaveBeenCalledTimes(3);
   });
-  it("reuses only an isolated demo contact without changing fields or clearing DND", async () => {
-    const fetcher = network([ready, { contact }, note, { succeeded: true }]);
+  it("refreshes only the submitted demo fields on an isolated contact without clearing DND", async () => {
+    const fetcher = network([ready, { contact }, { contact }, note, { succeeded: true }]);
     expect((await startPublicSmsDemo(lead, config, "request", fetcher)).accepted).toBe(true);
-    expect(fetcher.mock.calls.some(c => c[1]?.method === "PUT")).toBe(false);
+    const update = fetcher.mock.calls.find(c => c[1]?.method === "PUT");
+    expect(JSON.parse(String(update?.[1]?.body))).toEqual({
+      name: lead.name, address1: lead.address, city: lead.suburb, source: "Thinking of selling",
+    });
     expect(fetcher.mock.calls.filter(c => String(c[0]).endsWith("/contacts/"))).toHaveLength(0);
   });
   it("requires a persisted consent receipt before any opening SMS", async () => {
-    const fetcher = network([ready, { contact }, {}]);
+    const fetcher = network([ready, { contact }, { contact }, {}]);
     expect((await startPublicSmsDemo(lead, config, "request", fetcher)).code).toBe("DEMO_CONSENT_NOT_RECORDED");
-    expect(fetcher).toHaveBeenCalledTimes(3);
+    expect(fetcher).toHaveBeenCalledTimes(4);
   });
   it("does not automatically retry an ambiguous workflow enrolment", async () => {
-    const fetcher = network([ready, { contact }, note, new Error("timeout")]);
+    const fetcher = network([ready, { contact }, { contact }, note, new Error("timeout")]);
     expect((await startPublicSmsDemo(lead, config, "request", fetcher)).state).toBe("UNKNOWN");
-    expect(fetcher).toHaveBeenCalledTimes(4);
+    expect(fetcher).toHaveBeenCalledTimes(5);
   });
 });

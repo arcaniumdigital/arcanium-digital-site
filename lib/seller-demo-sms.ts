@@ -1,5 +1,5 @@
 import { normalizeAustralianMobile } from "../workers/funnel/src/phone";
-import { demoScenarios, demoSuburbs, type DemoScenario } from "./seller-demo";
+import { demoScenarios, type DemoScenario } from "./seller-demo";
 
 export type DemoSmsLead = {
   name: string;
@@ -19,8 +19,8 @@ export function validateDemoSmsLead(value: unknown): DemoSmsLead {
   if (!/^(?:\+|00)?[\d ()-]{8,24}$/.test(rawPhone)) throw new Error("Enter a valid Australian mobile number.");
   const phone = normalizeAustralianMobile(rawPhone);
   if (!phone) throw new Error("Enter a valid Australian mobile number.");
-  const suburb = typeof input.suburb === "string" ? input.suburb : "";
-  if (!(demoSuburbs as readonly string[]).includes(suburb)) throw new Error("Choose a suburb from the list.");
+  const suburb = typeof input.suburb === "string" ? input.suburb.trim().replace(/\s+/g, " ") : "";
+  if (!/^[\p{L} .'-]{2,80}$/u.test(suburb)) throw new Error("Enter a valid suburb using letters, spaces, apostrophes or hyphens.");
   const address = typeof input.address === "string" ? input.address.trim().replace(/\s+/g, " ") : "";
   if (address.length < 3 || address.length > 200 || /[<>@\u0000-\u001f\u007f]/.test(address)) throw new Error("Enter a property address of 3–200 characters. Use fictional property details for this test.");
   const selected = demoScenarios.find(item => item.id === input.scenario);

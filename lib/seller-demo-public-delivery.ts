@@ -56,8 +56,12 @@ export async function startPublicSmsDemo(input: DemoSmsLead, settings: Settings,
     if (contact) {
       if (!eligible(contact)) return blocked("EXISTING_CONTACT_PROTECTED", "This mobile belongs to an existing non-demo contact. Its settings have not been changed. Use the website chat instead.", 409);
       if (optedOut(contact)) return blocked("DEMO_SMS_OPTED_OUT", "SMS is opted out for this mobile. No messages or opt-out settings were changed.", 409);
-      // Keep the saved scenario stable during an active conversation. A repeat
-      // request cannot overwrite a real lead, its consent or its conversation.
+      const updated = object((await request(`/contacts/${contact.id}`, "PUT", {
+        name: lead.name, address1: lead.address, city: lead.suburb,
+        source: lead.scenario === "curious" ? "Just curious" : "Thinking of selling",
+      }))?.contact);
+      if (!eligible(updated) || optedOut(updated!)) return blocked("DEMO_UPDATE_NOT_VERIFIED", "The demo details could not be verified. No SMS workflow was started.");
+      contact = updated;
     } else {
       const created = await request("/contacts/", "POST", {
         locationId: demoDeliveryTarget.locationId, name: lead.name, phone: lead.phone,
